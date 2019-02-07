@@ -1,0 +1,6 @@
+{
+    "parent": "block/cross",
+    "textures": {
+        "cross": "dungeon:blocks/placeholder_plant"
+    }
+}

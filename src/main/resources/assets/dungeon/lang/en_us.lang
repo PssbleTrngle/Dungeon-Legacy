@@ -1,0 +1,7 @@
+tile.dungeon:placeholder_lamp.name=Placeholder (Lamp)
+tile.dungeon:placeholder_grass.name=Placeholder (Grass)
+tile.dungeon:placeholder_wall.name=Placeholder (Wall)
+tile.dungeon:placeholder_floor.name=Placeholder (Floor)
+tile.dungeon:placeholder_stairs.name=Placeholder (Stairs)
+tile.dungeon:placeholder_stairs_wall.name=Placeholder (Wall Stairs)
+tile.dungeon:placeholder_slab.name=Placeholder (Slab)

@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "axis=y": { "model": "dungeon:placeholder_log" },
+        "axis=z": { "model": "dungeon:placeholder_log", "x": 90 },
+        "axis=x": { "model": "dungeon:placeholder_log", "x": 90, "y": 90 }
+    }
+}
