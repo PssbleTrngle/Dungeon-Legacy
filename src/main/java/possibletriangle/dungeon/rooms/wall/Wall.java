@@ -2,6 +2,7 @@ package possibletriangle.dungeon.rooms.wall;
 
 import com.google.common.collect.Lists;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.structure.template.Template;
 import possibletriangle.dungeon.generator.ChunkPrimerDungeon;
@@ -27,4 +28,6 @@ public abstract class Wall {
     }
 
     public abstract void generateAt(DungeonOptions options, ChunkPrimerDungeon primer, int floor, Random r);
+
+    public abstract void populate(DungeonOptions options, World world, int chunkX, int ChunkZ, int floor, Random r);
 }

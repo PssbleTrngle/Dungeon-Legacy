@@ -1,17 +1,13 @@
-package possibletriangle.dungeon.structures;
+package possibletriangle.dungeon.rooms;
 
-import com.google.common.collect.Lists;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.gen.structure.template.Template;
-import possibletriangle.dungeon.Dungeon;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import possibletriangle.dungeon.generator.ChunkPrimerDungeon;
 import possibletriangle.dungeon.generator.DungeonOptions;
-import possibletriangle.dungeon.rooms.Room;
+import possibletriangle.dungeon.structures.DungeonStructur;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 public class RoomStructure extends Room {
@@ -47,8 +43,13 @@ public class RoomStructure extends Room {
     }
 
     @Override
-    public void generateAt(DungeonOptions options, ChunkPrimerDungeon primer, int floor, Random r) {
-        structure.generate(primer, options, floor, (x,y,z) -> (x < 16 && z < 16 && y < options.floorHeight && x >= 0 && z >= 0 && y >= 0) );
+    public void generateAt(DungeonOptions options, ChunkPrimerDungeon primer, int floor, Random r, Rotation rotation) {
+        structure.generate(primer, options, floor, (x,y,z) -> (x < 16 && z < 16 && y < options.floorHeight && x >= 0 && z >= 0 && y >= 0), rotation );
+    }
+
+    @Override
+    public void populate(DungeonOptions options, World world, int chunkX, int chunkZ, int floor, Random r) {
+        structure.populate(world, chunkX, chunkZ, options, floor, Rotation.NONE, false, new BlockPos(0,0,0));
     }
 
     @Override

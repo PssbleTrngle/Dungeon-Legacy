@@ -10,6 +10,11 @@ import java.util.Random;
 public class PaletteMossy extends PaletteStonebrick {
 
     @Override
+    public String getName() {
+        return "mossy";
+    }
+
+    @Override
     public double weight() {
         return 0.8;
     }

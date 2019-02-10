@@ -5,6 +5,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.structure.template.Template;
 import possibletriangle.dungeon.generator.ChunkPrimerDungeon;
@@ -19,7 +20,7 @@ import java.util.Random;
 
 public class WallRandom extends Wall {
 
-    private final static Wall FULL = new WallStructure("wall/all", 0);
+    private final static DungeonStructur FULL = new DungeonStructur("wall/all");
     private final static DungeonStructur CLOSED = new DungeonStructur("wall/door/wall");
 
     private final RandomCollection<DungeonStructur> doors = new RandomCollection<>();
@@ -50,25 +51,24 @@ public class WallRandom extends Wall {
 
     public void generateAt(DungeonOptions options, ChunkPrimerDungeon primer, int floor, Random r) {
 
-        FULL.generateAt(options, primer, floor, r);
+        FULL.generate(primer, options, floor, (x,y,z) -> (x == 0 || x == 15) && (z == 0 || z == 15), Rotation.NONE);
 
         boolean last = false;
         for(BlockPos pos : at.keySet()) {
 
-            if(false && at.get(pos) == Rotation.NONE ||at.get(pos) == Rotation.CLOCKWISE_90) {
+            boolean open = !last && r.nextDouble() > 0.4;
+            last = open;
 
-                defaultDoor.generate(primer, options, floor, null, at.get(pos), false, pos);
+            DungeonStructur door = open ? doors.next(r) : CLOSED;
+            door.generate(primer, options, floor, null, at.get(pos), false, pos);
 
-            } else {
 
-                boolean open = !last && r.nextDouble() > 0.4;
-                last = open;
-
-                DungeonStructur door = open ? doors.next(r) : CLOSED;
-                door.generate(primer, options, floor, null, at.get(pos), false, pos);
-
-            }
         }
+
+    }
+
+    @Override
+    public void populate(DungeonOptions options, World world, int chunkX, int ChunkZ, int floor, Random r) {
 
     }
 

@@ -15,8 +15,7 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
     private final Random r;
     private final Pallete[] palletes;
 
-    public ChunkPrimerDungeon(Rotation rotation, DungeonOptions options, Random r) {
-        super(rotation);
+    public ChunkPrimerDungeon(DungeonOptions options, Random r) {
         this.options = options;
         this.r = r;
         this.palletes = new Pallete[options.floorCount];
@@ -26,20 +25,20 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
         palletes[floor] = pallete;
     }
 
-    public void setBlockState(int x, int y, int z, int floor, IBlockState state) {
-        setBlockState(x, y, z, floor, state, false);
+    public void setBlockState(int x, int y, int z, int floor, Rotation rotation, IBlockState state) {
+        setBlockState(x, y, z, floor, state, rotation, false);
     }
 
-    public void setBlockState(int x, int y, int z, int floor, IBlockState state, boolean replace) {
+    public void setBlockState(int x, int y, int z, int floor, IBlockState state, Rotation rotation, boolean replace) {
 
         if(x < 0 || z < 0 || x > 15 || z > 15 || y < 0 || y >= options.floorHeight) {
-            Dungeon.LOGGER.info("Illegal generation atY floor {} ({}/{}/{})", floor, x, y, z);
+            Dungeon.LOGGER.info("Illegal generation at floor {} ({}/{}/{})", floor, x, y, z);
             return;
         }
 
         y += floor*options.floorHeight;
 
-        if(replace && getBlockStateWithRotation(x, y, z).getBlock() != Blocks.AIR) {
+        if(replace && getBlockStateWithRotation(x, y, z, rotation).getBlock() != Blocks.AIR) {
             return;
         }
 
@@ -62,12 +61,12 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
         else if(state.getBlock() == Blocks.LADDER)
             state = pallete.get(Pallete.Type.LADDER, state, r);
 
-        setBlockState(x, y, z, state);
+        setBlockState(x, y, z, state, rotation);
     }
 
     @Override
-    public void setBlockState(int x, int y, int z, IBlockState state) {
+    public void setBlockState(int x, int y, int z, IBlockState state, Rotation rotation) {
         if(state.getBlock() != Blocks.STRUCTURE_VOID)
-            super.setBlockState(x, y, z, state);
+            super.setBlockState(x, y, z, state, rotation);
     }
 }

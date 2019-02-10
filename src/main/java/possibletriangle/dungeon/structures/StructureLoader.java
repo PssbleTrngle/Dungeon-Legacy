@@ -32,7 +32,6 @@ public class StructureLoader {
         try
         {
             File file = new File(baseFolder, source.getResourcePath() + ".nbt");
-            Dungeon.LOGGER.info("Reading structure from {}", file.getAbsolutePath());
             inputstream = new FileInputStream(file);
             read(inputstream, blocks);
         }
@@ -53,8 +52,6 @@ public class StructureLoader {
         NBTTagList nbt_palette = compound.getTagList("palette", 10);
         NBTTagList nbt_blocks = compound.getTagList("blocks", 10);
 
-        Dungeon.LOGGER.info("Block Count: {}", nbt_blocks.tagCount());
-
         HashMap<Integer, IBlockState> palette = new HashMap<>();
 
         for (int i = 0; i < nbt_palette.tagCount(); ++i)
@@ -66,17 +63,15 @@ public class StructureLoader {
         for (int j = 0; j < nbt_blocks.tagCount(); ++j)
         {
             NBTTagCompound nbttagcompound = nbt_blocks.getCompoundTagAt(j);
-            NBTTagList nbttaglist2 = nbttagcompound.getTagList("pos", 3);
-            BlockPos blockpos = new BlockPos(nbttaglist2.getIntAt(0), nbttaglist2.getIntAt(1), nbttaglist2.getIntAt(2));
+            NBTTagList pos_tag = nbttagcompound.getTagList("pos", 3);
+            BlockPos blockpos = new BlockPos(pos_tag.getIntAt(0), pos_tag.getIntAt(1), pos_tag.getIntAt(2));
             IBlockState iblockstate = palette.get(nbttagcompound.getInteger("state"));
             NBTTagCompound block_nbt;
 
-            if (nbttagcompound.hasKey("nbt"))
-            {
+            if (nbttagcompound.hasKey("nbt")) {
                 block_nbt = nbttagcompound.getCompoundTag("nbt");
             }
-            else
-            {
+            else {
                 block_nbt = null;
             }
 

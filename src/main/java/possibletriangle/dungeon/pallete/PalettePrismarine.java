@@ -11,6 +11,11 @@ import java.util.Random;
 public class PalettePrismarine extends Pallete {
 
     @Override
+    public String getName() {
+        return "prismarine";
+    }
+
+    @Override
     public double weight() {
         return 0.2;
     }

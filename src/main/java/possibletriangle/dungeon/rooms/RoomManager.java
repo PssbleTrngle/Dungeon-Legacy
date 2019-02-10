@@ -1,9 +1,11 @@
 package possibletriangle.dungeon.rooms;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
+import net.minecraft.world.World;
+import possibletriangle.dungeon.Dungeon;
 import possibletriangle.dungeon.generator.DungeonOptions;
 import possibletriangle.dungeon.generator.RandomCollection;
-import possibletriangle.dungeon.rooms.quarter.RoomQuarter;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -14,12 +16,6 @@ public class RoomManager {
 
     private static final RandomCollection<Room> LIST = new RandomCollection<>();
     private static final HashMap<ResourceLocation, Room> MAP = new HashMap<>();
-    private static final RandomCollection<RoomQuarter> LIST_QUARTER = new RandomCollection<>();
-
-    public static void register(RoomQuarter room, double probability) {
-        if(probability > 0)
-            LIST_QUARTER.add(probability, room);
-    }
 
     public static void register(Room room, double probability) {
         if(probability > 0)
@@ -31,18 +27,17 @@ public class RoomManager {
         return LIST.next(r);
     }
 
-    public static Room randomFor(int floor, DungeonOptions options, Random r) {
-        Room random = null;
+    public static Room randomFor(int floor, DungeonOptions options, Random r, int chunkX, int chunkZ, Rotation rotation, World world) {
+        Room random;
         int c = 0;
 
-        while(!(random = random(r)).canReallyGoOnFloor(floor, options.floorCount) && c < 100)
+        while(!(random = random(r)).canReallyGoOnFloor(floor, chunkX, chunkZ, options.floorCount, rotation, world) && c < 100)
             c++;
 
-        return random;
-    }
+        if(c >= 100)
+            Dungeon.LOGGER.info("Random room selection took to many tries");
 
-    public static RoomQuarter randomQuarter(Random r) {
-        return LIST_QUARTER.next(r);
+        return random;
     }
 
     public static Room get(ResourceLocation r) {

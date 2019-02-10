@@ -9,6 +9,11 @@ import java.util.Random;
 public class PalleteNether extends Pallete {
 
     @Override
+    public String getName() {
+        return "nether";
+    }
+
+    @Override
     public double weight() {
         return 0.2;
     }

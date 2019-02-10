@@ -2,15 +2,16 @@ package possibletriangle.dungeon.rooms;
 
 import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import possibletriangle.dungeon.generator.ChunkPrimerDungeon;
-import possibletriangle.dungeon.generator.DungeonOptions;
-import possibletriangle.dungeon.generator.RandomCollection;
-import possibletriangle.dungeon.generator.WorldDataRooms;
+import possibletriangle.dungeon.Dungeon;
+import possibletriangle.dungeon.generator.*;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -37,8 +38,17 @@ public abstract class Room {
         return ID;
     }
 
-    public final boolean canReallyGoOnFloor(int floor, int floorCount) {
-        return (heightest_dependent + floor < floorCount) && (!onlytop || floor == floorCount-1) && (!onlybottom || floor == 0) && canGoOnFloor(floor, floorCount);
+    public final boolean canReallyGoOnFloor(int floor, int chunkX, int chunkZ, int floorCount, Rotation rotation, World world) {
+        boolean b1 = (heightest_dependent + floor < floorCount) && (!onlytop || floor == floorCount-1) && (!onlybottom || floor == 0);
+
+        boolean b2 = true;
+        for(EnumFaceDirection side : EnumFaceDirection.values()) {
+            Room room = roomAt(side, rotation, new Random());
+            RoomData existing = WorldDataRooms.atFloor(chunkX, floor, chunkZ, world);
+            b2 = b2 && (room == null || existing == null);
+        }
+
+        return b1 && b2 && canGoOnFloor(floor, floorCount);
     }
 
     public boolean canGoOnFloor(int floor, int floorCount) {
@@ -74,7 +84,15 @@ public abstract class Room {
         return RoomManager.get(ABOVE.get(floorAbove).next(r));
     }
 
-    public final Room roomAt(EnumFaceDirection side, Random r) {
+    public final Room roomAt(EnumFaceDirection side, Rotation rotation, Random r) {
+
+        switch (side) {
+            case UP:
+            case DOWN:
+                return null;
+        }
+
+        side = rotate(side, rotation);
         if(!SIDE.containsKey(side)) return null;
         return RoomManager.get(SIDE.get(side).next(r));
     }
@@ -111,7 +129,7 @@ public abstract class Room {
         return this;
     }
 
-    public abstract void generateAt(DungeonOptions options, ChunkPrimerDungeon primer, int floor, Random r);
+    public abstract void generateAt(DungeonOptions options, ChunkPrimerDungeon primer, int floor, Random r, Rotation rotation);
 
     public void tickPlayer(EntityPlayer player, BlockPos chunk) {
 
@@ -121,12 +139,46 @@ public abstract class Room {
     public static void onTick(TickEvent.PlayerTickEvent event) {
 
         BlockPos chunk = WorldDataRooms.toChunk(event.player.getPosition(), event.player.getEntityWorld());
-        ResourceLocation id = WorldDataRooms.atFloor(chunk.getX(), chunk.getY(), chunk.getZ(), event.player.getEntityWorld());
-        Room room = RoomManager.get(id);
+        RoomData data = WorldDataRooms.atFloor(chunk.getX(), chunk.getY(), chunk.getZ(), event.player.getEntityWorld());
+        if(data == null)
+            return;
+
+        Room room = RoomManager.get(data.name);
         if(room != null)
             room.tickPlayer(event.player, chunk);
 
 
     }
+
+    public static EnumFaceDirection rotate(EnumFaceDirection in, Rotation r) {
+
+        switch(r) {
+            case CLOCKWISE_180:
+                return rotate(rotate(in, Rotation.CLOCKWISE_90), Rotation.CLOCKWISE_90);
+            case COUNTERCLOCKWISE_90:
+                return rotate(rotate(in, Rotation.CLOCKWISE_180), Rotation.CLOCKWISE_90);
+            case CLOCKWISE_90:
+
+                switch(in) {
+                    case EAST:
+                        return EnumFaceDirection.SOUTH;
+                    case SOUTH:
+                        return EnumFaceDirection.SOUTH;
+                    case WEST:
+                        return EnumFaceDirection.NORTH;
+                    case NORTH:
+                        return EnumFaceDirection.EAST;
+                    default:
+                        return in;
+                }
+
+            default:
+                return in;
+
+        }
+
+    }
+
+    public abstract void populate(DungeonOptions options, World world, int chunkX, int chunkZ, int floor, Random r);
 
 }

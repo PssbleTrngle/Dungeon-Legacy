@@ -11,6 +11,11 @@ import java.util.Random;
 public class PalleteEnd extends Pallete {
 
     @Override
+    public String getName() {
+        return "end";
+    }
+
+    @Override
     public double weight() {
         return 0.1;
     }

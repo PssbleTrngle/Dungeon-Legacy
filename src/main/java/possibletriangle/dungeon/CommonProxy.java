@@ -1,8 +1,8 @@
 package possibletriangle.dungeon;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -15,10 +15,9 @@ import possibletriangle.dungeon.generator.WorldTypeDungeon;
 import possibletriangle.dungeon.pallete.*;
 import possibletriangle.dungeon.rooms.RoomLabyrint;
 import possibletriangle.dungeon.rooms.RoomManager;
-import possibletriangle.dungeon.rooms.RoomSpawn;
 import possibletriangle.dungeon.rooms.wall.WallRandom;
 import possibletriangle.dungeon.structures.DungeonStructur;
-import possibletriangle.dungeon.structures.RoomStructure;
+import possibletriangle.dungeon.rooms.RoomStructure;
 
 @Mod.EventBusSubscriber
 public class CommonProxy {
@@ -28,23 +27,15 @@ public class CommonProxy {
         new PalleteNether();
         new PaletteStonebrick();
         new PalleteEnd();
+        new PalleteEndQuark();
         new PaletteMossy();
         new PalettePrismarine();
+
+        registerRenderers();
 
     }
 
     public void init(FMLInitializationEvent event) {
-
-        /*
-        for(EnumDyeColor color : EnumDyeColor.values()) {
-            RoomManager.register(RoomColor.ROOMS[color.ordinal()] = new RoomColor(color), color.ordinal());
-            RoomManager.register(RoomColorGlass.ROOMS[color.ordinal()] = new RoomColorGlass(color), color.ordinal());
-            RoomManager.register(new RoomQuarterColor(color), color.ordinal());
-        }
-        */
-
-
-        //RoomManager.register(new RoomMulti(), 10.0);
 
         RoomManager.register(new RoomStructure("tower", "spiral_stairs_bottom").genWall().noCeil(), 5);
         RoomManager.register(new RoomStructure("tower", "spiral_stairs_top").genWall(), 0);
@@ -53,6 +44,10 @@ public class CommonProxy {
         RoomManager.register(new RoomStructure("tower", "slime_tower_bottom").noCeil(), 5);
         RoomManager.register(new RoomStructure("tower", "slime_tower_top"), 0);
         RoomManager.get("slime_tower_bottom").addDependendent(1, "slime_tower_top");
+
+        RoomManager.register(new RoomStructure("room", "long_start"), 10);
+        RoomManager.register(new RoomStructure("room", "long_end"), 0);
+        RoomManager.get("long_start").addDependendent(EnumFaceDirection.NORTH, "long_end");
 
         RoomManager.register(new RoomStructure("tower", "freefall_bottom").noCeil().genWall().onlyBottom(), 10);
         RoomManager.register(new RoomStructure("tower", "freefall_middle").noCeil().genWall(), 0);
@@ -85,7 +80,9 @@ public class CommonProxy {
 
                 .add(new DungeonStructur("wall/door/lava"), 0.2)
                 .add(new DungeonStructur("wall/door/vines"), 0.8)
-                .add(new DungeonStructur("wall/door/wood"), 0.8);
+                .add(new DungeonStructur("wall/door/wood"), 0.8)
+
+                .add(new DungeonStructur("wall/door/breakable"), 1);
 
     }
 
@@ -111,6 +108,9 @@ public class CommonProxy {
     }
 
     public void registerItemRenderer(Item item, int meta, String id) {
+    }
+
+    public void registerRenderers() {
     }
 
 }

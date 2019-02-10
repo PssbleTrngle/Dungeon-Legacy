@@ -1,28 +1,13 @@
 package possibletriangle.dungeon.rooms;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.player.PlayerSetSpawnEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import possibletriangle.dungeon.Dungeon;
-import possibletriangle.dungeon.generator.DungeonOptions;
-import possibletriangle.dungeon.structures.RoomStructure;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 @Mod.EventBusSubscriber
 public class RoomSpawn extends RoomStructure {

@@ -10,8 +10,8 @@ public class BlockMod extends Block {
 
     private final ResourceLocation name;
 
-    public BlockMod(String id) {
-        super(Material.ROCK);
+    public BlockMod(String id,Material mat) {
+        super(mat);
 
         this.name = new ResourceLocation(Dungeon.MODID, id);
 

@@ -1,6 +1,7 @@
 package possibletriangle.dungeon.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -37,7 +38,10 @@ public class ModBlocks {
 
     public static final Block PLANT = new BlockPlaceholderPlant(Pallete.Type.PLANT);
 
-    public static final Block SPAWN = new BlockSpawn();
+    public static final Block BREAKABLE_ROCK = new BlockMod("breakable_rock", Material.ROCK);
+    public static final Block BREAKABLE_ROCK_HARDER = new BlockMod("breakable_rock_harder", Material.ROCK);
+
+    public static final BlockSpawn SPAWN = new BlockSpawn();
 
     public static void register(IForgeRegistry<Block> registry) {
 
@@ -58,6 +62,9 @@ public class ModBlocks {
         LIST.add(LEAVES2);
 
         LIST.add(SPAWN);
+
+        LIST.add(BREAKABLE_ROCK);
+        LIST.add(BREAKABLE_ROCK_HARDER);
 
         for(Block block : LIST) {
 

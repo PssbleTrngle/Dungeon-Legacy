@@ -2,7 +2,10 @@ package possibletriangle.dungeon.block.tile.tesr;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.EnumParticleTypes;
+import possibletriangle.dungeon.Dungeon;
 import possibletriangle.dungeon.block.tile.TileEntitySpawn;
+import possibletriangle.dungeon.helper.Icons;
 
 public class TESRSpawn extends TileEntitySpecialRenderer<TileEntitySpawn> {
 
@@ -11,7 +14,10 @@ public class TESRSpawn extends TileEntitySpecialRenderer<TileEntitySpawn> {
 
         GlStateManager.pushMatrix();
 
-        
+        GlStateManager.translate(x, y, z);
+
+        GlStateManager.translate(1, te.getOffset()[1], 1);
+        VortexRenderer.render(te.vortexSize, 0.1, te.global ? Icons.VORTEX_GLOBAL : Icons.VORTEX);
 
         GlStateManager.popMatrix();
 

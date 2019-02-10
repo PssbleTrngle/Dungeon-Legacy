@@ -3,12 +3,17 @@ package possibletriangle.dungeon.command;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.server.CommandTeleport;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import possibletriangle.dungeon.Dungeon;
 import possibletriangle.dungeon.generator.WorldDataRooms;
+import possibletriangle.dungeon.helper.SpawnData;
+import possibletriangle.dungeon.rooms.RoomData;
 import possibletriangle.dungeon.structures.DungeonStructur;
 
 import javax.annotation.Nullable;
@@ -56,17 +61,40 @@ public class CommandDungeon extends CommandBase {
             switch (SubCommand.valueOf(args[0].toUpperCase())) {
 
                 case QUERY:
-                    int floor = WorldDataRooms.floor(sender.getPosition().getY(), sender.getEntityWorld());
-                    ResourceLocation room = WorldDataRooms.atY(sender.getPosition().getX() / 16 + 1, sender.getPosition().getY(), sender.getPosition().getZ() / 16 + 1, sender.getEntityWorld());
-                    if(room == null)
+                    BlockPos chunk = WorldDataRooms.toChunk(sender.getPosition(), sender.getEntityWorld());
+                    RoomData data = WorldDataRooms.atFloor(chunk.getX(), chunk.getY(), chunk.getZ(), sender.getEntityWorld());
+                    if(data == null)
                         throw new CommandException("There is no room here");
 
-                    sender.sendMessage(new TextComponentString("You are in a \"" + room.toString() + "\" atY floor " + floor));
+                    sender.sendMessage(new TextComponentString("You are in a \"" + data.name + "\" at floor "+ chunk.getY() + " [" + data.rotation.name().toLowerCase() + "]" ));
                     break;
 
                 case RELOAD:
                     DungeonStructur.reloadAll();
                     sender.sendMessage(new TextComponentString("Reloaded structures"));
+                    break;
+
+                case SPAWN:
+                    if(sender instanceof EntityPlayerMP) {
+                        EntityPlayerMP player = (EntityPlayerMP) sender;
+                        BlockPos p = SpawnData.getSpawn(player, player.getEntityWorld());
+                        if(p != null) {
+
+                            player.connection.setPlayerLocation(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, 0, 0);
+
+                        } else
+                            throw  new CommandException("You have not set your dungeon spawn");
+                    }
+                    break;
+
+                case SPAWNRESET:
+                    if(sender instanceof EntityPlayerMP) {
+                        EntityPlayerMP player = (EntityPlayerMP) sender;
+
+                        SpawnData.resetSpawn(player.getUniqueID(), player.getEntityWorld());
+                        sender.sendMessage(new TextComponentString("Spawnpoint has been reset"));
+                    }
+
                     break;
 
                     default:
@@ -80,7 +108,7 @@ public class CommandDungeon extends CommandBase {
     }
 
     public enum SubCommand {
-        QUERY, RELOAD;
+        QUERY, RELOAD, SPAWN, SPAWNRESET;
 
         public static List<String> names() {
             ArrayList<String> names = new ArrayList<>();

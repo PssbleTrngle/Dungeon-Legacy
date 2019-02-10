@@ -4,14 +4,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.ChunkPrimer;
+import possibletriangle.dungeon.Dungeon;
 
 public class ChunkPrimerRotateable extends ChunkPrimer {
-
-    private final Rotation rotation;
-
-    public ChunkPrimerRotateable(Rotation rotation) {
-        this.rotation = rotation;
-    }
 
     public static BlockPos rotate(BlockPos pos, Rotation rotation, double[] center) {
 
@@ -45,21 +40,21 @@ public class ChunkPrimerRotateable extends ChunkPrimer {
 
     }
 
+    @Deprecated
     @Override
     public void setBlockState(int x, int y, int z, IBlockState state) {
+        setBlockState(x, y, z, state, Rotation.NONE);
+        Dungeon.LOGGER.info("should not be used!");
+    }
+
+    public void setBlockState(int x, int y, int z, IBlockState state, Rotation rotation) {
 
         BlockPos pos = rotate(new BlockPos(x, y, z), rotation, new double[] {15.0 / 2, 15.0 / 2});
-
-        /*
-        Dungeon.LOGGER.info("Test: {}/{} -> {}/{}", x, z, pos.getX(), pos.getZ());
-        if(getBlockState(pos.getX(), pos.getY(), pos.getZ()) != ModBlocks.AIR.getDefaultState())
-            Dungeon.LOGGER.info("Double: {}/{}", pos.getX(), pos.getZ());
-        */
 
         super.setBlockState(pos.getX(), pos.getY(), pos.getZ(), state.withRotation(rotation));
     }
 
-    public IBlockState getBlockStateWithRotation(int x, int y, int z) {
+    public IBlockState getBlockStateWithRotation(int x, int y, int z, Rotation rotation) {
         BlockPos pos = rotate(new BlockPos(x, y, z), rotation, new double[] {15.0 / 2, 15.0 / 2});
         return getBlockState(pos.getX(), pos.getY(), pos.getZ());
     }

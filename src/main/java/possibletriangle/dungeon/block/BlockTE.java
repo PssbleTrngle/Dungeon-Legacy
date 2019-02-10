@@ -1,6 +1,7 @@
 package possibletriangle.dungeon.block;
 
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -11,8 +12,8 @@ import javax.annotation.Nullable;
 
 public abstract class BlockTE<TE extends TileEntity> extends BlockMod implements ITileEntityProvider {
 
-    public BlockTE(String id) {
-        super(id);
+    public BlockTE(String id, Material mat) {
+        super(id, mat);
     }
 
     public TE getTE(BlockPos pos, IBlockAccess world) {
