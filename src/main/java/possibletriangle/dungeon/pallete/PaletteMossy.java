@@ -7,11 +7,10 @@ import possibletriangle.dungeon.generator.RandomCollection;
 
 import java.util.Random;
 
-public class PaletteMossy extends PaletteStonebrick {
+public class PaletteMossy extends Pallete {
 
-    @Override
-    public String getName() {
-        return "mossy";
+    public PaletteMossy() {
+        super("mossy", 0F);
     }
 
     @Override
@@ -54,12 +53,6 @@ public class PaletteMossy extends PaletteStonebrick {
             case LEAVES2:
                 r.add(Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, BlockPlanks.EnumType.BIRCH), 1, 0.3);
                 break;
-            case PLANT:
-                r.add(Blocks.YELLOW_FLOWER.getDefaultState());
-                break;
-
-            default:
-                return super.forType(type);
 
         }
 

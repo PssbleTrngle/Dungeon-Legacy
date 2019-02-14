@@ -6,6 +6,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import possibletriangle.dungeon.block.tile.TileEntitySpawn;
+import possibletriangle.dungeon.block.tile.TileFakeWall;
+import possibletriangle.dungeon.block.tile.tesr.TESRFakeWall;
 import possibletriangle.dungeon.block.tile.tesr.TESRSpawn;
 
 public class ClientProxy extends CommonProxy {
@@ -18,5 +20,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerRenderers() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpawn.class, new TESRSpawn());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileFakeWall.class, new TESRFakeWall());
     }
 }

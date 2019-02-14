@@ -1,4 +1,4 @@
-package possibletriangle.dungeon.rooms;
+package possibletriangle.dungeon.generator.rooms;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
@@ -7,8 +7,6 @@ import possibletriangle.dungeon.Dungeon;
 import possibletriangle.dungeon.generator.DungeonOptions;
 import possibletriangle.dungeon.generator.RandomCollection;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 

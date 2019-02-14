@@ -31,7 +31,7 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
 
     public void setBlockState(int x, int y, int z, int floor, IBlockState state, Rotation rotation, boolean replace) {
 
-        if(x < 0 || z < 0 || x > 15 || z > 15 || y < 0 || y >= options.floorHeight) {
+        if(x < 0 || z < 0 || x > 15 || z > 15 || y < 0 || (y >= options.floorHeight && floor < options.floorCount-1)) {
             Dungeon.LOGGER.info("Illegal generation at floor {} ({}/{}/{})", floor, x, y, z);
             return;
         }

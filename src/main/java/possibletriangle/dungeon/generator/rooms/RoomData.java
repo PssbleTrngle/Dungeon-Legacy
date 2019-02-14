@@ -1,4 +1,4 @@
-package possibletriangle.dungeon.rooms;
+package possibletriangle.dungeon.generator.rooms;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;

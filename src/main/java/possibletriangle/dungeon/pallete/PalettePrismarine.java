@@ -10,9 +10,8 @@ import java.util.Random;
 
 public class PalettePrismarine extends Pallete {
 
-    @Override
-    public String getName() {
-        return "prismarine";
+    public PalettePrismarine() {
+        super("prismarine", 0F);
     }
 
     @Override
@@ -33,6 +32,7 @@ public class PalettePrismarine extends Pallete {
                 break;
 
             case RUNE:
+            case KEY_STONE:
                 r.add(Blocks.PRISMARINE.getDefaultState().withProperty(BlockPrismarine.VARIANT, BlockPrismarine.EnumType.DARK));
                 break;
             case GEM:
@@ -58,6 +58,7 @@ public class PalettePrismarine extends Pallete {
                 break;
 
             case GRASS:
+            case DIRT:
                 r.add(Blocks.SAND);
                 r.add(Blocks.GRAVEL);
                 break;

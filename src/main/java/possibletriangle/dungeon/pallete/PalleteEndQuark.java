@@ -2,11 +2,15 @@ package possibletriangle.dungeon.pallete;
 
 import net.minecraft.init.Blocks;
 
-public class PalleteEndQuark extends PalleteEnd {
+public class PalleteEndQuark extends Pallete {
+
+    public PalleteEndQuark() {
+        super("end_quark", 0F);
+    }
 
     @Override
-    public String getName() {
-        return "end_quark";
+    public String fallback() {
+        return "end";
     }
 
     @Override
@@ -45,9 +49,6 @@ public class PalleteEndQuark extends PalleteEnd {
             case SLAB:
                 r.add("quark:duskbound_block_slab");
                 break;
-
-            default:
-                return super.forType(type);
 
         }
 

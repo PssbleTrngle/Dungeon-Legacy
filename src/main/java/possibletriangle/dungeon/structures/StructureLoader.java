@@ -68,13 +68,7 @@ public class StructureLoader {
             IBlockState iblockstate = palette.get(nbttagcompound.getInteger("state"));
             NBTTagCompound block_nbt;
 
-            if (nbttagcompound.hasKey("nbt")) {
-                block_nbt = nbttagcompound.getCompoundTag("nbt");
-            }
-            else {
-                block_nbt = null;
-            }
-
+            block_nbt = nbttagcompound.getCompoundTag("nbt");
             blocks.add(new Template.BlockInfo(blockpos, iblockstate, block_nbt));
         }
 

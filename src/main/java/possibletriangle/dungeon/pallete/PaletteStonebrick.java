@@ -9,9 +9,8 @@ import java.util.Random;
 
 public class PaletteStonebrick extends Pallete {
 
-    @Override
-    public String getName() {
-        return "stonebrick";
+    public PaletteStonebrick() {
+        super("stonebrick", 0F);
     }
 
     @Override
@@ -33,6 +32,7 @@ public class PaletteStonebrick extends Pallete {
                 break;
 
             case RUNE:
+            case KEY_STONE:
                 r.add(Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
                 break;
             case GEM:
@@ -60,6 +60,9 @@ public class PaletteStonebrick extends Pallete {
             case GRASS:
                 r.add(Blocks.GRASS);
                 break;
+            case DIRT:
+                r.add(Blocks.DIRT);
+                break;
             case LOG:
                 r.add(Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.OAK));
                 break;
@@ -73,7 +76,11 @@ public class PaletteStonebrick extends Pallete {
                 r.add(Blocks.LEAVES2.getDefaultState().withProperty(BlockNewLog.VARIANT, BlockPlanks.EnumType.DARK_OAK));
                 break;
             case PLANT:
-                r.add(Blocks.RED_FLOWER);
+                for(int meta = 0; meta < 8; meta++)
+                    r.add(Blocks.RED_FLOWER.getStateFromMeta(meta));
+                r.add(Blocks.YELLOW_FLOWER.getDefaultState());
+                r.add(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN), 0, 4);
+                r.add(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS), 0, 4);
                 break;
 
             case BARS:

@@ -8,9 +8,8 @@ import java.util.Random;
 
 public class PalleteNether extends Pallete {
 
-    @Override
-    public String getName() {
-        return "nether";
+    public PalleteNether() {
+        super("nether", 1F);
     }
 
     @Override
@@ -31,6 +30,7 @@ public class PalleteNether extends Pallete {
                 break;
 
             case RUNE:
+            case KEY_STONE:
                 r.add(Blocks.MAGMA);
                 break;
             case GEM:
@@ -59,6 +59,7 @@ public class PalleteNether extends Pallete {
                 break;
 
             case GRASS:
+            case DIRT:
                 r.add(Blocks.MYCELIUM);
                 r.add(Blocks.SOUL_SAND);
                 break;

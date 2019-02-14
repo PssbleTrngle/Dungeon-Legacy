@@ -1,8 +1,7 @@
-package possibletriangle.dungeon.rooms;
+package possibletriangle.dungeon.generator.rooms;
 
 import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +20,7 @@ import java.util.Random;
 public abstract class Room {
 
     private final ResourceLocation ID;
+    private boolean simple = true;
 
     public Room(ResourceLocation id) {
         this.ID = id;
@@ -38,17 +38,54 @@ public abstract class Room {
         return ID;
     }
 
+    public static int[] offset(EnumFaceDirection side) {
+        switch(side) {
+            case SOUTH:
+               return new int[]{0, 1};
+            case WEST:
+                return new int[]{-1, 0};
+            case NORTH:
+                return new int[]{0, -1};
+            case EAST:
+                return new int[]{1, 0};
+            default: return new int[]{0, 0};
+        }
+    }
+
     public final boolean canReallyGoOnFloor(int floor, int chunkX, int chunkZ, int floorCount, Rotation rotation, World world) {
+        return canReallyGoOnFloor(floor, chunkX, chunkZ, floorCount, rotation, world, 0);
+    }
+
+    private final boolean canReallyGoOnFloor(int floor, int chunkX, int chunkZ, int floorCount, Rotation rotation, World world, int tries) {
+
+        if(tries > 10) {
+            Dungeon.LOGGER.info("Infinite Recursive Room testing for {}", getName());
+            return false;
+        }
+
         boolean b1 = (heightest_dependent + floor < floorCount) && (!onlytop || floor == floorCount-1) && (!onlybottom || floor == 0);
+        if(!(b1 && canGoOnFloor(floor, floorCount)))
+            return false;
+
+        if(simple)
+            return true;
 
         boolean b2 = true;
         for(EnumFaceDirection side : EnumFaceDirection.values()) {
             Room room = roomAt(side, rotation, new Random());
+            if(room == null)
+                continue;
+
             RoomData existing = WorldDataRooms.atFloor(chunkX, floor, chunkZ, world);
-            b2 = b2 && (room == null || existing == null);
+
+            int[] offset = offset(side);
+            b2 = b2 && room.canReallyGoOnFloor(floor, chunkX + offset[0], chunkZ + offset[0], floorCount, rotation, world, tries+1);
+
+
+            b2 = b2 && existing == null;
         }
 
-        return b1 && b2 && canGoOnFloor(floor, floorCount);
+        return b2;
     }
 
     public boolean canGoOnFloor(int floor, int floorCount) {
@@ -69,12 +106,13 @@ public abstract class Room {
 
     public final void addDependendent(int floorAbove, String s, double weight) {
         if(floorAbove > 0) {
-            floorAbove = Math.max(heightest_dependent, floorAbove);
+            heightest_dependent = Math.max(heightest_dependent, floorAbove);
 
             RandomCollection c = ABOVE.get(floorAbove);
             if(c == null) c = new RandomCollection();
             c.add(weight, new ResourceLocation(s));
             ABOVE.put(floorAbove, c);
+            simple = false;
 
         }
     }
@@ -112,6 +150,7 @@ public abstract class Room {
             if(c == null) c = new RandomCollection();
             c.add(weight, new ResourceLocation(s));
                 SIDE.put(side, c);
+            simple = false;
         }
     }
 

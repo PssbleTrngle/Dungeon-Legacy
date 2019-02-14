@@ -1,22 +1,15 @@
 package possibletriangle.dungeon.block.tile;
 
-import com.google.common.base.Predicate;
-import javafx.scene.chart.Axis;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import possibletriangle.dungeon.Dungeon;
-import possibletriangle.dungeon.block.BlockSpawn;
-import possibletriangle.dungeon.block.ModBlocks;
 import possibletriangle.dungeon.generator.WorldDataRooms;
 import possibletriangle.dungeon.helper.SpawnData;
-import possibletriangle.dungeon.rooms.RoomManager;
 
 import java.util.ArrayList;
 import java.util.List;

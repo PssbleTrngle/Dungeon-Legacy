@@ -1,20 +1,27 @@
 package possibletriangle.dungeon.structures;
 
 import com.google.common.collect.Lists;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGeneratorHell;
 import net.minecraft.world.gen.structure.template.Template;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTableManager;
 import possibletriangle.dungeon.Dungeon;
 import possibletriangle.dungeon.generator.ChunkPrimerDungeon;
 import possibletriangle.dungeon.generator.ChunkPrimerRotateable;
 import possibletriangle.dungeon.generator.DungeonOptions;
+import possibletriangle.dungeon.loot.LootManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class DungeonStructur {
 
@@ -51,7 +58,34 @@ public class DungeonStructur {
     }
 
     public void generate(ChunkPrimerDungeon primer, DungeonOptions options, int floor, GenTest test, Rotation rotation, boolean mirror, BlockPos offset) {
+
+        BlockPos last = last();
+        double[] rotationCenter = new double[]{last.getX() / 2.0, last.getZ() / 2.0};
+        generate(primer, options, floor, test, rotation, mirror, offset, rotationCenter);
+
+    }
+
+    public void generate(ChunkPrimerDungeon primer, DungeonOptions options, int floor, GenTest test, Rotation rotation, boolean mirror, BlockPos offset, double[] rotationCenter) {
         for(Template.BlockInfo info : blocks()) {
+
+            //info = StructureLoader.rotate(info, rotation, rotationCenter);
+
+            int x = info.pos.getX() + offset.getX();
+            int y = info.pos.getY() + offset.getY();
+            int z = info.pos.getZ() + offset.getZ();
+
+            if(test == null ||test.at(x, y, z))
+                primer.setBlockState(x, y, z, floor, rotation, info.blockState);
+;
+
+        }
+    }
+
+    public void populate(World world, int chunkX, int chunkZ, DungeonOptions options, int floor, Rotation rotation, boolean mirror, BlockPos offset, Random random) {
+
+        for(Template.BlockInfo info : blocks()) {
+
+            NBTTagCompound nbt = info.tileentityData;
 
             BlockPos last = last();
             double[] center = new double[]{last.getX() / 2.0, last.getZ() / 2.0};
@@ -61,35 +95,22 @@ public class DungeonStructur {
             int y = info.pos.getY() + offset.getY();
             int z = info.pos.getZ() + offset.getZ();
 
-            if(test == null ||test.at(x, y, z))
-                primer.setBlockState(x, y, z, floor, rotation, info.blockState);
+            BlockPos blockpos = new BlockPos(x + chunkX*16, y + floor*options.floorHeight, z + chunkZ*16);
+            TileEntity te = world.getTileEntity(blockpos);
+            if (te != null) {
 
-        }
-    }
+                nbt.setInteger("x", blockpos.getX());
+                nbt.setInteger("y", blockpos.getY());
+                nbt.setInteger("z", blockpos.getZ());
+                te.readFromNBT(nbt);
+                te.rotate(rotation);
 
-    public void populate(World world, int chunkX, int chunkZ, DungeonOptions options, int floor, Rotation rotation, boolean mirror, BlockPos offset) {
-
-        for(Template.BlockInfo info : blocks()) {
-
-            if(info.tileentityData != null) {
-
-                BlockPos last = last();
-                double[] center = new double[]{last.getX() / 2.0, last.getZ() / 2.0};
-                info = StructureLoader.rotate(info, rotation, center);
-
-                int x = info.pos.getX() + offset.getX();
-                int y = info.pos.getY() + offset.getY();
-                int z = info.pos.getZ() + offset.getZ();
-
-                BlockPos blockpos = new BlockPos(x + chunkX*16, y + floor*options.floorHeight, z + chunkZ*16);
-                TileEntity te = world.getTileEntity(blockpos);
-                if (te != null) {
-                    info.tileentityData.setInteger("x", blockpos.getX());
-                    info.tileentityData.setInteger("y", blockpos.getY());
-                    info.tileentityData.setInteger("z", blockpos.getZ());
-                    te.readFromNBT(info.tileentityData);
-                    te.rotate(rotation);
+                if(te instanceof IInventory) {
+                    IInventory inventory = (IInventory) te;
+                    if(inventory.isEmpty())
+                        LootManager.COMMON.fillInventory(inventory, random, new LootContext(0, null, null, null,  null, null));
                 }
+
 
             }
         }

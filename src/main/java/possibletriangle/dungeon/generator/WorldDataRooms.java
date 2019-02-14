@@ -11,7 +11,7 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import possibletriangle.dungeon.Dungeon;
 import possibletriangle.dungeon.pallete.Pallete;
-import possibletriangle.dungeon.rooms.RoomData;
+import possibletriangle.dungeon.generator.rooms.RoomData;
 
 import java.util.HashMap;
 
@@ -73,7 +73,7 @@ public class WorldDataRooms extends WorldSavedData {
             b.setInteger("floor", pos.getY());
             b.setInteger("chunkZ", pos.getZ());
             b.setString("rotation", MAP.get(pos).rotation.name());
-            b.setString("pallete", MAP.get(pos).pallete.getName());
+            b.setString("pallete", MAP.get(pos).pallete.getBiomeName());
 
             list.appendTag(b);
 
@@ -96,7 +96,8 @@ public class WorldDataRooms extends WorldSavedData {
     public static void put(int chunkX, int floor, int chunkZ, ResourceLocation name, Rotation r, Pallete pallete, World world, String s) {
         RoomData data = new RoomData(name, r, pallete);
         BlockPos pos = new BlockPos(chunkX, floor, chunkZ);
-        if(get(world).MAP.containsKey(pos)) {
+
+        if(get(world).MAP.containsKey(pos) && !"side".equals(s)) {
 
             Dungeon.LOGGER.info("Trying to overwrite existing room: \"{}\" -> \"{}\" [{}]", get(world).MAP.get(pos).name, name, s);
 

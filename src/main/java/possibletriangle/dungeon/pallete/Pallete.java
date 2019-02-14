@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public abstract class Pallete {
+public abstract class Pallete extends Biome {
 
     public String[] requiredMods() {
         return new String[0];
@@ -23,9 +23,8 @@ public abstract class Pallete {
         return LIST.next(r);
     }
 
-    public abstract String getName();
-
-    public Pallete() {
+    public Pallete(String name, float temp) {
+        super(new BiomeProperties(name).setTemperature(temp));
 
         boolean b = true;
         for (String mod : requiredMods())
@@ -33,8 +32,27 @@ public abstract class Pallete {
 
         if (b) {
             LIST.add(weight(), this);
-            MAP.put(new ResourceLocation(getName()), this);
+            MAP.put(new ResourceLocation(this.getBiomeName()), this);
         }
+    }
+
+    public static Block[] allBlocksFor(Type type) {
+
+        ArrayList<Block> list = new ArrayList<>();
+
+        for(ResourceLocation key : MAP.keySet()) {
+            Replacer r = MAP.get(key).forType(type);
+            for(IBlockState state : r.states())
+                if(!list.contains(state.getBlock()))
+                    list.add(state.getBlock());
+        }
+
+        return list.toArray(new Block[0]);
+
+    }
+
+    public String fallback() {
+        return "stonebrick";
     }
 
     public static final RandomCollection<Pallete> LIST = new RandomCollection<>();
@@ -45,6 +63,8 @@ public abstract class Pallete {
     public final IBlockState get(Type type, IBlockState parent, Random r) {
 
         IBlockState state = forType(type).get(r);
+        if(forType(type).isEmpty() && MAP.get(new ResourceLocation(fallback())) != null)
+            state = MAP.get(new ResourceLocation(fallback())).forType(type).get(r);
 
         for(IProperty prop : parent.getPropertyKeys())
             if(state.getPropertyKeys().contains(prop))
@@ -55,11 +75,10 @@ public abstract class Pallete {
     }
 
     public enum Type {
-        FLOOR, WALL, LAMP, RUNE, GEM,
-        PILLAR,
+        FLOOR, WALL, LAMP, RUNE, GEM, PILLAR, KEY_STONE,
         STAIRS, STAIRS_WALL, SLAB,
         TORCH, BARS, LADDER,
-        PLANT, GRASS, LOG, LOG2, LEAVES, LEAVES2,
+        PLANT, GRASS, DIRT, LOG, LOG2, LEAVES, LEAVES2,
         FLUID_HARMFUL, FLUID_SAVE
     }
 

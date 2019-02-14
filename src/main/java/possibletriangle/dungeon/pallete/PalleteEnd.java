@@ -10,9 +10,8 @@ import java.util.Random;
 
 public class PalleteEnd extends Pallete {
 
-    @Override
-    public String getName() {
-        return "end";
+    public PalleteEnd() {
+        super("end", 0F);
     }
 
     @Override
@@ -35,6 +34,7 @@ public class PalleteEnd extends Pallete {
                 break;
 
             case RUNE:
+            case KEY_STONE:
                 r.add("quark:duskbound_block");
                 r.add(Blocks.PURPUR_BLOCK);
                 break;
@@ -63,6 +63,7 @@ public class PalleteEnd extends Pallete {
                 break;
 
             case GRASS:
+            case DIRT:
                 r.add("quark:biotite_ore", 0, 0.05);
                 r.add(Blocks.END_STONE);
                 break;
