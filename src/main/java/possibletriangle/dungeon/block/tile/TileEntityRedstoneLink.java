@@ -27,7 +27,6 @@ public class TileEntityRedstoneLink extends TileEntity implements ITickable {
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        Dungeon.LOGGER.info("test");
         if(direction != null)
             compound.setString("direction", direction.getName());
         return compound;

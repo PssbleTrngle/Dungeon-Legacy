@@ -19,9 +19,13 @@ public class PaletteStonebrick extends Pallete {
     }
 
     @Override
-    public Replacer forType(Type type) {
+    public Replacer forType(Type type, int variant) {
 
         Replacer r = new Replacer();
+
+        BlockPlanks.EnumType wood = BlockPlanks.EnumType.OAK;
+        if(variant == 1) wood = BlockPlanks.EnumType.DARK_OAK;
+        if(variant == 1) wood = BlockPlanks.EnumType.SPRUCE;
 
         switch(type) {
             case FLUID_HARMFUL:
@@ -95,6 +99,18 @@ public class PaletteStonebrick extends Pallete {
                 break;
             case LADDER:
                 r.add(Blocks.VINE);
+                break;
+
+            case PLANKS:
+                r.add(Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, wood));
+                break;
+
+            case SLAB_PLANKS:
+                r.add(Blocks.WOODEN_SLAB.getDefaultState().withProperty(BlockWoodSlab.VARIANT, wood));
+                break;
+
+            case STAIRS_PLANKS:
+                r.add(stairs(wood));
                 break;
 
         }

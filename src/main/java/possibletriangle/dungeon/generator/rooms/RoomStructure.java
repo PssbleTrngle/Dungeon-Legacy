@@ -19,14 +19,9 @@ public class RoomStructure extends Room {
 
     public static final HashMap<String, RoomStructure> MAP = new HashMap<>();
 
-    private boolean genWall, noCeil;
+    private boolean noCeil;
 
     public final DungeonStructur structure;
-
-    public RoomStructure genWall() {
-        genWall = true;
-        return this;
-    }
 
     public RoomStructure noCeil() {
         noCeil = true;

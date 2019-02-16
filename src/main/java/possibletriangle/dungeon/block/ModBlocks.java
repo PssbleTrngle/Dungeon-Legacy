@@ -2,7 +2,6 @@ package possibletriangle.dungeon.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -34,6 +33,7 @@ public class ModBlocks {
     public static final Block LEAVES = new BlockPlaceholder(Pallete.Type.LEAVES);
     public static final Block LEAVES2 = new BlockPlaceholder(Pallete.Type.LEAVES2);
     public static final Block KEY_STONE = new BlockPlaceholder(Pallete.Type.KEY_STONE);
+    public static final Block PLANKS = new BlockPlaceholder(Pallete.Type.PLANKS);
 
     public static final Block PILLAR = new BlockPlaceholderPillar(Pallete.Type.PILLAR);
     public static final Block LOG = new BlockPlaceholderPillar(Pallete.Type.LOG);
@@ -41,7 +41,9 @@ public class ModBlocks {
 
     public static final Block STAIRS = new BlockStairsPlaceholder(Pallete.Type.STAIRS, FLOOR.getDefaultState());
     public static final Block STAIRS_WALL = new BlockStairsPlaceholder(Pallete.Type.STAIRS_WALL, WALL.getDefaultState());
+    public static final Block STAIRS_PLANKS = new BlockStairsPlaceholder(Pallete.Type.STAIRS_PLANKS, PLANKS.getDefaultState());
     public static final Block SLAB = new BlockSlabPlaceholder(Pallete.Type.SLAB, false);
+    public static final Block SLAB_PLANKS = new BlockSlabPlaceholder(Pallete.Type.SLAB_PLANKS, false);
 
     public static final Block PLANT = new BlockPlaceholderPlant(Pallete.Type.PLANT);
 
@@ -72,6 +74,9 @@ public class ModBlocks {
         LIST.add(LEAVES2);
         LIST.add(DIRT);
         LIST.add(KEY_STONE);
+        LIST.add(PLANKS);
+        LIST.add(STAIRS_PLANKS);
+        LIST.add(SLAB_PLANKS);
 
         LIST.add(SPAWN);
 

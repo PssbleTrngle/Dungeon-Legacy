@@ -60,7 +60,7 @@ public class ChunkGeneratorDungeon implements IChunkGenerator {
                 WorldDataRooms.put(chunkX, floor, chunkZ, room.getName(), data.rotation, data.pallete, world, "random");
             }
 
-            primer.set(floor, data.pallete);
+            primer.set(floor, data.pallete, r.nextInt(data.pallete.variantCount()));
 
             Room room = RoomManager.get(data.name);
             if(room != null) {

@@ -1,6 +1,7 @@
 package possibletriangle.dungeon.pallete;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -41,10 +42,12 @@ public abstract class Pallete extends Biome {
         ArrayList<Block> list = new ArrayList<>();
 
         for(ResourceLocation key : MAP.keySet()) {
-            Replacer r = MAP.get(key).forType(type);
-            for(IBlockState state : r.states())
-                if(!list.contains(state.getBlock()))
-                    list.add(state.getBlock());
+            for (int variant = 0; variant < MAP.get(key).variantCount(); variant++) {
+                Replacer r = MAP.get(key).forType(type, variant);
+                for (IBlockState state : r.states())
+                    if (!list.contains(state.getBlock()))
+                        list.add(state.getBlock());
+            }
         }
 
         return list.toArray(new Block[0]);
@@ -58,13 +61,13 @@ public abstract class Pallete extends Biome {
     public static final RandomCollection<Pallete> LIST = new RandomCollection<>();
     public static final HashMap<ResourceLocation, Pallete> MAP = new HashMap<>();
 
-    public abstract Replacer forType(Type type);
+    public abstract Replacer forType(Type type, int variant);
 
-    public final IBlockState get(Type type, IBlockState parent, Random r) {
+    public final IBlockState get(Type type, IBlockState parent, Random r, int variant) {
 
-        IBlockState state = forType(type).get(r);
-        if(forType(type).isEmpty() && MAP.get(new ResourceLocation(fallback())) != null)
-            state = MAP.get(new ResourceLocation(fallback())).forType(type).get(r);
+        IBlockState state = forType(type, variant).get(r);
+        if(forType(type, variant).isEmpty() && MAP.get(new ResourceLocation(fallback())) != null)
+            state = MAP.get(new ResourceLocation(fallback())).forType(type, variant).get(r);
 
         for(IProperty prop : parent.getPropertyKeys())
             if(state.getPropertyKeys().contains(prop))
@@ -79,9 +82,34 @@ public abstract class Pallete extends Biome {
         STAIRS, STAIRS_WALL, SLAB,
         TORCH, BARS, LADDER,
         PLANT, GRASS, DIRT, LOG, LOG2, LEAVES, LEAVES2,
-        FLUID_HARMFUL, FLUID_SAVE
+        FLUID_HARMFUL, FLUID_SAVE,
+        PLANKS, SLAB_PLANKS, STAIRS_PLANKS
     }
 
     public abstract double weight();
+
+    public int variantCount() {
+        return 4;
+    }
+
+    public static IBlockState stairs(BlockPlanks.EnumType wood) {
+
+        switch (wood) {
+            case OAK:
+                return (Blocks.OAK_STAIRS.getDefaultState());
+            case BIRCH:
+                return (Blocks.BIRCH_STAIRS.getDefaultState());
+            case JUNGLE:
+                return (Blocks.JUNGLE_STAIRS.getDefaultState());
+            case DARK_OAK:
+                return (Blocks.DARK_OAK_STAIRS.getDefaultState());
+            case SPRUCE:
+                return (Blocks.SPRUCE_STAIRS.getDefaultState());
+            case ACACIA:
+                return (Blocks.ACACIA_STAIRS.getDefaultState());
+            default:
+                return Blocks.AIR.getDefaultState();
+        }
+    }
 
 }

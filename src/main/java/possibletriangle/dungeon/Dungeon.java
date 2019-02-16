@@ -20,6 +20,9 @@ public class Dungeon
 
     public static Logger LOGGER;
 
+    @Mod.Instance(MODID)
+    public static Dungeon INSTANCE;
+
     @SidedProxy(serverSide = "possibletriangle.dungeon.CommonProxy", clientSide = "possibletriangle.dungeon.ClientProxy")
     public static CommonProxy proxy;
 

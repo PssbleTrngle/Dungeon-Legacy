@@ -18,7 +18,7 @@ public class PalleteNether extends Pallete {
     }
 
     @Override
-    public Replacer forType(Type type) {
+    public Replacer forType(Type type, int variant) {
 
         Replacer r = new Replacer();
 

@@ -14,15 +14,18 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
     private final DungeonOptions options;
     private final Random r;
     private final Pallete[] palletes;
+    private final int[] variants;
 
     public ChunkPrimerDungeon(DungeonOptions options, Random r) {
         this.options = options;
         this.r = r;
         this.palletes = new Pallete[options.floorCount];
+        this.variants = new int[options.floorCount];
     }
 
-    public void set(int floor, Pallete pallete) {
+    public void set(int floor, Pallete pallete, int variant) {
         palletes[floor] = pallete;
+        variants[floor] = variant;
     }
 
     public void setBlockState(int x, int y, int z, int floor, Rotation rotation, IBlockState state) {
@@ -46,20 +49,22 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
         if(pallete == null)
             pallete = Pallete.random(r);
 
+        int variant = variants[floor];
+
         if(state.getBlock() instanceof IPlaceholder)
-            state = pallete.get(((IPlaceholder) state.getBlock()).getType(), state, r);
+            state = pallete.get(((IPlaceholder) state.getBlock()).getType(), state, r, variant);
 
         else if(state.getBlock() == Blocks.LAVA)
-            state = pallete.get(Pallete.Type.FLUID_HARMFUL, state, r);
+            state = pallete.get(Pallete.Type.FLUID_HARMFUL, state, r, variant);
         else if(state.getBlock() == Blocks.WATER)
-            state = pallete.get(Pallete.Type.FLUID_SAVE, state, r);
+            state = pallete.get(Pallete.Type.FLUID_SAVE, state, r, variant);
 
         else if(state.getBlock() == Blocks.TORCH)
-            state = pallete.get(Pallete.Type.TORCH, state, r);
+            state = pallete.get(Pallete.Type.TORCH, state, r, variant);
         else if(state.getBlock() == Blocks.IRON_BARS)
-            state = pallete.get(Pallete.Type.BARS, state, r);
+            state = pallete.get(Pallete.Type.BARS, state, r, variant);
         else if(state.getBlock() == Blocks.LADDER)
-            state = pallete.get(Pallete.Type.LADDER, state, r);
+            state = pallete.get(Pallete.Type.LADDER, state, r, variant);
 
         setBlockState(x, y, z, state, rotation);
     }

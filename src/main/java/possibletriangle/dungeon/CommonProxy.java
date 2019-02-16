@@ -3,6 +3,7 @@ package possibletriangle.dungeon;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Loader;
@@ -11,16 +12,15 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import possibletriangle.dungeon.block.ModBlocks;
+import possibletriangle.dungeon.entity.EntityCurse;
 import possibletriangle.dungeon.generator.WorldTypeDungeon;
+import possibletriangle.dungeon.generator.rooms.*;
 import possibletriangle.dungeon.loot.LootManager;
 import possibletriangle.dungeon.pallete.*;
-import possibletriangle.dungeon.generator.rooms.RoomLabyrint;
-import possibletriangle.dungeon.generator.rooms.RoomManager;
-import possibletriangle.dungeon.generator.rooms.RoomSpawn;
 import possibletriangle.dungeon.generator.rooms.wall.WallRandom;
 import possibletriangle.dungeon.structures.DungeonStructur;
-import possibletriangle.dungeon.generator.rooms.RoomStructure;
 
 @Mod.EventBusSubscriber
 public class CommonProxy {
@@ -38,23 +38,26 @@ public class CommonProxy {
 
         registerRenderers();
 
-
+        {
+            int ID = 0;
+            EntityRegistry.registerModEntity(new ResourceLocation(Dungeon.MODID, "curse"), EntityCurse.class, Dungeon.MODID + ".curse", ID++, Dungeon.INSTANCE, EntityCurse.TRACKING_DISTANCE, 1, true, 0x111111, 0xDDDDDD);
+        }
     }
 
     public void init(FMLInitializationEvent event) {
 
         LootManager.reload();
 
-        RoomManager.register(new RoomStructure("tower", "spiral_stairs_bottom").genWall().noCeil(), 5);
-        RoomManager.register(new RoomStructure("tower", "spiral_stairs_top").genWall(), 0);
+        RoomManager.register(new RoomStructure("tower", "spiral_stairs_bottom").noCeil(), 5);
+        RoomManager.register(new RoomStructure("tower", "spiral_stairs_top"), 0);
         RoomManager.get("spiral_stairs_bottom").addDependendent(1, "spiral_stairs_top");
 
-        RoomManager.register(new RoomStructure("tower", "slime_tower_bottom").genWall().noCeil(), 5);
-        RoomManager.register(new RoomStructure("tower", "slime_tower_top").genWall(), 0);
+        RoomManager.register(new RoomStructure("tower", "slime_tower_bottom").noCeil(), 5);
+        RoomManager.register(new RoomStructure("tower", "slime_tower_top"), 0);
         RoomManager.get("slime_tower_bottom").addDependendent(1, "slime_tower_top");
 
-        RoomManager.register(new RoomStructure("room", "long_start").genWall(), 2);
-        RoomManager.register(new RoomStructure("room", "long_end").genWall(), 0);
+        RoomManager.register(new RoomStructure("room", "long_start"), 2);
+        RoomManager.register(new RoomStructure("room", "long_end"), 0);
         RoomManager.get("long_start").addDependendent(EnumFaceDirection.EAST, "long_end");
 
         RoomManager.register(new RoomStructure("room", "long_nw_bottom").noCeil().onlyBottom(), 1);
@@ -73,25 +76,30 @@ public class CommonProxy {
         RoomManager.get("long_nw_top").addDependendent(EnumFaceDirection.SOUTH, "long_sw_top");
         RoomManager.get("long_ne_top").addDependendent(EnumFaceDirection.SOUTH, "long_se_top");
 
-        RoomManager.register(new RoomStructure("tower", "freefall_bottom").noCeil().genWall().onlyBottom(), 3);
-        RoomManager.register(new RoomStructure("tower", "freefall_middle").noCeil().genWall(), 0);
-        RoomManager.register(new RoomStructure("tower", "freefall_top").genWall(), 0);
+        RoomManager.register(new RoomStructure("tower", "freefall_bottom").noCeil().onlyBottom(), 3);
+        RoomManager.register(new RoomStructure("tower", "freefall_middle").noCeil(), 0);
+        RoomManager.register(new RoomStructure("tower", "freefall_top"), 0);
         RoomManager.get("freefall_bottom").addDependendent(1, "freefall_middle");
         RoomManager.get("freefall_bottom").addDependendent(1, "freefall_top");
         RoomManager.get("freefall_middle").addDependendent(1, "freefall_top");
 
         RoomManager.register(new RoomLabyrint(), 10);
-        RoomManager.register(new RoomStructure("corridor", "straight_0").genWall(), 10);
-        RoomManager.register(new RoomStructure("corridor", "straight_1").genWall(), 10);
-        RoomManager.register(new RoomStructure("corridor", "twisted_0").genWall(), 10);
+        RoomManager.register(new RoomStructure("corridor", "straight_0"), 10);
+        RoomManager.register(new RoomStructure("corridor", "straight_1"), 10);
+        RoomManager.register(new RoomStructure("corridor", "twisted_0"), 10);
 
-        RoomManager.register(new RoomStructure("room", "garden").genWall(), 3);
-        RoomManager.register(new RoomStructure("room", "fountain").genWall(), 2);
-        RoomManager.register(new RoomStructure("room", "lava").genWall(), 4);
+        RoomManager.register(new RoomStructure("room", "garden"), 3);
+        RoomManager.register(new RoomStructure("room", "fountain"), 2);
+        RoomManager.register(new RoomStructure("room", "lava"), 4);
 
-        RoomManager.register(new RoomStructure("room", "spawner_0").genWall(), 4);
+        RoomManager.register(new RoomStructure("room", "spawner_0"), 4);
+        RoomManager.register(new RoomStructure("room", "spawner_1"), 4);
 
-        RoomManager.register(new RoomStructure("room", "atrium_0").genWall().noCeil().onlyTop(), 6);
+        RoomManager.register(new RoomStructure("room", "atrium_0").noCeil().onlyTop(), 6);
+
+        RoomManager.register(new RoomShop()
+                .add("basic", 1)
+                , 5);
 
         WallRandom wall_random = new WallRandom(1)
                 .add(new DungeonStructur("wall/door/rect_open"), 2)
