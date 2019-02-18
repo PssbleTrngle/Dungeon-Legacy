@@ -3,6 +3,7 @@ package possibletriangle.dungeon.generator;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.ChunkPrimer;
 import possibletriangle.dungeon.Dungeon;
 
@@ -27,8 +28,8 @@ public class ChunkPrimerRotateable extends ChunkPrimer {
         double[] point2 = {origin[0] - center[0], origin[1] - center[1]};
         double[] point3 = new double[2];
 
-        int cos = (int) Math.cos(Math.PI/2*parts_pi);
-        int sin = (int) Math.sin(Math.PI/2*parts_pi);
+        int cos = (int) MathHelper.cos((float) Math.PI/2*parts_pi);
+        int sin = (int) MathHelper.sin((float) Math.PI/2*parts_pi);
 
         point3[0] = point2[0] * cos - point2[1] * sin;
         point3[1] = point2[0] * sin + point2[1] * cos;

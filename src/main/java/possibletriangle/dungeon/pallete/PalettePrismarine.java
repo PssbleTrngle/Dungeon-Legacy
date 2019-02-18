@@ -27,6 +27,7 @@ public class PalettePrismarine extends Pallete {
         switch(type) {
 
             case FLUID_HARMFUL:
+                r.add("thermalfoundation:fluid_cryotheum", 1, 1);
             case FLUID_SAVE:
                 r.add(Blocks.WATER);
                 break;

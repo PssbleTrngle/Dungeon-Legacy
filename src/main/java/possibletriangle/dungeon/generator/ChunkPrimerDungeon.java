@@ -46,9 +46,6 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
         }
 
         Pallete pallete = floor >= palletes.length ? palletes[palletes.length-1] : palletes[floor];
-        if(pallete == null)
-            pallete = Pallete.random(r);
-
         int  variant = floor >= variants.length ? variants[variants.length-1] : variants[floor];
 
         if(state.getBlock() instanceof IPlaceholder)

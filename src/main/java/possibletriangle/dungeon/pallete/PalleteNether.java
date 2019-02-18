@@ -25,7 +25,13 @@ public class PalleteNether extends Pallete {
         switch(type) {
 
             case FLUID_HARMFUL:
+                if(variant == 1) r.add("thermalfoundation:fluid_pyrotheum", 0, 0.2);
+                else r.add(Blocks.LAVA, 1);
+                r.add(Blocks.LAVA);
+                break;
             case FLUID_SAVE:
+                if(variant == 0) r.add("biomesoplenty:honey", 1, 1);
+                else r.add("biomesoplenty:blood", 1, 2);
                 r.add(Blocks.LAVA);
                 break;
 
@@ -59,7 +65,10 @@ public class PalleteNether extends Pallete {
                 break;
 
             case GRASS:
+                if(variant == 0) r.add("biomesoplenty:grass:6", 1, 1);
+                else r.add("biomesoplenty:grass:8", 1, 0.6);
             case DIRT:
+                r.add(Blocks.NETHERRACK, 1);
                 r.add(Blocks.MYCELIUM);
                 r.add(Blocks.SOUL_SAND);
                 break;

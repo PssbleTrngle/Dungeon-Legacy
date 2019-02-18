@@ -71,12 +71,14 @@ public class ChunkGeneratorDungeon implements IChunkGenerator {
                         WorldDataRooms.put(chunkX, floor + floorsAbove, chunkZ, roomAbove.getName(), data.rotation, data.pallete, world, "above");
                 }
 
-                for(EnumFaceDirection side : new EnumFaceDirection[]{EnumFaceDirection.SOUTH, EnumFaceDirection.WEST, EnumFaceDirection.NORTH, EnumFaceDirection.EAST}) {
-                    Room roomAt = room.roomAt(side, data.rotation, r);
+                int offset = 1;
+                for(int x = -offset; x <= offset; x++)
+                    for(int z = -offset; z <= offset; z++) {
 
-                    int[] i = Room.offset(side);
-                    if(roomAt != null)
-                        WorldDataRooms.put(chunkX + i[0], floor, chunkZ + i[1], roomAt.getName(), data.rotation, data.pallete, world, "side");
+                        int[] i = new int[]{x, z};
+                        Room roomAt = room.roomAt(i, data.rotation, r);
+                        if(roomAt != null)
+                            WorldDataRooms.put(chunkX + i[0], floor, chunkZ + i[1], roomAt.getName(), data.rotation, data.pallete, world, "side");
                 }
 
                 room.generateAt(options, primer, floor, r, data.rotation);

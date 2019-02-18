@@ -58,7 +58,7 @@ public abstract class EntityCurse extends EntityMob {
 
         if(world.isRemote) {
             EnumParticleTypes particle = EnumParticleTypes.SUSPENDED_DEPTH;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 2; i++)
                 this.world.spawnParticle(particle, this.posX - 0.5 +  this.rand.nextDouble() * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ - 0.5 + this.rand.nextDouble() * (double)this.width, 0.1D, 0.1D, 0.1D);
             }
 

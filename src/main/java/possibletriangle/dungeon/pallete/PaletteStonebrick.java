@@ -62,6 +62,8 @@ public class PaletteStonebrick extends Pallete {
                 break;
 
             case GRASS:
+                if(variant == 0)  r.add("biomesoplenty:grass:7", 0, 0.3);
+                else r.add(Blocks.GRASS, 1);
                 r.add(Blocks.GRASS);
                 break;
             case DIRT:

@@ -1,8 +1,8 @@
 package possibletriangle.dungeon;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.item.Item;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -63,9 +63,9 @@ public class CommonProxy {
 
         RoomManager.register(new RoomStructure("room", "long_start"), 2);
         RoomManager.register(new RoomStructure("room", "long_end"), 0);
-        RoomManager.get("long_start").addDependendent(EnumFaceDirection.EAST, "long_end");
+        RoomManager.get("long_start").addDependendent(EnumFacing.EAST, "long_end");
 
-        RoomManager.register(new RoomStructure("room", "long_nw_bottom").noCeil().onlyBottom(), 1);
+        RoomManager.register(new RoomStructure("room", "long_nw_bottom").noCeil().onlyBottom(), 10);
         RoomManager.register(new RoomStructure("room", "long_ne_bottom").noCeil(), 0);
         RoomManager.register(new RoomStructure("room", "long_sw_bottom").noCeil(), 0);
         RoomManager.register(new RoomStructure("room", "long_se_bottom").noCeil(), 0);
@@ -73,13 +73,13 @@ public class CommonProxy {
         RoomManager.register(new RoomStructure("room", "long_ne_top"), 0);
         RoomManager.register(new RoomStructure("room", "long_sw_top"), 0);
         RoomManager.register(new RoomStructure("room", "long_se_top"), 0);
-        RoomManager.get("long_nw_bottom").addDependendent(EnumFaceDirection.EAST, "long_ne_bottom");
-        RoomManager.get("long_nw_bottom").addDependendent(EnumFaceDirection.SOUTH, "long_sw_bottom");
-        RoomManager.get("long_ne_bottom").addDependendent(EnumFaceDirection.SOUTH, "long_se_bottom");
+        RoomManager.get("long_nw_bottom").addDependendent(EnumFacing.EAST, "long_ne_bottom");
+        RoomManager.get("long_nw_bottom").addDependendent(EnumFacing.SOUTH, "long_sw_bottom");
+        RoomManager.get("long_nw_bottom").addDependendent(EnumFacing.SOUTH, EnumFacing.EAST, "long_se_bottom");
         RoomManager.get("long_nw_bottom").addDependendent(1, "long_nw_top");
-        RoomManager.get("long_nw_top").addDependendent(EnumFaceDirection.EAST, "long_ne_top");
-        RoomManager.get("long_nw_top").addDependendent(EnumFaceDirection.SOUTH, "long_sw_top");
-        RoomManager.get("long_ne_top").addDependendent(EnumFaceDirection.SOUTH, "long_se_top");
+        RoomManager.get("long_nw_top").addDependendent(EnumFacing.EAST, "long_ne_top");
+        RoomManager.get("long_nw_top").addDependendent(EnumFacing.SOUTH, "long_sw_top");
+        RoomManager.get("long_nw_top").addDependendent(EnumFacing.SOUTH, EnumFacing.EAST, "long_se_top");
 
         RoomManager.register(new RoomStructure("tower", "freefall_bottom").noCeil().onlyBottom(), 3);
         RoomManager.register(new RoomStructure("tower", "freefall_middle").noCeil(), 0);

@@ -27,10 +27,11 @@ public class PalleteEnd extends Pallete {
         switch(type) {
 
             case FLUID_HARMFUL:
+                r.add("thermalfoundation:fluid_ender", 1);
                 r.add(Blocks.LAVA);
                 break;
             case FLUID_SAVE:
-                r.add(Blocks.WATER);
+                r.add(Blocks.AIR);
                 break;
 
             case RUNE:

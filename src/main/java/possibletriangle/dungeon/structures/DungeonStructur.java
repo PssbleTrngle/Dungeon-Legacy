@@ -113,7 +113,7 @@ public class DungeonStructur {
 
                 if(te instanceof IInventory) {
                     IInventory inventory = (IInventory) te;
-                    if(inventory.isEmpty())
+                    if(inventory.isEmpty() && inventory.getSizeInventory() / 9 > 1)
                         LootManager.COMMON.fillInventory(inventory, random, new LootContext(0, null, null, null,  null, null));
                 }
 
@@ -125,7 +125,6 @@ public class DungeonStructur {
 
             Vec3d pos = new Vec3d(chunkX*16, floor * options.floorHeight, chunkZ*16);
             Entity entity = AnvilChunkLoader.readWorldEntityPos(tag, world, pos.x, pos.y, pos.z, true);
-            Dungeon.LOGGER.info("Entity");
 
         }
 

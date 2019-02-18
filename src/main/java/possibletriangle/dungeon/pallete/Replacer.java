@@ -91,6 +91,7 @@ public class Replacer {
                 return b.getStateFromMeta(meta);
         }
 
+        Dungeon.LOGGER.error("\"{}\" does not exist!", o);
         return null;
     }
 

@@ -1,18 +1,23 @@
 package possibletriangle.dungeon.generator.rooms;
 
-import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import possibletriangle.dungeon.Dungeon;
-import possibletriangle.dungeon.generator.*;
+import possibletriangle.dungeon.generator.ChunkPrimerDungeon;
+import possibletriangle.dungeon.generator.DungeonOptions;
+import possibletriangle.dungeon.generator.RandomCollection;
+import possibletriangle.dungeon.generator.WorldDataRooms;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -38,28 +43,14 @@ public abstract class Room {
         return ID;
     }
 
-    public static int[] offset(EnumFaceDirection side) {
-        switch(side) {
-            case SOUTH:
-               return new int[]{0, 1};
-            case WEST:
-                return new int[]{-1, 0};
-            case NORTH:
-                return new int[]{0, -1};
-            case EAST:
-                return new int[]{1, 0};
-            default: return new int[]{0, 0};
-        }
-    }
-
     public final boolean canReallyGoOnFloor(int floor, int chunkX, int chunkZ, int floorCount, Rotation rotation, World world) {
         return canReallyGoOnFloor(floor, chunkX, chunkZ, floorCount, rotation, world, 0);
     }
 
-    private final boolean canReallyGoOnFloor(int floor, int chunkX, int chunkZ, int floorCount, Rotation rotation, World world, int tries) {
+    private boolean canReallyGoOnFloor(int floor, int chunkX, int chunkZ, int floorCount, Rotation rotation, World world, int tries) {
 
         if(tries > 10) {
-            Dungeon.LOGGER.info("Infinite Recursive Room testing for {}", getName());
+            Dungeon.LOGGER.error("Infinite Recursive Room testing for {}", getName());
             return false;
         }
 
@@ -71,18 +62,18 @@ public abstract class Room {
             return true;
 
         boolean b2 = true;
-        for(EnumFaceDirection side : EnumFaceDirection.values()) {
-            Room room = roomAt(side, rotation, new Random());
-            if(room == null)
-                continue;
 
-            RoomData existing = WorldDataRooms.atFloor(chunkX, floor, chunkZ, world);
+        int offset = 1;
+        for(int x = -offset; x <= offset; x++)
+            for(int z = -offset; z <= offset; z++) {
+                int[] i = new int[]{x, z};
 
-            int[] offset = offset(side);
-            b2 = b2 && room.canReallyGoOnFloor(floor, chunkX + offset[0], chunkZ + offset[0], floorCount, rotation, world, tries+1);
+                Room room = roomAt(i, rotation, new Random());
+                if(room == null)
+                    continue;
 
-
-            b2 = b2 && existing == null;
+                RoomData existing = WorldDataRooms.atFloor(chunkX + i[0], floor, chunkZ + i[1], world);
+                b2 = b2 && existing == null && room.canReallyGoOnFloor(floor, chunkX + i[0], chunkZ + i[1], floorCount, rotation, world, tries+1);
         }
 
         return b2;
@@ -97,7 +88,7 @@ public abstract class Room {
     }
 
     private final HashMap<Integer, RandomCollection<ResourceLocation>> ABOVE = new HashMap<>();
-    private final HashMap<EnumFaceDirection, RandomCollection<ResourceLocation>> SIDE = new HashMap<>();
+    private final HashMap<String, RandomCollection<ResourceLocation>> SIDE = new HashMap<>();
     private int heightest_dependent = 0;
 
     public final void addDependendent(int floorAbove, String s) {
@@ -108,11 +99,10 @@ public abstract class Room {
         if(floorAbove > 0) {
             heightest_dependent = Math.max(heightest_dependent, floorAbove);
 
-            RandomCollection c = ABOVE.get(floorAbove);
-            if(c == null) c = new RandomCollection();
+            RandomCollection<ResourceLocation> c = ABOVE.get(floorAbove);
+            if(c == null) c = new RandomCollection<>();
             c.add(weight, new ResourceLocation(s));
             ABOVE.put(floorAbove, c);
-            simple = false;
 
         }
     }
@@ -122,7 +112,8 @@ public abstract class Room {
         return RoomManager.get(ABOVE.get(floorAbove).next(r));
     }
 
-    public final Room roomAt(EnumFaceDirection side, Rotation rotation, Random r) {
+    @Deprecated
+    public final Room roomAt(EnumFacing side, Rotation rotation, Random r) {
 
         switch (side) {
             case UP:
@@ -130,28 +121,84 @@ public abstract class Room {
                 return null;
         }
 
-        side = rotate(side, rotation);
-        if(!SIDE.containsKey(side)) return null;
-        return RoomManager.get(SIDE.get(side).next(r));
+        return roomAt(new int[]{side.getDirectionVec().getX(), side.getDirectionVec().getZ()}, rotation, r);
     }
 
-    public final void addDependendent(EnumFaceDirection side, String s) {
+    public final Room roomAt(int[] offset, Rotation rotation, Random r) {
+
+        int parts_pi = 0;
+        switch(rotation) {
+            case CLOCKWISE_90:
+                parts_pi = 1;
+                break;
+            case CLOCKWISE_180:
+                parts_pi = 2;
+                break;
+            case COUNTERCLOCKWISE_90:
+                parts_pi = -1;
+                break;
+        }
+
+        int cos = (int) MathHelper.cos((float) Math.PI/2*parts_pi);
+        int sin = (int) MathHelper.sin((float) Math.PI/2*parts_pi);
+
+        int x = offset[0] * cos  - offset[1] * sin;
+        int z = offset[0] * sin  + offset[1] * cos;
+
+        int[] i = new int[]{x, z};
+        if(!SIDE.containsKey(Arrays.toString(i))) return null;
+        return RoomManager.get(SIDE.get(Arrays.toString(i)).next(r));
+    }
+
+    public final void addDependendent(EnumFacing side, String s) {
         addDependendent(side, s, 1);
     }
 
-    public final void addDependendent(EnumFaceDirection side, String s, double weight) {
+    public final void addDependendent(EnumFacing side, String s, double weight) {
         switch (side) {
             case EAST:
             case WEST:
             case NORTH:
             case SOUTH:
-
-            RandomCollection c = SIDE.get(side);
-            if(c == null) c = new RandomCollection();
-            c.add(weight, new ResourceLocation(s));
-                SIDE.put(side, c);
-            simple = false;
+                addDependendent(new int[]{side.getDirectionVec().getX(), side.getDirectionVec().getZ()}, s, weight);
         }
+    }
+
+    public final void addDependendent(EnumFacing side1, EnumFacing side2, String s) {
+        addDependendent(side1, side2, s, 1);
+    }
+
+    public final void addDependendent(EnumFacing side1, EnumFacing side2, String s, double weight) {
+        int[] offset = new int[2];
+        switch (side1) {
+            case EAST:
+            case WEST:
+            case NORTH:
+            case SOUTH:
+                offset[0] += side1.getDirectionVec().getX();
+                offset[1] += side1.getDirectionVec().getZ();
+        }
+
+        switch (side2) {
+            case EAST:
+            case WEST:
+            case NORTH:
+            case SOUTH:
+                offset[0] += side2.getDirectionVec().getX();
+                offset[1] += side2.getDirectionVec().getZ();
+        }
+
+        addDependendent(offset, s, weight);
+    }
+
+    private void addDependendent(int[] offset, String s, double weight) {
+
+        RandomCollection<ResourceLocation> c = SIDE.get(offset);
+        if(c == null) c = new RandomCollection<>();
+        c.add(weight, new ResourceLocation(s));
+        SIDE.put(Arrays.toString(offset), c);
+        simple = false;
+
     }
 
     private boolean onlybottom = false;
@@ -174,6 +221,10 @@ public abstract class Room {
 
     }
 
+    public void enter(EntityPlayer player, BlockPos chunk) {
+
+    }
+
     @SubscribeEvent
     public static void onTick(TickEvent.PlayerTickEvent event) {
 
@@ -186,35 +237,6 @@ public abstract class Room {
         if(room != null)
             room.tickPlayer(event.player, chunk);
 
-
-    }
-
-    public static EnumFaceDirection rotate(EnumFaceDirection in, Rotation r) {
-
-        switch(r) {
-            case CLOCKWISE_180:
-                return rotate(rotate(in, Rotation.CLOCKWISE_90), Rotation.CLOCKWISE_90);
-            case COUNTERCLOCKWISE_90:
-                return rotate(rotate(in, Rotation.CLOCKWISE_180), Rotation.CLOCKWISE_90);
-            case CLOCKWISE_90:
-
-                switch(in) {
-                    case EAST:
-                        return EnumFaceDirection.SOUTH;
-                    case SOUTH:
-                        return EnumFaceDirection.SOUTH;
-                    case WEST:
-                        return EnumFaceDirection.NORTH;
-                    case NORTH:
-                        return EnumFaceDirection.EAST;
-                    default:
-                        return in;
-                }
-
-            default:
-                return in;
-
-        }
 
     }
 
