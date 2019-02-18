@@ -8,9 +8,8 @@ import java.util.Random;
 
 public class PalleteNether extends Pallete {
 
-    @Override
-    public String getName() {
-        return "nether";
+    public PalleteNether() {
+        super("nether", 1F);
     }
 
     @Override
@@ -19,18 +18,25 @@ public class PalleteNether extends Pallete {
     }
 
     @Override
-    public Replacer forType(Type type) {
+    public Replacer forType(Type type, int variant) {
 
         Replacer r = new Replacer();
 
         switch(type) {
 
             case FLUID_HARMFUL:
+                if(variant == 1) r.add("thermalfoundation:fluid_pyrotheum", 0, 0.2);
+                else r.add(Blocks.LAVA, 1);
+                r.add(Blocks.LAVA);
+                break;
             case FLUID_SAVE:
+                if(variant == 0) r.add("biomesoplenty:honey", 1, 1);
+                else r.add("biomesoplenty:blood", 1, 2);
                 r.add(Blocks.LAVA);
                 break;
 
             case RUNE:
+            case KEY_STONE:
                 r.add(Blocks.MAGMA);
                 break;
             case GEM:
@@ -59,6 +65,10 @@ public class PalleteNether extends Pallete {
                 break;
 
             case GRASS:
+                if(variant == 0) r.add("biomesoplenty:grass:6", 1, 1);
+                else r.add("biomesoplenty:grass:8", 1, 0.6);
+            case DIRT:
+                r.add(Blocks.NETHERRACK, 1);
                 r.add(Blocks.MYCELIUM);
                 r.add(Blocks.SOUL_SAND);
                 break;

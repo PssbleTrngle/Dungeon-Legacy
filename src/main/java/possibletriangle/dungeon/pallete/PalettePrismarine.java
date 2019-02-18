@@ -10,9 +10,8 @@ import java.util.Random;
 
 public class PalettePrismarine extends Pallete {
 
-    @Override
-    public String getName() {
-        return "prismarine";
+    public PalettePrismarine() {
+        super("prismarine", 0F);
     }
 
     @Override
@@ -21,18 +20,20 @@ public class PalettePrismarine extends Pallete {
     }
 
     @Override
-    public Replacer forType(Type type) {
+    public Replacer forType(Type type, int variant) {
 
         Replacer r = new Replacer();
 
         switch(type) {
 
             case FLUID_HARMFUL:
+                r.add("thermalfoundation:fluid_cryotheum", 1, 1);
             case FLUID_SAVE:
                 r.add(Blocks.WATER);
                 break;
 
             case RUNE:
+            case KEY_STONE:
                 r.add(Blocks.PRISMARINE.getDefaultState().withProperty(BlockPrismarine.VARIANT, BlockPrismarine.EnumType.DARK));
                 break;
             case GEM:
@@ -58,6 +59,7 @@ public class PalettePrismarine extends Pallete {
                 break;
 
             case GRASS:
+            case DIRT:
                 r.add(Blocks.SAND);
                 r.add(Blocks.GRAVEL);
                 break;

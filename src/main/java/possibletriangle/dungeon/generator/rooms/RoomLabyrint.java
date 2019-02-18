@@ -1,12 +1,11 @@
-package possibletriangle.dungeon.rooms;
+package possibletriangle.dungeon.generator.rooms;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.util.Rotation;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.ChunkPrimer;
 import possibletriangle.dungeon.block.ModBlocks;
 import possibletriangle.dungeon.generator.ChunkPrimerDungeon;
 import possibletriangle.dungeon.generator.DungeonOptions;
+import possibletriangle.dungeon.structures.DungeonStructur;
 
 import java.util.Random;
 
@@ -16,6 +15,8 @@ public class RoomLabyrint extends Room {
         super("labyrinth");
     }
 
+    private final static DungeonStructur FULL = new DungeonStructur("room/hall");
+
     @Override
     public boolean generateWall() {
         return true;
@@ -23,6 +24,8 @@ public class RoomLabyrint extends Room {
 
     @Override
     public void generateAt(DungeonOptions options, ChunkPrimerDungeon primer, int floor, Random r, Rotation rotation) {
+
+        FULL.generate(primer, options, floor, (x,y,z) -> (x == 0 || x == 15) || (z == 0 || z == 15), Rotation.NONE);
 
         for(int x = 0; x < 16; x++)
             for(int z = 0; z < 16; z++) {

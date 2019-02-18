@@ -14,15 +14,18 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
     private final DungeonOptions options;
     private final Random r;
     private final Pallete[] palletes;
+    private final int[] variants;
 
     public ChunkPrimerDungeon(DungeonOptions options, Random r) {
         this.options = options;
         this.r = r;
         this.palletes = new Pallete[options.floorCount];
+        this.variants = new int[options.floorCount];
     }
 
-    public void set(int floor, Pallete pallete) {
+    public void set(int floor, Pallete pallete, int variant) {
         palletes[floor] = pallete;
+        variants[floor] = variant;
     }
 
     public void setBlockState(int x, int y, int z, int floor, Rotation rotation, IBlockState state) {
@@ -31,7 +34,7 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
 
     public void setBlockState(int x, int y, int z, int floor, IBlockState state, Rotation rotation, boolean replace) {
 
-        if(x < 0 || z < 0 || x > 15 || z > 15 || y < 0 || y >= options.floorHeight) {
+        if(x < 0 || z < 0 || x > 15 || z > 15 || y < 0 || (y >= options.floorHeight && floor < options.floorCount-1)) {
             Dungeon.LOGGER.info("Illegal generation at floor {} ({}/{}/{})", floor, x, y, z);
             return;
         }
@@ -43,23 +46,22 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
         }
 
         Pallete pallete = floor >= palletes.length ? palletes[palletes.length-1] : palletes[floor];
-        if(pallete == null)
-            pallete = Pallete.random(r);
+        int  variant = floor >= variants.length ? variants[variants.length-1] : variants[floor];
 
         if(state.getBlock() instanceof IPlaceholder)
-            state = pallete.get(((IPlaceholder) state.getBlock()).getType(), state, r);
+            state = pallete.get(((IPlaceholder) state.getBlock()).getType(), state, r, variant);
 
         else if(state.getBlock() == Blocks.LAVA)
-            state = pallete.get(Pallete.Type.FLUID_HARMFUL, state, r);
+            state = pallete.get(Pallete.Type.FLUID_HARMFUL, state, r, variant);
         else if(state.getBlock() == Blocks.WATER)
-            state = pallete.get(Pallete.Type.FLUID_SAVE, state, r);
+            state = pallete.get(Pallete.Type.FLUID_SAVE, state, r, variant);
 
         else if(state.getBlock() == Blocks.TORCH)
-            state = pallete.get(Pallete.Type.TORCH, state, r);
+            state = pallete.get(Pallete.Type.TORCH, state, r, variant);
         else if(state.getBlock() == Blocks.IRON_BARS)
-            state = pallete.get(Pallete.Type.BARS, state, r);
+            state = pallete.get(Pallete.Type.BARS, state, r, variant);
         else if(state.getBlock() == Blocks.LADDER)
-            state = pallete.get(Pallete.Type.LADDER, state, r);
+            state = pallete.get(Pallete.Type.LADDER, state, r, variant);
 
         setBlockState(x, y, z, state, rotation);
     }

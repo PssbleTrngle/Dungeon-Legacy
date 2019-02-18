@@ -2,6 +2,7 @@ package possibletriangle.dungeon.generator;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.*;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.ChunkGeneratorFlat;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.Mod;
@@ -21,9 +22,11 @@ public class WorldTypeDungeon extends WorldType {
         return new ChunkGeneratorDungeon(new DungeonOptions(), world, new Random(world.getSeed()));
     }
 
+    /*
     @Override
-    public int getSpawnFuzz(WorldServer world, MinecraftServer server) {
-        return 0;
+    public BiomeProvider getBiomeProvider(World world) {
+        return new BiomeProviderDungeon(world);
     }
+    */
 
 }

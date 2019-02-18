@@ -26,14 +26,14 @@ public class StructureLoader {
 
     public static final String baseFolder = "structures/";
 
-    public static void read(ResourceLocation source, List<Template.BlockInfo> blocks) {
+    public static void read(ResourceLocation source, List<Template.BlockInfo> blocks, List<NBTTagCompound> entites) {
 
         InputStream inputstream = null;
         try
         {
             File file = new File(baseFolder, source.getResourcePath() + ".nbt");
             inputstream = new FileInputStream(file);
-            read(inputstream, blocks);
+            read(inputstream, blocks, entites);
         }
         catch (Throwable ignored)
         {
@@ -44,7 +44,7 @@ public class StructureLoader {
         }
     }
 
-    public static void read(NBTTagCompound compound, List<Template.BlockInfo> blocks) {
+    public static void read(NBTTagCompound compound, List<Template.BlockInfo> blocks, List<NBTTagCompound> entites) {
 
         NBTTagList nbttaglist = compound.getTagList("size", 3);
         BlockPos size = new BlockPos(nbttaglist.getIntAt(0), nbttaglist.getIntAt(1), nbttaglist.getIntAt(2));
@@ -68,19 +68,21 @@ public class StructureLoader {
             IBlockState iblockstate = palette.get(nbttagcompound.getInteger("state"));
             NBTTagCompound block_nbt;
 
-            if (nbttagcompound.hasKey("nbt")) {
-                block_nbt = nbttagcompound.getCompoundTag("nbt");
-            }
-            else {
-                block_nbt = null;
-            }
-
+            block_nbt = nbttagcompound.getCompoundTag("nbt");
             blocks.add(new Template.BlockInfo(blockpos, iblockstate, block_nbt));
+        }
+
+        NBTTagList nbt_entities = compound.getTagList("entities", 10);
+        for (int j = 0; j < nbt_entities.tagCount(); ++j) {
+
+            NBTTagCompound nbttagcompound = nbt_entities.getCompoundTagAt(j);
+            entites.add(nbttagcompound);
+
         }
 
     }
 
-    public static void read(InputStream stream, List<Template.BlockInfo> blocks) throws IOException
+    public static void read(InputStream stream, List<Template.BlockInfo> blocks, List<NBTTagCompound> entites) throws IOException
     {
         NBTTagCompound nbttagcompound = CompressedStreamTools.readCompressed(stream);
 
@@ -89,7 +91,7 @@ public class StructureLoader {
             nbttagcompound.setInteger("DataVersion", 500);
         }
 
-        read(FMLCommonHandler.instance().getDataFixer().process(FixTypes.STRUCTURE, nbttagcompound), blocks);
+        read(FMLCommonHandler.instance().getDataFixer().process(FixTypes.STRUCTURE, nbttagcompound), blocks, entites);
 
     }
 

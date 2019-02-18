@@ -12,11 +12,13 @@ public class TESRSpawn extends TileEntitySpecialRenderer<TileEntitySpawn> {
     @Override
     public void render(TileEntitySpawn te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 
+        setLightmapDisabled(true);
+
         GlStateManager.pushMatrix();
 
         GlStateManager.translate(x, y, z);
 
-        GlStateManager.translate(1, te.getOffset()[1], 1);
+        GlStateManager.translate(0, te.getOffset()[1], 0);
         VortexRenderer.render(te.vortexSize, 0.1, te.global ? Icons.VORTEX_GLOBAL : Icons.VORTEX);
 
         GlStateManager.popMatrix();

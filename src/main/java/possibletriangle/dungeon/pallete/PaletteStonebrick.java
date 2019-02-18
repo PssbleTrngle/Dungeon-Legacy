@@ -9,9 +9,8 @@ import java.util.Random;
 
 public class PaletteStonebrick extends Pallete {
 
-    @Override
-    public String getName() {
-        return "stonebrick";
+    public PaletteStonebrick() {
+        super("stonebrick", 0F);
     }
 
     @Override
@@ -20,9 +19,13 @@ public class PaletteStonebrick extends Pallete {
     }
 
     @Override
-    public Replacer forType(Type type) {
+    public Replacer forType(Type type, int variant) {
 
         Replacer r = new Replacer();
+
+        BlockPlanks.EnumType wood = BlockPlanks.EnumType.OAK;
+        if(variant == 1) wood = BlockPlanks.EnumType.DARK_OAK;
+        if(variant == 2) wood = BlockPlanks.EnumType.SPRUCE;
 
         switch(type) {
             case FLUID_HARMFUL:
@@ -33,6 +36,7 @@ public class PaletteStonebrick extends Pallete {
                 break;
 
             case RUNE:
+            case KEY_STONE:
                 r.add(Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED));
                 break;
             case GEM:
@@ -58,7 +62,12 @@ public class PaletteStonebrick extends Pallete {
                 break;
 
             case GRASS:
+                if(variant == 0)  r.add("biomesoplenty:grass:7", 0, 0.3);
+                else r.add(Blocks.GRASS, 1);
                 r.add(Blocks.GRASS);
+                break;
+            case DIRT:
+                r.add(Blocks.DIRT);
                 break;
             case LOG:
                 r.add(Blocks.LOG.getDefaultState().withProperty(BlockOldLog.VARIANT, BlockPlanks.EnumType.OAK));
@@ -73,7 +82,11 @@ public class PaletteStonebrick extends Pallete {
                 r.add(Blocks.LEAVES2.getDefaultState().withProperty(BlockNewLog.VARIANT, BlockPlanks.EnumType.DARK_OAK));
                 break;
             case PLANT:
-                r.add(Blocks.RED_FLOWER);
+                for(int meta = 0; meta < 8; meta++)
+                    r.add(Blocks.RED_FLOWER.getStateFromMeta(meta));
+                r.add(Blocks.YELLOW_FLOWER.getDefaultState());
+                r.add(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.FERN), 0, 4);
+                r.add(Blocks.TALLGRASS.getDefaultState().withProperty(BlockTallGrass.TYPE, BlockTallGrass.EnumType.GRASS), 0, 4);
                 break;
 
             case BARS:
@@ -88,6 +101,18 @@ public class PaletteStonebrick extends Pallete {
                 break;
             case LADDER:
                 r.add(Blocks.VINE);
+                break;
+
+            case PLANKS:
+                r.add(Blocks.PLANKS.getDefaultState().withProperty(BlockPlanks.VARIANT, wood));
+                break;
+
+            case SLAB_PLANKS:
+                r.add(Blocks.WOODEN_SLAB.getDefaultState().withProperty(BlockWoodSlab.VARIANT, wood));
+                break;
+
+            case STAIRS_PLANKS:
+                r.add(stairs(wood));
                 break;
 
         }

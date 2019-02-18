@@ -1,4 +1,4 @@
-package possibletriangle.dungeon.rooms;
+package possibletriangle.dungeon.generator.rooms;
 
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -14,19 +14,14 @@ public class RoomStructure extends Room {
 
     @Override
     public boolean generateWall() {
-        return genWall;
+        return true;
     }
 
     public static final HashMap<String, RoomStructure> MAP = new HashMap<>();
 
-    private boolean genWall, noCeil;
+    private boolean noCeil;
 
     public final DungeonStructur structure;
-
-    public RoomStructure genWall() {
-        genWall = true;
-        return this;
-    }
 
     public RoomStructure noCeil() {
         noCeil = true;
@@ -44,12 +39,12 @@ public class RoomStructure extends Room {
 
     @Override
     public void generateAt(DungeonOptions options, ChunkPrimerDungeon primer, int floor, Random r, Rotation rotation) {
-        structure.generate(primer, options, floor, (x,y,z) -> (x < 16 && z < 16 && y < options.floorHeight && x >= 0 && z >= 0 && y >= 0), rotation );
+        structure.generate(primer, options, floor, (x,y,z) -> (x < 16 && z < 16 && x >= 0 && z >= 0 && y >= 0 && (y < options.floorHeight || floor == options.floorCount-1)), rotation );
     }
 
     @Override
     public void populate(DungeonOptions options, World world, int chunkX, int chunkZ, int floor, Random r) {
-        structure.populate(world, chunkX, chunkZ, options, floor, Rotation.NONE, false, new BlockPos(0,0,0));
+        structure.populate(world, chunkX, chunkZ, options, floor, Rotation.NONE, false, new BlockPos(0,0,0), r);
     }
 
     @Override
