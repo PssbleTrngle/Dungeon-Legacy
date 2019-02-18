@@ -17,4 +17,8 @@ public class EntityAIFollowCurse extends EntityAINearestAttackableTarget<EntityP
         super(entity, EntityPlayer.class, 1, true, false, (player) -> (player.getDistance(entity) <= EntityCurse.ACTIVATION_DISTANCE));
     }
 
+    @Override
+    public boolean shouldContinueExecuting() {
+        return true;
+    }
 }

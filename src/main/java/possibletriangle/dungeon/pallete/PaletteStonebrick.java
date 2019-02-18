@@ -25,7 +25,7 @@ public class PaletteStonebrick extends Pallete {
 
         BlockPlanks.EnumType wood = BlockPlanks.EnumType.OAK;
         if(variant == 1) wood = BlockPlanks.EnumType.DARK_OAK;
-        if(variant == 1) wood = BlockPlanks.EnumType.SPRUCE;
+        if(variant == 2) wood = BlockPlanks.EnumType.SPRUCE;
 
         switch(type) {
             case FLUID_HARMFUL:

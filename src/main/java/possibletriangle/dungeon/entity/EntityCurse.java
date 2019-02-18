@@ -9,6 +9,9 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -17,10 +20,13 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import possibletriangle.dungeon.Dungeon;
 
-public class EntityCurse extends EntityMob {
+public abstract class EntityCurse extends EntityMob {
+
+    private static final DataParameter<Boolean> ACTIVE = EntityDataManager.createKey(EntityBlaze.class, DataSerializers.BOOLEAN);
 
     public static final int TRACKING_DISTANCE = 64, ACTIVATION_DISTANCE = 6;
-    public static final double SPEED = 0.25D;
+
+    public abstract float getSpeed();
 
     public EntityCurse(World worldIn) {
         super(worldIn);
@@ -47,15 +53,21 @@ public class EntityCurse extends EntityMob {
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if(world.isRemote)
-            for (int i = 0; i < 5; i++) {
-                this.world.spawnParticle(EnumParticleTypes.SUSPENDED_DEPTH, this.posX - 0.5 +  this.rand.nextDouble() * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ - 0.5 + this.rand.nextDouble() * (double)this.width, 0.1D, 0.1D, 0.1D);
+
+        this.dataManager.set(ACTIVE, getAttackTarget() != null);
+
+        if(world.isRemote) {
+            EnumParticleTypes particle = EnumParticleTypes.SUSPENDED_DEPTH;
+            for (int i = 0; i < 5; i++)
+                this.world.spawnParticle(particle, this.posX - 0.5 +  this.rand.nextDouble() * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height, this.posZ - 0.5 + this.rand.nextDouble() * (double)this.width, 0.1D, 0.1D, 0.1D);
             }
+
+
     }
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(SPEED);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(getSpeed());
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(100D);
     }
 
@@ -67,5 +79,11 @@ public class EntityCurse extends EntityMob {
     @Override
     public boolean isEntityInvulnerable(DamageSource source) {
         return source != DamageSource.OUT_OF_WORLD;
+    }
+
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        this.dataManager.register(ACTIVE, false);
     }
 }

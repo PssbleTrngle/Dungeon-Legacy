@@ -1,6 +1,8 @@
 package possibletriangle.dungeon.structures;
 
 import com.google.common.collect.Lists;
+import net.minecraft.command.server.CommandSummon;
+import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -8,11 +10,14 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.gen.ChunkGeneratorHell;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTableManager;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import possibletriangle.dungeon.Dungeon;
 import possibletriangle.dungeon.generator.ChunkPrimerDungeon;
 import possibletriangle.dungeon.generator.ChunkPrimerRotateable;
@@ -27,7 +32,8 @@ public class DungeonStructur {
 
     private static final ArrayList<DungeonStructur> LIST = new ArrayList<>();
 
-    private final List<Template.BlockInfo> blocks = Lists.<Template.BlockInfo>newArrayList();
+    private final List<Template.BlockInfo> blocks = Lists.newArrayList();
+    private final List<NBTTagCompound> entities = Lists.newArrayList();
     private final String source;
 
     public DungeonStructur(String source) {
@@ -37,7 +43,7 @@ public class DungeonStructur {
     }
 
     public void reload() {
-        StructureLoader.read(new ResourceLocation(source), blocks);
+        StructureLoader.read(new ResourceLocation(source), blocks, entities);
     }
 
     public static void reloadAll() {
@@ -113,6 +119,14 @@ public class DungeonStructur {
 
 
             }
+        }
+
+        for(NBTTagCompound tag : entities) {
+
+            Vec3d pos = new Vec3d(chunkX*16, floor * options.floorHeight, chunkZ*16);
+            Entity entity = AnvilChunkLoader.readWorldEntityPos(tag, world, pos.x, pos.y, pos.z, true);
+            Dungeon.LOGGER.info("Entity");
+
         }
 
     }

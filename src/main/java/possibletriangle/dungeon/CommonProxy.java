@@ -15,6 +15,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import possibletriangle.dungeon.block.ModBlocks;
 import possibletriangle.dungeon.entity.EntityCurse;
+import possibletriangle.dungeon.entity.EntityCurseFast;
+import possibletriangle.dungeon.entity.EntityCurseNormal;
+import possibletriangle.dungeon.entity.EntityCurseSlow;
 import possibletriangle.dungeon.generator.WorldTypeDungeon;
 import possibletriangle.dungeon.generator.rooms.*;
 import possibletriangle.dungeon.loot.LootManager;
@@ -40,7 +43,9 @@ public class CommonProxy {
 
         {
             int ID = 0;
-            EntityRegistry.registerModEntity(new ResourceLocation(Dungeon.MODID, "curse"), EntityCurse.class, Dungeon.MODID + ".curse", ID++, Dungeon.INSTANCE, EntityCurse.TRACKING_DISTANCE, 1, true, 0x111111, 0xDDDDDD);
+            EntityRegistry.registerModEntity(new ResourceLocation(Dungeon.MODID, "curse_slow"), EntityCurseSlow.class, Dungeon.MODID + ".curse_slow", ID++, Dungeon.INSTANCE, EntityCurse.TRACKING_DISTANCE, 1, true, 0x111111, 0xDDDDDD);
+            EntityRegistry.registerModEntity(new ResourceLocation(Dungeon.MODID, "curse_normal"), EntityCurseNormal.class, Dungeon.MODID + ".curse_normal", ID++, Dungeon.INSTANCE, EntityCurse.TRACKING_DISTANCE, 1, true, 0x111111, 0xDDDDDD);
+            EntityRegistry.registerModEntity(new ResourceLocation(Dungeon.MODID, "curse_fast"), EntityCurseFast.class, Dungeon.MODID + ".curse_fast", ID++, Dungeon.INSTANCE, EntityCurse.TRACKING_DISTANCE, 1, true, 0x111111, 0xDDDDDD);
         }
     }
 

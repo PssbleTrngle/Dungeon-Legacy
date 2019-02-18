@@ -1,11 +1,17 @@
 package possibletriangle.dungeon.generator.rooms;
 
+import net.minecraft.command.server.CommandSummon;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import possibletriangle.dungeon.generator.ChunkPrimerDungeon;
-import possibletriangle.dungeon.generator.DungeonOptions;
-import possibletriangle.dungeon.generator.RandomCollection;
+import net.minecraft.world.World;
+import possibletriangle.dungeon.Dungeon;
+import possibletriangle.dungeon.generator.*;
 import possibletriangle.dungeon.structures.DungeonStructur;
+import possibletriangle.dungeon.structures.StructureLoader;
 
 import java.util.Random;
 
@@ -30,4 +36,39 @@ public class RoomShop extends RoomStructure {
         return this;
     }
 
+    @Override
+    public void populate(DungeonOptions options, World world, int chunkX, int chunkZ, int floor, Random r) {
+
+        Rotation rotation = WorldDataRooms.atFloor(chunkX, floor, chunkZ, world).rotation;
+
+        BlockPos pos = ChunkPrimerRotateable.rotate(new BlockPos(12, 3, 7), rotation, new double[]{15 / 2.0, 15 / 2.0});
+        pos = pos.add(chunkX*16, floor * options.floorHeight, chunkZ*16);
+
+        EntityVillager villager = new EntityVillager(world);
+
+        villager.setPosition(pos.getX(), pos.getY(), pos.getZ());
+
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setBoolean("NoAI", true);
+        nbt.setBoolean("Invulnerable", true);
+        villager.readEntityFromNBT(nbt);
+
+        switch (rotation) {
+            case COUNTERCLOCKWISE_90:
+                villager.rotationYaw = 0;
+                break;
+            case NONE:
+                villager.rotationYaw = 90;
+                break;
+            case CLOCKWISE_180:
+                villager.rotationYaw = 270;
+                break;
+            case CLOCKWISE_90:
+                villager.rotationYaw = 180;
+                break;
+        }
+
+        world.spawnEntity(villager);
+
+    }
 }
