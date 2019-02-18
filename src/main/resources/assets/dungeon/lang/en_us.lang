@@ -23,3 +23,9 @@ tile.dungeon:redstone_link.name=Redstone Link
 
 tile.dungeon:breakable_rock.name=Breakable Rock
 tile.dungeon:breakable_rock_harder.name=Breakable Rock
+
+generator.Dungeon=Dungeon
+
+entity.dungeon.curse_slow.name=Curse
+entity.dungeon.curse_normal.name=Curse
+entity.dungeon.curse_fast.name=Curse

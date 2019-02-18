@@ -56,7 +56,7 @@ public class TileEntitySpawn extends TileEntity implements ITickable {
         compound.setDouble("offset_x", offset[0]);
         compound.setDouble("offset_y", offset[1]);
         compound.setDouble("offset_z", offset[2]);
-        compound.setInteger("floorHeight", floorHeight);
+        compound.setInteger("FLOOR_HEIGHT", floorHeight);
         compound.setBoolean("global", global);
 
     }
@@ -83,7 +83,7 @@ public class TileEntitySpawn extends TileEntity implements ITickable {
            pos = new BlockPos(p[0], p[1], p[2]);
         }
 
-        floorHeight = compound.getInteger("floorHeight");
+        floorHeight = compound.getInteger("FLOOR_HEIGHT");
         offset = new double[]{
             compound.getDouble("offset_x"),
             compound.getDouble("offset_y"),

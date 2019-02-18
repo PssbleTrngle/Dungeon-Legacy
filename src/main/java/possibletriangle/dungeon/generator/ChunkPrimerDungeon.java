@@ -19,8 +19,8 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
     public ChunkPrimerDungeon(DungeonOptions options, Random r) {
         this.options = options;
         this.r = r;
-        this.palletes = new Pallete[options.floorCount];
-        this.variants = new int[options.floorCount];
+        this.palletes = new Pallete[options.floorCount()];
+        this.variants = new int[options.floorCount()];
     }
 
     public void set(int floor, Pallete pallete, int variant) {
@@ -34,12 +34,12 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
 
     public void setBlockState(int x, int y, int z, int floor, IBlockState state, Rotation rotation, boolean replace) {
 
-        if(x < 0 || z < 0 || x > 15 || z > 15 || y < 0 || (y >= options.floorHeight && floor < options.floorCount-1)) {
+        if(x < 0 || z < 0 || x > 15 || z > 15 || y < 0 || (y >= options.FLOOR_HEIGHT && floor < options.floorCount()-1)) {
             Dungeon.LOGGER.info("Illegal generation at floor {} ({}/{}/{})", floor, x, y, z);
             return;
         }
 
-        y += floor*options.floorHeight;
+        y += floor*options.FLOOR_HEIGHT;
 
         if(replace && getBlockStateWithRotation(x, y, z, rotation).getBlock() != Blocks.AIR) {
             return;

@@ -3,6 +3,8 @@ package possibletriangle.dungeon.pallete;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 
 import java.util.Random;
 
@@ -10,11 +12,24 @@ public class PalleteNether extends Pallete {
 
     public PalleteNether() {
         super("nether", 1F);
+
+        addMob(new ResourceLocation("minecraft", "zombie_pigman"), 1);
+        addMob(new ResourceLocation("minecraft", "wither_skeleton"), 0.5);
+        addMob(new ResourceLocation("minecraft", "blaze"), 1);
+        addMob(new ResourceLocation("minecraft", "magma_cube"), 0.2);
+
+        if(Loader.isModLoaded("quark")) addMob(new ResourceLocation("quark", "wraith"), 0.1);
+        if(Loader.isModLoaded("natura")) addMob(new ResourceLocation("natura", "nitrocreeper"), 0.2);
     }
 
     @Override
     public double weight() {
         return 0.2;
+    }
+
+    @Override
+    public int variantCount() {
+        return 2;
     }
 
     @Override
@@ -25,7 +40,7 @@ public class PalleteNether extends Pallete {
         switch(type) {
 
             case FLUID_HARMFUL:
-                if(variant == 1) r.add("thermalfoundation:fluid_pyrotheum", 0, 0.2);
+                if(variant == 1) r.add("thermalfoundation:fluid_pyrotheum", 1, 0.2);
                 else r.add(Blocks.LAVA, 1);
                 r.add(Blocks.LAVA);
                 break;
@@ -74,10 +89,12 @@ public class PalleteNether extends Pallete {
                 break;
             case LOG:
             case LOG2:
+                if(variant == 0) r.add("natura:nether_logs:0", 1);
                 r.add(Blocks.BONE_BLOCK);
                 break;
             case LEAVES:
             case LEAVES2:
+                if(variant == 0) r.add("natura:nether_leaves:0", 1);
                 r.add(Blocks.GLOWSTONE);
                 break;
             case PLANT:

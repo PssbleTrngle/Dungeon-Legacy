@@ -39,7 +39,7 @@ public class RoomStructure extends Room {
 
     @Override
     public void generateAt(DungeonOptions options, ChunkPrimerDungeon primer, int floor, Random r, Rotation rotation) {
-        structure.generate(primer, options, floor, (x,y,z) -> (x < 16 && z < 16 && x >= 0 && z >= 0 && y >= 0 && (y < options.floorHeight || floor == options.floorCount-1)), rotation );
+        structure.generate(primer, options, floor, (x,y,z) -> (x < 16 && z < 16 && x >= 0 && z >= 0 && y >= 0 && (y < options.FLOOR_HEIGHT || floor == options.floorCount()-1)), rotation );
     }
 
     @Override

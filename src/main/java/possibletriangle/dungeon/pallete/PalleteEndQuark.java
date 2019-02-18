@@ -1,11 +1,21 @@
 package possibletriangle.dungeon.pallete;
 
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 
 public class PalleteEndQuark extends Pallete {
 
     public PalleteEndQuark() {
         super("end_quark", 0F);
+
+        addMob(new ResourceLocation("minecraft", "endermite"), 1);
+        addMob(new ResourceLocation("minecraft", "enderman"), 0.5);
+        addMob(new ResourceLocation("minecraft", "shulker"), 0.1);
+    }
+
+    @Override
+    public int variantCount() {
+        return 2;
     }
 
     @Override

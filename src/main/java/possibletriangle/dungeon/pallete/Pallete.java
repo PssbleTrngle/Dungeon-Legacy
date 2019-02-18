@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
@@ -15,6 +16,17 @@ import java.util.HashMap;
 import java.util.Random;
 
 public abstract class Pallete extends Biome {
+
+    private final RandomCollection<ResourceLocation> MOBS = new RandomCollection<>();
+
+    public ResourceLocation mob(Random random) {
+        if(MOBS.size() == 0) return null;
+        return MOBS.next(random);
+    }
+
+    void addMob(ResourceLocation name, double weight) {
+        MOBS.add(weight, name);
+    }
 
     public String[] requiredMods() {
         return new String[0];
@@ -88,9 +100,7 @@ public abstract class Pallete extends Biome {
 
     public abstract double weight();
 
-    public int variantCount() {
-        return 4;
-    }
+    public abstract int variantCount();
 
     public static IBlockState stairs(BlockPlanks.EnumType wood) {
 

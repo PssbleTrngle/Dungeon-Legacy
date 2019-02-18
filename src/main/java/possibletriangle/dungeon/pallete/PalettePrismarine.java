@@ -3,7 +3,9 @@ package possibletriangle.dungeon.pallete;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.structure.template.BlockRotationProcessor;
+import net.minecraftforge.fml.common.Loader;
 import possibletriangle.dungeon.generator.RandomCollection;
 
 import java.util.Random;
@@ -12,11 +14,21 @@ public class PalettePrismarine extends Pallete {
 
     public PalettePrismarine() {
         super("prismarine", 0F);
+
+        addMob(new ResourceLocation("minecraft", "zombie"), 1);
+        addMob(new ResourceLocation("minecraft", "skeleton"), 0.8);
+
+        if(Loader.isModLoaded("quark")) addMob(new ResourceLocation("quark", "pirate"), 0.4);
     }
 
     @Override
     public double weight() {
         return 0.2;
+    }
+
+    @Override
+    public int variantCount() {
+        return 2;
     }
 
     @Override

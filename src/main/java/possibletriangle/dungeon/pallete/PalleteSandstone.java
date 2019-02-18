@@ -1,26 +1,25 @@
 package possibletriangle.dungeon.pallete;
 
 import net.minecraft.block.*;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
-import possibletriangle.dungeon.generator.RandomCollection;
+import net.minecraftforge.fml.common.Loader;
 
-import java.util.Random;
-
-public class PaletteStonebrick extends Pallete {
+public class PalleteSandstone extends Pallete {
 
     @Override
     public int variantCount() {
         return 3;
     }
 
-    public PaletteStonebrick() {
-        super("stonebrick", 0F);
+    public PalleteSandstone() {
+        super("sandstone", 0F);
 
-        addMob(new ResourceLocation("minecraft", "zombie"), 1);
-        addMob(new ResourceLocation("minecraft", "skeleton"), 0.8);
+        addMob(new ResourceLocation("minecraft", "husk"), 1);
+        addMob(new ResourceLocation("minecraft", "skeleton"), 0.6);
         addMob(new ResourceLocation("minecraft", "creeper"), 0.1);
+
+        if(Loader.isModLoaded("thermalfoundation")) addMob(new ResourceLocation("thermalfoundation", "basalz"), 0.1);
     }
 
     @Override

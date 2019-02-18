@@ -29,7 +29,7 @@ public class RoomManager {
         Room random;
         int c = 0;
 
-        while(!(random = random(r)).canReallyGoOnFloor(floor, chunkX, chunkZ, options.floorCount, rotation, world) && c < 100)
+        while(!(random = random(r)).canReallyGoOnFloor(floor, chunkX, chunkZ, options.floorCount(), rotation, world) && c < 100)
             c++;
 
         if(c >= 100)

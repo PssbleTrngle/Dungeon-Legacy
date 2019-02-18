@@ -1,7 +1,6 @@
 package possibletriangle.dungeon.generator;
 
 import net.minecraft.block.BlockSlab;
-import net.minecraft.client.renderer.EnumFaceDirection;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Rotation;
@@ -9,7 +8,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.IChunkGenerator;
 import possibletriangle.dungeon.block.placeholder.BlockSlabPlaceholder;
 import possibletriangle.dungeon.block.ModBlocks;
@@ -41,20 +39,20 @@ public class ChunkGeneratorDungeon implements IChunkGenerator {
     @Override
     public Chunk generateChunk(int chunkX, int chunkZ) {
 
-        WorldDataRooms.setFloorHeight(options.floorHeight, world);
+        WorldDataRooms.setFloorHeight(DungeonOptions.FLOOR_HEIGHT, world);
         ChunkPrimerDungeon primer = new ChunkPrimerDungeon(options, r);
         Biome[] biomes = world.getBiomeProvider().getBiomesForGeneration(new Biome[0], chunkX*16, chunkZ*16, 16, 16);
 
         BlockPos spawn = world.getSpawnPoint();
 
-        for(int floor = 0; floor < options.floorCount; floor++) {
+        for(int floor = 0; floor < options.floorCount(); floor++) {
             boolean isSpawn = spawn.getX() / 16 == chunkX && spawn.getZ() / 16 == chunkZ && floor == 0;
 
             RoomData data = WorldDataRooms.atFloor(chunkX, floor, chunkZ, world);
 
             if(data == null) {
                 Pallete pallete = biomes[0] instanceof Pallete ? (Pallete) biomes[0] : Pallete.random(r);
-                Rotation rot = options.rotateRooms ? Rotation.values()[(int) Math.floor(Rotation.values().length * r.nextDouble())] : Rotation.NONE;
+                Rotation rot = options.rotateRooms() ? Rotation.values()[(int) Math.floor(Rotation.values().length * r.nextDouble())] : Rotation.NONE;
                 Room room = (isSpawn ? RoomSpawn.SPAWN : RoomManager.randomFor(floor, options, r, chunkX, chunkZ, rot, world));
                 data = new RoomData(room.getName(), rot, pallete);
                 WorldDataRooms.put(chunkX, floor, chunkZ, room.getName(), data.rotation, data.pallete, world, "random");
@@ -65,7 +63,7 @@ public class ChunkGeneratorDungeon implements IChunkGenerator {
             Room room = RoomManager.get(data.name);
             if(room != null) {
 
-                for(int floorsAbove = 1; options.floorCount > floor+floorsAbove; floorsAbove++) {
+                for(int floorsAbove = 1; options.floorCount() > floor+floorsAbove; floorsAbove++) {
                     Room roomAbove = room.roomAbove(floorsAbove, r);
                     if(roomAbove != null)
                         WorldDataRooms.put(chunkX, floor + floorsAbove, chunkZ, roomAbove.getName(), data.rotation, data.pallete, world, "above");
@@ -84,20 +82,20 @@ public class ChunkGeneratorDungeon implements IChunkGenerator {
                 room.generateAt(options, primer, floor, r, data.rotation);
                 if (room.generateWall())
                     Wall.random(r).generateAt(options, primer, floor, r, chunkX, chunkZ);
-                if (!room.noCeiling() && floor < options.floorCount-1) {
+                if (!room.noCeiling() && floor < options.floorCount()-1) {
                     for (int x = 0; x < 16; x++)
                         for (int z = 0; z < 16; z++)
-                            primer.setBlockState(x, options.floorHeight - 1, z, floor, ModBlocks.SLAB.getDefaultState().withProperty(BlockSlabPlaceholder.HALF, BlockSlab.EnumBlockHalf.TOP), data.rotation, true);
+                            primer.setBlockState(x, DungeonOptions.FLOOR_HEIGHT - 1, z, floor, ModBlocks.SLAB.getDefaultState().withProperty(BlockSlabPlaceholder.HALF, BlockSlab.EnumBlockHalf.TOP), data.rotation, true);
                 }
 
             }
 
         }
 
-        if(options.hasCeiling)
+        if(options.hasCeiling())
             for(int x = 0; x < 16; x++)
                 for(int z = 0; z < 16; z++)
-                    primer.setBlockState(x, 0, z, options.floorCount, Blocks.BARRIER.getDefaultState(), Rotation.NONE, true);
+                    primer.setBlockState(x, 0, z, options.floorCount(), Blocks.BARRIER.getDefaultState(), Rotation.NONE, true);
 
         Chunk chunk = new Chunk(world, primer, chunkX, chunkZ);
         chunk.generateSkylightMap();
@@ -108,7 +106,7 @@ public class ChunkGeneratorDungeon implements IChunkGenerator {
     @Override
     public void populate(int chunkX, int chunkZ) {
 
-        for(int floor = 0; floor < options.floorCount; floor++) {
+        for(int floor = 0; floor < options.floorCount(); floor++) {
             RoomData data = WorldDataRooms.atFloor(chunkX, floor, chunkZ, world);
             if(data != null) {
                 Room room = RoomManager.get(data.name);

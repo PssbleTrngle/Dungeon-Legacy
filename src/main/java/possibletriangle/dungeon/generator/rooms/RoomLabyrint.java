@@ -36,13 +36,13 @@ public class RoomLabyrint extends Room {
 
                         if(x % 3 != 0 && z % 3 != 0) {
 
-                            for(int y = 3; y < options.floorHeight-2; y++)
+                            for(int y = 3; y < options.FLOOR_HEIGHT -2; y++)
                                 primer.setBlockState(x, y, z, floor, rotation, ModBlocks.WALL.getDefaultState());
 
                         } else if((x % 3 == 0 || z % 3 == 0) && (x % 3 != 0 || z % 3 != 0))
                             if(r.nextDouble() < 0.25) {
 
-                                for(int y = 3; y < options.floorHeight-2; y++)
+                                for(int y = 3; y < options.FLOOR_HEIGHT -2; y++)
                                     primer.setBlockState(x, y, z, floor, rotation, ModBlocks.WALL.getDefaultState());
 
                             }

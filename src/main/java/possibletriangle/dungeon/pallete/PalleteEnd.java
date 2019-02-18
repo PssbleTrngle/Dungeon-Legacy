@@ -4,14 +4,24 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockHalfStoneSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import possibletriangle.dungeon.generator.RandomCollection;
 
 import java.util.Random;
 
 public class PalleteEnd extends Pallete {
 
+    @Override
+    public int variantCount() {
+        return 2;
+    }
+
     public PalleteEnd() {
         super("end", 0F);
+
+        addMob(new ResourceLocation("minecraft", "endermite"), 1);
+        addMob(new ResourceLocation("minecraft", "enderman"), 0.5);
+        addMob(new ResourceLocation("minecraft", "shulker"), 0.1);
     }
 
     @Override

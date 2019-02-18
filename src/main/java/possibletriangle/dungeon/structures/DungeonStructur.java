@@ -1,27 +1,25 @@
 package possibletriangle.dungeon.structures;
 
 import com.google.common.collect.Lists;
-import net.minecraft.command.server.CommandSummon;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
-import net.minecraft.world.gen.ChunkGeneratorHell;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootTableManager;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 import possibletriangle.dungeon.Dungeon;
 import possibletriangle.dungeon.generator.ChunkPrimerDungeon;
-import possibletriangle.dungeon.generator.ChunkPrimerRotateable;
 import possibletriangle.dungeon.generator.DungeonOptions;
+import possibletriangle.dungeon.generator.RandomCollection;
+import possibletriangle.dungeon.generator.WorldDataRooms;
+import possibletriangle.dungeon.generator.rooms.RoomData;
 import possibletriangle.dungeon.loot.LootManager;
 
 import java.util.ArrayList;
@@ -89,6 +87,10 @@ public class DungeonStructur {
 
     public void populate(World world, int chunkX, int chunkZ, DungeonOptions options, int floor, Rotation rotation, boolean mirror, BlockPos offset, Random random) {
 
+        RoomData data = WorldDataRooms.atFloor(chunkX, floor, chunkZ, world);
+        if(data == null)
+            return;
+
         for(Template.BlockInfo info : blocks()) {
 
             NBTTagCompound nbt = info.tileentityData;
@@ -101,7 +103,7 @@ public class DungeonStructur {
             int y = info.pos.getY() + offset.getY();
             int z = info.pos.getZ() + offset.getZ();
 
-            BlockPos blockpos = new BlockPos(x + chunkX*16, y + floor*options.floorHeight, z + chunkZ*16);
+            BlockPos blockpos = new BlockPos(x + chunkX*16, y + floor*options.FLOOR_HEIGHT, z + chunkZ*16);
             TileEntity te = world.getTileEntity(blockpos);
             if (te != null) {
 
@@ -117,13 +119,21 @@ public class DungeonStructur {
                         LootManager.COMMON.fillInventory(inventory, random, new LootContext(0, null, null, null,  null, null));
                 }
 
+                if(te instanceof TileEntityMobSpawner) {
+
+                    TileEntityMobSpawner spawner = (TileEntityMobSpawner) te;
+                    ResourceLocation mob = data.pallete.mob(random);
+                    if(mob != null)
+                        spawner.getSpawnerBaseLogic().setEntityId(mob);
+                }
+
 
             }
         }
 
         for(NBTTagCompound tag : entities) {
 
-            Vec3d pos = new Vec3d(chunkX*16, floor * options.floorHeight, chunkZ*16);
+            Vec3d pos = new Vec3d(chunkX*16, floor * options.FLOOR_HEIGHT, chunkZ*16);
             Entity entity = AnvilChunkLoader.readWorldEntityPos(tag, world, pos.x, pos.y, pos.z, true);
 
         }

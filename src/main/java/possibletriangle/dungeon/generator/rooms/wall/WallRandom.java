@@ -41,7 +41,7 @@ public class WallRandom extends Wall {
                 boolean closed = r.nextDouble() > 0.6;
                 boolean open = chunkX % 2 == chunkZ % 2;
 
-                BlockPos check = pos.add(0, floor*options.floorHeight + 2, 1);
+                BlockPos check = pos.add(0, floor*options.FLOOR_HEIGHT + 2, 1);
                 if (primer.getBlockStateWithRotation(check.getX(), check.getY(), check.getZ(), rot).getBlock() == Blocks.SPONGE) {
                     DungeonStructur door = closed ? CLOSED : doors.next(r);
                     if(open) door = OPEN;

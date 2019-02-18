@@ -23,6 +23,10 @@ public class RandomCollection<E> {
         return map.higherEntry(value).getValue();
     }
 
+    public int size() {
+        return map.values().size();
+    }
+
     public E[] all() {
 
         return (E[]) map.values().toArray();

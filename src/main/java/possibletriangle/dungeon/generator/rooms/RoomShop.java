@@ -1,17 +1,12 @@
 package possibletriangle.dungeon.generator.rooms;
 
-import net.minecraft.command.server.CommandSummon;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import possibletriangle.dungeon.Dungeon;
 import possibletriangle.dungeon.generator.*;
 import possibletriangle.dungeon.structures.DungeonStructur;
-import possibletriangle.dungeon.structures.StructureLoader;
 
 import java.util.Random;
 
@@ -42,7 +37,7 @@ public class RoomShop extends RoomStructure {
         Rotation rotation = WorldDataRooms.atFloor(chunkX, floor, chunkZ, world).rotation;
 
         BlockPos pos = ChunkPrimerRotateable.rotate(new BlockPos(12, 3, 7), rotation, new double[]{15 / 2.0, 15 / 2.0});
-        pos = pos.add(chunkX*16, floor * options.floorHeight, chunkZ*16);
+        pos = pos.add(chunkX*16, floor * options.FLOOR_HEIGHT, chunkZ*16);
 
         EntityVillager villager = new EntityVillager(world);
 

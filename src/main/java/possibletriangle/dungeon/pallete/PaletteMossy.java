@@ -3,14 +3,24 @@ package possibletriangle.dungeon.pallete;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import possibletriangle.dungeon.generator.RandomCollection;
 
 import java.util.Random;
 
 public class PaletteMossy extends Pallete {
 
+    @Override
+    public int variantCount() {
+        return 3;
+    }
+
     public PaletteMossy() {
         super("mossy", 0F);
+
+        addMob(new ResourceLocation("minecraft", "spider"), 1);
+        addMob(new ResourceLocation("minecraft", "cave_spider"), 2);
+        addMob(new ResourceLocation("minecraft", "slime"), 0.5);
     }
 
     @Override
