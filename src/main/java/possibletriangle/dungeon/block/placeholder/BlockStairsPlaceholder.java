@@ -8,7 +8,6 @@ import possibletriangle.dungeon.pallete.Pallete;
 
 public class BlockStairsPlaceholder extends BlockStairs implements IPlaceholder {
 
-    private final ResourceLocation name;
     private final Pallete.Type type;
 
     public BlockStairsPlaceholder(Pallete.Type type, IBlockState modelState) {
@@ -16,7 +15,7 @@ public class BlockStairsPlaceholder extends BlockStairs implements IPlaceholder 
 
         String id = type.name().toLowerCase();
         this.type = type;
-        this.name = new ResourceLocation(Dungeon.MODID, "placeholder_" + id);
+        ResourceLocation name = new ResourceLocation(Dungeon.MODID, "placeholder_" + id);
 
         setRegistryName(name);
         setUnlocalizedName(name.toString());

@@ -1,22 +1,22 @@
-package possibletriangle.dungeon.pallete;
+package possibletriangle.dungeon.pallete.objects;
 
 import net.minecraft.block.*;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
-import possibletriangle.dungeon.generator.RandomCollection;
+import net.minecraft.world.biome.Biome;
+import possibletriangle.dungeon.pallete.Pallete;
+import possibletriangle.dungeon.pallete.Replacer;
 
-import java.util.Random;
-
-public class PaletteMossy extends Pallete {
+public class PalleteMossy extends Pallete {
 
     @Override
-    public int variantCount() {
-        return 3;
+    public Biome getBiome(int variant) {
+        return Biomes.JUNGLE;
     }
 
-    public PaletteMossy() {
-        super("mossy", 0F);
+    public PalleteMossy() {
+        super("mossy");
 
         addMob(new ResourceLocation("minecraft", "spider"), 1);
         addMob(new ResourceLocation("minecraft", "cave_spider"), 2);
@@ -38,6 +38,9 @@ public class PaletteMossy extends Pallete {
             case GEM:
                 r.add(Blocks.EMERALD_BLOCK);
                 r.add(Blocks.GOLD_BLOCK);
+                r.add("biomesoplenty:gem_block:2");
+                r.add("biomesoplenty:gem_block:5");
+                r.add("biomesoplenty:gem_block:7");
                 break;
 
             case FLOOR:

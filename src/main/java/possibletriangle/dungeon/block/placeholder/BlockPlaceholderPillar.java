@@ -8,7 +8,6 @@ import possibletriangle.dungeon.pallete.Pallete;
 
 public class BlockPlaceholderPillar extends BlockRotatedPillar implements IPlaceholder {
 
-    private final ResourceLocation name;
     private final Pallete.Type type;
 
     public BlockPlaceholderPillar(Pallete.Type type) {
@@ -16,7 +15,7 @@ public class BlockPlaceholderPillar extends BlockRotatedPillar implements IPlace
 
         String id = type.name().toLowerCase();
         this.type = type;
-        this.name = new ResourceLocation(Dungeon.MODID, "placeholder_" + id);
+        ResourceLocation name = new ResourceLocation(Dungeon.MODID, "placeholder_" + id);
 
         setRegistryName(name);
         setUnlocalizedName(name.toString());

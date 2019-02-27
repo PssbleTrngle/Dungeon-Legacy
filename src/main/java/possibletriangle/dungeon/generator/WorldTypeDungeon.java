@@ -2,14 +2,8 @@ package possibletriangle.dungeon.generator;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiCreateWorld;
-import net.minecraft.client.gui.GuiCustomizeWorldScreen;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.*;
-import net.minecraft.world.biome.BiomeProvider;
-import net.minecraft.world.gen.ChunkGeneratorFlat;
 import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraftforge.fml.common.Mod;
-import possibletriangle.dungeon.Dungeon;
 
 import java.util.Random;
 

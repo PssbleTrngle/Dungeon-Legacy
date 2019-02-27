@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class ModBlocks {
 
-    public static ArrayList<Block> LIST = new ArrayList<>();
+    public static final ArrayList<Block> LIST = new ArrayList<>();
 
     public static final Block FLOOR = new BlockPlaceholder(Pallete.Type.FLOOR);
     public static final Block WALL = new BlockPlaceholder(Pallete.Type.WALL);
@@ -30,10 +30,11 @@ public class ModBlocks {
     public static final Block DIRT = new BlockPlaceholder(Pallete.Type.DIRT);
     public static final Block RUNE = new BlockPlaceholder(Pallete.Type.RUNE);
     public static final Block GEM = new BlockPlaceholder(Pallete.Type.GEM);
-    public static final Block LEAVES = new BlockPlaceholder(Pallete.Type.LEAVES);
-    public static final Block LEAVES2 = new BlockPlaceholder(Pallete.Type.LEAVES2);
+    public static final Block LEAVES = new BlockPlaceholderLeaves(Pallete.Type.LEAVES);
+    public static final Block LEAVES2 = new BlockPlaceholderLeaves(Pallete.Type.LEAVES2);
     public static final Block KEY_STONE = new BlockPlaceholder(Pallete.Type.KEY_STONE);
     public static final Block PLANKS = new BlockPlaceholder(Pallete.Type.PLANKS);
+    public static final Block FARMLAND = new BlockPlaceholder(Pallete.Type.FARMLAND);
 
     public static final Block PILLAR = new BlockPlaceholderPillar(Pallete.Type.PILLAR);
     public static final Block LOG = new BlockPlaceholderPillar(Pallete.Type.LOG);
@@ -46,14 +47,20 @@ public class ModBlocks {
     public static final Block SLAB_PLANKS = new BlockSlabPlaceholder(Pallete.Type.SLAB_PLANKS, false);
 
     public static final Block PLANT = new BlockPlaceholderPlant(Pallete.Type.PLANT);
+    public static final Block CROP = new BlockPlaceholderPlant(Pallete.Type.CROP);
+
+    public static final Block TORCH = new BlockPlaceholderTorch(Pallete.Type.TORCH);
 
     public static final Block BREAKABLE_ROCK = new BlockMod("breakable_rock", Material.ROCK);
     public static final Block BREAKABLE_ROCK_HARDER = new BlockMod("breakable_rock_harder", Material.ROCK);
 
     public static final BlockSpawn SPAWN = new BlockSpawn();
     public static final BlockRedstoneLink REDSTONE_LINK = new BlockRedstoneLink();
+
     public static final BlockFakeWall FAKE_WALL = new BlockFakeWall();
     public static final BlockFakeWallSided FAKE_WALL_SIDED = new BlockFakeWallSided();
+
+    public static final BlockToggleableWall TOGGLEABLE_WALL = new BlockToggleableWall();
 
     public static void register(IForgeRegistry<Block> registry) {
 
@@ -77,6 +84,9 @@ public class ModBlocks {
         LIST.add(PLANKS);
         LIST.add(STAIRS_PLANKS);
         LIST.add(SLAB_PLANKS);
+        LIST.add(CROP);
+        LIST.add(FARMLAND);
+        LIST.add(TORCH);
 
         LIST.add(SPAWN);
 
@@ -84,6 +94,7 @@ public class ModBlocks {
         LIST.add(BREAKABLE_ROCK_HARDER);
 
         LIST.add(REDSTONE_LINK);
+        LIST.add(TOGGLEABLE_WALL);
         //LIST.add(FAKE_WALL);
         //LIST.add(FAKE_WALL_SIDED);
 
@@ -103,9 +114,7 @@ public class ModBlocks {
     public static void registerItemBlocks(IForgeRegistry<Item> registry) {
 
         for(Block block : LIST) {
-
             registry.register(createItemBlock(block));
-
         }
 
     }
@@ -113,9 +122,7 @@ public class ModBlocks {
     public static void registerModels() {
 
         for(Block block : LIST) {
-
             registerItemModel(Item.getItemFromBlock(block), block.getRegistryName());
-
         }
 
         ModelLoader.setCustomStateMapper(REDSTONE_LINK, new StateMap.Builder().ignore(BlockRedstoneLink.POWER).build());

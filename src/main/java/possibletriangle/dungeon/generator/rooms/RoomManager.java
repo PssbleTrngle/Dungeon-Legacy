@@ -5,7 +5,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.world.World;
 import possibletriangle.dungeon.Dungeon;
 import possibletriangle.dungeon.generator.DungeonOptions;
-import possibletriangle.dungeon.generator.RandomCollection;
+import possibletriangle.dungeon.helper.RandomCollection;
 
 import java.util.HashMap;
 import java.util.Random;

@@ -3,9 +3,6 @@ package possibletriangle.dungeon.block.tile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import possibletriangle.dungeon.Dungeon;
-
-import java.util.Arrays;
 
 public class TileFakeWall extends TileEntity {
 

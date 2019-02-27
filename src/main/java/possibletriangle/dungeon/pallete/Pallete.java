@@ -4,18 +4,17 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.Loader;
-import possibletriangle.dungeon.generator.RandomCollection;
+import possibletriangle.dungeon.helper.RandomCollection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public abstract class Pallete extends Biome {
+public abstract class Pallete {
 
     private final RandomCollection<ResourceLocation> MOBS = new RandomCollection<>();
 
@@ -24,7 +23,7 @@ public abstract class Pallete extends Biome {
         return MOBS.next(random);
     }
 
-    void addMob(ResourceLocation name, double weight) {
+    public void addMob(ResourceLocation name, double weight) {
         MOBS.add(weight, name);
     }
 
@@ -36,8 +35,9 @@ public abstract class Pallete extends Biome {
         return LIST.next(r);
     }
 
-    public Pallete(String name, float temp) {
-        super(new BiomeProperties(name).setTemperature(temp));
+    public final String name;
+    public Pallete(String name) {
+        this.name = name;
 
         boolean b = true;
         for (String mod : requiredMods())
@@ -45,7 +45,7 @@ public abstract class Pallete extends Biome {
 
         if (b) {
             LIST.add(weight(), this);
-            MAP.put(new ResourceLocation(this.getBiomeName()), this);
+            MAP.put(new ResourceLocation(name), this);
         }
     }
 
@@ -83,6 +83,7 @@ public abstract class Pallete extends Biome {
 
         for(IProperty prop : parent.getPropertyKeys())
             if(state.getPropertyKeys().contains(prop))
+                //noinspection unchecked
                 state = state.withProperty(prop, parent.getValue(prop));
 
         return state;
@@ -94,13 +95,16 @@ public abstract class Pallete extends Biome {
         STAIRS, STAIRS_WALL, SLAB,
         TORCH, BARS, LADDER,
         PLANT, GRASS, DIRT, LOG, LOG2, LEAVES, LEAVES2,
+        CROP, FARMLAND,
         FLUID_HARMFUL, FLUID_SAVE,
         PLANKS, SLAB_PLANKS, STAIRS_PLANKS
     }
 
     public abstract double weight();
 
-    public abstract int variantCount();
+    public final int variantCount() {
+        return 15;
+    }
 
     public static IBlockState stairs(BlockPlanks.EnumType wood) {
 
@@ -121,5 +125,7 @@ public abstract class Pallete extends Biome {
                 return Blocks.AIR.getDefaultState();
         }
     }
+
+    public abstract Biome getBiome(int variant);
 
 }

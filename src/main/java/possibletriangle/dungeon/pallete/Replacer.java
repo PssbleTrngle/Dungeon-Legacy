@@ -1,12 +1,11 @@
 package possibletriangle.dungeon.pallete;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockNote;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import possibletriangle.dungeon.Dungeon;
-import possibletriangle.dungeon.generator.RandomCollection;
+import possibletriangle.dungeon.helper.RandomCollection;
 
 import java.util.ArrayList;
 import java.util.Random;

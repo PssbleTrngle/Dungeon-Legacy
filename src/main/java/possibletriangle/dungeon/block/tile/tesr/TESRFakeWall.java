@@ -4,14 +4,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
-import possibletriangle.dungeon.Dungeon;
-import possibletriangle.dungeon.block.tile.TileEntitySpawn;
 import possibletriangle.dungeon.block.tile.TileFakeWall;
 import possibletriangle.dungeon.helper.Icons;
 

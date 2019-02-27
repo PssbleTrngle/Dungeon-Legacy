@@ -1,7 +1,6 @@
 package possibletriangle.dungeon.entity.render;
 
 import net.minecraft.client.renderer.entity.RenderLiving;
-import net.minecraft.client.renderer.entity.RenderMagmaCube;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;

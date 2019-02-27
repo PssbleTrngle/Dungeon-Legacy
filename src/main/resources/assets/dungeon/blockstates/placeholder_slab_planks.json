@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "half=bottom,variant=default": { "model": "dungeon:half_slab_placeholder_planks" },
+        "half=top,variant=default": { "model": "dungeon:upper_slab_placeholder_planks" }
+    }
+}

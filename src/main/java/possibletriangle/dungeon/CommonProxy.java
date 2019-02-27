@@ -21,8 +21,8 @@ import possibletriangle.dungeon.entity.EntityCurseSlow;
 import possibletriangle.dungeon.generator.WorldTypeDungeon;
 import possibletriangle.dungeon.generator.rooms.*;
 import possibletriangle.dungeon.loot.LootManager;
-import possibletriangle.dungeon.pallete.*;
 import possibletriangle.dungeon.generator.rooms.wall.WallRandom;
+import possibletriangle.dungeon.pallete.objects.*;
 import possibletriangle.dungeon.structures.DungeonStructur;
 
 @Mod.EventBusSubscriber
@@ -30,14 +30,12 @@ public class CommonProxy {
 
     public void preinit(FMLPreInitializationEvent event) {
 
-         RoomSpawn.SPAWN = new RoomSpawn();
-
         new PalleteNether();
-        new PaletteStonebrick();
+        new PalleteStonebrick();
         new PalleteEnd();
-        new PalleteEndQuark();
-        new PaletteMossy();
-        new PalettePrismarine();
+        new PalleteMossy();
+        new PalletePrismarine();
+        new PalleteSandstone();
 
         registerRenderers();
 
@@ -52,6 +50,8 @@ public class CommonProxy {
     public void init(FMLInitializationEvent event) {
 
         LootManager.reload();
+
+        RoomManager.register(RoomSpawn.SPAWN = new RoomSpawn(), 0);
 
         RoomManager.register(new RoomStructure("tower", "spiral_stairs_bottom").noCeil(), 5);
         RoomManager.register(new RoomStructure("tower", "spiral_stairs_top"), 0);
@@ -88,7 +88,7 @@ public class CommonProxy {
         RoomManager.get("freefall_bottom").addDependendent(1, "freefall_top");
         RoomManager.get("freefall_middle").addDependendent(1, "freefall_top");
 
-        RoomManager.register(new RoomLabyrint(), 10);
+        RoomManager.register(new RoomLabyrint(), 30);
         RoomManager.register(new RoomStructure("corridor", "straight_0"), 10);
         RoomManager.register(new RoomStructure("corridor", "straight_1"), 10);
         RoomManager.register(new RoomStructure("corridor", "twisted_0"), 10);
@@ -102,6 +102,11 @@ public class CommonProxy {
 
         RoomManager.register(new RoomStructure("room", "atrium_0").noCeil().onlyTop(), 6);
 
+        RoomManager.register(new RoomStructure("room", "treasure"), 3);
+
+        RoomManager.register(new RoomStructure("room/spawn", "mid").noRandomWall(), 1);
+        RoomManager.register(new RoomStructure("room/spawn", "corner").noRandomWall(), 1);
+
         RoomManager.register(new RoomShop()
                 .add("basic", 1)
                 , 5);
@@ -110,21 +115,21 @@ public class CommonProxy {
                 .add(new DungeonStructur("wall/door/rect_open"), 2)
                 .add(new DungeonStructur("wall/door/big_open"), 2)
                 .add(new DungeonStructur("wall/door/small_open"), 2)
-
                 .add(new DungeonStructur("wall/door/bars_broken"), 0.5)
                 .add(new DungeonStructur("wall/door/bars_closed"), 0.5)
                 .add(new DungeonStructur("wall/door/bars_open"), 0.5)
-
                 .add(new DungeonStructur("wall/door/fence"), 0.5)
                 .add(new DungeonStructur("wall/door/iron_0"), 0.5)
                 .add(new DungeonStructur("wall/door/iron_1"), 0.5)
-
                 .add(new DungeonStructur("wall/door/lava"), 0.2)
                 .add(new DungeonStructur("wall/door/vines"), 0.8)
                 .add(new DungeonStructur("wall/door/wood"), 0.8)
-
                 .add(new DungeonStructur("wall/door/breakable_0"), 0.6)
-                .add(new DungeonStructur("wall/door/breakable_1"), 0.3);
+                .add(new DungeonStructur("wall/door/breakable_1"), 0.3)
+                .add(new DungeonStructur("wall/door/dust_0"), 0.2)
+                .add(new DungeonStructur("wall/door/dust_1"), 0.2)
+                .add(new DungeonStructur("wall/door/webs"), 0.3)
+                .add(new DungeonStructur("wall/door/toggle"), 0.3);
 
         if(Loader.isModLoaded("secretroomsmod"))
             wall_random

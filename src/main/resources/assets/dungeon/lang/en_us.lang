@@ -15,6 +15,9 @@ tile.dungeon:placeholder_log.name=Placeholder (Log)
 tile.dungeon:placeholder_log2.name=Placeholder (Log)
 tile.dungeon:placeholder_plant.name=Placeholder (Plant)
 tile.dungeon:placeholder_key_stone.name=Placeholder (Key Stone)
+tile.dungeon:placeholder_farmland.name=Placeholder (Farmland)
+tile.dungeon:placeholder_crop.name=Placeholder (Crop)
+tile.dungeon:placeholder_torch.name=Placeholder (Torch)
 
 tile.dungeon:spawn.name=Spawn
 tile.dungeon:fake_wall.name=Fake Wall

@@ -2,11 +2,17 @@ package possibletriangle.dungeon.block.tile;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.common.Mod;
 import possibletriangle.dungeon.Dungeon;
 import possibletriangle.dungeon.generator.WorldDataRooms;
 import possibletriangle.dungeon.helper.SpawnData;
@@ -15,27 +21,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Mod.EventBusSubscriber
 public class TileEntitySpawn extends TileEntity implements ITickable {
 
-    public UUID owner;
-    public String lastTeam;
-    private double[] offset = {0, 0, 0};
+    private double[] offset = {0.5, 0, 0.5};
     public final double vortexSize = 1.5;
 
-    private static final int neededTicks = 20 * 5;
+    private static final int neededTicks = 20 * 8;
 
     private int floorHeight;
-    private BlockPos pos;
+    private BlockPos chunk;
     public boolean global;
 
     public TileEntitySpawn(boolean global) {
         this.global = global;
     }
 
-    public void init() {
-        BlockPos chunk = WorldDataRooms.toChunk(getPos(), world);
+    public TileEntitySpawn() {
+        this(false);
+    }
+
+    public void initSpawn() {
         floorHeight = WorldDataRooms.getFloorHeight(world);
-        pos = new BlockPos((chunk.getX() - 2) * 16, chunk.getY() * floorHeight, (chunk.getZ()-2) * 16);
+        this.chunk = WorldDataRooms.toChunk(getPos(), world);
         if(global)
             SpawnData.get(world).GLOBAL.add(getPos());
     }
@@ -44,19 +52,9 @@ public class TileEntitySpawn extends TileEntity implements ITickable {
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
 
-        lastTeam = compound.getString("lastTeam");
-        String uuid = compound.getString("owner");
-        if(!uuid.equals("")) {
-            owner = UUID.fromString(uuid);
-        }
-        if(pos != null) {
-            compound.setIntArray("roomAnchor", new int[]{pos.getX(), pos.getY(), pos.getZ()});
-        }
-
         compound.setDouble("offset_x", offset[0]);
         compound.setDouble("offset_y", offset[1]);
         compound.setDouble("offset_z", offset[2]);
-        compound.setInteger("FLOOR_HEIGHT", floorHeight);
         compound.setBoolean("global", global);
 
     }
@@ -73,17 +71,6 @@ public class TileEntitySpawn extends TileEntity implements ITickable {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 
-        if(lastTeam != null)
-            compound.setString("lastTeam", lastTeam);
-        if(owner != null)
-            compound.setString("owner", owner.toString());
-
-        int[] p = compound.getIntArray("roomAnchor");
-        if(p.length == 3) {
-           pos = new BlockPos(p[0], p[1], p[2]);
-        }
-
-        floorHeight = compound.getInteger("FLOOR_HEIGHT");
         offset = new double[]{
             compound.getDouble("offset_x"),
             compound.getDouble("offset_y"),
@@ -100,15 +87,16 @@ public class TileEntitySpawn extends TileEntity implements ITickable {
     @Override
     public void update() {
 
-        if(pos == null || floorHeight <= 0) {
-            init();
-            return;
-        }
-
         if(world.isRemote)
             return;
 
-        AxisAlignedBB box = new AxisAlignedBB(pos, pos.add(15, floorHeight-1, 15));
+        if(chunk == null || floorHeight <= 0 || chunk.getX() != getPos().getX()/16 - 1 || chunk.getZ() != getPos().getZ()/16 - 1) {
+            initSpawn();
+            return;
+        }
+
+        BlockPos anchor_pos = new BlockPos(this.chunk.getX() * 16 + 16, this.chunk.getY() * floorHeight, this.chunk.getZ() * 16 + 16);
+        AxisAlignedBB box = new AxisAlignedBB(anchor_pos, anchor_pos.add(15, floorHeight-1, 15));
         AxisAlignedBB box_vortex = new AxisAlignedBB(getPos())
                 .offset(offset[0], offset[1], offset[2])
                 .grow(Math.floor(vortexSize+1));
@@ -116,14 +104,15 @@ public class TileEntitySpawn extends TileEntity implements ITickable {
         List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, box);
         List<EntityPlayer> players_vortex = world.getEntitiesWithinAABB(EntityPlayer.class, box_vortex, player -> vortexSize+0.5 >= player.getDistance(getPos().getX()+0.5, getPos().getY()+0.5, getPos().getZ()+0.5));
 
-        if(!SpawnData.hasOwner(getPos(), world) || global) {
+        boolean hasOwner = SpawnData.hasOwner(this.chunk, world);
+        if(!hasOwner || global) {
 
             String s = Dungeon.MODID + ":tick_in_vortex";
 
             for (EntityPlayer player : players) {
                 if (!last.contains(player)) {
 
-                    player.sendMessage(new TextComponentString("Stand in the vortex for " + (neededTicks/10) + "s to claim room"));
+                    player.sendMessage(new TextComponentString("Stand in the vortex for " + (neededTicks/20) + "s to claim room"));
 
                 }
 
@@ -139,6 +128,7 @@ public class TileEntitySpawn extends TileEntity implements ITickable {
                 else {
                     player.sendMessage(new TextComponentString("You claimed the room"));
                     player.getEntityData().removeTag(s);
+
                     if(global)
                         SpawnData.resetSpawn(player.getUniqueID(), world);
                     else
@@ -153,18 +143,26 @@ public class TileEntitySpawn extends TileEntity implements ITickable {
                         player.sendMessage(new TextComponentString("Left Vortex"));
                     }
         }
-        if(SpawnData.hasOwner(getPos(), world) || global) for(EntityPlayer player : players) {
 
+        if(hasOwner || global) for(EntityPlayer player : players) {
 
-            if(WorldDataRooms.toChunk(getPos(), world).equals(WorldDataRooms.toChunk(SpawnData.getSpawn(player, world), world))) {
+            if(isOwner(player)) {
 
                 if(!last.contains(player))
                     player.sendMessage(new TextComponentString("You entered your spawn room"));
 
             } else {
 
-                if(!last.contains(player))
+                if(!last.contains(player)) {
                     player.sendMessage(new TextComponentString("You entered someone else's spawn room"));
+                }
+
+                Vec3d current = new Vec3d(player.posX, player.posY, player.posZ);
+                Vec3d next = current.addVector(player.motionX, 0, player.motionZ);
+                double current_dist = current.distanceTo(new Vec3d(getPos()));
+                double next_dist = next.distanceTo(new Vec3d(getPos()));
+
+                player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("weakness"), 20*1, 100, true, false));
 
             }
 
@@ -174,8 +172,6 @@ public class TileEntitySpawn extends TileEntity implements ITickable {
         last_vortex = players_vortex;
 
     }
-
-    public static final boolean multipleSpawns = false;
 
     public void removeOwner() {
         SpawnData.declaimSpawn(getPos(), world);
@@ -189,11 +185,36 @@ public class TileEntitySpawn extends TileEntity implements ITickable {
         if(player == null)
             return false;
 
-        return isOwner(player.getUniqueID()) || (player.getTeam() != null && player.getTeam().getName().equals(lastTeam));
+        return isOwner(player.getUniqueID()) || chunk.equals(SpawnData.getSpawnChunk(player, world));
  }
 
     public boolean isOwner(UUID uuid) {
-        return owner == uuid;
+        return uuid .equals(SpawnData.getOwner(chunk, world));
     }
 
+    @Override
+    public void rotate(Rotation rotation) {
+        super.rotate(rotation);
+
+        int parts_pi = 0;
+        switch(rotation) {
+            case CLOCKWISE_90:
+                parts_pi = 1;
+                break;
+            case CLOCKWISE_180:
+                parts_pi = 2;
+                break;
+            case COUNTERCLOCKWISE_90:
+                parts_pi = -1;
+                break;
+        }
+
+        int cos = (int) MathHelper.cos((float) Math.PI/2*parts_pi);
+        int sin = (int) MathHelper.sin((float) Math.PI/2*parts_pi);
+
+        offset[0] = offset[0] * cos - offset[1] * sin;
+        offset[1] = offset[0] * sin + offset[1] * cos;
+
+        markDirty();
+    }
 }

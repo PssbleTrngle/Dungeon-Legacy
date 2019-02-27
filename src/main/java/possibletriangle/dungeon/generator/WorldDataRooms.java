@@ -73,7 +73,7 @@ public class WorldDataRooms extends WorldSavedData {
             b.setInteger("floor", pos.getY());
             b.setInteger("chunkZ", pos.getZ());
             b.setString("rotation", MAP.get(pos).rotation.name());
-            b.setString("pallete", MAP.get(pos).pallete.getBiomeName());
+            b.setString("pallete", MAP.get(pos).pallete.name);
 
             list.appendTag(b);
 
@@ -94,10 +94,13 @@ public class WorldDataRooms extends WorldSavedData {
     }
 
     public static void put(int chunkX, int floor, int chunkZ, ResourceLocation name, Rotation r, Pallete pallete, World world, String s) {
+
+        //Dungeon.LOGGER.info("Room: {} {}/{}/{}", name, chunkX, floor, chunkZ);
+
         RoomData data = new RoomData(name, r, pallete);
         BlockPos pos = new BlockPos(chunkX, floor, chunkZ);
 
-        if(get(world).MAP.containsKey(pos) && !"side".equals(s)) {
+        if(get(world).MAP.containsKey(pos)) {
 
             Dungeon.LOGGER.info("Trying to overwrite existing room: \"{}\" -> \"{}\" [{}]", get(world).MAP.get(pos).name, name, s);
 
@@ -141,8 +144,7 @@ public class WorldDataRooms extends WorldSavedData {
     public static BlockPos toChunk(BlockPos playerPos, World world) {
 
         int floor = floor(playerPos.getY(), world);
-        BlockPos chunk = new BlockPos(playerPos.getX() / 16 - 1, floor, playerPos.getZ() / 16 - 1);
-        return chunk;
+        return new BlockPos(playerPos.getX() / 16 - 1, floor, playerPos.getZ() / 16 - 1);
 
     }
 

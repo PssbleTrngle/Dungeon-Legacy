@@ -12,7 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import org.apache.commons.io.IOUtils;
-import possibletriangle.dungeon.Dungeon;
 import possibletriangle.dungeon.generator.ChunkPrimerRotateable;
 
 import java.io.File;

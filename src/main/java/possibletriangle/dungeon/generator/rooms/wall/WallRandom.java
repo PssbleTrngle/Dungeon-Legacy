@@ -3,10 +3,9 @@ package possibletriangle.dungeon.generator.rooms.wall;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import possibletriangle.dungeon.generator.ChunkPrimerDungeon;
 import possibletriangle.dungeon.generator.DungeonOptions;
-import possibletriangle.dungeon.generator.RandomCollection;
+import possibletriangle.dungeon.helper.RandomCollection;
 import possibletriangle.dungeon.structures.DungeonStructur;
 
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class WallRandom extends Wall {
                 boolean closed = r.nextDouble() > 0.6;
                 boolean open = chunkX % 2 == chunkZ % 2;
 
-                BlockPos check = pos.add(0, floor*options.FLOOR_HEIGHT + 2, 1);
+                BlockPos check = pos.add(0, floor* DungeonOptions.FLOOR_HEIGHT + 2, 1);
                 if (primer.getBlockStateWithRotation(check.getX(), check.getY(), check.getZ(), rot).getBlock() == Blocks.SPONGE) {
                     DungeonStructur door = closed ? CLOSED : doors.next(r);
                     if(open) door = OPEN;
@@ -49,11 +48,6 @@ public class WallRandom extends Wall {
                 }
 
         }
-
-    }
-
-    @Override
-    public void populate(DungeonOptions options, World world, int chunkX, int ChunkZ, int floor, Random r) {
 
     }
 

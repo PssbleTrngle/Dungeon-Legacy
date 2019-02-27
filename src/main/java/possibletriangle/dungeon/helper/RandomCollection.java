@@ -1,14 +1,16 @@
-package possibletriangle.dungeon.generator;
+package possibletriangle.dungeon.helper;
 
 import java.util.NavigableMap;
 import java.util.Random;
 import java.util.TreeMap;
 
 public class RandomCollection<E> {
-    private final NavigableMap<Double, E> map = new TreeMap<Double, E>();
+    private final NavigableMap<Double, E> map = new TreeMap<>();
     private double total = 0;
 
-    public RandomCollection() {
+    public RandomCollection(E... eeeees) {
+        for(E eeeee : eeeees)
+            add(1, eeeee);
     }
 
     public RandomCollection<E> add(double weight, E result) {

@@ -2,17 +2,16 @@ package possibletriangle.dungeon.generator;
 
 import net.minecraft.client.gui.*;
 import net.minecraft.client.resources.I18n;
-import possibletriangle.dungeon.Dungeon;
 
 import java.io.IOException;
 
 public class GuiDungeon extends GuiScreen implements GuiSlider.FormatHelper, GuiPageButtonList.GuiResponder {
 
-    private final GuiScreen parent;
+    private final GuiCreateWorld parent;
     private final DungeonOptions options;
     private GuiButton rotate, ceiling;
 
-    public GuiDungeon(GuiScreen parent, DungeonOptions options) {
+    public GuiDungeon(GuiCreateWorld parent, DungeonOptions options) {
         this.parent = parent;
         this.options = options;
     }

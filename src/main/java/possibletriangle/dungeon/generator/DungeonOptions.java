@@ -1,7 +1,5 @@
 package possibletriangle.dungeon.generator;
 
-import net.minecraft.block.state.IBlockState;
-
 public class DungeonOptions {
 
     public static final int MAX_FLOORS = 10;

@@ -13,19 +13,14 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
 
     private final DungeonOptions options;
     private final Random r;
-    private final Pallete[] palletes;
-    private final int[] variants;
+    private final Pallete pallete;
+    private final int variant;
 
-    public ChunkPrimerDungeon(DungeonOptions options, Random r) {
+    public ChunkPrimerDungeon(DungeonOptions options, Random r, Pallete pallete, int variant) {
         this.options = options;
         this.r = r;
-        this.palletes = new Pallete[options.floorCount()];
-        this.variants = new int[options.floorCount()];
-    }
-
-    public void set(int floor, Pallete pallete, int variant) {
-        palletes[floor] = pallete;
-        variants[floor] = variant;
+        this.pallete = pallete;
+        this.variant = variant;
     }
 
     public void setBlockState(int x, int y, int z, int floor, Rotation rotation, IBlockState state) {
@@ -34,19 +29,16 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
 
     public void setBlockState(int x, int y, int z, int floor, IBlockState state, Rotation rotation, boolean replace) {
 
-        if(x < 0 || z < 0 || x > 15 || z > 15 || y < 0 || (y >= options.FLOOR_HEIGHT && floor < options.floorCount()-1)) {
+        if(x < 0 || z < 0 || x > 15 || z > 15 || y < 0 || (y >= DungeonOptions.FLOOR_HEIGHT && floor < options.floorCount()-1)) {
             Dungeon.LOGGER.info("Illegal generation at floor {} ({}/{}/{})", floor, x, y, z);
             return;
         }
 
-        y += floor*options.FLOOR_HEIGHT;
+        y += floor* DungeonOptions.FLOOR_HEIGHT;
 
         if(replace && getBlockStateWithRotation(x, y, z, rotation).getBlock() != Blocks.AIR) {
             return;
         }
-
-        Pallete pallete = floor >= palletes.length ? palletes[palletes.length-1] : palletes[floor];
-        int  variant = floor >= variants.length ? variants[variants.length-1] : variants[floor];
 
         if(state.getBlock() instanceof IPlaceholder)
             state = pallete.get(((IPlaceholder) state.getBlock()).getType(), state, r, variant);
@@ -56,8 +48,6 @@ public class ChunkPrimerDungeon extends ChunkPrimerRotateable {
         else if(state.getBlock() == Blocks.WATER)
             state = pallete.get(Pallete.Type.FLUID_SAVE, state, r, variant);
 
-        else if(state.getBlock() == Blocks.TORCH)
-            state = pallete.get(Pallete.Type.TORCH, state, r, variant);
         else if(state.getBlock() == Blocks.IRON_BARS)
             state = pallete.get(Pallete.Type.BARS, state, r, variant);
         else if(state.getBlock() == Blocks.LADDER)

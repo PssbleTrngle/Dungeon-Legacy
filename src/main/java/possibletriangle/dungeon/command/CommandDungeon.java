@@ -10,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import possibletriangle.dungeon.Dungeon;
 import possibletriangle.dungeon.generator.WorldDataRooms;
 import possibletriangle.dungeon.helper.SpawnData;
@@ -70,7 +71,7 @@ public class CommandDungeon extends CommandBase {
                     if(data == null)
                         throw new CommandException("There is no room here");
 
-                    sender.sendMessage(new TextComponentString("You are in a \"" + data.name + "\" at floor "+ chunk.getY() + " [" + data.rotation.name().toLowerCase() + "] [" + data.pallete.getBiomeName() + "]" ));
+                    sender.sendMessage(new TextComponentString("You are in a \"" + data.name + "\" at floor " + chunk.getY() + " [" + data.rotation.name().toLowerCase() + "] [" + data.pallete.name + "]" ));
                     break;
 
                 case RELOAD:
@@ -82,7 +83,7 @@ public class CommandDungeon extends CommandBase {
                 case SPAWN:
                     if(sender instanceof EntityPlayerMP) {
                         EntityPlayerMP player = (EntityPlayerMP) sender;
-                        BlockPos p = SpawnData.getSpawn(player, player.getEntityWorld());
+                        BlockPos p = SpawnData.getSpawnBlock(player, player.getEntityWorld());
                         if(p != null) {
 
                             player.connection.setPlayerLocation(p.getX() + 0.5, p.getY(), p.getZ() + 0.5, 0, 0);
@@ -103,17 +104,21 @@ public class CommandDungeon extends CommandBase {
 
                 case LOOT:
 
-                    if(args.length >= 4) {
+                    if(args.length >= 5) {
 
-                        int luck = args.length >= 5 ? parseInt(args[4]) : 0;
-                        int times = args.length >= 6 ? Math.max(1, parseInt(args[5])) : 1;
+                        String table = args[4];
+                        int luck = args.length >= 6 ? parseInt(args[5]) : 0;
+                        int times = args.length >= 7 ? Math.max(1, parseInt(args[6])) : 1;
                         BlockPos pos = parseBlockPos(sender, args, 1, false);
                         TileEntity te = sender.getEntityWorld().getTileEntity(pos);
+
+                        LootTable t = LootManager.get(table) == null ? LootManager.COMMON : LootManager.get(table);
+
                         if(te instanceof IInventory) {
                             IInventory i = (IInventory) te;
                             i.clear();
                             for(int x = 0; x < times; x++)
-                                LootManager.COMMON.fillInventory(i, new Random(), new LootContext(luck, null, null, null, null, null));
+                                t.fillInventory(i, new Random(), new LootContext(luck, null, null, null, null, null));
                         } else
                             throw new CommandException("Not an inventory");
 

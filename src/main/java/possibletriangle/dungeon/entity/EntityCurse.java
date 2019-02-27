@@ -1,24 +1,21 @@
 package possibletriangle.dungeon.entity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
-import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import possibletriangle.dungeon.Dungeon;
+import possibletriangle.dungeon.entity.ai.EntityAIFollowCurse;
+import possibletriangle.dungeon.entity.ai.PathNavigateCurse;
 
 public abstract class EntityCurse extends EntityMob {
 
@@ -41,13 +38,23 @@ public abstract class EntityCurse extends EntityMob {
     }
 
     @Override
+    protected PathNavigate createNavigator(World world) {
+        return new PathNavigateCurse(this, world);
+    }
+
+    @Override
     public void onCollideWithPlayer(EntityPlayer player) {
 
         if(player.getEntityBoundingBox().intersects(this.getEntityBoundingBox())) {
-            player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:wither"), 20 * 20, 1, false, true));
+            //player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:wither"), 20 * 20, 1, false, true));
         }
 
-        super.onCollideWithPlayer(player);
+        //super.onCollideWithPlayer(player);
+    }
+
+    @Override
+    protected void jump() {
+        super.jump();
     }
 
     @Override
@@ -69,6 +76,13 @@ public abstract class EntityCurse extends EntityMob {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(getSpeed());
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(100D);
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(TRACKING_DISTANCE);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0);
+    }
+
+    @Override
+    public boolean attackEntityAsMob(Entity entityIn) {
+        return true;
     }
 
     @Override
@@ -86,4 +100,7 @@ public abstract class EntityCurse extends EntityMob {
         super.entityInit();
         this.dataManager.register(ACTIVE, false);
     }
+
 }
+
+

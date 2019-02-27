@@ -1,0 +1,8 @@
+{
+    "parent": "block/outer_stairs",
+    "textures": {
+        "bottom": "dungeon:blocks/placeholder_planks",
+        "top": "dungeon:blocks/placeholder_planks",
+        "side": "dungeon:blocks/placeholder_planks"
+    }
+}

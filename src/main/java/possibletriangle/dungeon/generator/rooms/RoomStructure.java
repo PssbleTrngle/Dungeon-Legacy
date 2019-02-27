@@ -12,9 +12,16 @@ import java.util.Random;
 
 public class RoomStructure extends Room {
 
+    private boolean genWall = true;
+
+    public RoomStructure noRandomWall() {
+        genWall = false;
+        return this;
+    }
+
     @Override
     public boolean generateWall() {
-        return true;
+        return genWall;
     }
 
     public static final HashMap<String, RoomStructure> MAP = new HashMap<>();
@@ -39,7 +46,7 @@ public class RoomStructure extends Room {
 
     @Override
     public void generateAt(DungeonOptions options, ChunkPrimerDungeon primer, int floor, Random r, Rotation rotation) {
-        structure.generate(primer, options, floor, (x,y,z) -> (x < 16 && z < 16 && x >= 0 && z >= 0 && y >= 0 && (y < options.FLOOR_HEIGHT || floor == options.floorCount()-1)), rotation );
+        structure.generate(primer, options, floor, (x,y,z) -> (x < 16 && z < 16 && x >= 0 && z >= 0 && y >= 0 && (y < DungeonOptions.FLOOR_HEIGHT || floor == options.floorCount()-1)), rotation );
     }
 
     @Override

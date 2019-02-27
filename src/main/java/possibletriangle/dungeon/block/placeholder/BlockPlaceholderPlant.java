@@ -13,7 +13,6 @@ import possibletriangle.dungeon.pallete.Pallete;
 
 public class BlockPlaceholderPlant extends BlockBush implements IPlaceholder {
 
-    private final ResourceLocation name;
     private final Pallete.Type type;
 
     public BlockPlaceholderPlant(Pallete.Type type) {
@@ -21,7 +20,7 @@ public class BlockPlaceholderPlant extends BlockBush implements IPlaceholder {
 
         String id = type.name().toLowerCase();
         this.type = type;
-        this.name = new ResourceLocation(Dungeon.MODID, "placeholder_" + id);
+        ResourceLocation name = new ResourceLocation(Dungeon.MODID, "placeholder_" + id);
 
         setRegistryName(name);
         setUnlocalizedName(name.toString());

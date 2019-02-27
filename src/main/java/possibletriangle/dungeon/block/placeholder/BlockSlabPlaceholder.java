@@ -14,7 +14,6 @@ import possibletriangle.dungeon.pallete.Pallete;
 
 public class BlockSlabPlaceholder extends BlockSlab implements IPlaceholder {
 
-    private final ResourceLocation name;
     private final Pallete.Type type;
     private final boolean doble;
 
@@ -24,7 +23,7 @@ public class BlockSlabPlaceholder extends BlockSlab implements IPlaceholder {
         String id = type.name().toLowerCase();
         this.type = type;
         this.doble = doble;
-        this.name = new ResourceLocation(Dungeon.MODID, "placeholder_" + id + (doble ? "_double" : ""));
+        ResourceLocation name = new ResourceLocation(Dungeon.MODID, "placeholder_" + id + (doble ? "_double" : ""));
 
         setRegistryName(name);
         setUnlocalizedName(name.toString());

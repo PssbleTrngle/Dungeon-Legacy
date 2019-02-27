@@ -1,19 +1,23 @@
-package possibletriangle.dungeon.pallete;
+package possibletriangle.dungeon.pallete.objects;
 
 import net.minecraft.block.*;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.structure.template.BlockRotationProcessor;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.Loader;
-import possibletriangle.dungeon.generator.RandomCollection;
+import possibletriangle.dungeon.pallete.Pallete;
+import possibletriangle.dungeon.pallete.Replacer;
 
-import java.util.Random;
+public class PalletePrismarine extends Pallete {
 
-public class PalettePrismarine extends Pallete {
+    @Override
+    public Biome getBiome(int variant) {
+        return Biomes.OCEAN;
+    }
 
-    public PalettePrismarine() {
-        super("prismarine", 0F);
+    public PalletePrismarine() {
+        super("prismarine");
 
         addMob(new ResourceLocation("minecraft", "zombie"), 1);
         addMob(new ResourceLocation("minecraft", "skeleton"), 0.8);
@@ -24,11 +28,6 @@ public class PalettePrismarine extends Pallete {
     @Override
     public double weight() {
         return 0.2;
-    }
-
-    @Override
-    public int variantCount() {
-        return 2;
     }
 
     @Override
@@ -51,6 +50,8 @@ public class PalettePrismarine extends Pallete {
             case GEM:
                 r.add(Blocks.LAPIS_BLOCK);
                 r.add(Blocks.GOLD_BLOCK);
+                r.add("biomesoplenty:gem_block:5");
+                r.add("biomesoplenty:gem_block:6");
                 break;
 
             case FLOOR:
@@ -70,6 +71,7 @@ public class PalettePrismarine extends Pallete {
                 r.add(Blocks.PRISMARINE.getDefaultState().withProperty(BlockPrismarine.VARIANT, BlockPrismarine.EnumType.BRICKS));
                 break;
 
+            case FARMLAND:
             case GRASS:
             case DIRT:
                 r.add(Blocks.SAND);
@@ -98,6 +100,10 @@ public class PalettePrismarine extends Pallete {
                 break;
             case LADDER:
                 r.add(Blocks.VINE);
+                break;
+
+            case CROP:
+                r.add(Blocks.AIR);
                 break;
 
         }

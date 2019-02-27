@@ -13,8 +13,9 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import possibletriangle.dungeon.Dungeon;
 import possibletriangle.dungeon.generator.ChunkPrimerDungeon;
 import possibletriangle.dungeon.generator.DungeonOptions;
-import possibletriangle.dungeon.generator.RandomCollection;
+import possibletriangle.dungeon.helper.RandomCollection;
 import possibletriangle.dungeon.generator.WorldDataRooms;
+import possibletriangle.dungeon.helper.SpawnData;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -234,9 +235,9 @@ public abstract class Room {
             return;
 
         Room room = RoomManager.get(data.name);
-        if(room != null)
+        if(room != null) {
             room.tickPlayer(event.player, chunk);
-
+        }
 
     }
 

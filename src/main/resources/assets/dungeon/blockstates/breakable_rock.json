@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "normal": { "model": "dungeon:breakable_rock" }
+    }
+}

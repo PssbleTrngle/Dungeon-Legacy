@@ -18,5 +18,4 @@ public class BlockPlaceholder extends BlockMod implements IPlaceholder {
     public Pallete.Type getType() {
         return type;
     }
-
 }

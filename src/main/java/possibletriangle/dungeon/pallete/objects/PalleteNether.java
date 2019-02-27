@@ -1,17 +1,24 @@
-package possibletriangle.dungeon.pallete;
+package possibletriangle.dungeon.pallete.objects;
 
-import net.minecraft.block.*;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockHalfStoneSlab;
+import net.minecraft.block.BlockNetherWart;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.Loader;
-
-import java.util.Random;
+import possibletriangle.dungeon.pallete.Pallete;
+import possibletriangle.dungeon.pallete.Replacer;
 
 public class PalleteNether extends Pallete {
 
+    @Override
+    public Biome getBiome(int variant) {
+        return Biomes.HELL;
+    }
+
     public PalleteNether() {
-        super("nether", 1F);
+        super("nether");
 
         addMob(new ResourceLocation("minecraft", "zombie_pigman"), 1);
         addMob(new ResourceLocation("minecraft", "wither_skeleton"), 0.5);
@@ -28,11 +35,6 @@ public class PalleteNether extends Pallete {
     }
 
     @Override
-    public int variantCount() {
-        return 2;
-    }
-
-    @Override
     public Replacer forType(Type type, int variant) {
 
         Replacer r = new Replacer();
@@ -40,13 +42,13 @@ public class PalleteNether extends Pallete {
         switch(type) {
 
             case FLUID_HARMFUL:
-                if(variant == 1) r.add("thermalfoundation:fluid_pyrotheum", 1, 0.2);
-                else r.add(Blocks.LAVA, 1);
+                if(variant % 2 == 0) r.add("thermalfoundation:fluid_pyrotheum", 1, 0.2);
+                if(variant % 2 == 1) r.add(Blocks.LAVA, 1);
                 r.add(Blocks.LAVA);
                 break;
             case FLUID_SAVE:
-                if(variant == 0) r.add("biomesoplenty:honey", 1, 1);
-                else r.add("biomesoplenty:blood", 1, 2);
+                if(variant % 2 == 0) r.add("biomesoplenty:honey", 1, 1);
+                if(variant % 2 == 1) r.add("biomesoplenty:blood", 1, 2);
                 r.add(Blocks.LAVA);
                 break;
 
@@ -57,6 +59,8 @@ public class PalleteNether extends Pallete {
             case GEM:
                 r.add(Blocks.GOLD_BLOCK);
                 r.add(Blocks.REDSTONE_BLOCK);
+                r.add("biomesoplenty:gem_block:1");
+                r.add("biomesoplenty:gem_block:7");
                 break;
 
             case FLOOR:
@@ -80,24 +84,24 @@ public class PalleteNether extends Pallete {
                 break;
 
             case GRASS:
-                if(variant == 0) r.add("biomesoplenty:grass:6", 1, 1);
-                else r.add("biomesoplenty:grass:8", 1, 0.6);
+                if(variant % 2 == 0) r.add("biomesoplenty:grass:6", 1, 1);
+                if(variant % 2 == 1) r.add("biomesoplenty:grass:8", 1, 0.6);
             case DIRT:
-                r.add(Blocks.NETHERRACK, 1);
-                r.add(Blocks.MYCELIUM);
-                r.add(Blocks.SOUL_SAND);
+                r.add(Blocks.NETHERRACK);
                 break;
             case LOG:
             case LOG2:
-                if(variant == 0) r.add("natura:nether_logs:0", 1);
+                if(variant % 2 == 0) r.add("natura:nether_logs:0", 1);
+                if(variant % 2 == 1) r.add(Blocks.BONE_BLOCK, 1);
                 r.add(Blocks.BONE_BLOCK);
                 break;
             case LEAVES:
             case LEAVES2:
-                if(variant == 0) r.add("natura:nether_leaves:0", 1);
+                if(variant % 2 == 0) r.add("natura:nether_leaves:0", 1);
+                if(variant % 2 == 1) r.add(Blocks.GLOWSTONE, 1);
                 r.add(Blocks.GLOWSTONE);
                 break;
-            case PLANT:
+            case CROP:
                 r.add(Blocks.NETHER_WART.getDefaultState().withProperty(BlockNetherWart.AGE, 0));
                 r.add(Blocks.NETHER_WART.getDefaultState().withProperty(BlockNetherWart.AGE, 1));
                 r.add(Blocks.NETHER_WART.getDefaultState().withProperty(BlockNetherWart.AGE, 2));
@@ -116,6 +120,15 @@ public class PalleteNether extends Pallete {
                 break;
             case LADDER:
                 r.add(Blocks.LADDER);
+                break;
+
+            case FARMLAND:
+                r.add(Blocks.MYCELIUM);
+                r.add(Blocks.SOUL_SAND);
+                break;
+
+            case PLANT:
+                r.add(Blocks.AIR);
                 break;
 
         }
