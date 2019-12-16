@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "dungeon:placeholder_grass" }
+        "": { "model": "dungeon:block/placeholder_grass" }
     }
 }

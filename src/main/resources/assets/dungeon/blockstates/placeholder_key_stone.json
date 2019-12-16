@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "dungeon:placeholder_key_stone" }
+        "": { "model": "dungeon:block/placeholder_key_stone" }
     }
 }

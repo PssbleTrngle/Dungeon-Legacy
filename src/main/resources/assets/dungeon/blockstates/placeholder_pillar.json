@@ -1,7 +1,7 @@
 {
     "variants": {
-        "axis=y": { "model": "dungeon:placeholder_pillar" },
-        "axis=z": { "model": "dungeon:placeholder_pillar", "x": 90 },
-        "axis=x": { "model": "dungeon:placeholder_pillar", "x": 90, "y": 90 }
+        "axis=y": { "model": "dungeon:block/placeholder_pillar" },
+        "axis=z": { "model": "dungeon:block/placeholder_pillar", "x": 90 },
+        "axis=x": { "model": "dungeon:block/placeholder_pillar", "x": 90, "y": 90 }
     }
 }

@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "dungeon:placeholder_lamp" }
+        "": { "model": "dungeon:block/placeholder_lamp" }
     }
 }

@@ -4,23 +4,25 @@ import java.util.NavigableMap;
 import java.util.Random;
 import java.util.TreeMap;
 
-public class RandomCollection<E> {
-    private final NavigableMap<Double, E> map = new TreeMap<>();
+public class RandomCollection<T> {
+
+    private final NavigableMap<Double, T> map = new TreeMap<>();
     private double total = 0;
 
-    public RandomCollection(E... eeeees) {
-        for(E eeeee : eeeees)
-            add(1, eeeee);
+    @SafeVarargs
+    public RandomCollection(T... ts) {
+        for(T t : ts)
+            add(t, 1);
     }
 
-    public RandomCollection<E> add(double weight, E result) {
+    public RandomCollection<T> add(T t, float weight) {
         if (weight <= 0) return this;
         total += weight;
-        map.put(total, result);
+        map.put(total, t);
         return this;
     }
 
-    public E next(Random random) {
+    public T next(Random random) {
         double value = random.nextDouble() * total;
         return map.higherEntry(value).getValue();
     }
@@ -29,10 +31,8 @@ public class RandomCollection<E> {
         return map.values().size();
     }
 
-    public E[] all() {
-
-        return (E[]) map.values().toArray();
-
+    public T[] all() {
+        return (T[]) map.values().toArray();
     }
 
 }

@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "dungeon:placeholder_rune" }
+        "": { "model": "dungeon:block/placeholder_rune" }
     }
 }

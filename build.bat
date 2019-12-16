@@ -1,2 +1,0 @@
-gradlew setupDecompWorkspace
-gradlew setupDevWorkspace ideaModule

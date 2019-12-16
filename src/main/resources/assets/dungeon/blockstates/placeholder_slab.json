@@ -1,6 +1,6 @@
 {
     "variants": {
-        "half=bottom,variant=default": { "model": "dungeon:half_slab_placeholder" },
-        "half=top,variant=default": { "model": "dungeon:upper_slab_placeholder" }
+        "half=bottom,variant=default": { "model": "dungeon:block/half_slab_placeholder" },
+        "half=top,variant=default": { "model": "dungeon:block/upper_slab_placeholder" }
     }
 }

@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "dungeon:placeholder_planks" }
+        "": { "model": "dungeon:block/placeholder_planks" }
     }
 }

@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "dungeon:breakable_rock_harder" }
+        "": { "model": "dungeon:block/breakable_rock_harder" }
     }
 }

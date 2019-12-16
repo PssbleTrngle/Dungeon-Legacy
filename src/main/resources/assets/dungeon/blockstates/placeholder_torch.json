@@ -1,9 +1,9 @@
 {
     "variants": {
-        "facing=up": { "model": "dungeon:placeholder_torch" },
-        "facing=east": { "model": "dungeon:placeholder_torch_wall" },
-        "facing=south": { "model": "dungeon:placeholder_torch_wall", "y": 90 },
-        "facing=west": { "model": "dungeon:placeholder_torch_wall", "y": 180 },
-        "facing=north": { "model": "dungeon:placeholder_torch_wall", "y": 270 }
+        "facing=up": { "model": "dungeon:block/placeholder_torch" },
+        "facing=east": { "model": "dungeon:block/placeholder_torch_wall" },
+        "facing=south": { "model": "dungeon:block/placeholder_torch_wall", "y": 90 },
+        "facing=west": { "model": "dungeon:block/placeholder_torch_wall", "y": 180 },
+        "facing=north": { "model": "dungeon:block/placeholder_torch_wall", "y": 270 }
     }
 }

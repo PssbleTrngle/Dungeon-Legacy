@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "dungeon:placeholder_leaves2" }
+        "": { "model": "dungeon:block/placeholder_leaves2" }
     }
 }
