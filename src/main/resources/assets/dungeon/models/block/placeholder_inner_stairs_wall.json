@@ -1,8 +1,0 @@
-{
-    "parent": "block/inner_stairs",
-    "textures": {
-        "bottom": "dungeon:blocks/placeholder_wall",
-        "top": "dungeon:blocks/placeholder_wall",
-        "side": "dungeon:blocks/placeholder_wall"
-    }
-}

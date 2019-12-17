@@ -1,7 +1,7 @@
 {
-    "parent": "block/cube_column",
-    "textures": {
-        "end": "dungeon:blocks/placeholder_log_top",
-        "side": "dungeon:blocks/placeholder_log_side"
-    }
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "dungeon:block/placeholder_log_top",
+    "side": "dungeon:block/placeholder_log_side"
+  }
 }

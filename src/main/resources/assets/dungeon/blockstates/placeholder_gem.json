@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "": { "model": "dungeon:block/placeholder_gem" }
+  "variants": {
+    "": {
+      "model": "dungeon:block/placeholder_gem"
     }
+  }
 }

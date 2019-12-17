@@ -1,6 +1,0 @@
-{
-    "variants": {
-        "collision=true": { "model": "stonebrick_normal" },
-        "collision=false": { "model": "dungeon:block/toggleable_block" }
-    }
-}

@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "": { "model": "dungeon:block/placeholder_planks" }
+  "variants": {
+    "": {
+      "model": "dungeon:block/placeholder_planks"
     }
+  }
 }

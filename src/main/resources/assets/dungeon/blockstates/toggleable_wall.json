@@ -1,6 +1,0 @@
-{
-    "variants": {
-        "collision=true": { "model": "stonebrick" },
-        "collision=false": { "model": "redstone_block" }
-    }
-}
