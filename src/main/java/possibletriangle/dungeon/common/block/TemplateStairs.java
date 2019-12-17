@@ -1,17 +1,21 @@
 package possibletriangle.dungeon.common.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.StairsBlock;
-import net.minecraft.block.material.Material;
-import net.minecraftforge.common.Tags;
 
-public class TemplateStairs extends StairsBlock {
+public class TemplateStairs extends StairsBlock implements IPlaceholder {
 
-    public TemplateStairs(Template template) {
+    private final Type type;
+
+    public TemplateStairs(Type type) {
         super(Blocks.STONE.getDefaultState(), TemplateBlock.PROPERTIES);
-        setRegistryName("placeholder_" + template.name().toLowerCase());
+        this.type = type;
+        setRegistryName("placeholder_" + type.name().toLowerCase());
+    }
+
+    @Override
+    public Type getType() {
+        return this.type;
     }
 
 }

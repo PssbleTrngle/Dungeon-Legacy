@@ -1,14 +1,20 @@
 package possibletriangle.dungeon.common.block;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.block.SlabBlock;
-import net.minecraft.block.StairsBlock;
 
-public class TemplateSlab extends SlabBlock {
+public class TemplateSlab extends SlabBlock implements IPlaceholder {
 
-    public TemplateSlab(Template template) {
+    private final Type type;
+
+    public TemplateSlab(Type type) {
         super(TemplateBlock.PROPERTIES);
-        setRegistryName("placeholder_" + template.name().toLowerCase());
+        this.type = type;
+        setRegistryName("placeholder_" + type.name().toLowerCase());
+    }
+
+    @Override
+    public Type getType() {
+        return this.type;
     }
 
 }
