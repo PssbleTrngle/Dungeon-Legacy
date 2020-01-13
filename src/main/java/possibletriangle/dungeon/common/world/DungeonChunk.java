@@ -1,7 +1,10 @@
 package possibletriangle.dungeon.common.world;
 
+import javafx.scene.chart.Axis;
 import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.IProperty;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -31,19 +34,70 @@ public class DungeonChunk {
         this.floor = floor;
     }
 
-    public DungeonChunk(IChunk chunk, Random random, DungeonSettings settings, PlacementSettings placement) {
+    public DungeonChunk(IChunk chunk, Random random, DungeonSettings settings) {
         this.chunk = chunk;
         this.random = random;
         this.settings = settings;
-        this.placement = placement;
         this.palette = Palette.random(random);
+        this.placement = new PlacementSettings().setRotation(Rotation.func_222466_a(random));
+        //this.palette = Palette.random(random);
+        //this.palette = getPos().x % 2 == getPos().z % 2 ? Palette.NATURE : Palette.NETHER;
     }
 
     public ChunkPos getPos() {
         return this.chunk.getPos();
     }
 
-    public BlockState setBlockState(BlockPos pos, BlockState state, Rotation rotation) {
+    private static BlockState rotateProperty(BlockState state, IProperty<?> property, Rotation rotation) {
+        Class clazz = property.getValueClass();
+        if(clazz.isInstance(Rotation.NONE)) {
+
+            IProperty<Rotation> p = (IProperty<Rotation>) property;
+            Rotation r = state.get(p).add(rotation);
+            if(p.getAllowedValues().contains(r)) return state.with(p, r);
+
+        } else if(clazz.isInstance(Direction.DOWN)) {
+
+            IProperty<Direction> p = (IProperty<Direction>) property;
+            Direction d = state.get(p);
+            for(int i = 0; i < rotation.ordinal(); i++) d = d.rotateAround(Direction.Axis.Y);
+            if(p.getAllowedValues().contains(d)) return state.with(p, d);
+
+        } else if(clazz.isInstance(Direction.Axis.X)) {
+
+            IProperty<Direction.Axis> p = (IProperty<Direction.Axis>) property;
+            Direction.Axis a = state.get(p);
+            switch (a) {
+                case X:
+                    a = Direction.Axis.Z;
+                    break;
+                case Z:
+                    a = Direction.Axis.X;
+                    break;
+            }
+            if (p.getAllowedValues().contains(a)) return state.with(p, a);
+
+        }
+
+        return state;
+    }
+
+    public void setTileEntity(BlockPos pos, CompoundNBT nbt) {
+        this.setTileEntity(pos, nbt, 1);
+    }
+
+    public void setTileEntity(BlockPos pos, CompoundNBT nbt, int size) {
+        Rotation rotation = pos.getX() * pos.getZ() == 0 ? Rotation.NONE : this.placement.getRotation();
+        BlockPos rotated = this.rotate(pos, rotation, size);
+        BlockPos real = getPos().asBlockPos().add(rotated);
+        nbt.putInt("x", real.getX());
+        nbt.putInt("y", real.getY());
+        nbt.putInt("z", real.getZ());
+        chunk.addTileEntity(nbt);
+    }
+
+    public BlockState setBlockState(BlockPos pos, BlockState state, Rotation rotation, int size) {
+        if(pos.getX() * pos.getZ() == 0 && rotation != Rotation.NONE) setBlockState(pos, state, Rotation.NONE, size);
 
         if(state.getBlock() instanceof IPlaceholder) {
 
@@ -59,20 +113,37 @@ public class DungeonChunk {
 
         } else {
 
-            float phi = (float) (rotation.ordinal() * Math.PI / 2);
-            int sin = (int) MathHelper.sin(phi);
-            int cos = (int) MathHelper.cos(phi);
+            BlockState rotatedState =
+                    state.getProperties()
+                            .stream()
+                            .reduce(state, (s, p) -> rotateProperty(s, p, rotation), (a, b) -> a);
 
-            float[] centered = new float[]{pos.getX() - 7.5F, pos.getZ() - 7.5F};
-
-            BlockPos rotated = new BlockPos(
-                    (int) (centered[0] * cos - centered[1] * sin + 7.5F),
-                    pos.getY() + floor * (settings.floorHeight + 1),
-                    (int) (centered[0] * sin + centered[1] * cos + 7.5F)
-            );
-
-            return chunk.setBlockState(rotated, state, false);
+            BlockPos rotated = this.rotate(pos, rotation, size);
+            return chunk.setBlockState(rotated, rotatedState, false);
         }
+    }
+
+    private BlockPos rotate(BlockPos in, Rotation rotation, int size) {
+        float phi = (float) (rotation.ordinal() * Math.PI / 2);
+        int sin = (int) MathHelper.sin(phi);
+        int cos = (int) MathHelper.cos(phi);
+
+        int center = size * 8;
+        float[] centered = new float[]{in.getX() - center, in.getZ() - center};
+
+        return new BlockPos(
+                (int) (centered[0] * cos - centered[1] * sin + center),
+                in.getY() + floor * (settings.floorHeight + 1),
+                (int) (centered[0] * sin + centered[1] * cos + center)
+        );
+    }
+
+    public BlockState setBlockState(BlockPos pos, BlockState state, int size) {
+        return setBlockState(pos, state, this.placement.getRotation(), size);
+    }
+
+    public BlockState setBlockState(BlockPos pos, BlockState state, Rotation rotation) {
+        return setBlockState(pos, state, rotation, 1);
     }
 
     public BlockState setBlockState(BlockPos pos, BlockState state) {

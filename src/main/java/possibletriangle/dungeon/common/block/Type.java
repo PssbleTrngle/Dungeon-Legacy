@@ -12,10 +12,13 @@ public enum Type {
     RUNE,
     GEM,
     PLANKS,
-    GLASS,
-    FALLING_BLOCK,
-
+    GLASS(t -> new TemplateTransparent(t, true)),
+    FALLING(TemplateFalling::new),
     PILLAR(TemplatePillar::new),
+    SEAL,
+
+    GRASS(TemplateGrass::new),
+    LEAVES(TemplateTransparent::new),
     LOG(TemplatePillar::new),
 
     STAIRS(TemplateStairs::new),
@@ -29,7 +32,7 @@ public enum Type {
     PRESSURE_PLATE,
     BUTTON,
     LEVER,
-    LAMP,
+    LAMP(t -> new TemplateBlock(t, 15)),
     CHEST;
 
     private final Function<Type, Block> block;

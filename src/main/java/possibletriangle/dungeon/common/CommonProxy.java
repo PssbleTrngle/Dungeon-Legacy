@@ -5,9 +5,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.ChunkGeneratorType;
+import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -16,11 +14,9 @@ import net.minecraftforge.registries.RegistryBuilder;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.Palette;
 import possibletriangle.dungeon.common.block.Type;
-import possibletriangle.dungeon.common.world.DungeonChunkGenerator;
-import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.DungeonWorldType;
 import possibletriangle.dungeon.common.world.room.Room;
-import possibletriangle.dungeon.common.world.room.RoomHallway;
+import possibletriangle.dungeon.common.world.room.HallwayMaze;
 import possibletriangle.dungeon.common.world.room.RoomStructure;
 import possibletriangle.dungeon.common.world.wall.Wall;
 import possibletriangle.dungeon.helper.RandomCollection;
@@ -54,7 +50,9 @@ public class CommonProxy {
         @SubscribeEvent
         public static void onPalettesRegistry(final RegistryEvent.Register<Palette> event) {
             event.getRegistry().registerAll(
-                    new Palette(1F).setRegistryName("stone")
+
+                    /* ------------------   STONE  ------------------ */
+                    new Palette(1F, () -> Biomes.PLAINS, () -> null).setRegistryName(DungeonMod.MODID, "stone")
                             .put(new RandomCollection<Supplier<Block>>()
                                             .add(() -> Blocks.INFESTED_STONE, 1F)
                                             .add(() -> Blocks.COBBLESTONE, 0.5F),
@@ -74,11 +72,46 @@ public class CommonProxy {
                             .put(() -> Blocks.GLOWSTONE, Type.LAMP)
                             .put(() -> Blocks.STONE_SLAB, Type.SLAB)
                             .put(() -> Blocks.STONE_STAIRS, Type.STAIRS)
-                            .put(() -> Blocks.OAK_LOG, Type.PILLAR)
+                            .put(() -> Blocks.OAK_LOG, Type.PILLAR, Type.LOG)
                             .put(() -> Blocks.MOSSY_STONE_BRICK_SLAB, Type.SLAB_WALL)
-                            .put(() -> Blocks.MOSSY_STONE_BRICK_STAIRS, Type.STAIRS_WALL),
+                            .put(() -> Blocks.MOSSY_STONE_BRICK_STAIRS, Type.STAIRS_WALL)
+                            .put(() -> Blocks.GRASS_BLOCK, Type.GRASS)
+                            .put(() -> Blocks.OAK_PLANKS, Type.PLANKS)
+                            .put(() -> Blocks.GLASS, Type.GLASS)
+                            .put(new RandomCollection<>(() -> Blocks.SAND, () -> Blocks.GRAVEL), Type.FALLING)
+                            .put(() -> Blocks.OAK_LEAVES, Type.LEAVES)
+                            .put(() -> Blocks.CHEST, Type.CHEST)
+                            .put(() -> Blocks.LEVER, Type.LEVER)
+                            .put(new RandomCollection<>(() -> Blocks.DANDELION, () -> Blocks.POPPY, () -> Blocks.BLUE_ORCHID, () -> Blocks.AZURE_BLUET))
+                            .put(() -> Blocks.STONE_BUTTON, Type.BUTTON)
+                            .put(() -> Blocks.POLISHED_ANDESITE, Type.SEAL),
 
-                    new Palette(1F).setRegistryName("nature")
+                    /* ------------------   NETHER  ------------------ */
+                    new Palette(1F, () -> Biomes.NETHER).setRegistryName(DungeonMod.MODID, "nether")
+                            .put(new RandomCollection<Supplier<Block>>()
+                                            .add(() -> Blocks.NETHERRACK, 1F)
+                                            .add(() -> Blocks.SOUL_SAND, 0.1F),
+                                    Type.FLOOR)
+                            .put(new RandomCollection<Supplier<Block>>()
+                                            .add(() -> Blocks.SOUL_SAND, 1F)
+                                            .add(() -> Blocks.GRAVEL, 2F),
+                                    Type.PATH)
+                            .put(new RandomCollection<Supplier<Block>>()
+                                            .add(() -> Blocks.NETHER_BRICKS, 1F)
+                                            .add(() -> Blocks.RED_NETHER_BRICKS, 0.2F),
+                                    Type.WALL, Type.PILLAR)
+                            .put(new RandomCollection<Supplier<Block>>()
+                                            .add(() -> Blocks.GOLD_BLOCK, 2F)
+                                            .add(() -> Blocks.QUARTZ_BLOCK, 1F)
+                                            .add(() -> Blocks.OBSIDIAN, 1F),
+                                    Type.GEM)
+                            .put(() -> Blocks.MAGMA_BLOCK, Type.RUNE)
+                            .put(() -> Blocks.GLOWSTONE, Type.LAMP)
+                            .put(() -> Blocks.NETHER_BRICK_SLAB, Type.SLAB, Type.SLAB_WALL)
+                            .put(() -> Blocks.NETHER_BRICK_STAIRS, Type.STAIRS, Type.STAIRS_WALL),
+
+                    /* ------------------   NATURE  ------------------ */
+                    new Palette(1F, () -> Biomes.FOREST).setRegistryName(DungeonMod.MODID, "nature")
                             .put(new RandomCollection<Supplier<Block>>()
                                             .add(() -> Blocks.INFESTED_STONE, 1F)
                                             .add(() -> Blocks.MOSSY_COBBLESTONE, 0.5F),
@@ -92,7 +125,8 @@ public class CommonProxy {
                                             .add(() -> Blocks.STONE_BRICKS, 1F)
                                             .add(() -> Blocks.MOSSY_STONE_BRICKS, 1F)
                                             .add(() -> Blocks.CRACKED_STONE_BRICKS, 0.6F),
-                                    Type.WALL, Type.PILLAR)
+                                    Type.WALL)
+                            .put(() -> Blocks.SPRUCE_LOG, Type.PILLAR, Type.LOG)
                             .put(new RandomCollection<Supplier<Block>>()
                                             .add(() -> Blocks.GOLD_BLOCK, 1F)
                                             .add(() -> Blocks.EMERALD_BLOCK, 2F),
@@ -109,14 +143,18 @@ public class CommonProxy {
         @SubscribeEvent
         public static void onRoomsRegistry(final RegistryEvent.Register<Room> event) {
 
-            Arrays.stream(new String[]{"garden", "well", "forest", "lava_pillars"})
+            Arrays.stream(new String[]{"lava_pillars", "forest", "garden", "well", "stairs", "hole", "hole_taller", "atrium"})
                     .map(name -> new ResourceLocation(DungeonMod.MODID, "room/" + name))
                     .map(r -> new RoomStructure(Room.Type.ROOM, r))
                     .forEach(event.getRegistry()::register);
 
+            Arrays.stream(new String[]{"corridor_1", "star", "bridge"})
+                    .map(name -> new ResourceLocation(DungeonMod.MODID, "hallway/" + name))
+                    .map(r -> new RoomStructure(Room.Type.HALLWAY, r))
+                    .forEach(event.getRegistry()::register);
+
             event.getRegistry().registerAll(
-                    new RoomHallway().setRegistryName("hallway"),
-                    new Wall().setRegistryName("wall")
+                    new HallwayMaze().setRegistryName("maze")
             );
         }
 

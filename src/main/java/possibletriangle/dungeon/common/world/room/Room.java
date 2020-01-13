@@ -1,5 +1,6 @@
 package possibletriangle.dungeon.common.world.room;
 
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,7 +19,7 @@ import java.util.Random;
 public abstract class Room extends ForgeRegistryEntry<Room> {
 
     public enum Type {
-        HALLWAY, ROOM, WALL
+        HALLWAY, ROOM
     }
 
     private static final HashMap<Type, RandomCollection<Room>> VALUES = new HashMap<>();
@@ -40,6 +41,14 @@ public abstract class Room extends ForgeRegistryEntry<Room> {
     }
 
     public abstract void generate(DungeonChunk chunk, int floor, Random random, DungeonSettings settings);
+
+    /**
+     * X and Z are the amount of chunks, Y is the amount of floors
+     * @return The amount of space a room requires
+     */
+    public Vec3i getSize(DungeonSettings options) {
+        return new Vec3i(1, 1, 1);
+    }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onRoomsRegistry(final RegistryEvent.Register<Room> event) {

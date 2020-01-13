@@ -13,6 +13,6 @@ public class DungeonWorldType extends WorldType {
 
     @Override
     public ChunkGenerator<?> createChunkGenerator(World world) {
-        return new DungeonChunkGenerator(world, new DungeonBiomeProvider(world), new DungeonSettings());
+        return new DungeonChunkGenerator(world, new DungeonSettings());
     }
 }

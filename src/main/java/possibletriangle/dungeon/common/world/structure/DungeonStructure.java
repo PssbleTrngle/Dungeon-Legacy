@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ObjectIntIdentityMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -20,19 +21,29 @@ import java.util.List;
 
 public class DungeonStructure {
 
+    private BlockPos size;
     private final List<List<Template.BlockInfo>> blocks = Lists.newArrayList();
     private final List<Template.EntityInfo> entities = Lists.newArrayList();
 
+    public BlockPos getSize() {
+        return this.size;
+    }
+
     public void generate(DungeonChunk chunk, BlockPos pos) {
         this.blocks.forEach(l -> l.forEach(block -> {
-            chunk.setBlockState(block.pos.add(pos), block.state);
+            BlockPos p = pos.add(block.pos);
+            chunk.setBlockState(p, block.state);
+            if(block.nbt != null) chunk.setTileEntity(p, block.nbt);
         }));
     }
 
     public void read(CompoundNBT nbt) {
         this.blocks.clear();
         this.entities.clear();
+
         ListNBT size = nbt.getList("size", 3);
+        this.size = new BlockPos(size.getInt(0), size.getInt(1), size.getInt(2));
+
         ListNBT blocks = nbt.getList("blocks", 10);
         ListNBT palettes;
         if (nbt.contains("palettes", 9)) {

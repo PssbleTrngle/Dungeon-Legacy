@@ -23,6 +23,7 @@ public class RandomCollection<T> {
     }
 
     public T next(Random random) {
+        if(this.total == 0) return null;
         double value = random.nextDouble() * total;
         return map.higherEntry(value).getValue();
     }
