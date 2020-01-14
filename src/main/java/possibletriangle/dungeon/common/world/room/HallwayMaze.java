@@ -7,7 +7,7 @@ import possibletriangle.dungeon.common.world.GenerationContext;
 
 import java.util.Random;
 
-public class HallwayMaze extends Room {
+public class HallwayMaze implements Generateable {
 
     @Override
     public void generate(DungeonChunk chunk, Random random, GenerationContext context) {

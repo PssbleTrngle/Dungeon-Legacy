@@ -19,14 +19,23 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-public class DungeonStructure {
+public class DungeonStructure implements Generateable {
 
+    public final StructureMetadata meta;
     private BlockPos size;
     private final List<List<Template.BlockInfo>> blocks = Lists.newArrayList();
     private final List<Template.EntityInfo> entities = Lists.newArrayList();
 
-    public BlockPos getSize() {
-        return this.size;
+    public DungeonStructure(StructureMetadata meta) {
+        this.meta = meta;
+    }
+
+    public Vec3i getSize(DungeonSettings options) {
+        return new Vec3i(1, Math.max(1, this.size.getY() / options.floorHeight), 1);
+    }
+
+    public void generate(DungeonChunk chunk, Random random, GenerationContext context) {
+        this.generate(chunk, new BlockPos(1, 0, 1));
     }
 
     public void generate(DungeonChunk chunk, BlockPos pos) {

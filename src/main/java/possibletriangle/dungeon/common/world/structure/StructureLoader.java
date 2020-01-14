@@ -33,14 +33,17 @@ import java.util.Collection;
 
 public class StructureLoader {
 
-    public static void load(IResourceManager manager, Room.Type type, ResourceLocation r) {
+    private static void load(IResourceManager manager, Room.Type type, ResourceLocation r) {
         try {
             manager.getAllResources(r).stream().forEach(resource -> {
                 try {
-                    DungeonStructure structure = read(resource.getInputStream());
-                    StructureMetadata metadata = resource.getMetadata(StructureMetadata.SERIALIZER);
-                    if(metadata == null) metadata = StructureMetadata.SERIALIZER.deserialize(new JsonObject());
-                    Room.register(new RoomStructure(structure), type, metadata);
+
+                    StructureMetadata meta = resource.getMetadata(StructureMetadata.SERIALIZER);
+                    if(metadata == null) meta = StructureMetadata.SERIALIZER.deserialize(new JsonObject());
+                    DungeonStructure structure = read(resource.getInputStream(), meta);
+
+                    Room.register(structure, type);
+
                 } catch (IOException e) {
                     DungeonMod.LOGGER.info("Error on loading file for '{}'", r.toString());
                 }
@@ -62,6 +65,7 @@ public class StructureLoader {
         }
     }
 
+    /*
     public static void load(ResourceLocation source) {
         String PATH = "assets/" + source.getNamespace() + "/structures/";
     }
@@ -79,15 +83,16 @@ public class StructureLoader {
             IOUtils.closeQuietly(input);
         }
     }
+    */
 
-    public static DungeonStructure read(InputStream stream) throws IOException {
+    public static DungeonStructure read(InputStream stream, StructureMetadata meta) throws IOException {
         CompoundNBT nbt = CompressedStreamTools.readCompressed(stream);
 
         if (!nbt.contains("DataVersion", 99)) {
             nbt.putInt("DataVersion", 500);
         }
 
-        DungeonStructure structure = new DungeonStructure();
+        DungeonStructure structure = new DungeonStructure(meta);
         DataFixer fixed = Minecraft.getInstance().getDataFixer();
         structure.read(NBTUtil.update(fixed, DefaultTypeReferences.STRUCTURE, nbt, nbt.getInt("DataVersion")));
         return structure;
