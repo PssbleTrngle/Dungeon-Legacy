@@ -1,13 +1,16 @@
 package possibletriangle.dungeon.helper;
 
-import java.util.NavigableMap;
-import java.util.Random;
-import java.util.TreeMap;
+import java.util.Arrays;
+import java.util.function.Function;
 
 public class RandomCollectionVariant<T> extends RandomCollection<Function<Integer,T>> {
 
+    @SuppressWarnings("unchecked")
     public RandomCollectionVariant(T... ts) {
-        super(Arrays.stream(ts).map(t -> (Function<Integer,T>) i -> t));
+        super(Arrays.stream(ts)
+                .map(t -> (Function<Integer,T>) i -> t)
+                .toArray(Function[]::new)
+        );
     }
 
 }

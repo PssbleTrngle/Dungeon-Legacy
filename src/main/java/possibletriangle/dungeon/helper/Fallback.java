@@ -1,5 +1,7 @@
 package possibletriangle.dungeon.helper;
 
+import java.util.function.Function;
+
 public class Fallback<T> implements Function<Integer,T> {
 
     private final Function<Integer,T>[] suppliers;
@@ -8,9 +10,10 @@ public class Fallback<T> implements Function<Integer,T> {
         this.suppliers = suppliers;
     }
 
-    public T apply(int variant) {
+    @Override
+    public T apply(Integer variant) {
         for(Function<Integer,T> supplier : suppliers) {
-            T t = suppliers.apply(variant);
+            T t = supplier.apply(variant);
             if(t != null) return t;
         }
 

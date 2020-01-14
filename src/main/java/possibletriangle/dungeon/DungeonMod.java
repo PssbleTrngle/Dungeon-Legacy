@@ -3,13 +3,14 @@ package possibletriangle.dungeon;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.*;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -20,9 +21,6 @@ import possibletriangle.dungeon.common.block.TemplateBlock;
 import possibletriangle.dungeon.common.world.room.HallwayMaze;
 import possibletriangle.dungeon.common.world.room.Room;
 import possibletriangle.dungeon.common.world.structure.StructureLoader;
-import possibletriangle.dungeon.common.world.structure.StructureMetadata;
-
-import java.util.Collection;
 
 @Mod(DungeonMod.MODID)
 public class DungeonMod {
@@ -68,7 +66,7 @@ public class DungeonMod {
 
         IResourceManager manager = event.getServer().getResourceManager();
         StructureLoader.reload(manager);
-        Room.register(new HallwayMaze(), Room.Type.HALLWAY, new StructureMetadata(1F, ctx -> true));
+        Room.register(new HallwayMaze(), Room.Type.HALLWAY);
 
         DungeonMod.LOGGER.info("Registered {} structures", Room.count());
 

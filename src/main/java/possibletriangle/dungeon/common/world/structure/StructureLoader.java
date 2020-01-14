@@ -3,44 +3,32 @@ package possibletriangle.dungeon.common.world.structure;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.DataFixer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.MinecartItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.datafix.DefaultTypeReferences;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
-import net.minecraftforge.fml.javafmlmod.FMLModContainer;
-import net.minecraftforge.fml.loading.FMLCommonLaunchHandler;
-import net.minecraftforge.fml.loading.FMLServerLaunchProvider;
-import org.apache.commons.io.IOUtils;
 import possibletriangle.dungeon.DungeonMod;
-import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.room.Room;
-import possibletriangle.dungeon.common.world.room.RoomStructure;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileSystems;
 import java.util.Collection;
 
 public class StructureLoader {
 
-    public static void load(IResourceManager manager, Room.Type type, ResourceLocation r) {
+    private static void load(IResourceManager manager, Room.Type type, ResourceLocation r) {
         try {
             manager.getAllResources(r).stream().forEach(resource -> {
                 try {
-                    DungeonStructure structure = read(resource.getInputStream());
-                    StructureMetadata metadata = resource.getMetadata(StructureMetadata.SERIALIZER);
-                    if(metadata == null) metadata = StructureMetadata.SERIALIZER.deserialize(new JsonObject());
-                    Room.register(new RoomStructure(structure), type, metadata);
+
+                    StructureMetadata meta = resource.getMetadata(StructureMetadata.SERIALIZER);
+                    if(meta == null) meta = StructureMetadata.SERIALIZER.deserialize(new JsonObject());
+                    DungeonStructure structure = read(resource.getInputStream(), meta);
+
+                    Room.register(structure, type);
+
                 } catch (IOException e) {
                     DungeonMod.LOGGER.info("Error on loading file for '{}'", r.toString());
                 }
@@ -62,6 +50,7 @@ public class StructureLoader {
         }
     }
 
+    /*
     public static void load(ResourceLocation source) {
         String PATH = "assets/" + source.getNamespace() + "/structures/";
     }
@@ -79,15 +68,16 @@ public class StructureLoader {
             IOUtils.closeQuietly(input);
         }
     }
+    */
 
-    public static DungeonStructure read(InputStream stream) throws IOException {
+    public static DungeonStructure read(InputStream stream, StructureMetadata meta) throws IOException {
         CompoundNBT nbt = CompressedStreamTools.readCompressed(stream);
 
         if (!nbt.contains("DataVersion", 99)) {
             nbt.putInt("DataVersion", 500);
         }
 
-        DungeonStructure structure = new DungeonStructure();
+        DungeonStructure structure = new DungeonStructure(meta);
         DataFixer fixed = Minecraft.getInstance().getDataFixer();
         structure.read(NBTUtil.update(fixed, DefaultTypeReferences.STRUCTURE, nbt, nbt.getInt("DataVersion")));
         return structure;

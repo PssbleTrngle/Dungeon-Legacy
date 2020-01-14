@@ -1,24 +1,19 @@
 package possibletriangle.dungeon.common.world;
 
-import javafx.scene.chart.Axis;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
-import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.IPlaceholder;
 import possibletriangle.dungeon.common.block.Palette;
 import possibletriangle.dungeon.common.block.Type;
 
-import java.util.Arrays;
 import java.util.Random;
 
 public class DungeonChunk {
@@ -29,12 +24,14 @@ public class DungeonChunk {
     private final DungeonSettings settings;
     private final PlacementSettings placement;
     private final Palette palette;
+    private int variant;
 
     void setFloor(int floor) {
         this.floor = floor;
     }
 
     public DungeonChunk(IChunk chunk, Random random, DungeonSettings settings) {
+        this.variant = random.nextInt(32);
         this.chunk = chunk;
         this.random = random;
         this.settings = settings;
@@ -102,7 +99,7 @@ public class DungeonChunk {
         if(state.getBlock() instanceof IPlaceholder) {
 
             Type type = ((IPlaceholder) state.getBlock()).getType();
-            BlockState replace = palette.blockFor(type, random).getDefaultState();
+            BlockState replace = palette.blockFor(type, random, variant);
 
             BlockState applied =
                     state.getProperties()
