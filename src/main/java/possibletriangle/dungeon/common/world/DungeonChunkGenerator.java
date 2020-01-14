@@ -1,20 +1,15 @@
 package possibletriangle.dungeon.common.world;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
-import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.TemplateBlock;
 import possibletriangle.dungeon.common.world.room.Room;
 import possibletriangle.dungeon.common.world.wall.Wall;
@@ -24,11 +19,12 @@ import java.util.Random;
 public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
 
     public static Random chunkSeed(long worldSeed, int x, int z) {
+        /* TODO generate a real seed for a chunk like below but better  */
         return new Random(worldSeed ^ ((x & z) * 10000));
     }
 
     public DungeonChunkGenerator(World world, DungeonSettings settings) {
-        super(world, new DungeonBiomeProvider(world.getSeed()), settings);
+        super(world, new DungeonBiomeProvider(world), settings);
     }
 
     @Override
@@ -45,18 +41,17 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
         return Room.random(Room.Type.ROOM, random);
     }
 
-    private Room roomFor(Random random, ChunkPos pos, DungeonSettings settings, int maxFloors) {
+    private Room roomFor(Random random, GenerationContext ctx) {
         Room room;
         do {
-            room = roomFor(random, pos);
-        } while(room == null || room.getSize(settings).getY() > maxFloors);
+            room = roomFor(random, ctx.pos);
+        } while(room == null || room.getSize(settings).getY() > ctx.settings.floors - ctx.floor || !room.getMeta().predicate.test(ctx));
         return room;
     }
 
     @Override
     public void makeBase(IWorld world, IChunk ichunk) {
 
-        /* TODO generate a real seed for a chunk like below but better  */
         Random random = chunkSeed(world.getSeed(), ichunk.getPos().x, ichunk.getPos().z);
         int floorHeight = getSettings().floorHeight;
 
@@ -64,14 +59,12 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
 
         for(int floor = 0; floor < getSettings().floors; floor++) {
             chunk.setFloor(floor);
+            GenerationContext ctx = new GenerationContext(floor, this.getSettings(), ichunk.getPos());
 
-            Room room = roomFor(random, ichunk.getPos(), getSettings(), getSettings().floors - floor);
+            Room room = roomFor(random, ctx);
             Vec3i size = room.getSize(getSettings());
-            if(size.getY() == 0) {
-                DungeonMod.LOGGER.info("Error: {} has a zero height", room.getRegistryName());
-            }
 
-            room.generate(chunk, floor, random, this.getSettings());
+            room.generate(chunk, random, ctx);
             Wall.generate(chunk, size.getY(), random, this.getSettings());
 
             /* If the room is heigher than 1 floor, skip the next floors to not override it */

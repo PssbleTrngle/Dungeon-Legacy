@@ -1,0 +1,13 @@
+{
+    "structure": {
+        "weight": 40,
+        "conditions": [
+            {
+                "type": "floor",
+                "allow": [
+                    -1
+                ]
+            }
+        ]
+    }
+}

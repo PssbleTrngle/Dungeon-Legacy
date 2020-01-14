@@ -18,8 +18,12 @@ public enum Type {
     SEAL,
 
     GRASS(TemplateGrass::new),
+    FARMLAND(TemplateFarmland::new),
     LEAVES(TemplateTransparent::new),
     LOG(TemplatePillar::new),
+
+    PLANT(TemplateFlower::new),
+    CROP(TemplateCrop::new),
 
     STAIRS(TemplateStairs::new),
     SLAB(TemplateSlab::new),
@@ -27,13 +31,11 @@ public enum Type {
     SLAB_WALL(TemplateSlab::new),
 
     FENCE,
-    FLUID_SAFE,
     FLUID_UNSAFE,
     PRESSURE_PLATE,
-    BUTTON,
-    LEVER,
-    LAMP(t -> new TemplateBlock(t, 15)),
-    CHEST;
+    BUTTON(TemplateButton::new),
+    LEVER(TemplateLever::new),
+    LAMP(t -> new TemplateBlock(t, 15));
 
     private final Function<Type, Block> block;
 
