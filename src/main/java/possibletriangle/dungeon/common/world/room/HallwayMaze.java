@@ -4,10 +4,16 @@ import net.minecraft.util.math.BlockPos;
 import possibletriangle.dungeon.common.block.TemplateBlock;
 import possibletriangle.dungeon.common.world.DungeonChunk;
 import possibletriangle.dungeon.common.world.GenerationContext;
+import possibletriangle.dungeon.common.world.structure.StructureMetadata;
 
 import java.util.Random;
 
 public class HallwayMaze implements Generateable {
+
+    @Override
+    public StructureMetadata getMeta() {
+        return new StructureMetadata(1);
+    }
 
     @Override
     public void generate(DungeonChunk chunk, Random random, GenerationContext context) {

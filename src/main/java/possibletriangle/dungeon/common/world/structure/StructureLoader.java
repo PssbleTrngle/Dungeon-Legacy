@@ -3,32 +3,17 @@ package possibletriangle.dungeon.common.world.structure;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.DataFixer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.MinecartItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.datafix.DefaultTypeReferences;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
-import net.minecraftforge.fml.javafmlmod.FMLModContainer;
-import net.minecraftforge.fml.loading.FMLCommonLaunchHandler;
-import net.minecraftforge.fml.loading.FMLServerLaunchProvider;
-import org.apache.commons.io.IOUtils;
 import possibletriangle.dungeon.DungeonMod;
-import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.room.Room;
-import possibletriangle.dungeon.common.world.room.RoomStructure;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileSystems;
 import java.util.Collection;
 
 public class StructureLoader {
@@ -39,7 +24,7 @@ public class StructureLoader {
                 try {
 
                     StructureMetadata meta = resource.getMetadata(StructureMetadata.SERIALIZER);
-                    if(metadata == null) meta = StructureMetadata.SERIALIZER.deserialize(new JsonObject());
+                    if(meta == null) meta = StructureMetadata.SERIALIZER.deserialize(new JsonObject());
                     DungeonStructure structure = read(resource.getInputStream(), meta);
 
                     Room.register(structure, type);

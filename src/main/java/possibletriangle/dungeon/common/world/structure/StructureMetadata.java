@@ -4,23 +4,14 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mojang.realmsclient.util.JsonUtils;
-import io.netty.util.internal.StringUtil;
-import javafx.util.Pair;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
 import net.minecraft.util.JSONUtils;
-import net.minecraft.util.StringUtils;
-import net.minecraftforge.event.world.PistonEvent;
-import org.lwjgl.system.CallbackI;
 import possibletriangle.dungeon.common.world.GenerationContext;
 
-import javax.sound.midi.MetaEventListener;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.BiPredicate;
-import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
@@ -31,6 +22,10 @@ public class StructureMetadata {
 
     public final float weight;
     public final Predicate<GenerationContext> predicate;
+
+    public StructureMetadata(float weight) {
+        this(weight, ctx -> true);
+    }
 
     public StructureMetadata(float weight, Predicate<GenerationContext> predicate) {
         this.weight = weight;

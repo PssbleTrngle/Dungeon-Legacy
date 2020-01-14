@@ -7,21 +7,25 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.IntNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ObjectIntIdentityMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.gen.feature.template.Template;
 import possibletriangle.dungeon.common.world.DungeonChunk;
+import possibletriangle.dungeon.common.world.DungeonSettings;
+import possibletriangle.dungeon.common.world.GenerationContext;
+import possibletriangle.dungeon.common.world.room.Generateable;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class DungeonStructure implements Generateable {
 
-    public final StructureMetadata meta;
+    private final StructureMetadata meta;
     private BlockPos size;
     private final List<List<Template.BlockInfo>> blocks = Lists.newArrayList();
     private final List<Template.EntityInfo> entities = Lists.newArrayList();
@@ -30,10 +34,17 @@ public class DungeonStructure implements Generateable {
         this.meta = meta;
     }
 
+    @Override
+    public StructureMetadata getMeta() {
+        return meta;
+    }
+
+    @Override
     public Vec3i getSize(DungeonSettings options) {
         return new Vec3i(1, Math.max(1, this.size.getY() / options.floorHeight), 1);
     }
 
+    @Override
     public void generate(DungeonChunk chunk, Random random, GenerationContext context) {
         this.generate(chunk, new BlockPos(1, 0, 1));
     }

@@ -1,6 +1,7 @@
 package possibletriangle.dungeon.common.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
@@ -10,9 +11,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
+import possibletriangle.dungeon.common.world.room.StateProvider;
+import possibletriangle.dungeon.helper.BlockCollection;
 import possibletriangle.dungeon.helper.RandomCollection;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
@@ -32,10 +34,10 @@ public class Palette extends ForgeRegistryEntry<Palette> {
     @ObjectHolder("nether")
     public static final Palette NETHER = null;
 
-    private static final Block DEFAULT = Blocks.SPONGE;
+    private static final BlockState DEFAULT = Blocks.SPONGE.getDefaultState();
     private static final RandomCollection<Palette> VALUES = new RandomCollection<>();
 
-    private final HashMap<Type, RandomCollection<Supplier<Block>>> blocks = new HashMap<>();
+    private final HashMap<Type, BlockCollection> blocks = new HashMap<>();
     private final float weight;
     private final Supplier<Palette> parent;
     public final Supplier<Biome> biome;
@@ -54,27 +56,35 @@ public class Palette extends ForgeRegistryEntry<Palette> {
         return VALUES.next(random);
     }
 
-    public Palette put(RandomCollection<Supplier<Block>> collection, Type... types) {
+    public Palette put(BlockCollection collection, Type... types) {
         for(Type type : types)
             this.blocks.putIfAbsent(type, collection);
         return this;
     }
 
-    public Palette put(Supplier<Block> block, Type... types) {
-        return this.put(new RandomCollection<>(block), types);
+    public Palette put(StateProvider block, Type... types) {
+        return this.put(new BlockCollection(block), types);
     }
 
-    private RandomCollection<Supplier<Block>> blocksFor(Type type) {
-        return this.blocks.getOrDefault(type, new RandomCollection<>(() -> null));
+    public Palette put(Block block, Type... types) {
+        return this.put(new BlockCollection(block), types);
     }
 
-    public Block blockFor(Type type, Random random) {
-        Block block = blocksFor(type).next(random).get();
+    public Palette put(BlockState state, Type... types) {
+        return this.put(new BlockCollection(state), types);
+    }
+
+    private BlockCollection blocksFor(Type type) {
+        return this.blocks.getOrDefault(type, new BlockCollection(i -> null));
+    }
+
+    public BlockState blockFor(Type type, Random random, int variant) {
+        BlockState block = blocksFor(type).next(random).apply(variant);
         if(block != null) return block;
 
         Palette parent = this.parent.get();
         if(parent == null || this.getRegistryName().equals(parent.getRegistryName())) return DEFAULT;
-        return parent.blockFor(type, random);
+        return parent.blockFor(type, random, variant);
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
