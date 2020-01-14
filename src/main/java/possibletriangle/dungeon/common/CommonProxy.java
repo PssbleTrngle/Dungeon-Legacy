@@ -110,10 +110,10 @@ public class CommonProxy {
                             .put(Blocks.NETHER_BRICK_SLAB, Type.SLAB, Type.SLAB_WALL)
                             .put(Blocks.NETHER_BRICK_STAIRS, Type.STAIRS, Type.STAIRS_WALL)
                             .put(Blocks.NETHER_WART, Type.CROP)
-                            .put(Blocks.NETHER_WART_BLOCK, Type.LEAVES)
+                            .put(Blocks.RED_MUSHROOM_BLOCK, Type.LEAVES)
                             .put(Blocks.RED_CONCRETE_POWDER, Type.FALLING)
                             .put(new BlockCollection(Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM), Type.PLANT)
-                            .put(Blocks.BONE_BLOCK, Type.LOG),
+                            .put(Blocks.MUSHROOM_STEM, Type.LOG),
 
                     /* ------------------   NATURE  ------------------ */
                     new Palette(1F, () -> Biomes.FOREST).setRegistryName(DungeonMod.MODID, "nature")
