@@ -42,36 +42,65 @@ public class Palette extends ForgeRegistryEntry<Palette> {
     private final Supplier<Palette> parent;
     public final Supplier<Biome> biome;
 
-    public Palette(float weight, Supplier<Biome> biome) {
-        this(weight, biome, () -> STONE);
-    }
-
+    /**
+     * Palettes are used to replace {@link possibletriangle.dungeon.common.block.IPlaceholder} blocks
+     * @param weight The weigth used in generation. A heigher weight causes a higher chance of generation
+     * @param biome The biome associated with this palette
+     * @param parent The palette used as a fallback
+     */
     public Palette(float weight, Supplier<Biome> biome, Supplier<Palette> parent) {
         this.parent = parent;
         this.biome = biome;
         this.weight = weight;
     }
 
+
+    /**
+     * Palettes are used to replace {@link possibletriangle.dungeon.common.block.Palette}
+     * @param weight The weigth used in generation. A heigher weight causes a higher chance of generation
+     * @param biome The biome associated with this palette
+     */
+    public Palette(float weight, Supplier<Biome> biome) {
+        this(weight, biome, () -> STONE);
+    }
+
+    /**
+     * Returns a random palette using the provided seeded random
+     * @param random The seeded random
+     */
     public static Palette random(Random random) {
         return VALUES.next(random);
     }
 
-    public Palette put(BlockCollection collection, Type... types) {
-        for(Type type : types)
-            this.blocks.putIfAbsent(type, collection);
-        return this;
+    public static interface MultiConsumer<P,T> {
+
+        P for(T... types)
+
     }
 
-    public Palette put(StateProvider block, Type... types) {
-        return this.put(new BlockCollection(block), types);
+    /**
+     * Associate a collection of blocks with one ore multiple {@link possibletriangle.dungeon.common.block.Type}
+     * @param collection the blocks
+     * @param types the placeholder types
+     */
+    public MultiConsumer<Palette,Type> put(BlockCollection collection) {
+        return types -> {
+            for(Type type : types)
+                this.blocks.putIfAbsent(type, collection);
+            return this
+        }
     }
 
-    public Palette put(Block block, Type... types) {
-        return this.put(new BlockCollection(block), types);
+    public MultiConsumer<Palette,Type> put(StateProvider... providers) {
+        return types -> this.put(new BlockCollection(providers), types);
     }
 
-    public Palette put(BlockState state, Type... types) {
-        return this.put(new BlockCollection(state), types);
+    public MultiConsumer<Palette,Type> put(Block... blocks) {
+        return types -> this.put(new BlockCollection(blocks), types);
+    }
+
+    public MultiConsumer<Palette,Type> put(BlockState... states) {
+        return types -> this.put(new BlockCollection(states), types);
     }
 
     private BlockCollection blocksFor(Type type) {
