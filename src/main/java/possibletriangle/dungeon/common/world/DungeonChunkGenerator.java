@@ -21,6 +21,9 @@ import java.util.Random;
 
 public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
 
+    /**
+     * @return The seeded random used to generate this chunk
+     */
     public static Random chunkSeed(long worldSeed, ChunkPos pos) {
         /* TODO generate a real seed for a chunk like below but better  */
         return new Random(worldSeed ^ ((pos.x & pos.z) * 10000));
@@ -38,21 +41,48 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
         return 0;
     }
 
-    private static Generateable roomFor(Random random, ChunkPos pos) {
-        boolean hallway = pos.x % 2 == pos.z % 2;
-        if(hallway) return Room.random(Room.Type.HALLWAY, random);
-        return Room.random(Room.Type.ROOM, random);
+    /**
+     * @param ctx The context containing the ChunkPos and the floor
+     * @return The Room type used for the current chunk and floor
+     */
+    private static Structures.Type typeFor(GenerationContext ctx) {
+        boolean hallway = ctx.pos.x % 2 == ctx.pos.z % 2;
+        if(hallway) return Structures.Type.HALLWAY
+        return Structures.Type.ROOM;
     }
 
+    /**
+     * @return If a structure fits the current requirements, like size or the structures' conditions defined by its .mcmeta file
+     */
+    private static boolean fits(Generateable structure, GenerationContext ctx) {
+        return structure != null && structure.getSize(settings).getY() <= ctx.settings.floors - ctx.floor && structure.getMeta().predicate.test(ctx);
+    }
+
+    /**
+     * Retrieves a random structure fitting the current requirements.
+     * @param ctx The context containing the ChunkPos and the floor
+     * @return The found structure
+     */
     private static Generateable roomFor(Random random, DungeonSettings settings, GenerationContext ctx) {
-        Generateable room;
+        Generateable structure;
+        Structures.Type type = typeFor(ctx);
+
         do {
-            room = roomFor(random, ctx.pos);
-        } while(room == null || room.getSize(settings).getY() > ctx.settings.floors - ctx.floor || !room.getMeta().predicate.test(ctx));
-        return room;
+            structure = Structures.random(type, random);
+        } while(!fits(structure, ctx));
+        
+        return structure;
     }
 
-    private static Map<Integer,Generateable> roomsFor(DungeonSettings settings, ChunkPos pos, long seed) {
+    /**
+     * Retrieves all rooms for a specific ChunkPos.
+     * Can be called at any time and will always return the same rooms
+     * @param settings The settings of the dungeon
+     * @param pos The position of the Chunk
+     * @param seed The worlds seed
+     * @return A HashMap containing the rooms with their floor as the key
+     */
+    public static Map<Integer,Generateable> roomsFor(DungeonSettings settings, ChunkPos pos, long seed) {
 
         Random random = chunkSeed(seed, pos);
         Map<Integer,Generateable> rooms = new HashMap<>();

@@ -18,7 +18,7 @@ import java.util.Collection;
 
 public class StructureLoader {
 
-    private static void load(IResourceManager manager, Room.Type type, ResourceLocation r) {
+    private static void load(IResourceManager manager, Structures.Type type, ResourceLocation r) {
         try {
             manager.getAllResources(r).stream().forEach(resource -> {
                 try {
@@ -41,7 +41,7 @@ public class StructureLoader {
     public static void reload(IResourceManager manager) {
         DungeonMod.LOGGER.info("Reloading structures");
 
-        for(Room.Type type : Room.Type.values()) {
+        for(Structures.Type type : Structures.Type.values()) {
 
             Collection<ResourceLocation> resources = manager.getAllResourceLocations("structures/" + type.name().toLowerCase(), s -> s.endsWith(".nbt"));
             DungeonMod.LOGGER.info("Found {} structure files for type {}", resources.size(), type.name());

@@ -38,7 +38,7 @@ public class CommonProxy {
         IResourceManager manager = event.getServer().getResourceManager();
 
         StructureLoader.reload(manager);
-        Room.register(new HallwayMaze(), Room.Type.HALLWAY);
+        Room.register(new HallwayMaze(), Structures.Type.HALLWAY);
 
         DungeonMod.LOGGER.info("Loaded {} structures", Room.count());
 

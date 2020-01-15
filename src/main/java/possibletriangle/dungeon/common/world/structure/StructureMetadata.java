@@ -32,6 +32,13 @@ public class StructureMetadata {
         this.predicate = predicate;
     }
 
+    /**
+     * @return The default Metadata, used if a structure file does not define its own
+     */
+    public static StructureMetadata getDefault() {
+        return SERIALIZER.deserialize(new JsonObject());
+    }
+
     public static class Serializer implements IMetadataSectionSerializer<StructureMetadata> {
 
         @Override
@@ -41,6 +48,7 @@ public class StructureMetadata {
 
         @Override
         public StructureMetadata deserialize(JsonObject json) {
+
             float weight = JSONUtils.getFloat(json, "weight", 1F);
             JsonArray conditions = JSONUtils.getJsonArray(json, "conditions", new JsonArray());
 
@@ -53,41 +61,61 @@ public class StructureMetadata {
                     JsonArray blacklist = JSONUtils.getJsonArray(condition, "reject", new JsonArray());
                     JsonArray whitelist = JSONUtils.getJsonArray(condition, "allow", new JsonArray());
 
-                    Predicate<GenerationContext> predicate = predicateFor(type, blacklist, whitelist);
+                    Predicate<GenerationContext> predicate = getPredicate(type, blacklist, whitelist);
                     if(predicate != null) predicates.add(predicate);
 
                 }
             });
 
+            /* Merge predicates using AND */
             Predicate<GenerationContext> predicate = predicates.stream().reduce(ctx -> true, Predicate::and, (p1, p2) -> p1);
             return new StructureMetadata(weight, predicate);
         }
 
-        private <T> Predicate<GenerationContext> predicateForOne(JsonArray list, BiPredicate<T,GenerationContext> single, Function<JsonElement, T> parse) {
+        /**
+         * Pulls all predicates from a JsonArray
+         * @param list The JsonArray containing the JsonElements
+         * @param parse Function to parse a JsonElement to the required type (ex: JsonElement::getAsInt)
+         * @param single Predicate to test a single entry against the GenerationContext
+         * @return A merged predicated using OR
+         */
+        private <T> Predicate<GenerationContext> predicateForOne(JsonArray list, Function<JsonElement, T> parse, BiPredicate<T,GenerationContext> single) {
             return StreamSupport.stream(Spliterators.spliteratorUnknownSize(list.iterator(), Spliterator.ORDERED), false)
                         .map(parse)
                         .map(i -> (Predicate<GenerationContext>) ctx -> single.test(i, ctx))
                         .reduce(ctx -> false, Predicate::or, (p1, p2) -> p1);
         }
 
-        private <T> Predicate<GenerationContext> predicateForAll(JsonArray blacklist, JsonArray whitelist, BiPredicate<T,GenerationContext> single, Function<JsonElement, T> parse) {
+        /**
+         * Pull predicates from either the whitelist.
+         * If the provided whitelist is empty, use the blacklist
+         * @param parse Function to parse a JsonElement to the required type (ex: JsonElement::getAsInt)
+         * @param single Predicate to test a single entry against the GenerationContext
+         * @return A merged predicate using OR
+         */
+        private <T> Predicate<GenerationContext> predicateForAll(JsonArray blacklist, JsonArray whitelist, Function<JsonElement, T> parse, BiPredicate<T,GenerationContext> single) {
             if(whitelist.size() > 0)
-                return predicateForOne(whitelist, single, parse);
+                return predicateForOne(whitelist, parse, single);
             else if(blacklist.size() > 0)
-                return predicateForOne(blacklist, single, parse).negate();
+                return predicateForOne(blacklist, parse, single).negate();
 
             return ctx -> true;
         }
 
-        private Predicate<GenerationContext> predicateFor(String type, JsonArray blacklist, JsonArray whitelist) {
+        /**
+         * @param type The type of condition
+         * @return the predicate
+         */
+        private Predicate<GenerationContext> getPredicate(String type, JsonArray blacklist, JsonArray whitelist) {
+
             switch (type) {
 
                 case "floor":
-                    return predicateForAll(blacklist, whitelist, (floor, ctx) -> {
+                    return predicateForAll(blacklist, whitelist, JsonElement::getAsInt, (floor, ctx) -> {
                         if(floor >= 0) return ctx.floor == floor;
                         int floors = ctx.settings.floors;
                         return ctx.floor - floors == floor;
-                    }, JsonElement::getAsInt);
+                    });
 
                 default:
                     return null;
