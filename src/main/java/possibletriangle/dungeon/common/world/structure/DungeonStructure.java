@@ -50,6 +50,7 @@ public class DungeonStructure implements Generateable {
     }
 
     public void generate(DungeonChunk chunk, BlockPos pos) {
+
         this.blocks.forEach(l -> l.forEach(block -> {
             BlockPos p = pos.add(block.pos);
             chunk.setBlockState(p, block.state);
