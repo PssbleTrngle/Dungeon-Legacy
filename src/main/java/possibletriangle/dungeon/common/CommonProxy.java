@@ -18,6 +18,7 @@ import possibletriangle.dungeon.common.block.Type;
 import possibletriangle.dungeon.common.world.DungeonWorldType;
 import possibletriangle.dungeon.helper.BlockCollection;
 import possibletriangle.dungeon.helper.Variant;
+import possibletriangle.dungeon.helper.Fallback;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -33,12 +34,13 @@ public class CommonProxy {
     reloadRooms() {
 
         Room.clear();
-        
+
         IResourceManager manager = event.getServer().getResourceManager();
+        
         StructureLoader.reload(manager);
         Room.register(new HallwayMaze(), Room.Type.HALLWAY);
 
-        DungeonMod.LOGGER.info("Registered {} structures", Room.count());
+        DungeonMod.LOGGER.info("Loaded {} structures", Room.count());
 
     }
 
@@ -76,7 +78,7 @@ public class CommonProxy {
                                 .for(Type.GEM)
                             .put(Blocks.CHISELED_STONE_BRICKS).for(Type.RUNE)
                             .put(Blocks.REDSTONE_LAMP).for(Type.LAMP)
-                            .put(Blocks.STONE_SLAB).for(Type.SLAB)
+                            .put(new Fallback(() -> null, () -> Blocks.STONE_SLAB)).for(Type.SLAB) /* TODO remvove if working */
                             .put(Blocks.STONE_STAIRS).for(Type.STAIRS)
                             .put(Blocks.OAK_LOG).for(Type.PILLAR, Type.LOG)
                             .put(Blocks.MOSSY_STONE_BRICK_SLAB).for(Type.SLAB_WALL)
