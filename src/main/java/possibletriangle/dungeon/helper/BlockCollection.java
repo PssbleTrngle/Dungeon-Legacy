@@ -12,20 +12,6 @@ public class BlockCollection extends RandomCollection<StateProvider> {
         super(providers);
     }
 
-    public BlockCollection(Block... blocks) {
-        this(Arrays.stream(blocks)
-                .map(Block::getDefaultState)
-                .toArray(BlockState[]::new)
-        );
-    }
-
-    public BlockCollection(BlockState... states) {
-        this(Arrays.stream(states)
-                .map(t -> (StateProvider) i -> t)
-                .toArray(StateProvider[]::new)
-        );
-    }
-
     @Override
     public BlockCollection add(StateProvider stateProvider, float weight) {
         super.add(stateProvider, weight);
