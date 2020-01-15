@@ -7,13 +7,17 @@ import java.util.HashMap;
 import java.util.Random;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public abstract class Room {
+public abstract class Structures {
 
     public enum Type {
-        HALLWAY, ROOM
+        HALLWAY, ROOM, DOOR, BOSS, BASE
     }
 
     private static final HashMap<Type, RandomCollection<Generateable>> VALUES = new HashMap<>();
+
+    public static final clear() {
+        VALUES.clear();
+    }
 
     public static int count() {
         return VALUES.values().stream()
