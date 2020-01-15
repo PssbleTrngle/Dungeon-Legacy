@@ -30,6 +30,18 @@ public class CommonProxy {
 
     }
 
+    reloadRooms() {
+
+        Room.clear();
+        
+        IResourceManager manager = event.getServer().getResourceManager();
+        StructureLoader.reload(manager);
+        Room.register(new HallwayMaze(), Room.Type.HALLWAY);
+
+        DungeonMod.LOGGER.info("Registered {} structures", Room.count());
+
+    }
+
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
 

@@ -7,7 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import possibletriangle.dungeon.common.block.TemplateBlock;
 import possibletriangle.dungeon.common.world.DungeonChunk;
 import possibletriangle.dungeon.common.world.DungeonSettings;
-import possibletriangle.dungeon.common.world.room.Room;
+import possibletriangle.dungeon.common.world.room.Structures;
 
 import java.util.Random;
 

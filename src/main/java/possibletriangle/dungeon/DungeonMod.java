@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 import possibletriangle.dungeon.common.CommonProxy;
 import possibletriangle.dungeon.common.block.TemplateBlock;
 import possibletriangle.dungeon.common.world.room.HallwayMaze;
-import possibletriangle.dungeon.common.world.room.Room;
+import possibletriangle.dungeon.common.world.room.Structures;
 import possibletriangle.dungeon.common.world.structure.StructureLoader;
 
 @Mod(DungeonMod.MODID)
@@ -62,13 +62,7 @@ public class DungeonMod {
     public void onServerStarted(FMLServerStartedEvent event) {}
 
     @SubscribeEvent
-    public void registerRooms(FMLServerStartingEvent event) {
-
-        IResourceManager manager = event.getServer().getResourceManager();
-        StructureLoader.reload(manager);
-        Room.register(new HallwayMaze(), Room.Type.HALLWAY);
-
-        DungeonMod.LOGGER.info("Registered {} structures", Room.count());
-
+    public void onServerStarting(FMLServerStartingEvent event) {
+        proxy.reloadRooms();
     }
 }

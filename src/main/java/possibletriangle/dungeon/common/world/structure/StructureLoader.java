@@ -10,7 +10,7 @@ import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.datafix.DefaultTypeReferences;
 import possibletriangle.dungeon.DungeonMod;
-import possibletriangle.dungeon.common.world.room.Room;
+import possibletriangle.dungeon.common.world.room.Structures;
 
 import java.io.IOException;
 import java.io.InputStream;
