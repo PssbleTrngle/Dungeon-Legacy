@@ -18,28 +18,13 @@ import java.util.Collection;
 
 public class StructureLoader {
 
-    private static void load(IResourceManager manager, Structures.Type type, ResourceLocation r) {
-        try {
-            manager.getAllResources(r).stream().forEach(resource -> {
-                try {
-
-                    StructureMetadata meta = resource.getMetadata(StructureMetadata.SERIALIZER);
-                    if(meta == null) meta = StructureMetadata.SERIALIZER.deserialize(new JsonObject());
-                    DungeonStructure structure = read(resource.getInputStream(), meta);
-
-                    Room.register(structure, type);
-
-                } catch (IOException e) {
-                    DungeonMod.LOGGER.info("Error on loading file for '{}'", r.toString());
-                }
-            });
-        } catch (IOException ex) {
-            DungeonMod.LOGGER.info("Structure '{}' not found", r.toString());
-        }
-    }
-
+    /**
+     * Loads all structures in the data folder
+     * Called on server starting
+     * @param manager The servers resource manager
+     */
     public static void reload(IResourceManager manager) {
-        DungeonMod.LOGGER.info("Reloading structures");
+        DungeonMod.LOGGER.info("Reloading structures...");
 
         for(Structures.Type type : Structures.Type.values()) {
 
@@ -50,27 +35,38 @@ public class StructureLoader {
         }
     }
 
-    /*
-    public static void load(ResourceLocation source) {
-        String PATH = "assets/" + source.getNamespace() + "/structures/";
-    }
-
-    public static DungeonStructure read(ResourceLocation source) {
-
-        InputStream input = null;
+    /**
+     * Loads a single structure file and its metadata and registeres them
+     * @param manager The servers resource manager
+     * @param type The type the structure should be registed as
+     * @param name The path pointing to the structures files
+     */
+    private static void load(IResourceManager manager, Structures.Type type, ResourceLocation path) {
         try {
-            File file = new File("structures/", source.getPath() + ".nbt");
-            input = new FileInputStream(file);
-            return read(input);
-        } catch (Throwable ignored) {
-            return null;
-        } finally {
-            IOUtils.closeQuietly(input);
+            manager.getAllResources(path).stream().forEach(resource -> {
+                try {
+
+                    DungeonStructure structure = readStructure(resource);
+                    Room.register(structure, type);
+
+                } catch (IOException e) {
+                    DungeonMod.LOGGER.error("Error on loading file for '{}'", path.toString());
+                }
+            });
+        } catch (IOException ex) {
+            DungeonMod.LOGGER.error("Structure '{}' not found", path.toString());
         }
     }
-    */
 
-    public static DungeonStructure read(InputStream stream, StructureMetadata meta) throws IOException {
+    /**
+     * @param resource The IResource pointing to the structures files
+     * @return A DungeonStructure instance with the specified metadata reading from the given IResource
+     */
+    private static DungeonStructure readStructure(IResource resource) throws IOException {
+
+        StructureMetadata meta = resource.getMetadata(StructureMetadata.SERIALIZER);
+        if(meta == null) meta = StructureMetadata.getDefault();
+
         CompoundNBT nbt = CompressedStreamTools.readCompressed(stream);
 
         if (!nbt.contains("DataVersion", 99)) {
