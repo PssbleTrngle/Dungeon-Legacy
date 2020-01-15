@@ -15,6 +15,29 @@ public class HallwayMaze implements Generateable {
         return new StructureMetadata(1);
     }
 
+
+    /**
+     *    0  │# #     # # #       # # #     #│#
+     *    ───┼───────────────────────────────┼──────
+     *    F  │#                              │#
+     *    E  │                               │
+     *    D  │      E % E   E % E   E%  E    │
+     *    C  │#     %       %           %    │#
+     *    B  │#     E % E   E % E % E   E    │#
+     *    A  │#             %   %            │#
+     *    9  │      E % E   E   E   E   E    │
+     *    8  │                          %    │
+     *    7  │      E   E % E % E   E   E    │
+     *    6  │#         %           %        │#
+     *    5  │#     E   E   E % E   E % E    │#
+     *    4  │#         %       %   %        │#
+     *    3  │      E % E   E % E   E   E    │
+     *    2  │                               │
+     *    1  │#                              │#
+     *    0  │# #     # # #       # # #     #│#
+     *    ───┼───────────────────────────────┼──────
+     *    F  │0 1 2 3 4 5 6 7 8 9 A B C D E F│0
+     */
     @Override
     public void generate(DungeonChunk chunk, Random random, GenerationContext context) {
 
@@ -24,7 +47,6 @@ public class HallwayMaze implements Generateable {
 
         for (int x = 3; x < 14; x++)
             for (int z = 3; z < 14; z++) {
-
                 boolean event = (x+1) % 2 == 0 && (z+1) % 2 == 0;
                 boolean odd = ((x+1) % 2) * ((z+1) % 2) == 0);
                 boolean close = even || (odd && random.nextInt(4) == 0);

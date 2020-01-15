@@ -10,15 +10,42 @@ import java.util.Random;
 public abstract class Structures {
 
     public enum Type {
-        HALLWAY, ROOM, DOOR, BOSS, BASE
+        /**
+         * Every black field of a chessboard
+         */
+        ROOM,
+        /**
+         * Every white field of a chessboard
+         */
+        HALLWAY,
+        /**
+         * The doors used to be randomly placed at the room walls
+         */
+        DOOR,
+        /**
+         * Rare rooms containg a boss enemy
+         * Spawning at a mininum distance from other boss rooms and the world spawn
+         */
+        BOSS,
+        /**
+         * Rare rooms containg a boss enemy
+         * Spawning at a mininum distance
+         */
+        BASE
     }
 
     private static final HashMap<Type, RandomCollection<Generateable>> VALUES = new HashMap<>();
 
+    /**
+     * Unload structures
+     */
     public static final clear() {
         VALUES.clear();
     }
 
+    /**
+     * The amount of loaded Structures
+     */
     public static int count() {
         return VALUES.values().stream()
                 .map(RandomCollection::size)
@@ -26,12 +53,22 @@ public abstract class Structures {
                 .orElse(0);
     }
 
-    public static void register(Generateable room, Type type) {
+    /**
+     * Register a structure to a specific type
+     * @param structure The structure
+     * @param type The type, defining the use of this structure
+     */
+    public static void register(Generateable structure, Type type) {
         RandomCollection<Generateable> collection = VALUES.getOrDefault(type, new RandomCollection<>());
-        collection.add(room, room.getMeta().weight);
+        collection.add(structure, structure.getMeta().weight);
         VALUES.put(type, collection);
     }
 
+    /**
+     * Retrieve a random structure for a specific type
+     * @param type The structure type
+     * @param random The seeded random
+     */
     public static Generateable random(Type type, Random random) {
         return VALUES.getOrDefault(type, new RandomCollection<>()).next(random);
     }
