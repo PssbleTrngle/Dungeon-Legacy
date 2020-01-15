@@ -96,7 +96,7 @@ public class DungeonChunk {
     public BlockState setBlockState(BlockPos pos, BlockState state, Rotation rotation, int size) {
         if(pos.getX() * pos.getZ() == 0 && rotation != Rotation.NONE) setBlockState(pos, state, Rotation.NONE, size);
 
-        if(state.getBlock() instanceof IPlaceholder) {
+        if(settings.replacePlaceholders && state.getBlock() instanceof IPlaceholder) {
 
             Type type = ((IPlaceholder) state.getBlock()).getType();
             BlockState replace = palette.blockFor(type, random, variant);
