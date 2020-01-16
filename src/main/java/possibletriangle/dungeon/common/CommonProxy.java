@@ -65,7 +65,7 @@ public class CommonProxy {
                                         .add(Blocks.STONE, 1F)
                                         .add(Blocks.ANDERSITE, 0.7F)
                                 .for(Type.FLOOR, Type.PILLAR)
-                            .put(Blocks.COBBLESTONE).for(Type.PAHT)
+                            .put(Blocks.COBBLESTONE).for(Type.PATH)
                             .put(new BlockCollection()
                                         .add(Blocks.STONE_BRICKS, 1F)
                                         .add(Blocks.MOSSY_STONE_BRICKS, 0.1F)
@@ -186,23 +186,44 @@ public class CommonProxy {
 
         @SubscribeEvent
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
+
             Arrays.stream(Type.values())
                     .map(Type::block)
                     .forEach(event.getRegistry()::register);
+
+            event.getRegistry().registerAll(
+                new BreakableBlock(Blocks.STONE).setRegistryName(DungeonMod.MODID, "porous_stone"),
+                new BreakableBlock(Blocks.GRAVEL).setRegistryName(DungeonMod.MODID, "gravelous_gravel"),
+                new BreakableBlock(Blocks.OAK_PLANKS).setRegistryName(DungeonMod.MODID, "morsh_wood")
+            );
+
         }
 
         @SubscribeEvent
         public static void onItemsRegistry(final RegistryEvent.Register<Item> event) {
-            Item.Properties properties = new Item.Properties()
-                    .group(DungeonMod.GROUP);
 
-            Arrays.stream(Type.values())
-                    .map(type -> new ResourceLocation(DungeonMod.MODID, "placeholder_" + type.name().toLowerCase()))
-                    .map(GameRegistry.findRegistry(Block.class)::getValue)
-                    .filter(Objects::nonNull)
-                    .filter(b -> b.getRegistryName() != null)
-                    .map(b -> new BlockItem(b, properties).setRegistryName(b.getRegistryName()))
-                    .forEach(event.getRegistry()::register);
+            registerBlockItems(event,
+                Arrays.stream(Type.values())
+                    .map(type -> type.name().toLowerCase())
+                    .map(name -> new ResourceLocation(DungeonMod.MODID, "placeholder_" + name))
+            );
+
+            registerBlockItems(event,
+                Arrays.stream("porous_stone", "gravelous_gravel", "morsh_wood")
+                    .map(name -> new ResourceLocation(DungeonMod.MODID, name))
+            );
+
+        }
+
+        private final void registerBlockItems(RegistryEvent.Register<Item> event, Stream<ResourceLocation> blocks) {
+            Item.Properties properties = new Item.Properties().group(DungeonMod.GROUP);
+
+            blocks
+                .map(GameRegistry.findRegistry(Block.class)::getValue)
+                .filter(Objects::nonNull)
+                .filter(b -> b.getRegistryName() != null)
+                .map(b -> new BlockItem(b, properties).setRegistryName(b.getRegistryName()))
+                .forEach(event.getRegistry()::register);
         }
 
     }
