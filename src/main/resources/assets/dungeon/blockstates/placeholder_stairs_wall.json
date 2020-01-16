@@ -1,0 +1,244 @@
+{
+  "variants": {
+    "facing=east,shape=straight,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south,shape=straight,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall",
+      "y": 90,
+      "x": 0
+    },
+    "facing=west,shape=straight,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall",
+      "y": 180,
+      "x": 0
+    },
+    "facing=north,shape=straight,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall",
+      "y": 270,
+      "x": 0
+    },
+    "facing=east,shape=outer_right,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south,shape=outer_right,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 90,
+      "x": 0
+    },
+    "facing=west,shape=outer_right,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 180,
+      "x": 0
+    },
+    "facing=north,shape=outer_right,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 270,
+      "x": 0
+    },
+    "facing=east,shape=outer_left,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 270,
+      "x": 0
+    },
+    "facing=south,shape=outer_left,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 0,
+      "x": 0
+    },
+    "facing=west,shape=outer_left,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north,shape=outer_left,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 180,
+      "x": 0
+    },
+    "facing=east,shape=inner_right,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south,shape=inner_right,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 90,
+      "x": 0
+    },
+    "facing=west,shape=inner_right,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 180,
+      "x": 0
+    },
+    "facing=north,shape=inner_right,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 270,
+      "x": 0
+    },
+    "facing=east,shape=inner_left,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 270,
+      "x": 0
+    },
+    "facing=south,shape=inner_left,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 0,
+      "x": 0
+    },
+    "facing=west,shape=inner_left,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north,shape=inner_left,half=bottom": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 180,
+      "x": 0
+    },
+    "facing=east,shape=straight,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall",
+      "y": 0,
+      "x": 180
+    },
+    "facing=south,shape=straight,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall",
+      "y": 90,
+      "x": 180
+    },
+    "facing=west,shape=straight,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall",
+      "y": 180,
+      "x": 180
+    },
+    "facing=north,shape=straight,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall",
+      "y": 270,
+      "x": 180
+    },
+    "facing=east,shape=outer_right,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 0,
+      "x": 180
+    },
+    "facing=south,shape=outer_right,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 90,
+      "x": 180
+    },
+    "facing=west,shape=outer_right,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 180,
+      "x": 180
+    },
+    "facing=north,shape=outer_right,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 270,
+      "x": 180
+    },
+    "facing=east,shape=outer_left,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 270,
+      "x": 180
+    },
+    "facing=south,shape=outer_left,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 0,
+      "x": 180
+    },
+    "facing=west,shape=outer_left,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 90,
+      "x": 180
+    },
+    "facing=north,shape=outer_left,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_outer",
+      "y": 180,
+      "x": 180
+    },
+    "facing=east,shape=inner_right,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 0,
+      "x": 180
+    },
+    "facing=south,shape=inner_right,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 90,
+      "x": 180
+    },
+    "facing=west,shape=inner_right,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 180,
+      "x": 180
+    },
+    "facing=north,shape=inner_right,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 270,
+      "x": 180
+    },
+    "facing=east,shape=inner_left,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 270,
+      "x": 180
+    },
+    "facing=south,shape=inner_left,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 0,
+      "x": 180
+    },
+    "facing=west,shape=inner_left,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 90,
+      "x": 180
+    },
+    "facing=north,shape=inner_left,half=top": {
+      "uvlock": true,
+      "model": "dungeon:block/placeholder_stairs_wall_inner",
+      "y": 180,
+      "x": 180
+    }
+  }
+}
