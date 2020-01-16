@@ -65,6 +65,42 @@ async function fallback({ name, type }) {
 
 }
 
+function cycleProps(props) {
+
+	const rec = (props, done = {'': {}}) => {
+
+		const keys = Object.keys(props);
+		if(keys.length > 0) {
+
+			const prop = props[keys[0]];
+			const next = {};
+
+			for(let value in prop) {
+
+				const v = `${prop}=${value}`;
+
+				for(let name in done) {
+
+					const composedName = name.length > 0 ? `${name},${v}` : v;
+					const composedMods = {...done[name], ...prop[value]};
+					next[composedName] = composedMods;
+
+				}
+			}
+
+			delete prop[keys[0]];
+			return rec(props, next);
+
+		}
+
+		return done;
+
+	}
+	
+	return { variants: rec(props) };
+
+}
+
 const Types = {
 
 	get(name) {
@@ -78,6 +114,29 @@ const Types = {
 	},
 
 	async stairs({ name, full }) {
+
+		const half = {
+			bottom: { x: 0 },
+			bottom: { x: 180 },
+		}
+
+		const facing = {
+			east: { y: 0 },
+			south: { y: 90 },
+			west: { y: 180 },
+			north: { y: 270 },
+		}
+
+		const shape = {
+			straight: {},
+			outer_right: { name: n => n + '_outer'  },
+			outer_left: { name: n => n + '_outer', y: -90 },
+			inner_right: { name: n => n + '_inner' },
+			inner_left: { name: n => n + '_inner', y: -90 },
+		}
+
+		const cycled = cycleProps({ half, facing, shape });
+		console.log(cycled);
 
 		await write('blockstates', name, {
 			variants: {
