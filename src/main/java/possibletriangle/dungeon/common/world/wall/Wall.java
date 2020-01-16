@@ -13,12 +13,19 @@ import java.util.Random;
 
 public class Wall {
 
+    /**
+     * All the positions of the doors on one wall
+     */
     private static final AxisAlignedBB[] DOORS = {
             new AxisAlignedBB(new BlockPos(0, 0, 3), new BlockPos(1, 3, 5)),
             new AxisAlignedBB(new BlockPos(0, 0, 7), new BlockPos(1, 3, 10)),
             new AxisAlignedBB(new BlockPos(0, 0, 12), new BlockPos(1, 3, 14))
     };
 
+    /**
+     * TODO generate for multi-floor Rooms
+     * @param floor the amount of floors
+     */
     public static void generate(DungeonChunk chunk, int floors, Random random, DungeonSettings settings) {
 
         for (int x = 0; x < 16; x++)
