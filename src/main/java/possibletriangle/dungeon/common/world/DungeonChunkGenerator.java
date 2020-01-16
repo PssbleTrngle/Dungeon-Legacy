@@ -47,7 +47,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
      */
     private static Structures.Type typeFor(GenerationContext ctx) {
         boolean hallway = ctx.pos.x % 2 == ctx.pos.z % 2;
-        if(hallway) return Structures.Type.HALLWAY
+        if(hallway) return Structures.Type.HALLWAY;
         return Structures.Type.ROOM;
     }
 
@@ -55,7 +55,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
      * @return If a structure fits the current requirements, like size or the structures' conditions defined by its .mcmeta file
      */
     private static boolean fits(Generateable structure, GenerationContext ctx) {
-        return structure != null && structure.getSize(settings).getY() <= ctx.settings.floors - ctx.floor && structure.getMeta().predicate.test(ctx);
+        return structure != null && structure.getSize(ctx.settings).getY() <= ctx.settings.floors - ctx.floor && structure.getMeta().predicate.test(ctx);
     }
 
     /**

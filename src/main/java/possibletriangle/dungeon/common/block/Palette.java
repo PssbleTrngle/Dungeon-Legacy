@@ -72,35 +72,34 @@ public class Palette extends ForgeRegistryEntry<Palette> {
         return VALUES.next(random);
     }
 
-    public static interface MultiConsumer<P,T> {
+    public interface MultiConsumer<P,T> {
 
-        P for(T... types)
+        P forTypes(T... types);
 
     }
 
     /**
      * Associate a collection of blocks with one ore multiple {@link possibletriangle.dungeon.common.block.Type}
      * @param collection the blocks
-     * @param types the placeholder types
      */
     public MultiConsumer<Palette,Type> put(BlockCollection collection) {
         return types -> {
             for(Type type : types)
                 this.blocks.putIfAbsent(type, collection);
-            return this
-        }
+            return this;
+        };
     }
 
     public MultiConsumer<Palette,Type> put(StateProvider... providers) {
-        return types -> this.put(new BlockCollection(providers), types);
+        return this.put(new BlockCollection(providers));
     }
 
     public MultiConsumer<Palette,Type> put(Block... blocks) {
-        return types -> this.put(new BlockCollection(blocks), types);
+        return this.put(Arrays.stream(blocks).map(Block::getDefaultState).toArray(BlockState[]::new));
     }
 
     public MultiConsumer<Palette,Type> put(BlockState... states) {
-        return types -> this.put(new BlockCollection(states), types);
+        return this.put(Arrays.stream(states).map(s -> (StateProvider) i -> s).toArray(StateProvider[]::new));
     }
 
     private BlockCollection blocksFor(Type type) {

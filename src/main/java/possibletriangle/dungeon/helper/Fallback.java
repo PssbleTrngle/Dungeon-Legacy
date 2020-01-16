@@ -1,5 +1,10 @@
 package possibletriangle.dungeon.helper;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import possibletriangle.dungeon.common.world.room.StateProvider;
+
+import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -7,19 +12,19 @@ public class Fallback implements StateProvider {
 
     private final StateProvider[] providers;
 
+    @SafeVarargs
     public Fallback(Supplier<BlockState>... suppliers) {
-        this.providers = Arrays.steam(suppliers).map(s -> (StateProvider) i -> s);
+        this(Arrays.stream(suppliers).map(s -> (StateProvider) i -> s.get()).toArray(StateProvider[]::new));
     }
-
     public Fallback(StateProvider... providers) {
         this.providers = providers;
     }
 
     @Override
-    public T apply(Integer variant) {
-        for(Function<Integer,T> provider : providers) {
-            T t = provider.apply(variant);
-            if(t != null) return t;
+    public BlockState apply(Integer variant) {
+        for(StateProvider provider : providers) {
+            BlockState state = provider.apply(variant);
+            if(state != null) return state;
         }
 
         return null;

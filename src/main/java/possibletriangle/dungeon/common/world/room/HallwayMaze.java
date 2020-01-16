@@ -1,6 +1,10 @@
 package possibletriangle.dungeon.common.world.room;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import possibletriangle.dungeon.common.block.TemplateBlock;
 import possibletriangle.dungeon.common.world.DungeonChunk;
 import possibletriangle.dungeon.common.world.GenerationContext;
@@ -63,22 +67,22 @@ public class HallwayMaze implements Generateable {
      *    F  │0 1 2 3 4 5 6 7 8 9 A B C D E F│0
      */
     @Override
-    public void generate(DungeonChunk chunk, Random random, GenerationContext context) {
+    public void generate(DungeonChunk chunk, Random random, GenerationContext ctx) {
 
-        this.generateFloor(chunk);
+        this.generateFloor(chunk, ctx.settings);
         BlockState wall = TemplateBlock.WALL.getDefaultState();
         BlockState lava = Blocks.LAVA.getDefaultState();
-        Vec3i size = getSize();
+        Vec3i size = this.getSize(ctx.settings);
 
-        for (int x = 2; x < 16 * size.x - 1; x++)
-            for (int z = 2; z < 16 * size.z - 1; z++) {
+        for (int x = 2; x < 16 * size.getX() - 1; x++)
+            for (int z = 2; z < 16 * size.getZ() - 1; z++) {
 
                 boolean even = x % 2 == 0 && z % 2 == 0;
-                boolean odd = (x % 2) * (z % 2) == 0);
-                boolean close = even || (odd && random.next() <= closeChance);
-                boolean setLava = close && random.next <= lavaChance;
+                boolean odd = (x % 2) * (z % 2) == 0;
+                boolean close = even || (odd && random.nextFloat() <= closeChance);
+                boolean setLava = close && random.nextFloat() <= lavaChance;
 
-                for (int y = 2; y < context.settings.floorHeight; y++)
+                for (int y = 2; y < ctx.settings.floorHeight; y++)
                     if (close) chunk.setBlockState(new BlockPos(x, y, z), setLava ? wall : lava);
 
             }
@@ -86,15 +90,15 @@ public class HallwayMaze implements Generateable {
         for(Rotation rotation : Rotation.values())
             for(int z : new int[]{ 5, 11 }) {
 
-                boolean gen = random.next() <= wallChance;
-                for (int y = 3; y < context.settings.floorHeight; y++) {
+                boolean gen = random.nextFloat() <= wallChance;
+                for (int y = 3; y < ctx.settings.floorHeight; y++) {
 
-                    chunk.setBlockState(new BlockPos(1, y, z), wall);
-                    if(gen) chunk.setBlockState(new BlockPos(2, y, z), wall);
+                    chunk.setBlockState(new BlockPos(1, y, z), wall, rotation);
+                    if(gen) chunk.setBlockState(new BlockPos(2, y, z), wall, rotation);
 
                 }
 
-                if(!gen) chunk.setBlockState(new BlockPos(2, 5, z), Blocks.TORCH.getDefaultState());
+                if(!gen) chunk.setBlockState(new BlockPos(2, 5, z), Blocks.TORCH.getDefaultState(), rotation);
 
             }
     }
