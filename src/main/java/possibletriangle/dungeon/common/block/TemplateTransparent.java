@@ -33,14 +33,17 @@ public class TemplateTransparent extends TemplateBlock {
         return true;
     }
 
+    @SuppressWarnings("deprecated")
     public boolean causesSuffocation(BlockState p_220060_1_, IBlockReader p_220060_2_, BlockPos p_220060_3_) {
         return false;
     }
 
+    @SuppressWarnings("deprecated")
     public boolean isNormalCube(BlockState p_220081_1_, IBlockReader p_220081_2_, BlockPos p_220081_3_) {
         return false;
     }
 
+    @SuppressWarnings("deprecated")
     @OnlyIn(Dist.CLIENT)
     public boolean isSideInvisible(BlockState state, BlockState next, Direction direction) {
         if (!hideNeighboors) return super.isSideInvisible(state, next, direction);
