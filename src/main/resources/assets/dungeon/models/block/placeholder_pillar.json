@@ -1,7 +1,0 @@
-{
-  "parent": "block/cube_column",
-  "textures": {
-    "end": "dungeon:block/placeholder_pillar_top",
-    "side": "dungeon:block/placeholder_pillar_side"
-  }
-}
