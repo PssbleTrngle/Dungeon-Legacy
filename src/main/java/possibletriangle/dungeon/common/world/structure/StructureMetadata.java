@@ -6,6 +6,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
 import net.minecraft.util.JSONUtils;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoader;
 import possibletriangle.dungeon.common.world.GenerationContext;
 
 import java.util.List;
@@ -20,16 +22,18 @@ public class StructureMetadata {
 
     public static final Serializer SERIALIZER = new Serializer();
 
+    public final String display;
     public final float weight;
     public final Predicate<GenerationContext> predicate;
 
-    public StructureMetadata(float weight) {
-        this(weight, ctx -> true);
-    }
-
-    public StructureMetadata(float weight, Predicate<GenerationContext> predicate) {
+    public StructureMetadata(float weight, String display, Predicate<GenerationContext> predicate) {
         this.weight = weight;
         this.predicate = predicate;
+        this.display = display;
+    }
+
+    public StructureMetadata(float weight, String display) {
+        this(weight, display, ctx -> true);
     }
 
     /**
@@ -52,6 +56,8 @@ public class StructureMetadata {
             float weight = JSONUtils.getFloat(json, "weight", 1F);
             JsonArray conditions = JSONUtils.getJsonArray(json, "conditions", new JsonArray());
 
+            String display = JSONUtils.getString(json, "name", "???");
+
             List<Predicate<GenerationContext>> predicates = Lists.newArrayList();
             conditions.forEach(c -> {
                 JsonObject condition = c.getAsJsonObject();
@@ -69,7 +75,7 @@ public class StructureMetadata {
 
             /* Merge predicates using AND */
             Predicate<GenerationContext> predicate = predicates.stream().reduce(ctx -> true, Predicate::and, (p1, p2) -> p1);
-            return new StructureMetadata(weight, predicate);
+            return new StructureMetadata(weight, display, predicate);
         }
 
         /**
@@ -116,6 +122,9 @@ public class StructureMetadata {
                         int floors = ctx.settings.floors;
                         return ctx.floor - floors == floor;
                     });
+
+                case "mod":
+                    return predicateForAll(blacklist, whitelist, JsonElement::getAsString, (modid, ctx) -> ModList.get().isLoaded(modid));
 
                 default:
                     return null;

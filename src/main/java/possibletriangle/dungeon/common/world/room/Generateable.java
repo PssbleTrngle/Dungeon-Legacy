@@ -11,27 +11,36 @@ import possibletriangle.dungeon.common.world.structure.StructureMetadata;
 
 import java.util.Random;
 
-public interface Generateable {
+public abstract class Generateable {
 
-    StructureMetadata getMeta();
+    public abstract StructureMetadata getMeta();
 
-    void generate(DungeonChunk chunk, Random random, GenerationContext context);
+    public abstract void generate(DungeonChunk chunk, Random random, GenerationContext context);
 
     /**
      * X and Z are the amount of chunks, Y is the amount of floors
      * @return The amount of space required
      */
-    default Vec3i getSize(DungeonSettings options) {
-        return new Vec3i(1, 1, 1);
+    public final Vec3i getSize() {
+        Vec3i actual = getActualSize();
+        return new Vec3i(actual.getX() / 16, Math.max(1, actual.getY() / (DungeonSettings.FLOOR_HEIGHT + 1)), actual.getZ() / 16);
+    }
+
+    /**
+     * X and Z are the amount of chunks, Y is the amount of floors
+     * @return The amount of space required
+     */
+    public Vec3i getActualSize() {
+        return new Vec3i(16, DungeonSettings.FLOOR_HEIGHT, 16);
     }
 
     /**
      * Generate the floor of a room
      * @param chunk the chunk to generate in
      */
-    default void generateFloor(DungeonChunk chunk, DungeonSettings settings) {
+    protected final void generateFloor(DungeonChunk chunk, DungeonSettings settings) {
 
-        Vec3i size = getSize(settings);
+        Vec3i size = getSize();
         BlockState state = TemplateBlock.FLOOR.getDefaultState();
 
         for (int x = 0; x < size.getX() * 16; x++)

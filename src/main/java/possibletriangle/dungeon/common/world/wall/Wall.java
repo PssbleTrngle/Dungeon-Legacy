@@ -24,27 +24,28 @@ public class Wall {
 
     /**
      * TODO generate for multi-floor Rooms
-     * @param floor the amount of floors
+     * @param floors the amount of floors
      */
     public static void generate(DungeonChunk chunk, int floors, Random random, DungeonSettings settings) {
 
         for (int x = 0; x < 16; x++)
             for (int z = 0; z < 16; z++)
                 if (x * z == 0)
-                    for (int y = 0; y < settings.floorHeight * floors; y++)
+                    for (int y = 0; y < (DungeonSettings.FLOOR_HEIGHT + 1) * floors; y++)
                         chunk.setBlockState(new BlockPos(x, y, z), TemplateBlock.WALL.getDefaultState());
 
-        for (AxisAlignedBB door : DOORS)
-            for (Rotation rot : new Rotation[]{ Rotation.NONE, Rotation.CLOCKWISE_90 }) {
+        for(int floor = 0; floor < floors; floor++)
+            for (AxisAlignedBB door : DOORS)
+                for (Rotation rot : new Rotation[]{ Rotation.NONE, Rotation.CLOCKWISE_90 }) {
 
-                if (random.nextFloat() > 0.6F) {
-                    int maxY = (int) door.maxY + random.nextInt(2);
-                    for (int x = (int) door.minX; x < door.maxX; x++)
-                        for (int y = (int) door.minY; y < maxY; y++)
-                            for (int z = (int) door.minZ; z < door.maxZ; z++)
-                                chunk.setBlockState(new BlockPos(x, y + 3, z), Blocks.AIR.getDefaultState(), rot);
+                    if (random.nextFloat() > 0.6F) {
+                        int maxY = (int) door.maxY + random.nextInt(2);
+                        for (int x = (int) door.minX; x < door.maxX; x++)
+                            for (int y = (int) door.minY; y < maxY; y++)
+                                for (int z = (int) door.minZ; z < door.maxZ; z++)
+                                    chunk.setBlockState(new BlockPos(x, y + 3 + floor * (DungeonSettings.FLOOR_HEIGHT + 1), z), Blocks.AIR.getDefaultState(), rot);
+                    }
                 }
-            }
 
     }
 }
