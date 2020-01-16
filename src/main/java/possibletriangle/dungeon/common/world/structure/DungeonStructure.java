@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.gen.feature.template.Template;
+import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.world.DungeonChunk;
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.GenerationContext;
@@ -23,7 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class DungeonStructure implements Generateable {
+public class DungeonStructure extends Generateable {
 
     private final StructureMetadata meta;
     private BlockPos size;
@@ -34,14 +35,13 @@ public class DungeonStructure implements Generateable {
         this.meta = meta;
     }
 
-    @Override
     public StructureMetadata getMeta() {
-        return meta;
+        return this.meta;
     }
 
     @Override
-    public Vec3i getSize(DungeonSettings options) {
-        return new Vec3i(1, Math.max(1, this.size.getY() / options.floorHeight), 1);
+    public Vec3i getActualSize() {
+        return new Vec3i(16, this.size.getY(), 16);
     }
 
     @Override

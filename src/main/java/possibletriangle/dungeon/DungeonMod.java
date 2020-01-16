@@ -4,6 +4,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resources.IResourceManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -58,11 +60,8 @@ public class DungeonMod {
 
     private void processIMC(final InterModProcessEvent event) {}
 
-    @SubscribeEvent
-    public void onServerStarted(FMLServerStartedEvent event) {}
-
-    @SubscribeEvent
-    public void onServerStarting(FMLServerStartingEvent event) {
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onServerStarting(final FMLServerAboutToStartEvent event) {
         proxy.reloadRooms(event.getServer().getResourceManager());
     }
 }

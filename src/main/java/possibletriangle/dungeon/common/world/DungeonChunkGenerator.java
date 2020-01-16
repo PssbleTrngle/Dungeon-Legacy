@@ -55,7 +55,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
      * @return If a structure fits the current requirements, like size or the structures' conditions defined by its .mcmeta file
      */
     private static boolean fits(Generateable structure, GenerationContext ctx) {
-        return structure != null && structure.getSize(ctx.settings).getY() <= ctx.settings.floors - ctx.floor && structure.getMeta().predicate.test(ctx);
+        return structure != null && structure.getSize().getY() <= ctx.settings.floors - ctx.floor && structure.getMeta().predicate.test(ctx);
     }
 
     /**
@@ -91,7 +91,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
             GenerationContext ctx = new GenerationContext(floor, settings, pos);
 
             Generateable room = roomFor(random, settings, ctx);
-            Vec3i size = room.getSize(settings);
+            Vec3i size = room.getSize();
             rooms.put(floor, room);
 
             /* If the room is higher than 1 floor, skip the next floors to not override it */
@@ -115,7 +115,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
             GenerationContext ctx = new GenerationContext(floor, settings, pos);
             chunk.setFloor(floor);
             
-            Vec3i size = room.getSize(settings);
+            Vec3i size = room.getSize();
 
             /* Generate Room and Wall */
             room.generate(chunk, random, ctx);
@@ -134,12 +134,12 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
     private void generateCeiling(int floor, int height, DungeonChunk chunk) {
         DungeonSettings settings = getSettings();
 
-        boolean solidCeiling = floor < settings.floors - 1 || settings.hasCeiling;
+        boolean solidCeiling = (floor + height - 1) < settings.floors - 1 || settings.hasCeiling;
         BlockState ceiling = (solidCeiling ? TemplateBlock.FLOOR : Blocks.BARRIER).getDefaultState();
 
         for(int x = 0; x < 16; x++)
             for(int z = 0; z < 16; z++) {
-                BlockPos p = new BlockPos(x, (settings.floorHeight + 1) * (height - 1) + settings.floorHeight, z);
+                BlockPos p = new BlockPos(x, (DungeonSettings.FLOOR_HEIGHT + 1) * (height - 1) + DungeonSettings.FLOOR_HEIGHT, z);
                 chunk.setBlockState(p, ceiling);
             }
     }

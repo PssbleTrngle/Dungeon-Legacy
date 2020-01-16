@@ -90,6 +90,9 @@ public class DungeonChunk {
         nbt.putInt("x", real.getX());
         nbt.putInt("y", real.getY());
         nbt.putInt("z", real.getZ());
+
+
+
         chunk.addTileEntity(nbt);
     }
 
@@ -130,7 +133,7 @@ public class DungeonChunk {
 
         return new BlockPos(
                 (int) (centered[0] * cos - centered[1] * sin + center),
-                in.getY() + floor * (settings.floorHeight + 1),
+                in.getY() + floor * (DungeonSettings.FLOOR_HEIGHT + 1),
                 (int) (centered[0] * sin + centered[1] * cos + center)
         );
     }
