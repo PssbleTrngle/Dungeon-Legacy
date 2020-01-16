@@ -19,6 +19,9 @@
 	{ "name": "placeholder_stairs", "type": "stairs", "full": "placeholder_floor" },
 	{ "name": "placeholder_slab_wall", "type": "slab", "full": "placeholder_wall" },
 	{ "name": "placeholder_stairs_wall", "type": "stairs", "full": "placeholder_wall" },
+
+	{ "name": "placeholder_plant", "type": "cross" },
+	{ "name": "placeholder_crop", "type": "cross" },
 	
     { "name": "porous_stone", "type": "cube" },
     { "name": "gravelous_gravel", "type": "cube" },
