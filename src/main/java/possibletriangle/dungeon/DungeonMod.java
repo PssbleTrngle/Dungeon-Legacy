@@ -22,6 +22,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import possibletriangle.dungeon.common.CommonProxy;
+import possibletriangle.dungeon.common.DungeonCommand;
 import possibletriangle.dungeon.common.block.TemplateBlock;
 import possibletriangle.dungeon.common.world.room.HallwayMaze;
 import possibletriangle.dungeon.common.world.room.Structures;
@@ -71,7 +72,12 @@ public class DungeonMod {
     private void processIMC(final InterModProcessEvent event) {}
 
     @SubscribeEvent(priority = EventPriority.HIGH)
-    public void onServerStarting(final FMLServerAboutToStartEvent event) {
+    public void onServerWillStart(final FMLServerAboutToStartEvent event) {
         proxy.reloadRooms(event.getServer().getResourceManager());
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onServerStarting(final FMLServerStartingEvent  event) {
+        DungeonCommand.register(event.getCommandDispatcher());
     }
 }
