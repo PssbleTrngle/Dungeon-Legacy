@@ -65,30 +65,39 @@ async function fallback({ name, type }) {
 
 }
 
-function cycleProps(props) {
+function cycleProps(props, defaults) {
 
-	const rec = (props, done = {'': {}}) => {
+	const rec = (props, done = { '': defaults }) => {
 
 		const keys = Object.keys(props);
-		if(keys.length > 0) {
+		if (keys.length > 0) {
 
-			const prop = props[keys[0]];
+			const prop = keys[0];
+			const values = props[prop];
 			const next = {};
 
-			for(let value in prop) {
+			for (let value in values) {
 
 				const v = `${prop}=${value}`;
 
-				for(let name in done) {
+				for (let name in done) {
 
 					const composedName = name.length > 0 ? `${name},${v}` : v;
-					const composedMods = {...done[name], ...prop[value]};
+					const composedMods = { ...done[name] };
+
+					for (let p in values[value]) {
+						const v = values[value][p];
+						if (typeof v === 'function')
+							composedMods[p] = v(composedMods[p]);
+						else composedMods[p] = v;
+					}
+
 					next[composedName] = composedMods;
 
 				}
 			}
 
-			delete prop[keys[0]];
+			delete props[prop];
 			return rec(props, next);
 
 		}
@@ -96,7 +105,7 @@ function cycleProps(props) {
 		return done;
 
 	}
-	
+
 	return { variants: rec(props) };
 
 }
@@ -117,7 +126,7 @@ const Types = {
 
 		const half = {
 			bottom: { x: 0 },
-			bottom: { x: 180 },
+			top: { x: 180 },
 		}
 
 		const facing = {
@@ -129,14 +138,11 @@ const Types = {
 
 		const shape = {
 			straight: {},
-			outer_right: { name: n => n + '_outer'  },
-			outer_left: { name: n => n + '_outer', y: -90 },
-			inner_right: { name: n => n + '_inner' },
-			inner_left: { name: n => n + '_inner', y: -90 },
+			outer_right: { model: n => n + '_outer' },
+			outer_left: { model: n => n + '_outer', y: y => (y + 270) % 360 },
+			inner_right: { model: n => n + '_inner' },
+			inner_left: { model: n => n + '_inner', y: y => (y + 270) % 360 },
 		}
-
-		const cycled = cycleProps({ half, facing, shape });
-		console.log(cycled);
 
 		await write('blockstates', name, {
 			variants: {
@@ -183,6 +189,11 @@ const Types = {
 			}
 		});
 
+		await write('blockstates', name, cycleProps(
+			{ facing, shape, half },
+			{ uvlock: true, model: `${MOD}:block/${name}` }
+		));
+
 		await Promise.all(
 			['', 'outer', 'inner'].map(s =>
 				write('models/block', `${name}${s ? '_' + s : ''}`, {
@@ -197,7 +208,7 @@ const Types = {
 		)
 	},
 
-	async  slab({ name, full }) {
+	async slab({ name, full }) {
 
 		await write('blockstates', name, {
 			variants: {
@@ -276,14 +287,18 @@ const blocks = require('./blocks.json')
 
 async function run() {
 
-	console.log('');
+	console.clear();
 	await clean();
 
 	progress(`Started Generator for ${blocks.length} blocks`)
+	console.log('')
 
 	Promise.all(
 		blocks.map(create)
-	).then(() => success('Done'));
+	).then(() => {
+		console.log('')
+		success('Done');
+	});
 
 };
 run();
