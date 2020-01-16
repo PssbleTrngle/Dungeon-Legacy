@@ -1,6 +1,9 @@
 package possibletriangle.dungeon.common.world.room;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import possibletriangle.dungeon.common.block.TemplateBlock;
 import possibletriangle.dungeon.common.world.DungeonChunk;
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.GenerationContext;
@@ -26,14 +29,15 @@ public interface Generateable {
      * Generate the floor of a room
      * @param chunk the chunk to generate in
      */
-    default void generateFloor(DungeonChunk chunk) {
+    default void generateFloor(DungeonChunk chunk, DungeonSettings settings) {
 
-        Vec3i size = getSize();
+        Vec3i size = getSize(settings);
+        BlockState state = TemplateBlock.FLOOR.getDefaultState();
 
         for (int x = 0; x < size.getX() * 16; x++)
             for (int z = 0; z < size.getZ() * 16; z++)
                 for (int y = 0; y < 3; y++)
-                    chunk.setBlockState(new BlockPos(x, y, z), TemplateBlock.FLOOR.getDefaultState());
+                    chunk.setBlockState(new BlockPos(x, y, z), state);
 
     }
 

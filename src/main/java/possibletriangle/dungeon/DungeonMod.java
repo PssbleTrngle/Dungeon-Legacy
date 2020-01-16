@@ -63,6 +63,6 @@ public class DungeonMod {
 
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
-        proxy.reloadRooms();
+        proxy.reloadRooms(event.getServer().getResourceManager());
     }
 }

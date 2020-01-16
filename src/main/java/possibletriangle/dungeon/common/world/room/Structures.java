@@ -39,7 +39,7 @@ public abstract class Structures {
     /**
      * Unload structures
      */
-    public static final clear() {
+    public static void clear() {
         VALUES.clear();
     }
 
