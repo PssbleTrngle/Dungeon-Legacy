@@ -123,7 +123,7 @@ public class CommonProxy {
                                 .forTypes(Type.GEM),
 
                     /* ------------------   NETHER  ------------------ */
-                    new Palette(0.1F, () -> Biomes.NETHER).setRegistryName(DungeonMod.MODID, "nether")
+                    new Palette(0.2F, () -> Biomes.NETHER).setRegistryName(DungeonMod.MODID, "nether")
                             .put(new BlockCollection()
                                         .add(Blocks.NETHERRACK, 1F)
                                         .add(Blocks.SOUL_SAND, 0.1F))
@@ -153,7 +153,7 @@ public class CommonProxy {
                             .put(Blocks.MUSHROOM_STEM).forTypes(Type.LOG),
 
                     /* ------------------  PRISMARINE  ------------------ */
-                    new Palette(0.1F, () -> Biomes.OCEAN).setRegistryName(DungeonMod.MODID, "prismarine")
+                    new Palette(0.2F, () -> Biomes.OCEAN).setRegistryName(DungeonMod.MODID, "prismarine")
                             .put(Blocks.PRISMARINE).forTypes(Type.FLOOR)
                             .put(Blocks.DARK_PRISMARINE).forTypes(Type.PATH)
                             .put(Blocks.PRISMARINE_BRICKS).forTypes(Type.WALL)
@@ -167,7 +167,7 @@ public class CommonProxy {
                                 .forTypes(Type.PLANT, Type.CROP),
 
                     /* ------------------  END  ------------------ */
-                    new Palette(0.1F, () -> Biomes.THE_END).setRegistryName(DungeonMod.MODID, "end")
+                    new Palette(0.2F, () -> Biomes.THE_END).setRegistryName(DungeonMod.MODID, "end")
                             .put(Blocks.END_STONE).forTypes(Type.FLOOR)
                             .put(Blocks.END_STONE_BRICKS).forTypes(Type.PATH)
                             .put(Blocks.PURPUR_BLOCK).forTypes(Type.WALL)
@@ -181,8 +181,8 @@ public class CommonProxy {
                             .put(Blocks.AIR).forTypes(Type.PLANT, Type.CROP)
                             .put(Blocks.PURPLE_STAINED_GLASS).forTypes(Type.GLASS),
 
-                    /* ------------------  END  ------------------ */
-                    new Palette(0.1F, () -> Biomes.MUSHROOM_FIELDS).setRegistryName(DungeonMod.MODID, "mushroom")
+                    /* ------------------  MUSHROOM  ------------------ */
+                    new Palette(0.2F, () -> Biomes.MUSHROOM_FIELDS).setRegistryName(DungeonMod.MODID, "mushroom")
                             .put(Blocks.MYCELIUM).forTypes(Type.GRASS)
                             .put(new Variant(Blocks.RED_MUSHROOM_BLOCK, Blocks.BROWN_MUSHROOM_BLOCK)).forTypes(Type.LEAVES)
                             .put(Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM).forTypes(Type.PLANT)
