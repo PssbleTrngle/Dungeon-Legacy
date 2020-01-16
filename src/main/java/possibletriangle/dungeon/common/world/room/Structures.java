@@ -43,7 +43,8 @@ public abstract class Structures {
         static boolean validRoom(Generateable structure) {
             Vec3i size = structure.getActualSize();
             int floorHeight = DungeonSettings.FLOOR_HEIGHT;
-            return size.getX() % 16 == 0 && size.getZ() % 16 == 0 && size.getY() <= floorHeight || size.getY() % (floorHeight + 1) == 0;
+            return size.getX() % 16 == 0 && size.getZ() % 16 == 0
+                    && size.getY() <= floorHeight || (size.getY() - floorHeight) % (floorHeight + 1) == 0;
         }
 
         Predicate<Generateable> valid;
@@ -86,7 +87,7 @@ public abstract class Structures {
             VALUES.put(type, collection);
 
         } else {
-            DungeonMod.LOGGER.error("Trying to register a structure which is invalid for type '{}'", type.name());
+            DungeonMod.LOGGER.error("Trying to register a structure which is invalid for type '{}': '{}'", type.name(), structure.getMeta().display);
         }
     }
 

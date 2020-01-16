@@ -1,11 +1,16 @@
 package possibletriangle.dungeon.common.world.structure;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.DataFixer;
+import javafx.util.Pair;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
@@ -15,47 +20,58 @@ import possibletriangle.dungeon.common.world.room.Structures;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class StructureLoader {
+public class StructureLoader extends ReloadListener<List<DungeonStructure>> {
+
+    private final Structures.Type type;
+    public StructureLoader(Structures.Type type) {
+        this.type = type;
+    }
 
     /**
      * Loads all structures in the data folder
      * Called on server starting
      * @param manager The servers resource manager
      */
-    public static void reload(IResourceManager manager) {
-        DungeonMod.LOGGER.info("Reloading structures...");
+    @Override
+    protected List<DungeonStructure> prepare(IResourceManager manager, IProfiler profiler) {
 
-        for(Structures.Type type : Structures.Type.values()) {
+        Collection<ResourceLocation> resources = manager.getAllResourceLocations("structures/" + type.name().toLowerCase(), s -> s.endsWith(".nbt"));
+        DungeonMod.LOGGER.info("Found {} structure files for type {}", resources.size(), type.name());
 
-            Collection<ResourceLocation> resources = manager.getAllResourceLocations("structures/" + type.name().toLowerCase(), s -> s.endsWith(".nbt"));
-            DungeonMod.LOGGER.info("Found {} structure files for type {}", resources.size(), type.name());
+        return resources.stream()
+                .map(r -> load(manager, r))
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
 
-            resources.forEach(r -> load(manager, type, r));
-        }
+    @Override
+    protected void apply(List<DungeonStructure> list, IResourceManager manager, IProfiler profiler) {
+        list.forEach(structure ->  Structures.register(structure, type));
     }
 
     /**
-     * Loads a single structure file and its metadata and registeres them
+     * Loads a single structure file and its metadata
      * @param manager The servers resource manager
-     * @param type The type the structure should be registed as
      * @param path The path pointing to the structures files
      */
-    private static void load(IResourceManager manager, Structures.Type type, ResourceLocation path) {
+    private static List<DungeonStructure> load(IResourceManager manager, ResourceLocation path) {
         try {
-            manager.getAllResources(path).stream().forEach(resource -> {
+            return manager.getAllResources(path).stream().map(resource -> {
                 try {
 
-                    DungeonStructure structure = readStructure(resource);
-                    Structures.register(structure, type);
+                    return readStructure(resource);
 
                 } catch (IOException e) {
                     DungeonMod.LOGGER.error("Error on loading file for '{}'", path.toString());
+                    return null;
                 }
-            });
+            }).filter(Objects::nonNull).collect(Collectors.toList());
         } catch (IOException ex) {
             DungeonMod.LOGGER.error("Structure '{}' not found", path.toString());
+            return Lists.newArrayList();
         }
     }
 
@@ -66,7 +82,10 @@ public class StructureLoader {
     private static DungeonStructure readStructure(IResource resource) throws IOException {
 
         StructureMetadata meta = resource.getMetadata(StructureMetadata.SERIALIZER);
-        if(meta == null) meta = StructureMetadata.getDefault();
+        if(meta == null) {
+            String filename = resource.getLocation().getPath();
+            meta = new StructureMetadata(1F, filename);
+        }
 
         CompoundNBT nbt = CompressedStreamTools.readCompressed(resource.getInputStream());
 

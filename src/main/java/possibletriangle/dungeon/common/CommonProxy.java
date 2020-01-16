@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biomes;
@@ -39,14 +40,15 @@ public class CommonProxy {
 
     }
 
-    public void reloadRooms(IResourceManager manager) {
+    public void reloadRooms(IReloadableResourceManager manager) {
 
         Structures.clear();
 
-        StructureLoader.reload(manager);
-        Structures.register(new HallwayMaze(), Structures.Type.HALLWAY);
+        Arrays.stream(Structures.Type.values())
+                .map(StructureLoader::new)
+                .forEach(manager::addReloadListener);
 
-        DungeonMod.LOGGER.info("Loaded {} structures", Structures.count());
+        Structures.register(new HallwayMaze(), Structures.Type.HALLWAY);
 
     }
 
