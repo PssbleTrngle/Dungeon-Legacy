@@ -33,23 +33,12 @@ public class HallwayMaze implements Generateable {
      * 
      *  Generates a maze filling out a 13x13 space
      * 
-     *      ───── LAYOUT ─────
-     *          Even    E
-     *          Odd     O
-     *          Wall    #
-     *          Torch   *
-     *      ──────────────────
-     * 
-     * 
-     * 
-     * ┌──┬──┐  ╔══╦══╗ ╒══╤══╕ ╓──╥──╖
-     * │  │  │  ║  ║  ║ │  │  │ ║  ║  ║
-     * ├──┼──┤  ╠══╬══╣ ╞══╪══╡ ╟──╫──╢
-     * │  │  │  ║  ║  ║ │  │  │ ║  ║  ║
-     * └──┴──┘  ╚══╩══╝ ╘══╧══╛ ╙──╨──╜
-     * 
-     * 
-     * 
+     *              ┌──── LAYOUT ────┐
+     *              │   Even    E    │  
+     *              │   Odd     O    │  
+     *              │   Wall    #    │  
+     *              │   Torch   *    │
+     *              └────────────────┘
      * 
      * 
      *    0  │# #     # # #       # # #     #│#
@@ -79,9 +68,10 @@ public class HallwayMaze implements Generateable {
         this.generateFloor(chunk);
         BlockState wall = TemplateBlock.WALL.getDefaultState();
         BlockState lava = Blocks.LAVA.getDefaultState();
+        Vec3i size = getSize();
 
-        for (int x = 2; x < 15; x++)
-            for (int z = 2; z < 15; z++) {
+        for (int x = 2; x < 16 * size.x - 1; x++)
+            for (int z = 2; z < 16 * size.z - 1; z++) {
 
                 boolean even = x % 2 == 0 && z % 2 == 0;
                 boolean odd = (x % 2) * (z % 2) == 0);
