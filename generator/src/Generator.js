@@ -2,9 +2,9 @@ const fs = require('fs');
 const rimraf = require('rimraf');
 const chalk = require('chalk');
 
-const success = (...s) => console.log(chalk.greenBright(['✅', ...s].join('   ')));
+const success = (...s) => console.log(chalk.greenBright(['✓', ...s].join('   ')));
 const progress = (...s) => console.log(chalk.cyanBright([...s, '...'].join(' ')));
-const error = (...s) => console.log(chalk.redBright(['❌', ...s].join('    ')));
+const error = (...s) => console.log(chalk.redBright(['✗', ...s].join('    ')));
 
 const MOD = 'dungeon';
 const assets = `${__dirname}/../../src/main/resources/assets/${MOD}`;
@@ -248,6 +248,23 @@ const Types = {
 			textures: {
 				end: `${MOD}:block/${name}_top`,
 				side: `${MOD}:block/${name}_side`
+			}
+		});
+
+	},
+
+	async cross({ name }) {
+
+		await write('blockstates', name, {
+			variants: {
+				'': { model: `${MOD}:block/${name}` }
+			}
+		});
+
+		await write('models/block', name, {
+			parent: 'block/cros',
+			textures: {
+				cross: `${MOD}:block/${name}`
 			}
 		});
 
