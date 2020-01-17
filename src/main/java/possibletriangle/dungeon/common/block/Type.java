@@ -8,6 +8,7 @@ public enum Type {
 
     FLOOR,
     WALL,
+    DIRT(TemplateGrass::new),
     PATH,
     RUNE,
     GEM,
@@ -32,7 +33,7 @@ public enum Type {
 
     FENCE,
     FLUID_UNSAFE,
-    PRESSURE_PLATE,
+    PRESSURE_PLATE(TemplatePlate::new),
     BUTTON(TemplateButton::new),
     LEVER(TemplateLever::new),
     LAMP(t -> new TemplateBlock(t, 15));
