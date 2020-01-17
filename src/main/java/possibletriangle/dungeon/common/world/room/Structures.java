@@ -44,7 +44,7 @@ public abstract class Structures {
             Vec3i size = structure.getActualSize();
             int floorHeight = DungeonSettings.FLOOR_HEIGHT;
             return size.getX() % 16 == 0 && size.getZ() % 16 == 0
-                    && size.getY() <= floorHeight || (size.getY() - floorHeight) % (floorHeight + 1) == 0;
+                    && (size.getY() - floorHeight) % (floorHeight + 1) == 0;
         }
 
         Predicate<Generateable> valid;
