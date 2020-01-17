@@ -3,6 +3,7 @@ package possibletriangle.dungeon.common;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.RedstoneLampBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.resources.IReloadableResourceManager;
@@ -86,7 +87,7 @@ public class CommonProxy {
                                         .add(Blocks.LAPIS_BLOCK, 0.1F))
                                 .forTypes(Type.GEM)
                             .put(Blocks.CHISELED_STONE_BRICKS).forTypes(Type.RUNE)
-                            .put(Blocks.REDSTONE_LAMP).forTypes(Type.LAMP)
+                            .put(Blocks.REDSTONE_LAMP.getDefaultState().with(RedstoneLampBlock.LIT, true)).forTypes(Type.LAMP)
                             .put(Blocks.STONE_SLAB).forTypes(Type.SLAB)
                             .put(Blocks.STONE_STAIRS).forTypes(Type.STAIRS)
                             .put(Blocks.MOSSY_STONE_BRICK_SLAB).forTypes(Type.SLAB_WALL)
