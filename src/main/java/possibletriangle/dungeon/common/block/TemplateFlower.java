@@ -10,7 +10,7 @@ public class TemplateFlower extends FlowerBlock implements IPlaceholder {
     private final Type type;
 
     public TemplateFlower(Type type) {
-        super(Effects.HASTE, 1, TemplateBlock.PROPERTIES);
+        super(Effects.HASTE, 1, TemplateBlock.PROPERTIES().doesNotBlockMovement());
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
     }

@@ -13,7 +13,7 @@ public class TemplateFalling extends FallingBlock implements IPlaceholder {
     private final Type type;
 
     public TemplateFalling(Type type) {
-        super(TemplateBlock.PROPERTIES);
+        super(TemplateBlock.PROPERTIES());
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
     }

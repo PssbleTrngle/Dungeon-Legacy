@@ -27,18 +27,19 @@ public class TemplateBlock extends Block implements IPlaceholder {
 
     private final Type type;
 
-    static final Properties PROPERTIES =
-            Properties.create(Material.ROCK)
+    public static Properties PROPERTIES() {
+        return Properties.create(Material.ROCK)
                 .sound(SoundType.STONE)
                 .hardnessAndResistance(1000.0F)
                 .noDrops();
+    }
 
     public TemplateBlock(Type type) {
         this(type, 0);
     }
 
     public TemplateBlock(Type type, int light) {
-        super(PROPERTIES.lightValue(light));
+        super(PROPERTIES().lightValue(light));
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
     }
