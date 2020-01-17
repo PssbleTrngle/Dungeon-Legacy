@@ -3,6 +3,7 @@ package possibletriangle.dungeon.common;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
@@ -33,35 +34,42 @@ public class DungeonCommand {
           Commands.literal(DungeonMod.MODID)
             .then(Commands.literal("room")
                 .then(Commands.literal("get")
-                    .then(Commands.argument("pos", BlockPosArgument.blockPos()))
-                        .executes(context -> {
-                            BlockPos pos = BlockPosArgument.getLoadedBlockPos(context, "pos");
-                            ChunkPos chunk = new ChunkPos(pos);
-                            CommandSource source = context.getSource();
-                            World world = source.getWorld();
-                            DungeonSettings settings = new DungeonSettings();
-
-                            Map<Integer, Generateable> rooms = DungeonChunkGenerator.roomsFor(settings, chunk, world.getSeed());
-                            int floor = pos.getY() / (DungeonSettings.FLOOR_HEIGHT + 1);
-
-                            source.sendFeedback(new StringTextComponent("Found " + rooms.size() + " rooms at " + chunk.toString()), true);
-
-                            int nextFloor = rooms.keySet().stream().filter(f -> f <= floor).min(Comparator.comparingInt(a -> a)).orElse(0);
-                            Generateable room = rooms.get(nextFloor);
-
-                            if(room != null) {
-                                source.sendFeedback(new StringTextComponent("Room on floor " + floor + ":"), true);
-                                source.sendFeedback(new StringTextComponent("Name: " + room.getMeta().display), true);
-                                source.sendFeedback(new StringTextComponent("Weight: " + room.getMeta().weight), true);
-                                source.sendFeedback(new StringTextComponent("Size: " + room.getSize().toString()), true);
-                                source.sendFeedback(new StringTextComponent("Actual Size: " + room.getActualSize().toString()), true);
-                            }
-
-                            return rooms.size();
-                        })
-                )
+                    .then(Commands.argument("pos", BlockPosArgument.blockPos())
+                        .executes(DungeonCommand::getRoom)
+                ).executes(DungeonCommand::getRoom))
             )
         );
+    }
+
+    private static int getRoom(CommandContext<CommandSource> context) {
+        CommandSource source = context.getSource();
+
+        BlockPos pos = new BlockPos(source.getPos());
+        try {
+            BlockPosArgument.getBlockPos(context, "pos");
+        } catch (CommandSyntaxException ignored) {}
+
+        ChunkPos chunk = new ChunkPos(pos);
+        World world = source.getWorld();
+        DungeonSettings settings = new DungeonSettings();
+
+        Map<Integer, Generateable> rooms = DungeonChunkGenerator.roomsFor(settings, chunk, world.getSeed());
+        int floor = pos.getY() / (DungeonSettings.FLOOR_HEIGHT + 1);
+
+        source.sendFeedback(new StringTextComponent("Found " + rooms.size() + " rooms at " + chunk.toString()), true);
+
+        int nextFloor = rooms.keySet().stream().filter(f -> f <= floor).max(Comparator.comparingInt(a -> a)).orElse(0);
+        Generateable room = rooms.get(nextFloor);
+
+        if (room != null) {
+            source.sendFeedback(new StringTextComponent("Room on floor " + nextFloor + ":"), true);
+            source.sendFeedback(new StringTextComponent("Name: " + room.getMeta().display), true);
+            source.sendFeedback(new StringTextComponent("Weight: " + room.getMeta().weight), true);
+            source.sendFeedback(new StringTextComponent("Size: " + room.getSize().toString()), true);
+            source.sendFeedback(new StringTextComponent("Actual Size: " + room.getActualSize().toString()), true);
+        }
+
+        return rooms.size();
     }
 
 }
