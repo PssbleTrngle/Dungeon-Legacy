@@ -13,7 +13,7 @@ public class TemplatePillar extends RotatedPillarBlock implements IPlaceholder {
     private final Type type;
 
     public TemplatePillar(Type type) {
-        super(TemplateBlock.PROPERTIES);
+        super(TemplateBlock.PROPERTIES());
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
     }

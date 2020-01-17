@@ -60,7 +60,7 @@ public class DungeonChunk {
             for(int i = 0; i < rotation.ordinal(); i++) d = d.rotateAround(Direction.Axis.Y);
             if(p.getAllowedValues().contains(d)) return state.with(p, d);
 
-        } else if(clazz.isInstance(Direction.Axis.X)) {
+        } else if(clazz.isInstance(Direction.Axis.X) && rotation != Rotation.NONE && rotation != rotation.CLOCKWISE_180) {
 
             IProperty<Direction.Axis> p = (IProperty<Direction.Axis>) property;
             Direction.Axis a = state.get(p);

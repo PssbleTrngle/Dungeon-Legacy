@@ -7,7 +7,7 @@ public class TemplateSlab extends SlabBlock implements IPlaceholder {
     private final Type type;
 
     public TemplateSlab(Type type) {
-        super(TemplateBlock.PROPERTIES);
+        super(TemplateBlock.PROPERTIES());
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
     }
