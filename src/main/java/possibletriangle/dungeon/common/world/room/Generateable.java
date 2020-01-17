@@ -23,11 +23,12 @@ public abstract class Generateable {
      */
     public final Vec3i getSize() {
         Vec3i actual = getActualSize();
-        return new Vec3i(actual.getX() / 16, Math.max(1, actual.getY() / (DungeonSettings.FLOOR_HEIGHT + 1)), actual.getZ() / 16);
+        int height = (actual.getY() - DungeonSettings.FLOOR_HEIGHT) / (DungeonSettings.FLOOR_HEIGHT + 1) + 1;
+        return new Vec3i(actual.getX() / 16, Math.max(1, height), actual.getZ() / 16);
     }
 
     /**
-     * X and Z are the amount of chunks, Y is the amount of floors
+     * The actual size of the structure in blocks
      * @return The amount of space required
      */
     public Vec3i getActualSize() {
