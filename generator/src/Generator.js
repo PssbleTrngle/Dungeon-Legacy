@@ -48,13 +48,17 @@ async function create(params) {
 	}
 }
 
-async function fallback({ name, type }) {
-
-	await write('blockstates', name, {
+function defaultState(name) {
+	return write('blockstates', name, {
 		variants: {
 			'': { model: `${MOD}:block/${name}` }
 		}
 	});
+}
+
+async function fallback({ name, type }) {
+
+	await defaultState(name);
 
 	await write('models/block', name, {
 		parent: `block/${type}`,
@@ -69,16 +73,16 @@ function cycleProps(props, defaults) {
 
 	const rec = (props, done = { '': defaults }) => {
 
-		const keys = Object.keys(props);
-		if (keys.length > 0) {
+		const properties = Object.keys(props);
+		if (properties.length > 0) {
 
-			const prop = keys[0];
-			const values = props[prop];
+			const property = properties[0];
+			const values = props[property];
 			const next = {};
 
 			for (let value in values) {
 
-				const v = `${prop}=${value}`;
+				const v = `${property}=${value}`;
 
 				for (let name in done) {
 
@@ -97,7 +101,7 @@ function cycleProps(props, defaults) {
 				}
 			}
 
-			delete props[prop];
+			delete props[property];
 			return rec(props, next);
 
 		}
@@ -117,9 +121,7 @@ const Types = {
 	},
 
 	async cube({ name }) {
-
 		await fallback({ name, type: 'cube_all' });
-
 	},
 
 	async stairs({ name, full }) {
@@ -143,51 +145,6 @@ const Types = {
 			inner_right: { model: n => n + '_inner' },
 			inner_left: { model: n => n + '_inner', y: y => (y + 270) % 360 },
 		}
-
-		await write('blockstates', name, {
-			variants: {
-				'facing=east,half=bottom,shape=straight': { model: `${MOD}:block/${name}` },
-				'facing=west,half=bottom,shape=straight': { model: `${MOD}:block/${name}`, y: 180, uvlock: true },
-				'facing=south,half=bottom,shape=straight': { model: `${MOD}:block/${name}`, y: 90, uvlock: true },
-				'facing=north,half=bottom,shape=straight': { model: `${MOD}:block/${name}`, y: 270, uvlock: true },
-				'facing=east,half=bottom,shape=outer_right': { model: `${MOD}:block/${name}_outer` },
-				'facing=west,half=bottom,shape=outer_right': { model: `${MOD}:block/${name}_outer`, y: 180, uvlock: true },
-				'facing=south,half=bottom,shape=outer_right': { model: `${MOD}:block/${name}_outer`, y: 90, uvlock: true },
-				'facing=north,half=bottom,shape=outer_right': { model: `${MOD}:block/${name}_outer`, y: 270, uvlock: true },
-				'facing=east,half=bottom,shape=outer_left': { model: `${MOD}:block/${name}_outer`, y: 270, uvlock: true },
-				'facing=west,half=bottom,shape=outer_left': { model: `${MOD}:block/${name}_outer`, y: 90, uvlock: true },
-				'facing=south,half=bottom,shape=outer_left': { model: `${MOD}:block/${name}_outer` },
-				'facing=north,half=bottom,shape=outer_left': { model: `${MOD}:block/${name}_outer`, y: 180, uvlock: true },
-				'facing=east,half=bottom,shape=inner_right': { model: `${MOD}:block/${name}_inner` },
-				'facing=west,half=bottom,shape=inner_right': { model: `${MOD}:block/${name}_inner`, y: 180, uvlock: true },
-				'facing=south,half=bottom,shape=inner_right': { model: `${MOD}:block/${name}_inner`, y: 90, uvlock: true },
-				'facing=north,half=bottom,shape=inner_right': { model: `${MOD}:block/${name}_inner`, y: 270, uvlock: true },
-				'facing=east,half=bottom,shape=inner_left': { model: `${MOD}:block/${name}_inner`, y: 270, uvlock: true },
-				'facing=west,half=bottom,shape=inner_left': { model: `${MOD}:block/${name}_inner`, y: 90, uvlock: true },
-				'facing=south,half=bottom,shape=inner_left': { model: `${MOD}:block/${name}_inner` },
-				'facing=north,half=bottom,shape=inner_left': { model: `${MOD}:block/${name}_inner`, y: 180, uvlock: true },
-				'facing=east,half=top,shape=straight': { model: `${MOD}:block/${name}`, x: 180, uvlock: true },
-				'facing=west,half=top,shape=straight': { model: `${MOD}:block/${name}`, x: 180, y: 180, uvlock: true },
-				'facing=south,half=top,shape=straight': { model: `${MOD}:block/${name}`, x: 180, y: 90, uvlock: true },
-				'facing=north,half=top,shape=straight': { model: `${MOD}:block/${name}`, x: 180, y: 270, uvlock: true },
-				'facing=east,half=top,shape=outer_right': { model: `${MOD}:block/${name}_outer`, x: 180, y: 90, uvlock: true },
-				'facing=west,half=top,shape=outer_right': { model: `${MOD}:block/${name}_outer`, x: 180, y: 270, uvlock: true },
-				'facing=south,half=top,shape=outer_right': { model: `${MOD}:block/${name}_outer`, x: 180, y: 180, uvlock: true },
-				'facing=north,half=top,shape=outer_right': { model: `${MOD}:block/${name}_outer`, x: 180, uvlock: true },
-				'facing=east,half=top,shape=outer_left': { model: `${MOD}:block/${name}_outer`, x: 180, uvlock: true },
-				'facing=west,half=top,shape=outer_left': { model: `${MOD}:block/${name}_outer`, x: 180, y: 180, uvlock: true },
-				'facing=south,half=top,shape=outer_left': { model: `${MOD}:block/${name}_outer`, x: 180, y: 90, uvlock: true },
-				'facing=north,half=top,shape=outer_left': { model: `${MOD}:block/${name}_outer`, x: 180, y: 270, uvlock: true },
-				'facing=east,half=top,shape=inner_right': { model: `${MOD}:block/${name}_inner`, x: 180, y: 90, uvlock: true },
-				'facing=west,half=top,shape=inner_right': { model: `${MOD}:block/${name}_inner`, x: 180, y: 270, uvlock: true },
-				'facing=south,half=top,shape=inner_right': { model: `${MOD}:block/${name}_inner`, x: 180, y: 180, uvlock: true },
-				'facing=north,half=top,shape=inner_right': { model: `${MOD}:block/${name}_inner`, x: 180, uvlock: true },
-				'facing=east,half=top,shape=inner_left': { model: `${MOD}:block/${name}_inner`, x: 180, uvlock: true },
-				'facing=west,half=top,shape=inner_left': { model: `${MOD}:block/${name}_inner`, x: 180, y: 180, uvlock: true },
-				'facing=south,half=top,shape=inner_left': { model: `${MOD}:block/${name}_inner`, x: 180, y: 90, uvlock: true },
-				'facing=north,half=top,shape=inner_left': { model: `${MOD}:block/${name}_inner`, x: 180, y: 270, uvlock: true }
-			}
-		});
 
 		await write('blockstates', name, cycleProps(
 			{ facing, shape, half },
@@ -253,16 +210,27 @@ const Types = {
 
 	},
 
-	async cross({ name }) {
+	async farmland({ name, dirt }) {
 
-		await write('blockstates', name, {
-			variants: {
-				'': { model: `${MOD}:block/${name}` }
+		await defaultState(name);
+
+		await write('models/block', name, {
+			parent: 'block/template_farmland',
+			textures: {
+				particle: `${MOD}:block/${dirt}`,
+				dirt: `${MOD}:block/${dirt}`,
+				top: `${MOD}:block/${name}`,
 			}
 		});
 
+	},
+
+	async cross({ name }) {
+
+		await defaultState(name);
+
 		await write('models/block', name, {
-			parent: 'block/cros',
+			parent: 'block/cross',
 			textures: {
 				cross: `${MOD}:block/${name}`
 			}
@@ -270,7 +238,7 @@ const Types = {
 
 	},
 
-	async grass({ name }) {
+	async grass({ name, dirt }) {
 
 		await write('blockstates', name, {
 			variants: {
@@ -286,8 +254,8 @@ const Types = {
 		await write('models/block', name, {
 			parent: 'block/cube',
 			textures: {
-				particle: `${MOD}:block/${name}_bottom`,
-				down: `${MOD}:block/${name}_bottom`,
+				particle: `${MOD}:block/${dirt}`,
+				down: `${MOD}:block/${dirt}`,
 				up: `${MOD}:block/${name}_top`,
 				north: `${MOD}:block/${name}_side`,
 				east: `${MOD}:block/${name}_side`,
@@ -296,7 +264,106 @@ const Types = {
 			}
 		});
 
-	}
+	},
+
+	async pressure_plate({ name, texture }) {
+
+		await write('blockstates', name, {
+			variants: {
+				'powered=false': { model: `${MOD}:block/${name}` },
+				'powered=true': { model: `${MOD}:block/${name}_down` }
+			}
+		});
+
+		await Promise.all([['pressure_plate_down', '_down'], ['pressure_plate_up', '']]
+			.map(([ parent, suffix ]) => 
+				write('models/block', name + suffix, {
+					parent: `block/${parent}`,
+					textures: {
+						texture: `${MOD}:block/${texture}`
+					}
+				})
+			)
+		);
+
+	},
+
+	async button({ name, texture }) {
+
+		const face = {
+			floor: {},
+			wall: { x: 90 },
+			ceiling: { x: 180, y: y => (y + 180) % 360 },
+		}
+
+		const facing = {
+			east: { y: 90 },
+			south: { y: 180 },
+			west: { y: 270 },
+			north: { y: 0 },
+		}
+
+		const powered = {
+			true: { model: n => n + '_pressed' },
+			false: {},
+		}
+
+		await write('blockstates', name, cycleProps(
+			{ facing, face, powered },
+			{ uvlock: true, model: `${MOD}:block/${name}` }
+		));
+
+		await Promise.all([['button', ''], ['button_pressed', '_pressed']]
+			.map(([ parent, suffix ]) => 
+				write('models/block', name + suffix, {
+					parent: `block/${parent}`,
+					textures: {
+						texture: `${MOD}:block/${texture}`
+					}
+				})
+			)
+		);
+
+	},
+
+	async lever({ name, stone }) {
+
+		const face = {
+			floor: {},
+			wall: { x: 90 },
+			ceiling: { x: 180, y: y => (y + 180) % 360 },
+		}
+
+		const facing = {
+			east: { y: 90 },
+			south: { y: 180 },
+			west: { y: 270 },
+			north: { y: 0 },
+		}
+
+		const powered = {
+			true: { model: n => n + '_on' },
+			false: {},
+		}
+
+		await write('blockstates', name, cycleProps(
+			{ facing, face, powered },
+			{ uvlock: true, model: `${MOD}:block/${name}` }
+		));
+
+		await Promise.all([['lever', ''], ['lever_on', '_on']]
+			.map(([ parent, suffix ]) => 
+				write('models/block', name + suffix, {
+					parent: `block/${parent}`,
+					textures: {
+						base: `${MOD}:block/${stone}`,
+						particle: `${MOD}:block/${stone}`,
+					}
+				})
+			)
+		);
+
+	},
 
 }
 
