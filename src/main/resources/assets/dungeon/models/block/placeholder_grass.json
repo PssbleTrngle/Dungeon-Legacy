@@ -1,8 +1,8 @@
 {
   "parent": "block/cube",
   "textures": {
-    "particle": "dungeon:block/placeholder_grass_bottom",
-    "down": "dungeon:block/placeholder_grass_bottom",
+    "particle": "dungeon:block/placeholder_dirt",
+    "down": "dungeon:block/placeholder_dirt",
     "up": "dungeon:block/placeholder_grass_top",
     "north": "dungeon:block/placeholder_grass_side",
     "east": "dungeon:block/placeholder_grass_side",

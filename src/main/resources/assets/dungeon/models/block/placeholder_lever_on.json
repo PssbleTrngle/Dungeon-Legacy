@@ -1,0 +1,7 @@
+{
+  "parent": "block/lever_on",
+  "textures": {
+    "base": "dungeon:block/undefined",
+    "particle": "dungeon:block/undefined"
+  }
+}
