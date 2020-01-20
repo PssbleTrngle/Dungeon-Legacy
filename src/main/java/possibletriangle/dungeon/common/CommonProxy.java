@@ -62,7 +62,6 @@ public class CommonProxy {
                     .setName(new ResourceLocation(DungeonMod.MODID, "palette"))
                     .setType(Palette.class)
                     .create();
-        public static void onNewRegistry(final RegistryEvent.NewRegistry event) {
             new RegistryBuilder<StructureType>()
                     .setName(new ResourceLocation(DungeonMod.MODID, "structure_type"))
                     .setType(StructureType.class)
