@@ -1,0 +1,28 @@
+{
+    "structure": {
+        "parts": [
+            {
+                "categories": [
+                    {
+                        "allowed": [
+                            "free"
+                        ]
+                    }
+                ],
+                "position": {
+                    "x": 3,
+                    "y": 4,
+                    "z": 3
+                },
+                "size": {
+                    "x": 3,
+                    "y": {
+                        "from": 1,
+                        "to": 4
+                    },
+                    "z": 3
+                }
+            }
+        ]
+    }
+}
