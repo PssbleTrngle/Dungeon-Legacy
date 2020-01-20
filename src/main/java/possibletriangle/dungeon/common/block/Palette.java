@@ -69,7 +69,7 @@ public class Palette extends ForgeRegistryEntry<Palette> {
      * @param random The seeded random
      */
     public static Palette random(Random random) {
-        return VALUES.next(random).orElseThrow(NullPointerExpection::new);
+        return VALUES.next(random).orElseThrow(NullPointerException::new);
     }
 
     public interface MultiConsumer<P,T> {

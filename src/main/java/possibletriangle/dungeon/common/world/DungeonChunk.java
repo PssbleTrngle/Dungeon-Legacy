@@ -36,7 +36,7 @@ public class DungeonChunk {
         this.random = random;
         this.settings = settings;
         this.palette = Palette.random(random);
-        this.placement = new PlacementSettings().setRotation(Rotation.func_222466_a(random));
+        this.placement = new PlacementSettings().setRotation(Rotation.randomRotation(random));
         //this.palette = Palette.random(random);
         //this.palette = getPos().x % 2 == getPos().z % 2 ? Palette.NATURE : Palette.NETHER;
     }
