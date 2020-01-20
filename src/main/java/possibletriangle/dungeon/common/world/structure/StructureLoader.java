@@ -44,6 +44,8 @@ public class StructureLoader extends ReloadListener<List<DungeonStructure>> {
 
         return resources.stream()
                 .map(r -> load(manager, r))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
     }
@@ -58,21 +60,21 @@ public class StructureLoader extends ReloadListener<List<DungeonStructure>> {
      * @param manager The servers resource manager
      * @param path The path pointing to the structures files
      */
-    private static List<DungeonStructure> load(IResourceManager manager, ResourceLocation path) {
+    private static Optional<List<DungeonStructure>> load(IResourceManager manager, ResourceLocation path) {
         try {
             return manager.getAllResources(path).stream().map(resource -> {
                 try {
 
-                    return readStructure(resource);
+                    return Optional.of(readStructure(resource));
 
                 } catch (IOException e) {
                     DungeonMod.LOGGER.error("Error on loading file for '{}'", path.toString());
-                    return null;
+                    return Optional.empty();
                 }
             }).filter(Objects::nonNull).collect(Collectors.toList());
         } catch (IOException ex) {
             DungeonMod.LOGGER.error("Structure '{}' not found", path.toString());
-            return Lists.newArrayList();
+            return Optional.empty();
         }
     }
 

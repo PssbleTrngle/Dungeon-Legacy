@@ -69,7 +69,7 @@ public class Palette extends ForgeRegistryEntry<Palette> {
      * @param random The seeded random
      */
     public static Palette random(Random random) {
-        return VALUES.next(random);
+        return VALUES.next(random).orElseThrow(NullPointerExpection::new);
     }
 
     public interface MultiConsumer<P,T> {
@@ -107,7 +107,7 @@ public class Palette extends ForgeRegistryEntry<Palette> {
     }
 
     public BlockState blockFor(Type type, Random random, int variant) {
-        BlockState block = blocksFor(type).next(random).apply(variant);
+        BlockState block = blocksFor(type).next(random).orElse(i -> null).apply(variant);
         if(block != null) return block;
 
         Palette parent = this.parent.get();

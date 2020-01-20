@@ -163,7 +163,7 @@ public class StructureMetadata {
                     return predicateForAll(blacklist, whitelist, JsonElement::getAsString, (String modid, GenerationContext ctx) -> ModList.get().isLoaded(modid));
 
                 default:
-                    return null;
+                    return ctx -> true;
             }
         }
 

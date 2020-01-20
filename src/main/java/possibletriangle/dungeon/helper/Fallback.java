@@ -20,6 +20,7 @@ public class Fallback implements StateProvider {
         this.providers = providers;
     }
 
+    @Nullable
     @Override
     public BlockState apply(Integer variant) {
         for(StateProvider provider : providers) {
