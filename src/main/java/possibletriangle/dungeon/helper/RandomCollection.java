@@ -3,6 +3,7 @@ package possibletriangle.dungeon.helper;
 import java.util.NavigableMap;
 import java.util.Random;
 import java.util.TreeMap;
+import java.util.Optional;
 
 public class RandomCollection<T> {
 
@@ -22,10 +23,10 @@ public class RandomCollection<T> {
         return this;
     }
 
-    public T next(Random random) {
-        if(this.total == 0) return null;
+    public Optional<T> next(Random random) {
+        if(this.total == 0) return Optional.empty();
         double value = random.nextDouble() * total;
-        return map.higherEntry(value).getValue();
+        return Optional.of(map.higherEntry(value).getValue());
     }
 
     public int size() {

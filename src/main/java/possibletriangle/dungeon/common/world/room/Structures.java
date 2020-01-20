@@ -59,6 +59,6 @@ public abstract class Structures {
      * @param random The seeded random
      */
     public static Generateable random(StructureType type, Random random) {
-        return VALUES.getOrDefault(type, new RandomCollection<>()).next(random);
+        return VALUES.getOrDefault(type, new RandomCollection<>()).next(random).orElseThrow(NullPointerExpection::new);
     }
 }
