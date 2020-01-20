@@ -26,14 +26,14 @@ public class StructureMetadata {
     public final float weight;
     public final Predicate<GenerationContext> predicate;
 
-    public StructureMetadata(float weight, String display, Predicate<GenerationContext> predicate) {
+    public StructureMetadata(float weight, String display, Predicate<GenerationContext> predicate, String... categories) {
         this.weight = weight;
         this.predicate = predicate;
         this.display = display;
     }
 
-    public StructureMetadata(float weight, String display) {
-        this(weight, display, ctx -> true);
+    public StructureMetadata(float weight, String display, String... categories) {
+        this(weight, display, ctx -> true, categories);
     }
 
     /**
@@ -55,6 +55,7 @@ public class StructureMetadata {
 
             float weight = JSONUtils.getFloat(json, "weight", 1F);
             JsonArray conditions = JSONUtils.getJsonArray(json, "conditions", new JsonArray());
+            String[] categories = arrayToStream(JSONUtils.getJsonArray(json, "categories", new JsonArray()), JsonElement::getAsString).toArray(String[]::new)
 
             String display = JSONUtils.getString(json, "name", "???");
 
@@ -75,20 +76,24 @@ public class StructureMetadata {
 
             /* Merge predicates using AND */
             Predicate<GenerationContext> predicate = predicates.stream().reduce(ctx -> true, Predicate::and, (p1, p2) -> p1);
-            return new StructureMetadata(weight, display, predicate);
+            return new StructureMetadata(weight, display, predicate, categories);
+        }
+
+        <T> Stream<T> arrayToStream(JsonArray array, Function<JsonElement, T> parse) {
+            return StreamSupport.stream(Spliterators.spliteratorUnknownSize(array.iterator(), Spliterator.ORDERED), false)
+                .map(parse)
         }
 
         /**
          * Pulls all predicates from a JsonArray
          * @param list The JsonArray containing the JsonElements
          * @param parse Function to parse a JsonElement to the required type (ex: JsonElement::getAsInt)
-         * @param single Predicate to test a single entry against the GenerationContext
+         * @param single Predicate to test a single entry against the K
          * @return A merged predicated using OR
          */
-        private <T> Predicate<GenerationContext> predicateForOne(JsonArray list, Function<JsonElement, T> parse, BiPredicate<T,GenerationContext> single) {
-            return StreamSupport.stream(Spliterators.spliteratorUnknownSize(list.iterator(), Spliterator.ORDERED), false)
-                        .map(parse)
-                        .map(i -> (Predicate<GenerationContext>) ctx -> single.test(i, ctx))
+        private <T,K> Predicate<K> predicateForOne(JsonArray list, Function<JsonElement, T> parse, BiPredicate<T,K> single) {
+            return arrayToStream(list, parse)
+                        .map(i -> (Predicate<K>) ctx -> single.test(i, ctx))
                         .reduce(ctx -> false, Predicate::or, (p1, p2) -> p1);
         }
 
@@ -96,10 +101,10 @@ public class StructureMetadata {
          * Pull predicates from either the whitelist.
          * If the provided whitelist is empty, use the blacklist
          * @param parse Function to parse a JsonElement to the required type (ex: JsonElement::getAsInt)
-         * @param single Predicate to test a single entry against the GenerationContext
+         * @param single Predicate to test a single entry against the K
          * @return A merged predicate using OR
          */
-        private <T> Predicate<GenerationContext> predicateForAll(JsonArray blacklist, JsonArray whitelist, Function<JsonElement, T> parse, BiPredicate<T,GenerationContext> single) {
+        private <T,K> Predicate<K> predicateForAll(JsonArray blacklist, JsonArray whitelist, Function<JsonElement, T> parse, BiPredicate<T,K> single) {
             if(whitelist.size() > 0)
                 return predicateForOne(whitelist, parse, single);
             else if(blacklist.size() > 0)
@@ -117,18 +122,70 @@ public class StructureMetadata {
             switch (type) {
 
                 case "floor":
-                    return predicateForAll(blacklist, whitelist, JsonElement::getAsInt, (floor, ctx) -> {
+                    return predicateForAll(blacklist, whitelist, JsonElement::getAsInt, (int floor, GenerationContext ctx) -> {
                         if(floor >= 0) return ctx.floor == floor;
                         int floors = ctx.settings.floors;
                         return ctx.floor - floors == floor;
                     });
 
                 case "mod":
-                    return predicateForAll(blacklist, whitelist, JsonElement::getAsString, (modid, ctx) -> ModList.get().isLoaded(modid));
+                    return predicateForAll(blacklist, whitelist, JsonElement::getAsString, (String modid, GenerationContext ctx) -> ModList.get().isLoaded(modid));
 
                 default:
                     return null;
             }
+        }
+
+        private Pair<Integer, Integer> getCoordinate(JsonElement element) {
+
+            if(element.isInt()) {
+
+                int i = element.getAsInt();
+                return new Pair<>(i, i);
+
+            } else if(element.JsonObect()) {
+
+                int from = JSONUtils.getInt(element, "from");
+                int to = JSONUtils.getInt(element, "to");
+
+                return new Pair<>(from, to);
+
+            }
+
+        }
+
+        private AxisAlignedBB getPos(JsonObject json) {
+
+            Pair<Integer, Integer> x = getCoordinate(json.getElement("x"));
+            Pair<Integer, Integer> y = getCoordinate(json.getElement("x"));
+            Pair<Integer, Integer> z = getCoordinate(json.getElement("x"));
+
+            return new AxisAlignedBB(x.getKey(), y.getKey(), z.getKey(), x.getValue(), y.getValue(), z.getValue());
+
+        }
+
+        private void getParts(JsonObject json) {
+
+            JsonArray parts = JSONUtils.getJsonArray(json, "parts", new JsonArray());
+            parts.forEach(part -> {
+                
+                JsonArray categories = JSONUtils.getJsonArray(part, "categories", new JsonArray());
+                Predicate<String> predicate = arrayToStream(categories, JsonElement::getAsJsonObject)
+                    .map(condition -> {
+
+                        JsonArray blacklist = JSONUtils.getJsonArray(condition, "reject", new JsonArray());
+                        JsonArray whitelist = JSONUtils.getJsonArray(condition, "allow", new JsonArray());
+                        return predicateForAll(blacklist, whitelist, JsonElement::getAsString, (String cat, String given) -> cat.equals(given));
+
+                    })
+                    .reduce(c -> true, Predicate::and, (p1, p2) -> p1);
+
+                
+                AxisAlignedBB pos = getPos(JSONUtils.getJsonObject(part, "pos", new JsonObject()));
+                AxisAlignedBB size = getPos(JSONUtils.getJsonObject(part, "size", new JsonObject()));
+
+            })
+
         }
 
     }
