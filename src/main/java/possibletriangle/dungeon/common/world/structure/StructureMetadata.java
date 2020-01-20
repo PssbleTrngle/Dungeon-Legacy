@@ -1,22 +1,29 @@
 package possibletriangle.dungeon.common.world.structure;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import javafx.util.Pair;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
 import net.minecraft.util.JSONUtils;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoader;
 import possibletriangle.dungeon.common.world.GenerationContext;
+import possibletriangle.dungeon.common.world.room.Generateable;
 import possibletriangle.dungeon.common.world.room.StructureType;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class StructureMetadata {
@@ -29,7 +36,7 @@ public class StructureMetadata {
     public final String[] categories;
     public final Part[] parts;
 
-    public static class Part implements Predicate<IGenerateable> {
+    public static class Part implements Predicate<Generateable> {
 
         private final Predicate<String[]> categories;
         private final AxisAlignedBB pos;
@@ -41,7 +48,7 @@ public class StructureMetadata {
             this.categories = categories;
         }
 
-        public boolean test(IGenerateable structure) {
+        public boolean test(Generateable structure) {
             Vec3i size = structure.getActualSize();
             return categories.test(structure.getMeta().categories)
                 && size.getX() >= this.size.minX && size.getX() <= this.size.maxX
@@ -153,14 +160,15 @@ public class StructureMetadata {
             switch (type) {
 
                 case "floor":
-                    return predicateForAll(blacklist, whitelist, JsonElement::getAsInt, (int floor, GenerationContext ctx) -> {
+                    return predicateForAll(blacklist, whitelist, JsonElement::getAsInt, (Integer floor, GenerationContext ctx) -> {
                         if(floor >= 0) return ctx.floor == floor;
                         int floors = ctx.settings.floors;
                         return ctx.floor - floors == floor;
                     });
 
                 case "mod":
-                    return predicateForAll(blacklist, whitelist, JsonElement::getAsString, (String modid, GenerationContext ctx) -> ModList.get().isLoaded(modid));
+                    return predicateForAll(blacklist, whitelist, JsonElement::getAsString,
+                            (String modid, GenerationContext ctx)-> ModList.get().isLoaded(modid));
 
                 default:
                     return ctx -> true;
@@ -168,13 +176,12 @@ public class StructureMetadata {
         }
 
         private Pair<Integer, Integer> getCoordinate(JsonElement element) {
-
-            if(element.isInt()) {
+            if(JSONUtils.isNumber(element)) {
 
                 int i = element.getAsInt();
                 return new Pair<>(i, i);
 
-            } else if(element.JsonObect()) {
+            } else if(element.isJsonObject()) {
 
                 int from = JSONUtils.getInt(element, "from");
                 int to = JSONUtils.getInt(element, "to");
@@ -183,13 +190,14 @@ public class StructureMetadata {
 
             }
 
+            return new Pair<>(0, 0);
         }
 
         private AxisAlignedBB getPos(JsonObject json) {
 
-            Pair<Integer, Integer> x = getCoordinate(json.getElement("x"));
-            Pair<Integer, Integer> y = getCoordinate(json.getElement("x"));
-            Pair<Integer, Integer> z = getCoordinate(json.getElement("x"));
+            Pair<Integer, Integer> x = getCoordinate(json.get("x"));
+            Pair<Integer, Integer> y = getCoordinate(json.get("y"));
+            Pair<Integer, Integer> z = getCoordinate(json.get("z"));
 
             return new AxisAlignedBB(x.getKey(), y.getKey(), z.getKey(), x.getValue(), y.getValue(), z.getValue());
 
@@ -200,7 +208,7 @@ public class StructureMetadata {
             List<Part> list = Lists.newArrayList();
             JsonArray parts = JSONUtils.getJsonArray(json, "parts", new JsonArray());
 
-            parts.forEach(part -> {
+            arrayToStream(parts, JsonElement::getAsJsonObject).forEach(part -> {
                 
                 JsonArray categories = JSONUtils.getJsonArray(part, "categories", new JsonArray());
                 Predicate<String[]> predicate = arrayToStream(categories, JsonElement::getAsJsonObject)
@@ -208,7 +216,7 @@ public class StructureMetadata {
 
                         JsonArray blacklist = JSONUtils.getJsonArray(condition, "reject", new JsonArray());
                         JsonArray whitelist = JSONUtils.getJsonArray(condition, "allow", new JsonArray());
-                        return predicateForAll(blacklist, whitelist, JsonElement::getAsString, (String cat, String[] given) -> given.contains(cat));
+                        return predicateForAll(blacklist, whitelist, JsonElement::getAsString, (String cat, String[] given) -> Arrays.asList(given).contains(cat));
 
                     })
                     .reduce(c -> true, Predicate::and, (p1, p2) -> p1);
@@ -217,7 +225,7 @@ public class StructureMetadata {
                 AxisAlignedBB pos = getPos(JSONUtils.getJsonObject(part, "pos", new JsonObject()));
                 AxisAlignedBB size = getPos(JSONUtils.getJsonObject(part, "size", new JsonObject()));
 
-                list.add(new Part(categories, pos, size));
+                list.add(new Part(predicate, pos, size));
 
             });
 

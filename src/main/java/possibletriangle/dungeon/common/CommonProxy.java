@@ -46,11 +46,11 @@ public class CommonProxy {
 
         Structures.clear();
 
-        Arrays.stream(StructureType.values())
+        StructureType.values().stream()
                 .map(StructureLoader::new)
                 .forEach(manager::addReloadListener);
 
-        Structures.register(new HallwayMaze(), StructureTypes.HALLWAY);
+        Structures.register(new HallwayMaze(), StructureType.HALLWAY);
 
     }
 

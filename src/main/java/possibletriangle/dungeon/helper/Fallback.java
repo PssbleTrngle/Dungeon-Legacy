@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import possibletriangle.dungeon.common.world.room.StateProvider;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.Supplier;

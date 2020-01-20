@@ -3,17 +3,21 @@ package possibletriangle.dungeon.common.world.room;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistryEntry;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.*;
 import possibletriangle.dungeon.DungeonMod;
+import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.room.StateProvider;
 import possibletriangle.dungeon.helper.BlockCollection;
 import possibletriangle.dungeon.helper.RandomCollection;
+
+import java.util.Collection;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
@@ -53,7 +57,7 @@ public class StructureType extends ForgeRegistryEntry<StructureType> {
     @ObjectHolder("base")
     public static final StructureType BASE = null;
 
-    static boolean validRoom(Generateable structure) {
+    public static boolean validRoom(Generateable structure) {
         Vec3i size = structure.getActualSize();
         int floorHeight = DungeonSettings.FLOOR_HEIGHT;
         return size.getX() % 16 == 0 && size.getZ() % 16 == 0
@@ -62,6 +66,10 @@ public class StructureType extends ForgeRegistryEntry<StructureType> {
 
     final Predicate<Generateable> valid;
     private final String customFolder;
+
+    public static Collection<StructureType> values() {
+        return GameRegistry.findRegistry(StructureType.class).getValues();
+    }
 
     public StructureType(Predicate<Generateable> valid, String customFolder) {
         this.valid = valid;
