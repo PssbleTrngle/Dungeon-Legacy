@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import javafx.util.Pair;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
 import net.minecraft.util.JSONUtils;
@@ -12,14 +13,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoader;
+import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.world.GenerationContext;
 import possibletriangle.dungeon.common.world.room.Generateable;
 import possibletriangle.dungeon.common.world.room.StructureType;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -221,12 +220,14 @@ public class StructureMetadata {
                     })
                     .reduce(c -> true, Predicate::and, (p1, p2) -> p1);
 
-                
-                AxisAlignedBB pos = getPos(JSONUtils.getJsonObject(part, "pos", new JsonObject()));
-                AxisAlignedBB size = getPos(JSONUtils.getJsonObject(part, "size", new JsonObject()));
+                try {
+                    AxisAlignedBB pos = getPos(JSONUtils.getJsonObject(part, "pos"));
+                    AxisAlignedBB size = getPos(JSONUtils.getJsonObject(part, "size"));
 
-                list.add(new Part(predicate, pos, size));
-
+                    list.add(new Part(predicate, pos, size));
+                } catch(JsonSyntaxException ex) {
+                    DungeonMod.LOGGER.error("A structure is missing position or size for a substructure part, part will be skipped");
+                }
             });
 
             return list.toArray(new Part[0]);
