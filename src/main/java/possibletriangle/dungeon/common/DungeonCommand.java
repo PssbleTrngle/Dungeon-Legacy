@@ -46,7 +46,7 @@ public class DungeonCommand {
 
         BlockPos pos = new BlockPos(source.getPos());
         try {
-            BlockPosArgument.getBlockPos(context, "pos");
+            pos = BlockPosArgument.getBlockPos(context, "pos");
         } catch (CommandSyntaxException ignored) {}
 
         ChunkPos chunk = new ChunkPos(pos);
