@@ -26,4 +26,4 @@ jobs:
     steps:
       - if: github.action == 'closed' && github.pull_request.merged == 'true'
       - uses: build
-      - run: ./gradlew runServer
+      - run: echo Release
