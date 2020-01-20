@@ -25,15 +25,41 @@ public class StructureMetadata {
     public final String display;
     public final float weight;
     public final Predicate<GenerationContext> predicate;
+    public final String[] categories;
+    public final Part[] parts;
 
-    public StructureMetadata(float weight, String display, Predicate<GenerationContext> predicate, String... categories) {
+    public static class Part implements Predicate<IGenerateable> {
+
+        private final Predicate<String[]> categories;
+        private final AxisAlignedBB pos;
+        private final AxisAlignedBB size;
+
+        public Part(Predicate<String[]> categories, AxisAlignedBB pos, AxisAlignedBB size) {
+            this.size = size;
+            this.pos = pos;
+            this.categories = categories;
+        }
+
+        test(IGenerateable structure) {
+            Vec3i size = structure.getActualSize();
+            return categories.test(structure.getMeta().categories)
+                && size.getX() >= this.size.minX && size.getX() <= this.size.maxX
+                && size.getY() >= this.size.minY && size.getY() <= this.size.maxY
+                && size.getZ() >= this.size.minZ && size.getZ() <= this.size.maxZ;
+        }
+
+    }
+
+    public StructureMetadata(float weight, String display, Predicate<GenerationContext> predicate, String[] categories, Part[] parts) {
         this.weight = weight;
         this.predicate = predicate;
         this.display = display;
+        this.categories = categories;
+        this.parts = parts;
     }
 
     public StructureMetadata(float weight, String display, String... categories) {
-        this(weight, display, ctx -> true, categories);
+        this(weight, display, ctx -> true, categories, new Part[0]);
     }
 
     /**
@@ -76,7 +102,10 @@ public class StructureMetadata {
 
             /* Merge predicates using AND */
             Predicate<GenerationContext> predicate = predicates.stream().reduce(ctx -> true, Predicate::and, (p1, p2) -> p1);
-            return new StructureMetadata(weight, display, predicate, categories);
+
+            Part[] parts = getParts(json);
+
+            return new StructureMetadata(weight, display, predicate, categories, parts);
         }
 
         <T> Stream<T> arrayToStream(JsonArray array, Function<JsonElement, T> parse) {
@@ -164,18 +193,20 @@ public class StructureMetadata {
 
         }
 
-        private void getParts(JsonObject json) {
+        private Part[] getParts(JsonObject json) {
 
+            List<Part> list = Lists.newArrayList();
             JsonArray parts = JSONUtils.getJsonArray(json, "parts", new JsonArray());
+
             parts.forEach(part -> {
                 
                 JsonArray categories = JSONUtils.getJsonArray(part, "categories", new JsonArray());
-                Predicate<String> predicate = arrayToStream(categories, JsonElement::getAsJsonObject)
+                Predicate<String[]> predicate = arrayToStream(categories, JsonElement::getAsJsonObject)
                     .map(condition -> {
 
                         JsonArray blacklist = JSONUtils.getJsonArray(condition, "reject", new JsonArray());
                         JsonArray whitelist = JSONUtils.getJsonArray(condition, "allow", new JsonArray());
-                        return predicateForAll(blacklist, whitelist, JsonElement::getAsString, (String cat, String given) -> cat.equals(given));
+                        return predicateForAll(blacklist, whitelist, JsonElement::getAsString, (String cat, String[] given) -> given.contains(cat));
 
                     })
                     .reduce(c -> true, Predicate::and, (p1, p2) -> p1);
@@ -184,7 +215,11 @@ public class StructureMetadata {
                 AxisAlignedBB pos = getPos(JSONUtils.getJsonObject(part, "pos", new JsonObject()));
                 AxisAlignedBB size = getPos(JSONUtils.getJsonObject(part, "size", new JsonObject()));
 
-            })
+                list.add(new Part(categories, pos, size));
+
+            });
+
+            return list.toArray(new Part[0]);
 
         }
 
