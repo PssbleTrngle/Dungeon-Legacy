@@ -13,6 +13,7 @@ import net.minecraft.world.gen.Heightmap;
 import possibletriangle.dungeon.common.block.TemplateBlock;
 import possibletriangle.dungeon.common.world.room.Generateable;
 import possibletriangle.dungeon.common.world.room.Structures;
+import possibletriangle.dungeon.common.world.room.StructureType;
 import possibletriangle.dungeon.common.world.wall.Wall;
 
 import java.util.HashMap;

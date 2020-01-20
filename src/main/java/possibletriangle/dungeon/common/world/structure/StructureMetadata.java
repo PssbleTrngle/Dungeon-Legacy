@@ -9,6 +9,7 @@ import net.minecraft.util.JSONUtils;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoader;
 import possibletriangle.dungeon.common.world.GenerationContext;
+import possibletriangle.dungeon.common.world.room.StructureType;
 
 import java.util.List;
 import java.util.Spliterator;

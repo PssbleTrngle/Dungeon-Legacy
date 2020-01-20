@@ -28,6 +28,7 @@ import possibletriangle.dungeon.common.world.structure.StructureLoader;
 import possibletriangle.dungeon.helper.BlockCollection;
 import possibletriangle.dungeon.helper.Variant;
 import possibletriangle.dungeon.helper.Fallback;
+import possibletriangle.dungeon.common.world.room.StructureType;
 
 import java.util.Arrays;
 import java.util.Objects;
