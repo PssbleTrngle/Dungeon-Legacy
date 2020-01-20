@@ -14,6 +14,8 @@ import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.world.room.StateProvider;
 import possibletriangle.dungeon.helper.BlockCollection;
 import possibletriangle.dungeon.helper.RandomCollection;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 import java.util.Arrays;
 import java.util.HashMap;
