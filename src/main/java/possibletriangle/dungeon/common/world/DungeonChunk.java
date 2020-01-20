@@ -13,6 +13,7 @@ import net.minecraft.world.gen.feature.template.PlacementSettings;
 import possibletriangle.dungeon.common.block.IPlaceholder;
 import possibletriangle.dungeon.common.block.Palette;
 import possibletriangle.dungeon.common.block.Type;
+import possibletriangle.dungeon.common.data.DungeonLoot;
 
 import java.util.Random;
 
@@ -37,8 +38,6 @@ public class DungeonChunk {
         this.settings = settings;
         this.palette = Palette.random(random);
         this.placement = new PlacementSettings().setRotation(Rotation.randomRotation(random));
-        //this.palette = Palette.random(random);
-        //this.palette = getPos().x % 2 == getPos().z % 2 ? Palette.NATURE : Palette.NETHER;
     }
 
     public ChunkPos getPos() {
@@ -87,11 +86,12 @@ public class DungeonChunk {
         Rotation rotation = pos.getX() * pos.getZ() == 0 ? Rotation.NONE : this.placement.getRotation();
         BlockPos rotated = this.rotate(pos, rotation, size);
         BlockPos real = getPos().asBlockPos().add(rotated);
+
         nbt.putInt("x", real.getX());
         nbt.putInt("y", real.getY());
         nbt.putInt("z", real.getZ());
 
-
+        nbt.putString("LootTable", DungeonLoot.Rarity.COMMON.path().toString());
 
         chunk.addTileEntity(nbt);
     }
