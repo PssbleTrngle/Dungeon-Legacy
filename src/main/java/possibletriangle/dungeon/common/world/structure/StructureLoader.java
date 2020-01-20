@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 
 public class StructureLoader extends ReloadListener<List<DungeonStructure>> {
 
-    private final Structures.Type type;
-    public StructureLoader(Structures.Type type) {
+    private final StructureType type;
+    public StructureLoader(StructureType type) {
         this.type = type;
     }
 
@@ -38,8 +38,8 @@ public class StructureLoader extends ReloadListener<List<DungeonStructure>> {
     @Override
     protected List<DungeonStructure> prepare(IResourceManager manager, IProfiler profiler) {
 
-        Collection<ResourceLocation> resources = manager.getAllResourceLocations("structures/" + type.name().toLowerCase(), s -> s.endsWith(".nbt"));
-        DungeonMod.LOGGER.info("Found {} structure files for type {}", resources.size(), type.name());
+        Collection<ResourceLocation> resources = manager.getAllResourceLocations("structures/" + type.folder(), s -> s.endsWith(".nbt"));
+        DungeonMod.LOGGER.info("Found {} structure files for type {}", resources.size(), type.getRegistryName());
 
         return resources.stream()
                 .map(r -> load(manager, r))

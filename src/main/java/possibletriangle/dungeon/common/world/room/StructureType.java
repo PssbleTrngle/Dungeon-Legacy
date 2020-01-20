@@ -22,35 +22,34 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @ObjectHolder(DungeonMod.MODID)
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class StructureType extends ForgeRegistryEntry<Palette> {
+public class StructureType extends ForgeRegistryEntry<StructureType> {
 
     /**
      * Every black field of a chessboard
      */
     @ObjectHolder("room")
-    public static final ROOM(Type::validRoom) = null;
+    public static final StructureType ROOM = null;
     /**
      * Every white field of a chessboard
      */
     @ObjectHolder("hallway")
-    public static final HALLWAY(Type::validRoom) = null;
+    public static final StructureType HALLWAY = null;
     /**
      * The doors used to be randomly placed at the room walls
      */
     @ObjectHolder("door")
-    public static final DOOR(s -> true) = null;
+    public static final StructureType DOOR = null;
     /**
      * Rare rooms containing a boss enemy
      * Spawning at a minimum distance from other boss rooms and the world spawn
      */
     @ObjectHolder("boss")
-    public static final BOSS(Type::validRoom) = null;
+    public static final StructureType BOSS = null;
     /**
      * Spawning at a minimum distance
      */
     @ObjectHolder("base")
-    public static final BASE(Type::validRoom) = null;
+    public static final StructureType BASE = null;
 
     static boolean validRoom(Generateable structure) {
         Vec3i size = structure.getActualSize();
@@ -59,7 +58,7 @@ public class StructureType extends ForgeRegistryEntry<Palette> {
                 && (size.getY() - floorHeight) % (floorHeight + 1) == 0;
     }
 
-    public final Predicate<Generateable> valid;
+    final Predicate<Generateable> valid;
     private final customFolder;
 
     public StructureType(Predicate<Generateable> valid, String customFolder) {
