@@ -45,10 +45,10 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
      * @param ctx The context containing the ChunkPos and the floor
      * @return The Room type used for the current chunk and floor
      */
-    private static Structures.Type typeFor(GenerationContext ctx) {
+    private static StructureType typeFor(GenerationContext ctx) {
         boolean hallway = ctx.pos.x % 2 == ctx.pos.z % 2;
-        if(hallway) return Structures.Type.HALLWAY;
-        return Structures.Type.ROOM;
+        if(hallway) return StructureType.HALLWAY;
+        return StructureType.ROOM;
     }
 
     /**
@@ -65,7 +65,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
      */
     private static Generateable roomFor(Random random, DungeonSettings settings, GenerationContext ctx) {
         Generateable structure;
-        Structures.Type type = typeFor(ctx);
+        StructureType type = typeFor(ctx);
 
         do {
             structure = Structures.random(type, random);

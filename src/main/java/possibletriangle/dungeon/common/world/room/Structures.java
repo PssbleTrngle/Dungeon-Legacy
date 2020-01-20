@@ -16,45 +16,7 @@ import java.util.function.Predicate;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public abstract class Structures {
 
-    public enum Type {
-
-        /**
-         * Every black field of a chessboard
-         */
-        ROOM(Type::validRoom),
-        /**
-         * Every white field of a chessboard
-         */
-        HALLWAY(Type::validRoom),
-        /**
-         * The doors used to be randomly placed at the room walls
-         */
-        DOOR(s -> true),
-        /**
-         * Rare rooms containing a boss enemy
-         * Spawning at a minimum distance from other boss rooms and the world spawn
-         */
-        BOSS(Type::validRoom),
-        /**
-         * Spawning at a minimum distance
-         */
-        BASE(Type::validRoom);
-
-        static boolean validRoom(Generateable structure) {
-            Vec3i size = structure.getActualSize();
-            int floorHeight = DungeonSettings.FLOOR_HEIGHT;
-            return size.getX() % 16 == 0 && size.getZ() % 16 == 0
-                    && (size.getY() - floorHeight) % (floorHeight + 1) == 0;
-        }
-
-        Predicate<Generateable> valid;
-        Type(Predicate<Generateable> valid) {
-            this.valid = valid;
-        }
-
-    }
-
-    private static final HashMap<Type, RandomCollection<Generateable>> VALUES = new HashMap<>();
+    private static final HashMap<StructureType, RandomCollection<Generateable>> VALUES = new HashMap<>();
 
     /**
      * Unload structures
@@ -78,7 +40,7 @@ public abstract class Structures {
      * @param structure The structure
      * @param type The type, defining the use of this structure
      */
-    public static void register(Generateable structure, Type type) {
+    public static void register(Generateable structure, StructureType type) {
 
         if(type.valid.test(structure)) {
 
@@ -87,7 +49,7 @@ public abstract class Structures {
             VALUES.put(type, collection);
 
         } else {
-            DungeonMod.LOGGER.error("Trying to register a structure which is invalid for type '{}': '{}'", type.name(), structure.getMeta().display);
+            DungeonMod.LOGGER.error("Trying to register a structure which is invalid for type '{}': '{}'", type.getRegistryName(), structure.getMeta().display);
         }
     }
 
@@ -96,7 +58,7 @@ public abstract class Structures {
      * @param type The structure type
      * @param random The seeded random
      */
-    public static Generateable random(Type type, Random random) {
+    public static Generateable random(StructureType type, Random random) {
         return VALUES.getOrDefault(type, new RandomCollection<>()).next(random);
     }
 }

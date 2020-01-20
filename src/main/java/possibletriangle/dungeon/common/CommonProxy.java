@@ -45,11 +45,11 @@ public class CommonProxy {
 
         Structures.clear();
 
-        Arrays.stream(Structures.Type.values())
+        Arrays.stream(StructureType.values())
                 .map(StructureLoader::new)
                 .forEach(manager::addReloadListener);
 
-        Structures.register(new HallwayMaze(), Structures.Type.HALLWAY);
+        Structures.register(new HallwayMaze(), StructureTypes.HALLWAY);
 
     }
 
@@ -72,10 +72,10 @@ public class CommonProxy {
         @SubscribeEvent
         public static void onStructureTypeRegistry(final RegistryEvent.Register<StructureType> event) {
             event.getRegistry().registerAll(
-                new StructureType(StructureType::validRoom).setRegistryName("room"),
-                new StructureType(StructureType::validRoom).setRegistryName("hallway"),
-                new StructureType(StructureType::validRoom).setRegistryName("boss"),
-                new StructureType(StructureType::validRoom).setRegistryName("base"),
+                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.MODID, "room"),
+                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.MODID, "hallway"),
+                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.MODID, "boss"),
+                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.MODID, "base"),
                 new StructureType(s -> true).setRegistryName("door/small"),
                 new StructureType(s -> true).setRegistryName("door/big")
             );
