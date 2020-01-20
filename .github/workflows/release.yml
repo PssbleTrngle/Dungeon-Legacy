@@ -5,11 +5,13 @@ on:
     branches:
     - master
 
-jobs:
+jobs: 
   build:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v1
-    - run: ./gradlew build
+    - run: |
+        chmod +x ./gradlew
+        ./gradlew build
