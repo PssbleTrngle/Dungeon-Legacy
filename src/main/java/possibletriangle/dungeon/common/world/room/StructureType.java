@@ -59,7 +59,7 @@ public class StructureType extends ForgeRegistryEntry<StructureType> {
     }
 
     final Predicate<Generateable> valid;
-    private final customFolder;
+    private final String customFolder;
 
     public StructureType(Predicate<Generateable> valid, String customFolder) {
         this.valid = valid;

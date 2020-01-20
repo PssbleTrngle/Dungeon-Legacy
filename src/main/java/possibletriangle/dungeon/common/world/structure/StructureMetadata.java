@@ -40,7 +40,7 @@ public class StructureMetadata {
             this.categories = categories;
         }
 
-        test(IGenerateable structure) {
+        public boolean test(IGenerateable structure) {
             Vec3i size = structure.getActualSize();
             return categories.test(structure.getMeta().categories)
                 && size.getX() >= this.size.minX && size.getX() <= this.size.maxX
@@ -81,7 +81,7 @@ public class StructureMetadata {
 
             float weight = JSONUtils.getFloat(json, "weight", 1F);
             JsonArray conditions = JSONUtils.getJsonArray(json, "conditions", new JsonArray());
-            String[] categories = arrayToStream(JSONUtils.getJsonArray(json, "categories", new JsonArray()), JsonElement::getAsString).toArray(String[]::new)
+            String[] categories = arrayToStream(JSONUtils.getJsonArray(json, "categories", new JsonArray()), JsonElement::getAsString).toArray(String[]::new);
 
             String display = JSONUtils.getString(json, "name", "???");
 
@@ -109,8 +109,9 @@ public class StructureMetadata {
         }
 
         <T> Stream<T> arrayToStream(JsonArray array, Function<JsonElement, T> parse) {
-            return StreamSupport.stream(Spliterators.spliteratorUnknownSize(array.iterator(), Spliterator.ORDERED), false)
-                .map(parse)
+            return StreamSupport
+                .stream(Spliterators.spliteratorUnknownSize(array.iterator(), Spliterator.ORDERED), false)
+                .map(parse);
         }
 
         /**
