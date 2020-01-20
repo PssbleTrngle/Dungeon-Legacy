@@ -62,6 +62,23 @@ public class CommonProxy {
                     .setName(new ResourceLocation(DungeonMod.MODID, "palette"))
                     .setType(Palette.class)
                     .create();
+        public static void onNewRegistry(final RegistryEvent.NewRegistry event) {
+            new RegistryBuilder<StructureType>()
+                    .setName(new ResourceLocation(DungeonMod.MODID, "structure_type"))
+                    .setType(StructureType.class)
+                    .create();
+        }
+
+        @SubscribeEvent
+        public static void onStructureTypeRegistry(final RegistryEvent.Register<StructureType> event) {
+            event.getRegistry().registerAll(
+                new StructureType(StructureType::validRoom).setRegistryName("room"),
+                new StructureType(StructureType::validRoom).setRegistryName("hallway"),
+                new StructureType(StructureType::validRoom).setRegistryName("boss"),
+                new StructureType(StructureType::validRoom).setRegistryName("base"),
+                new StructureType(s -> true).setRegistryName("door/small"),
+                new StructureType(s -> true).setRegistryName("door/big")
+            );
         }
 
         @SubscribeEvent
