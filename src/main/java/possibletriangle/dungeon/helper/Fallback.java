@@ -13,7 +13,6 @@ public class Fallback implements StateProvider {
 
     private final StateProvider[] providers;
 
-    @SafeVarargs
     public Fallback(Supplier<BlockState>... suppliers) {
         this(Arrays.stream(suppliers).map(s -> (StateProvider) i -> s.get()).toArray(StateProvider[]::new));
     }
