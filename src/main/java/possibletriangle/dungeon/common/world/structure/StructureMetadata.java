@@ -169,11 +169,24 @@ public class StructureMetadata {
                     return predicateForAll(blacklist, whitelist, JsonElement::getAsString,
                             (String modid, GenerationContext ctx)-> ModList.get().isLoaded(modid));
 
+                case "palette":
+                    return predicateForAll(blacklist, whitelist, j -> new ResourceLocation(j.getAsString()),
+                            (ResourceLocation palette, GenerationContext ctx) -> true);
+
                 default:
                     return ctx -> true;
             }
         }
 
+        /**
+         * Retrive a coordinate either in the format 
+         *        x: 0
+         * or
+         *        x: { from: 0, to: 2 }  
+         * 
+         * @param element The JSON Element to read from
+         * @return A pair representing the min and max values
+         */
         private Pair<Integer, Integer> getCoordinate(JsonElement element) {
             if(JSONUtils.isNumber(element)) {
 
