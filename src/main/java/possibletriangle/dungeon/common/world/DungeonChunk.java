@@ -21,22 +21,17 @@ public class DungeonChunk {
 
     private final IChunk chunk;
     private final Random random;
-    private int floor = 0;
     private final DungeonSettings settings;
     private final PlacementSettings placement;
     private final Palette palette;
     private int variant;
 
-    void setFloor(int floor) {
-        this.floor = floor;
-    }
-
-    public DungeonChunk(IChunk chunk, Random random, DungeonSettings settings) {
+    public DungeonChunk(IChunk chunk, Random random, GenerationContext ctx) {
         this.variant = random.nextInt(32);
         this.chunk = chunk;
         this.random = random;
-        this.settings = settings;
-        this.palette = Palette.random(random);
+        this.settings = ctx.settings;
+        this.palette = ctx.palette;
         this.placement = new PlacementSettings().setRotation(Rotation.randomRotation(random));
     }
 
@@ -133,7 +128,7 @@ public class DungeonChunk {
 
         return new BlockPos(
                 (int) (centered[0] * cos - centered[1] * sin + center),
-                in.getY() + floor * (DungeonSettings.FLOOR_HEIGHT + 1),
+                in.getY() + ctx.getFloor() * (DungeonSettings.FLOOR_HEIGHT + 1),
                 (int) (centered[0] * sin + centered[1] * cos + center)
         );
     }
