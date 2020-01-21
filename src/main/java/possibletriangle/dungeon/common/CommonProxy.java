@@ -113,6 +113,8 @@ public class CommonProxy {
                             .put(Blocks.GLASS).forTypes(Type.GLASS)
                             .put(Blocks.GRAVEL).forTypes(Type.FALLING)
                             .put(new Variant(Blocks.OAK_PLANKS, Blocks.SPRUCE_PLANKS, Blocks.DARK_OAK_PLANKS)).forTypes(Type.PLANKS)
+                            .put(new Variant(Blocks.OAK_STAIRS, Blocks.SPRUCE_STAIRS, Blocks.DARK_OAK_STAIRS)).forTypes(Type.STAIRS_WOOD)
+                            .put(new Variant(Blocks.OAK_SLAB, Blocks.SPRUCE_SLAB, Blocks.DARK_OAK_SLAB)).forTypes(Type.SLAB_WOOD)
                             .put(new Variant(Blocks.OAK_LOG, Blocks.SPRUCE_LOG, Blocks.DARK_OAK_LOG)).forTypes(Type.LOG)
                             .put(new Variant(Blocks.OAK_LEAVES, Blocks.SPRUCE_LEAVES, Blocks.DARK_OAK_LEAVES)).forTypes(Type.LEAVES)
                             .put(new Variant(Blocks.WHEAT, Blocks.POTATOES, Blocks.CARROTS, Blocks.BEETROOTS)).forTypes(Type.CROP)
@@ -124,6 +126,7 @@ public class CommonProxy {
                             .put(Blocks.LEVER).forTypes(Type.LEVER)
                             .put(Blocks.DANDELION, Blocks.POPPY, Blocks.BLUE_ORCHID, Blocks.AZURE_BLUET).forTypes(Type.PLANT)
                             .put(Blocks.STONE_BUTTON).forTypes(Type.BUTTON)
+                            .put(new Variant(Blocks.MELON, Blocks.PUMPKIN)).forTypes(Type.FRUIT)
                             .put(Blocks.POLISHED_ANDESITE).forTypes(Type.SEAL),
 
                     /* ------------------   NATURE  ------------------ */

@@ -12,6 +12,7 @@
     { "name": "placeholder_dirt", "type": "cube" },
     { "name": "placeholder_seal", "type": "cube" },
     { "name": "placeholder_leaves", "type": "cube" },
+    { "name": "placeholder_fruit", "type": "grass", "dirt": "placeholder_fruit_bottom" },
 
     { "name": "placeholder_pillar", "type": "pillar" },
     { "name": "placeholder_log", "type": "pillar" },
@@ -21,6 +22,8 @@
 	{ "name": "placeholder_stairs", "type": "stairs", "full": "placeholder_floor" },
 	{ "name": "placeholder_slab_wall", "type": "slab", "full": "placeholder_wall" },
 	{ "name": "placeholder_stairs_wall", "type": "stairs", "full": "placeholder_wall" },
+	{ "name": "placeholder_slab_wood", "type": "slab", "full": "placeholder_planks" },
+	{ "name": "placeholder_stairs_wood", "type": "stairs", "full": "placeholder_planks" },
 
 	{ "name": "placeholder_plant", "type": "cross" },
 	{ "name": "placeholder_crop", "type": "cross" },
