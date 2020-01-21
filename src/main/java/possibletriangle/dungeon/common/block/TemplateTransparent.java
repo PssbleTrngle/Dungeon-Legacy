@@ -29,17 +29,17 @@ public class TemplateTransparent extends TemplateBlock {
         return BlockRenderLayer.CUTOUT;
     }
 
-    public boolean propagatesSkylightDown(BlockState p_200123_1_, IBlockReader p_200123_2_, BlockPos p_200123_3_) {
+    public boolean propagatesSkylightDown(BlockState state, IBlockReader world, BlockPos pos) {
         return true;
     }
 
     @SuppressWarnings("deprecated")
-    public boolean causesSuffocation(BlockState p_220060_1_, IBlockReader p_220060_2_, BlockPos p_220060_3_) {
+    public boolean causesSuffocation(BlockState state, IBlockReader world, BlockPos pos) {
         return false;
     }
 
     @SuppressWarnings("deprecated")
-    public boolean isNormalCube(BlockState p_220081_1_, IBlockReader p_220081_2_, BlockPos p_220081_3_) {
+    public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
         return false;
     }
 
