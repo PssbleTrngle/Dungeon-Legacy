@@ -82,21 +82,21 @@ function cycleProps(props, defaults) {
 
 			for (let value in values) {
 
-				const v = `${property}=${value}`;
+				const key = `${property}=${value}`;
 
 				for (let name in done) {
 
-					const composedName = name.length > 0 ? `${name},${v}` : v;
-					const composedMods = { ...done[name] };
+					const composedKey = name.length > 0 ? `${name},${key}` : key;
+					const composedValues = { ...done[name] };
 
 					for (let p in values[value]) {
 						const v = values[value][p];
 						if (typeof v === 'function')
-							composedMods[p] = v(composedMods[p]);
-						else composedMods[p] = v;
+							composedValues[p] = v(composedValues[p]);
+						else composedValues[p] = v;
 					}
 
-					next[composedName] = composedMods;
+					next[composedKey] = composedValues;
 
 				}
 			}
@@ -105,11 +105,9 @@ function cycleProps(props, defaults) {
 			return rec(props, next);
 
 		}
-
 		return done;
 
 	}
-
 	return { variants: rec(props) };
 
 }
