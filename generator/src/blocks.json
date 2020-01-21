@@ -8,11 +8,11 @@
 	{ "name": "placeholder_rune", "type": "cube" },
     { "name": "placeholder_glass", "type": "cube" },
     { "name": "placeholder_falling", "type": "cube" },
-    { "name": "placeholder_grass", "type": "grass", "dirt": "placeholder_dirt" },
+    { "name": "placeholder_grass", "type": "grass", "bottom": "placeholder_dirt" },
     { "name": "placeholder_dirt", "type": "cube" },
     { "name": "placeholder_seal", "type": "cube" },
     { "name": "placeholder_leaves", "type": "cube" },
-    { "name": "placeholder_fruit", "type": "grass", "dirt": "placeholder_fruit_bottom" },
+    { "name": "placeholder_fruit", "type": "grass" },
 
     { "name": "placeholder_pillar", "type": "pillar" },
     { "name": "placeholder_log", "type": "pillar" },
