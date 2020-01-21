@@ -15,7 +15,7 @@ public abstract class Generateable {
 
     public abstract StructureMetadata getMeta();
 
-    public abstract void generate(DungeonChunk chunk, Random random, GenerationContext context);
+    public abstract void generate(DungeonChunk chunk, Random random, GenerationContext context, BlockPos at);
 
     /**
      * X and Z are the amount of chunks, Y is the amount of floors
