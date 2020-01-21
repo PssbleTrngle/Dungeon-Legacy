@@ -171,7 +171,7 @@ public class StructureMetadata {
 
                 case "palette":
                     return predicateForAll(blacklist, whitelist, j -> new ResourceLocation(j.getAsString()),
-                            (ResourceLocation palette, GenerationContext ctx) -> true);
+                            (ResourceLocation palette, GenerationContext ctx) -> ctx.palette.getResourceName().equals(palette));
 
                 default:
                     return ctx -> true;
