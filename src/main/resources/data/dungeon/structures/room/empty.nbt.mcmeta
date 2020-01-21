@@ -2,13 +2,9 @@
     "structure": {
         "parts": [
             {
-                "categories": [
-                    {
-                        "allowed": [
-                            "free"
-                        ]
-                    }
-                ],
+                "categories": {
+                    "allowed": [ "free" ]
+                },
                 "position": {
                     "x": 3,
                     "y": 4,
