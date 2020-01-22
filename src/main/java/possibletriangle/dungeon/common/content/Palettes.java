@@ -1,4 +1,4 @@
-package possibletriangle.dungeon.common;
+package possibletriangle.dungeon.common.content;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -126,7 +126,7 @@ public class Palettes {
 
             /* ------------------  SAND  ------------------ */
             new Palette(0.3F, () -> Biomes.DESERT).setRegistryName(DungeonMod.MODID, "sand")
-                    .put(Blocks.SANDSTONE_BLOCK).forTypes(Type.WALL, Type.FLOOR, Type.PILLAR)
+                    .put(Blocks.SANDSTONE).forTypes(Type.WALL, Type.FLOOR, Type.PILLAR)
                     .put(Blocks.CHISELED_SANDSTONE).forTypes(Type.RUNE)
                     .put(Blocks.SAND).forTypes(Type.PATH, Type.FALLING)
                     .put(Blocks.SANDSTONE_SLAB).forTypes(Type.SLAB, Type.SLAB_WALL)

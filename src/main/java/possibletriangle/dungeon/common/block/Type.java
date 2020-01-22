@@ -21,7 +21,6 @@ public enum Type {
     SLAB(TemplateSlab::new),
     STAIRS_WALL(TemplateStairs::new),
     SLAB_WALL(TemplateSlab::new),
-    SLAB(TemplateSlab::new),
     
     PLANKS,
     STAIRS_WOOD(TemplateStairs::new),

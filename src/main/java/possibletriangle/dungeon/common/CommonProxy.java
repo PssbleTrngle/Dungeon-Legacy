@@ -8,6 +8,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.event.RegistryEvent;
@@ -19,7 +20,10 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.registries.RegistryBuilder;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.BreakableBlock;
+import possibletriangle.dungeon.common.block.MetadataBlock;
 import possibletriangle.dungeon.common.block.Palette;
+import possibletriangle.dungeon.common.block.tile.MetadataTile;
+import possibletriangle.dungeon.common.content.Palettes;
 import possibletriangle.dungeon.common.block.Type;
 import possibletriangle.dungeon.common.world.DungeonWorldType;
 import possibletriangle.dungeon.common.world.room.HallwayMaze;
@@ -87,6 +91,15 @@ public class CommonProxy {
         }
 
         @SubscribeEvent
+        public static void onTileRegistry(final RegistryEvent.Register<TileEntityType<?>> event) {
+            event.getRegistry().register(TileEntityType.Builder.create(
+                    MetadataTile::new, MetadataBlock.METADATA_BLOCK)
+                    .build(null)
+                    .setRegistryName(DungeonMod.MODID, "metadata")
+            );
+        }
+
+        @SubscribeEvent
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
 
             Arrays.stream(Type.values())
@@ -96,7 +109,8 @@ public class CommonProxy {
             event.getRegistry().registerAll(
                 new BreakableBlock(Blocks.STONE).setRegistryName(DungeonMod.MODID, "porous_stone"),
                 new BreakableBlock(Blocks.GRAVEL).setRegistryName(DungeonMod.MODID, "gravelous_gravel"),
-                new BreakableBlock(Blocks.OAK_PLANKS).setRegistryName(DungeonMod.MODID, "morsh_wood")
+                new BreakableBlock(Blocks.OAK_PLANKS).setRegistryName(DungeonMod.MODID, "morsh_wood"),
+                new MetadataBlock().setRegistryName(DungeonMod.MODID, "metadata_block")
             );
 
         }
@@ -111,7 +125,7 @@ public class CommonProxy {
             );
 
             registerBlockItems(event,
-                Arrays.stream(new String[]{ "porous_stone", "gravelous_gravel", "morsh_wood" })
+                Arrays.stream(new String[]{ "porous_stone", "gravelous_gravel", "morsh_wood", "metadata_block" })
                     .map(name -> new ResourceLocation(DungeonMod.MODID, name))
             );
 

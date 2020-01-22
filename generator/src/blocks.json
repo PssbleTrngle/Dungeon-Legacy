@@ -12,7 +12,7 @@
     { "name": "placeholder_dirt", "type": "cube" },
     { "name": "placeholder_seal", "type": "cube" },
     { "name": "placeholder_leaves", "type": "cube" },
-    { "name": "placeholder_fruit", "type": "grass" },
+    { "name": "placeholder_fruit", "type": "grass", "bottom": "placeholder_fruit_top" },
 
     { "name": "placeholder_pillar", "type": "pillar" },
     { "name": "placeholder_log", "type": "pillar" },
@@ -30,10 +30,12 @@
 	{ "name": "placeholder_stairs_wall", "type": "stairs", "full": "placeholder_wall" },
 
 	{ "name": "placeholder_button", "type": "button", "texture": "placeholder_wall" },
-	{ "name": "placeholder_pressure_plate", "type": "pressure_plate", "texture": "placeholder_wall" },
+	{ "name": "placeholder_pressure_plate", "type": "pressure_plate", "texture": "placeholder_floor" },
 	{ "name": "placeholder_lever", "type": "lever", "stone": "placeholder_wall" },
 	
     { "name": "porous_stone", "type": "cube" },
     { "name": "gravelous_gravel", "type": "cube" },
-    { "name": "morsh_wood", "type": "cube" }
+	{ "name": "morsh_wood", "type": "cube" },
+	
+    { "name": "metadata_block", "type": "cube" }
 ]

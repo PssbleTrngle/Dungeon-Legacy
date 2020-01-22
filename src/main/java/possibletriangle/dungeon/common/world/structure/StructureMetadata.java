@@ -2,15 +2,15 @@ package possibletriangle.dungeon.common.world.structure;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import javafx.util.Pair;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoader;
 import possibletriangle.dungeon.DungeonMod;
@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class StructureMetadata {
+public class StructureMetadata implements INBTSerializable<CompoundNBT> {
 
     public static final Serializer SERIALIZER = new Serializer();
 
@@ -69,11 +69,22 @@ public class StructureMetadata {
         this(weight, display, ctx -> true, categories, new Part[0]);
     }
 
-    /**
-     * @return The default Metadata, used if a structure file does not define its own
-     */
     public static StructureMetadata getDefault() {
         return SERIALIZER.deserialize(new JsonObject());
+    }
+
+    @Override
+    public CompoundNBT serializeNBT() {
+        CompoundNBT nbt = new CompoundNBT();
+
+        nbt.putFloat("weight", weight);
+
+        return nbt;
+    }
+
+    @Override
+    public void deserializeNBT(CompoundNBT nbt) {
+        //this.weight = nbt.getFloat("weigth");
     }
 
     public static class Serializer implements IMetadataSectionSerializer<StructureMetadata> {
