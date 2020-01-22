@@ -24,7 +24,7 @@ public class BreakableBlock extends Block {
 
     public BreakableBlock(Block parent) {
         super(Block.Properties.from(parent).noDrops());
-        this.tool = tool;
+        this.tool = parent.getDefaultState().getHarvestTool();
     }
 
 }

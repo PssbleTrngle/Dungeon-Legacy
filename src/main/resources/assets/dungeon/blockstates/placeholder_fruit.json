@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "dungeon:block/placeholder_fruit"
+      },
+      {
+        "model": "dungeon:block/placeholder_fruit",
+        "y": 90
+      },
+      {
+        "model": "dungeon:block/placeholder_fruit",
+        "y": 180
+      },
+      {
+        "model": "dungeon:block/placeholder_fruit",
+        "y": 270
+      }
+    ]
+  }
+}
