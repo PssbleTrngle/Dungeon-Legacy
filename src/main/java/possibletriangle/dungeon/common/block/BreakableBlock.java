@@ -22,21 +22,9 @@ public class BreakableBlock extends Block {
 
     public final ToolType tool;
 
-    public BreakableBlock(Material material, SoundType sound, float hardness, ToolType tool) {
-        super(Properties.create(material)
-                .sound(sound)
-                .harvestTool(tool)
-                .hardnessAndResistance(hardness).noDrops()
-        );
-        this.tool = tool;
-    }
-
     public BreakableBlock(Block parent) {
-        this(parent.getDefaultState());
-    }
-
-    private BreakableBlock(BlockState parent) {
-        this(parent.getMaterial(), parent.getSoundType(), parent.getBlockHardness(null, null), parent.getHarvestTool());
+        super(Block.Properties.from(parent).noDrops());
+        this.tool = tool;
     }
 
 }

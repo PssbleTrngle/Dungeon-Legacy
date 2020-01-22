@@ -69,6 +69,11 @@ async function fallback({ name, type }) {
 
 }
 
+function* each(object) {
+	for(let key in object)
+		yield [key, object[key]];
+}
+
 function cycleProps(props, defaults) {
 
 	const rec = (props, done = { '': defaults }) => {
@@ -80,23 +85,22 @@ function cycleProps(props, defaults) {
 			const values = props[property];
 			const next = {};
 
-			for (let value in values) {
+			for (let [value, modifiers] of each(values)) {
 
-				const v = `${property}=${value}`;
+				const key = `${property}=${value}`;
 
 				for (let name in done) {
 
-					const composedName = name.length > 0 ? `${name},${v}` : v;
-					const composedMods = { ...done[name] };
+					const composedKey = name.length > 0 ? `${name},${key}` : key;
+					const composedValues = { ...done[name] };
 
-					for (let p in values[value]) {
-						const v = values[value][p];
-						if (typeof v === 'function')
-							composedMods[p] = v(composedMods[p]);
-						else composedMods[p] = v;
+					for (let [p, modifier] of each(modifiers)) {
+						if (typeof modifier === 'function')
+							composedValues[p] = modifier(composedValues[p]);
+						else composedValues[p] = modifier;
 					}
 
-					next[composedName] = composedMods;
+					next[composedKey] = composedValues;
 
 				}
 			}
@@ -105,11 +109,9 @@ function cycleProps(props, defaults) {
 			return rec(props, next);
 
 		}
-
 		return done;
 
 	}
-
 	return { variants: rec(props) };
 
 }
@@ -238,7 +240,7 @@ const Types = {
 
 	},
 
-	async grass({ name, dirt }) {
+	async grass({ name, bottom, top }) {
 
 		await write('blockstates', name, {
 			variants: {
@@ -254,9 +256,9 @@ const Types = {
 		await write('models/block', name, {
 			parent: 'block/cube',
 			textures: {
-				particle: `${MOD}:block/${dirt}`,
-				down: `${MOD}:block/${dirt}`,
-				up: `${MOD}:block/${name}_top`,
+				particle: `${MOD}:block/${bottom}`,
+				down: `${MOD}:block/${bottom || name + '_bottom'}`,
+				up: `${MOD}:block/${top || name + '_top'}`,
 				north: `${MOD}:block/${name}_side`,
 				east: `${MOD}:block/${name}_side`,
 				south: `${MOD}:block/${name}_side`,

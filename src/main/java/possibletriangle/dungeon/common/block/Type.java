@@ -8,35 +8,40 @@ public enum Type {
 
     FLOOR,
     WALL,
-    DIRT(TemplateGrass::new),
     PATH,
     RUNE,
     GEM,
-    PLANKS,
+    SEAL,
     GLASS(t -> new TemplateTransparent(t, true)),
     FALLING(TemplateFalling::new),
     PILLAR(TemplatePillar::new),
-    SEAL,
-
-    GRASS(TemplateGrass::new),
-    FARMLAND(TemplateFarmland::new),
-    LEAVES(TemplateTransparent::new),
-    LOG(TemplatePillar::new),
-
-    PLANT(TemplateFlower::new),
-    CROP(TemplateCrop::new),
+    LAMP(t -> new TemplateBlock(t, 15)),
 
     STAIRS(TemplateStairs::new),
     SLAB(TemplateSlab::new),
     STAIRS_WALL(TemplateStairs::new),
     SLAB_WALL(TemplateSlab::new),
+    SLAB(TemplateSlab::new),
+    
+    PLANKS,
+    STAIRS_WOOD(TemplateStairs::new),
+    SLAB_WOOD(TemplateSlab::new),
+    LEAVES(TemplateTransparent::new),
+    LOG(TemplatePillar::new),
+
+    DIRT(TemplateGrass::new),
+    GRASS(TemplateGrass::new),
+    FARMLAND(TemplateFarmland::new),
+    PLANT(TemplateFlower::new),
+    CROP(TemplateCrop::new),
+    FRUIT,
 
     FENCE,
     FLUID_UNSAFE,
+    
     PRESSURE_PLATE(TemplatePlate::new),
     BUTTON(TemplateButton::new),
-    LEVER(TemplateLever::new),
-    LAMP(t -> new TemplateBlock(t, 15));
+    LEVER(TemplateLever::new);
 
     private final Function<Type, Block> block;
 

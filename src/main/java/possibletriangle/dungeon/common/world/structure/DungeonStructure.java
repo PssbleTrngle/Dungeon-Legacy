@@ -45,17 +45,14 @@ public class DungeonStructure extends Generateable {
     }
 
     @Override
-    public void generate(DungeonChunk chunk, Random random, GenerationContext context) {
-        this.generate(chunk, new BlockPos(1, 0, 1));
-    }
-
-    public void generate(DungeonChunk chunk, BlockPos pos) {
+    public void generate(DungeonChunk chunk, Random random, GenerationContext context, BlockPos at) {
 
         this.blocks.forEach(l -> l.forEach(block -> {
-            BlockPos p = pos.add(block.pos);
+            BlockPos p = at.add(block.pos);
             chunk.setBlockState(p, block.state);
             if(block.nbt != null) chunk.setTileEntity(p, block.nbt);
         }));
+
     }
 
     public void read(CompoundNBT nbt) {
