@@ -33,7 +33,7 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
 
     private String display;
     private float weight;
-    private Predicate<GenerationContext> predicate;
+    private Condition<?,GenerationContext>[] conditions;
     private String[] categories;
     private Part[] parts;
 
@@ -46,7 +46,8 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
     }
 
     public Predicate<GenerationContext> getPredicate() {
-        return predicate;
+        return Arrays.stream(conditions)
+            .reduce(ctx -> true, Predicate::and, (p1, p2) -> p1);
     }
 
     public String[] getCategories() {
@@ -59,11 +60,11 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
 
     public static class Part implements Predicate<Generateable> {
 
-        private final Predicate<String[]> categories;
+        private final Condition<String,String[]> categories;
         private final AxisAlignedBB pos;
         private final AxisAlignedBB size;
 
-        public Part(Predicate<String[]> categories, AxisAlignedBB pos, AxisAlignedBB size) {
+        public Part(Condition<String,String[]> categories, AxisAlignedBB pos, AxisAlignedBB size) {
             this.size = size;
             this.pos = pos;
             this.categories = categories;
@@ -79,9 +80,60 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
 
     }
 
-    public StructureMetadata(float weight, String display, Predicate<GenerationContext> predicate, String[] categories, Part[] parts) {
+    public static class Condition<T,K> implements Predicate<K> {
+
+        public static final BiPredicate<Integer, GenerationContext> FLOOR =(floor, ctx) -> {
+            if(floor >= 0) return ctx.floor == floor;
+            int floors = ctx.settings.floors;
+            return ctx.floor - floors == floor;
+        });
+
+        public static final BiPredicate<String, GenerationContext> MOD = (modid, ctx) ->
+            ModList.get().isLoaded(modid)));
+
+        public static final BiPredicate<ResourceLocation, GenerationContext> FLOOR = (palette, ctx) ->
+            ctx.palette.getResourceName().equals(palette)));
+
+
+        private T[] allow;
+        private T[] reject;
+        private T[] required;
+        private final BiPredicate<T,K> single;
+
+        public Condition(T[] allow, T[] reject, T[] required, BiPredicate<T,K> single) {
+            this.allow = allow;
+            this.reject = reject;
+            this.required = required;
+            this.single = single;
+        }
+        
+        public boolean test(K k) {
+            return predicateForAll().test(k);
+        }
+
+        private Optional<Predicate<K>> predicateForOne(T[] array) {
+            if(list.size() == 0) return Optional.empty();
+            
+            return Optional.of(Arrays.stream(array)
+                        .map(i -> (Predicate<K>) ctx -> single.test(i, ctx))
+                        .reduce(ctx -> false, Predicate::or, (p1, p2) -> p1));
+        }
+
+        private <T,K> Predicate<K> predicateForAll() {
+           
+            Predicate<K> p1 = predicateForOne(reject).orElse(ctx -> false).negate();
+            Predicate<K> p2 = predicateForOne(allow).orElse(ctx -> true);
+            Predicate<K> p3 = predicateForOne(required.negate()).orElse(ctx -> false).negate();
+
+            return p1.and(p2).and(p3);
+
+        }
+
+    }
+
+    public StructureMetadata(float weight, String display, Condition<GeneractionContext,?> conditions, String[] categories, Part[] parts) {
         this.weight = weight;
-        this.predicate = predicate;
+        this.conditions = conditions;
         this.display = display;
         this.categories = categories;
         this.parts = parts;
@@ -127,30 +179,19 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
         public StructureMetadata deserialize(JsonObject json) {
 
             float weight = JSONUtils.getFloat(json, "weight", 1F);
-            JsonArray conditions = JSONUtils.getJsonArray(json, "conditions", new JsonArray());
+            JsonArray condtionJson = JSONUtils.getJsonArray(json, "conditions", new JsonArray());
             String[] categories = arrayToStream(JSONUtils.getJsonArray(json, "categories", new JsonArray()), JsonElement::getAsString).toArray(String[]::new);
 
             String display = JSONUtils.getString(json, "name", "???");
 
-            List<Predicate<GenerationContext>> predicates = Lists.newArrayList();
-            conditions.forEach(c -> {
-                JsonObject condition = c.getAsJsonObject();
-                if(JSONUtils.hasField(condition, "type")) {
-
-                    String type = JSONUtils.getString(condition, "type");
-
-                    Predicate<GenerationContext> predicate = getPredicate(type, condition);
-                    if(predicate != null) predicates.add(predicate);
-
-                }
-            });
-
-            /* Merge predicates using AND */
-            Predicate<GenerationContext> predicate = predicates.stream().reduce(ctx -> true, Predicate::and, (p1, p2) -> p1);
+            Condtion<GenerationContext,?>[] conditions = arrayToStream(condtionJson, JsonElement::getAsJsonObject)
+                .map(Serializer::getCondition)
+                .filter(Optional::isPresent)
+                .toArray();
 
             Part[] parts = getParts(json);
 
-            return new StructureMetadata(weight, display, predicate, categories, parts);
+            return new StructureMetadata(weight, display, conditions, categories, parts);
         }
 
         <T> Stream<T> arrayToStream(JsonArray array, Function<JsonElement, T> parse) {
@@ -159,70 +200,44 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
                 .map(parse);
         }
 
-        /**
-         * Pulls all predicates from a JsonArray
-         * @param list The JsonArray containing the JsonElements
-         * @param parse Function to parse a JsonElement to the required type (ex: JsonElement::getAsInt)
-         * @param single Predicate to test a single entry against the K
-         * @return A merged predicated using OR
-         */
-        private <T,K> Optional<Predicate<K>> predicateForOne(JsonArray list, Function<JsonElement, T> parse, BiPredicate<T,K> single) {
-            if(list.size() == 0) return Optional.empty();
-            
-            return Optional.of(arrayToStream(list, parse)
-                        .map(i -> (Predicate<K>) ctx -> single.test(i, ctx))
-                        .reduce(ctx -> false, Predicate::or, (p1, p2) -> p1));
+        private static <T> T[] parseJsonArray(JsonArray in, Function<JsonElement,T> parse) {
+            return (T[]) arrayToStream(in, parse).toArray();
+        }
+
+        private static <T,K> Condition<T,K> parseCondition(JsonArray allow, JsonArray reject, JsonArray required, BiPredicate<T,K> predicate, Function<JsonElement,T> parse) {
+            return new Condition(
+                parseJsonArray(allow, parse),
+                parseJsonArray(reject, parse),
+                parseJsonArray(required, parse),
+                predicate
+            );
         }
 
         /**
-         * Pull predicates from either the whitelist.
-         * If the provided whitelist is empty, use the blacklist
-         * @param parse Function to parse a JsonElement to the required type (ex: JsonElement::getAsInt)
-         * @param single Predicate to test a single entry against the K
-         * @return A merged predicate using OR
-         */
-        private <T,K> Predicate<K> predicateForAll(JsonObject condition, Function<JsonElement, T> parse, BiPredicate<T,K> single) {
-            
-            /* FALSE if any the predicate succeeds for any entry */
-            JsonArray reject = JSONUtils.getJsonArray(condition, "reject", new JsonArray());
-            /* TRUE if any the predicate succeeds for any entry */
-            JsonArray allow = JSONUtils.getJsonArray(condition, "allow", new JsonArray());
-            /* TRUE if all the predicate succeeds for any entry */
-            JsonArray required = JSONUtils.getJsonArray(condition, "require", new JsonArray());
-           
-            Predicate<K> p1 = predicateForOne(reject, parse, single).orElse(ctx -> false).negate();
-            Predicate<K> p2 = predicateForOne(allow, parse, single).orElse(ctx -> true);
-            Predicate<K> p3 = predicateForOne(required, parse, single.negate()).orElse(ctx -> false).negate();
-
-            return p1.and(p2).and(p3);
-
-        }
-
-        /**
-         * @param type The type of condition
+         * @param type The type of c
          * @return the predicate
          */
-        private Predicate<GenerationContext> getPredicate(String type, JsonObject condition) {
+        private static Optional<Condition<?,GenerationContext>> getCondition(JsonObject object) {
+
+            String type = JSONUtils.getString(c, "type", null);
+
+            JsonArray allow = JSONUtils.getJsonArray(object, "allow", new JsonArray());
+            JsonArray reject = JSONUtils.getJsonArray(object, "reject", new JsonArray());
+            JsonArray required = JSONUtils.getJsonArray(object, "required", new JsonArray());
 
             switch (type) {
 
                 case "floor":
-                    return predicateForAll(condition, JsonElement::getAsInt, (Integer floor, GenerationContext ctx) -> {
-                        if(floor >= 0) return ctx.floor == floor;
-                        int floors = ctx.settings.floors;
-                        return ctx.floor - floors == floor;
-                    });
+                    return Optional.of(parseCondition(allow, reject, required, Condition.FLOOR, JsonElement::getAsInt));
 
                 case "mod":
-                    return predicateForAll(condition, JsonElement::getAsString,
-                            (String modid, GenerationContext ctx)-> ModList.get().isLoaded(modid));
+                    return Optional.of(parseCondition(allow, reject, required, Condition.MOD, JsonElement::getAsString));
 
                 case "palette":
-                    return predicateForAll(condition, j -> new ResourceLocation(j.getAsString()),
-                            (ResourceLocation palette, GenerationContext ctx) -> ctx.palette.getResourceName().equals(palette));
+                    return Optional.of(parseCondition(allow, reject, required, Condition.PALETTE, e -> new ResourceLocation(e.getAsString())));
 
                 default:
-                    return ctx -> true;
+                    return Optional.empty();
             }
         }
 
@@ -235,7 +250,7 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
          * @param element The JSON Element to read from
          * @return A pair representing the min and max values
          */
-        private Pair<Integer, Integer> getCoordinate(JsonElement element) {
+        private static Pair<Integer, Integer> getCoordinate(JsonElement element) {
             if(JSONUtils.isNumber(element)) {
 
                 int i = element.getAsInt();
@@ -253,7 +268,7 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
             return new Pair<>(0, 0);
         }
 
-        private AxisAlignedBB getPos(JsonObject json) {
+        private static AxisAlignedBB getPos(JsonObject json) {
 
             Pair<Integer, Integer> x = getCoordinate(json.get("x"));
             Pair<Integer, Integer> y = getCoordinate(json.get("y"));
@@ -263,24 +278,28 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
 
         }
 
-        private Part[] getParts(JsonObject json) {
+        private static Part[] getParts(JsonObject json) {
 
             List<Part> list = Lists.newArrayList();
             JsonArray parts = JSONUtils.getJsonArray(json, "parts", new JsonArray());
 
             arrayToStream(parts, JsonElement::getAsJsonObject).forEach(part -> {
                 
-                JsonObject condition = JSONUtils.JsonObject(part, "categories", new JsonObject());
+                JsonObject c = JSONUtils.JsonObject(part, "categories", new JsonObject());
                 
-                Predicate<String[]> predicate = predicateForAll(condition, JsonElement::getAsString,
-                    (String cat, String[] given) -> Arrays.asList(given).contains(cat));
+                JsonArray allow = JSONUtils.getJsonArray(c, "allow", new JsonArray());
+                JsonArray reject = JSONUtils.getJsonArray(c, "reject", new JsonArray());
+                JsonArray required = JSONUtils.getJsonArray(c, "required", new JsonArray());
+
+                Condtion<String,String[]> condition = parseCondition(allow, reject, required, 
+                (String cat, String[] given) -> Arrays.asList(given).contains(cat), JsonElement::getAsString);
 
 
                 try {
                     AxisAlignedBB pos = getPos(JSONUtils.getJsonObject(part, "pos"));
                     AxisAlignedBB size = getPos(JSONUtils.getJsonObject(part, "size"));
 
-                    list.add(new Part(predicate, pos, size));
+                    list.add(new Part(condition, pos, size));
                 } catch(JsonSyntaxException ex) {
                     DungeonMod.LOGGER.error("A structure is missing position or size for a substructure part, part will be skipped");
                 }
