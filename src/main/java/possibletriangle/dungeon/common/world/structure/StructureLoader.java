@@ -1,10 +1,6 @@
 package possibletriangle.dungeon.common.world.structure;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.gson.JsonObject;
 import com.mojang.datafixers.DataFixer;
-import javafx.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.nbt.CompoundNBT;
@@ -18,9 +14,9 @@ import net.minecraft.util.datafix.DefaultTypeReferences;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.world.room.Structures;
 import possibletriangle.dungeon.common.world.room.StructureType;
+import possibletriangle.dungeon.common.world.structure.metadata.StructureMetadata;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 

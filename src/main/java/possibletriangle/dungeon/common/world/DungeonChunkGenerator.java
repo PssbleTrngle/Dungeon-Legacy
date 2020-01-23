@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
+import possibletriangle.dungeon.common.block.Palette;
 import possibletriangle.dungeon.common.block.TemplateBlock;
 import possibletriangle.dungeon.common.world.room.Generateable;
 import possibletriangle.dungeon.common.world.room.Structures;
@@ -56,7 +57,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
      * @return If a structure fits the current requirements, like size or the structures' conditions defined by its .mcmeta file
      */
     private static boolean fits(Generateable structure, GenerationContext ctx) {
-        return structure != null && structure.getSize().getY() <= ctx.settings.floors - ctx.floor && structure.getMeta().getPredicate().test(ctx);
+        return structure != null && structure.getSize().getY() <= ctx.settings.floors - ctx.getFloor() && structure.getMeta().getPredicate().test(ctx);
     }
 
     /**

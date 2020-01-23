@@ -21,17 +21,15 @@ public class DungeonChunk {
 
     private final IChunk chunk;
     private final Random random;
-    private final DungeonSettings settings;
     private final PlacementSettings placement;
-    private final Palette palette;
+    private final GenerationContext ctx;
     private int variant;
 
     public DungeonChunk(IChunk chunk, Random random, GenerationContext ctx) {
         this.variant = random.nextInt(32);
         this.chunk = chunk;
         this.random = random;
-        this.settings = ctx.settings;
-        this.palette = ctx.palette;
+        this.ctx = ctx;
         this.placement = new PlacementSettings().setRotation(Rotation.randomRotation(random));
     }
 
@@ -94,10 +92,10 @@ public class DungeonChunk {
     public BlockState setBlockState(BlockPos pos, BlockState state, Rotation rotation, int size) {
         if(pos.getX() * pos.getZ() == 0 && rotation != Rotation.NONE) setBlockState(pos, state, Rotation.NONE, size);
 
-        if(settings.replacePlaceholders && state.getBlock() instanceof IPlaceholder) {
+        if(ctx.settings.replacePlaceholders && state.getBlock() instanceof IPlaceholder) {
 
             Type type = ((IPlaceholder) state.getBlock()).getType();
-            BlockState replace = palette.blockFor(type, random, variant);
+            BlockState replace = ctx.palette.blockFor(type, random, variant);
 
             BlockState applied =
                     state.getProperties()
