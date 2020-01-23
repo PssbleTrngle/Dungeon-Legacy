@@ -24,6 +24,7 @@ import sun.net.ResourceManager;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.Objects;
 
 @ObjectHolder("dungeon")
 public class MetadataTile extends TileEntity {
@@ -31,7 +32,7 @@ public class MetadataTile extends TileEntity {
     @ObjectHolder("metadata")
     public static final TileEntityType<MetadataTile> TYPE = null;
 
-    private String name;
+    private String name = "";
     private StructureMetadata meta = StructureMetadata.getDefault();
 
     public String getName() {
@@ -49,17 +50,18 @@ public class MetadataTile extends TileEntity {
     public void readMeta() {
         if(!this.world.isRemote && name != null) try {
 
+            ResourceLocation n = new ResourceLocation(name);
+            ResourceLocation path = new ResourceLocation(n.getNamespace(), "structures/" + n.getPath());
             IReloadableResourceManager manager = this.world.getServer().getResourceManager();
-            manager.getAllResources(new ResourceLocation(name)).stream().map(r ->
+            manager.getAllResources(path).stream().map(r ->
                     r.getMetadata(StructureMetadata.SERIALIZER)
-            ).findFirst().ifPresent(meta -> {
-                DungeonMod.LOGGER.info("Loaded meta: {}", this.meta.serializeNBT());
+            ).filter(Objects::nonNull).findFirst().ifPresent(meta -> {
                 this.meta = meta;
                 markDirty();
             });
 
         } catch (IOException ex) {
-            DungeonMod.LOGGER.error("IOException on reloading metdata for {}", name);
+            DungeonMod.LOGGER.error("IOException on reloading metadata for {}", name, ex);
         }
     }
 
@@ -89,12 +91,16 @@ public class MetadataTile extends TileEntity {
         super.read(compound);
 
         if(compound.contains("name")) name = compound.getString("name");
+        if(compound.contains("meta")) this.meta.deserializeNBT(compound.getCompound("meta"));
     }
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
         CompoundNBT nbt = super.write(compound);
+
         if(name != null) nbt.putString("name", name);
+        nbt.put("meta", meta.serializeNBT());
+
         return nbt;
     }
 

@@ -45,11 +45,11 @@ public abstract class Structures {
         if(type.valid.test(structure)) {
 
             RandomCollection<Generateable> collection = VALUES.getOrDefault(type, new RandomCollection<>());
-            collection.add(structure, structure.getMeta().weight);
+            collection.add(structure, structure.getMeta().getWeight());
             VALUES.put(type, collection);
 
         } else {
-            DungeonMod.LOGGER.error("Trying to register a structure which is invalid for type '{}': '{}'", type.getRegistryName(), structure.getMeta().display);
+            DungeonMod.LOGGER.error("Trying to register a structure which is invalid for type '{}': '{}'", type.getRegistryName(), structure.getMeta().getDisplay());
         }
     }
 

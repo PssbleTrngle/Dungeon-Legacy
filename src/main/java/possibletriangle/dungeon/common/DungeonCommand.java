@@ -12,8 +12,10 @@ import net.minecraft.command.impl.SetBlockCommand;
 import net.minecraft.util.CachedBlockInfo;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.structure.MineshaftPieces;
@@ -22,6 +24,7 @@ import possibletriangle.dungeon.common.world.DungeonChunk;
 import possibletriangle.dungeon.common.world.DungeonChunkGenerator;
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.room.Generateable;
+import possibletriangle.dungeon.common.world.structure.StructureMetadata;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -62,11 +65,16 @@ public class DungeonCommand {
         Generateable room = rooms.get(nextFloor);
 
         if (room != null) {
-            source.sendFeedback(new StringTextComponent("Room on floor " + nextFloor + ":"), true);
-            source.sendFeedback(new StringTextComponent("Name: " + room.getMeta().display), true);
-            source.sendFeedback(new StringTextComponent("Weight: " + room.getMeta().weight), true);
-            source.sendFeedback(new StringTextComponent("Size: " + room.getSize().toString()), true);
-            source.sendFeedback(new StringTextComponent("Actual Size: " + room.getActualSize().toString()), true);
+            StructureMetadata meta = room.getMeta();
+            Vec3i size = room.getSize();
+
+            source.sendFeedback(new TranslationTextComponent("command.dungeon.get.room", meta.getDisplay()), false);
+            source.sendFeedback(new TranslationTextComponent("command.dungeon.get.floor", floor, settings.floors), false);
+            source.sendFeedback(new TranslationTextComponent("command.dungeon.get.size", size.getX(), size.getZ(), size.getY()), false);
+            source.sendFeedback(new TranslationTextComponent("command.dungeon.get.palette", "unknown"), false);
+            source.sendFeedback(new TranslationTextComponent("command.dungeon.get.weight", meta.getWeight()), false);
+        } else {
+            source.sendFeedback(new TranslationTextComponent("command.dungeon.get.no_room"), false);
         }
 
         return rooms.size();
