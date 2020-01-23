@@ -1,22 +1,17 @@
 package possibletriangle.dungeon.common;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.RedstoneLampBlock;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.resources.IResourceManager;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.registries.RegistryBuilder;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.BreakableBlock;
@@ -29,10 +24,11 @@ import possibletriangle.dungeon.common.world.DungeonWorldType;
 import possibletriangle.dungeon.common.world.room.HallwayMaze;
 import possibletriangle.dungeon.common.world.room.Structures;
 import possibletriangle.dungeon.common.world.structure.StructureLoader;
-import possibletriangle.dungeon.helper.BlockCollection;
-import possibletriangle.dungeon.helper.Variant;
-import possibletriangle.dungeon.helper.Fallback;
 import possibletriangle.dungeon.common.world.room.StructureType;
+import possibletriangle.dungeon.common.world.structure.metadata.condition.ConditionType;
+import possibletriangle.dungeon.common.world.structure.metadata.condition.FloorCondition;
+import possibletriangle.dungeon.common.world.structure.metadata.condition.ModCondition;
+import possibletriangle.dungeon.common.world.structure.metadata.condition.PaletteCondition;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -67,9 +63,15 @@ public class CommonProxy {
                     .setName(new ResourceLocation(DungeonMod.MODID, "palette"))
                     .setType(Palette.class)
                     .create();
+
             new RegistryBuilder<StructureType>()
                     .setName(new ResourceLocation(DungeonMod.MODID, "structure_type"))
                     .setType(StructureType.class)
+                    .create();
+
+            new RegistryBuilder<ConditionType>()
+                    .setName(new ResourceLocation(DungeonMod.MODID, "condition"))
+                    .setType(ConditionType.class)
                     .create();
         }
 
@@ -88,6 +90,15 @@ public class CommonProxy {
         @SubscribeEvent
         public static void onPalettesRegistry(final RegistryEvent.Register<Palette> event) {
             Palettes.register(event);
+        }
+
+        @SubscribeEvent
+        public static void onConditionRegistry(final RegistryEvent.Register<ConditionType> event) {
+            event.getRegistry().registerAll(
+                    new ModCondition().setRegistryName(DungeonMod.MODID, "mod"),
+                    new PaletteCondition().setRegistryName(DungeonMod.MODID, "palette"),
+                    new FloorCondition().setRegistryName(DungeonMod.MODID, "floor")
+            );
         }
 
         @SubscribeEvent

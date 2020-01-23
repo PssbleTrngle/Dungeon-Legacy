@@ -1,11 +1,7 @@
 package possibletriangle.dungeon;
 
-import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IFutureReloadListener;
-import net.minecraft.resources.IResourceManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,7 +12,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -24,16 +19,6 @@ import org.apache.logging.log4j.Logger;
 import possibletriangle.dungeon.common.CommonProxy;
 import possibletriangle.dungeon.common.DungeonCommand;
 import possibletriangle.dungeon.common.block.TemplateBlock;
-import possibletriangle.dungeon.common.world.room.HallwayMaze;
-import possibletriangle.dungeon.common.world.room.Structures;
-import possibletriangle.dungeon.common.world.structure.DungeonStructure;
-import possibletriangle.dungeon.common.world.structure.StructureLoader;
-import possibletriangle.dungeon.common.world.structure.StructureMetadata;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 @Mod(DungeonMod.MODID)
 public class DungeonMod {

@@ -1,6 +1,7 @@
 package possibletriangle.dungeon.common.world;
 
 import net.minecraft.util.math.ChunkPos;
+import possibletriangle.dungeon.common.block.Palette;
 
 public class GenerationContext {
 
@@ -17,14 +18,14 @@ public class GenerationContext {
     }
 
     GenerationContext(DungeonSettings settings, ChunkPos pos, Palette palette) {
-        this(0, settings, pos);
+        this(0, settings, pos, palette);
     }
 
     public int getFloor() {
         return this.floor;
     }
 
-    setFloor(int floor) {
+    void setFloor(int floor) {
         this.floor = floor;
     }
 

@@ -12,11 +12,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.gen.feature.template.Template;
-import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.world.DungeonChunk;
-import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.GenerationContext;
 import possibletriangle.dungeon.common.world.room.Generateable;
+import possibletriangle.dungeon.common.world.structure.metadata.StructureMetadata;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;

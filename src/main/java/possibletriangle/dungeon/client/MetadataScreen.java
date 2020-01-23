@@ -43,7 +43,7 @@ public class MetadataScreen extends Screen {
         this.nameEdit.setText(tile.getName());
         this.children.add(this.nameEdit);
 
-        this.categoriesEdit = new TextFieldWidget(this.font, this.width / 2 - 152, 80, 300, 20, I18n.format("metadata_block.categories")) {};
+        this.categoriesEdit = new TextFieldWidget(this.font, this.width / 2 - 152, 70, 300, 20, I18n.format("metadata_block.categories")) {};
         this.categoriesEdit.setMaxStringLength(128);
         this.categoriesEdit.setText(tile.getName());
         this.children.add(this.categoriesEdit);

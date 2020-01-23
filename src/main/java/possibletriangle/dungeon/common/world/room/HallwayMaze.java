@@ -9,7 +9,7 @@ import possibletriangle.dungeon.common.block.TemplateBlock;
 import possibletriangle.dungeon.common.world.DungeonChunk;
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.GenerationContext;
-import possibletriangle.dungeon.common.world.structure.StructureMetadata;
+import possibletriangle.dungeon.common.world.structure.metadata.StructureMetadata;
 
 import java.util.Random;
 
