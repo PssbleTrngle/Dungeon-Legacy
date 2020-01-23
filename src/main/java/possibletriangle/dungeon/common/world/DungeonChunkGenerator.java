@@ -75,6 +75,11 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
         return structure;
     }
 
+    public static Palette paletteFor(ChunkPos pos, long seed) {
+        Random random = chunkSeed(seed, pos);
+        return Palette.random(random);
+    }
+
     /**
      * Retrieves all rooms for a specific ChunkPos.
      * Can be called at any time and will always return the same rooms
@@ -87,9 +92,10 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
 
         Random random = chunkSeed(seed, pos);
         Map<Integer,Generateable> rooms = new HashMap<>();
+        GenerationContext ctx = new GenerationContext(settings, pos, paletteFor(pos, seed));
 
         for(int floor = 0; floor < settings.floors; floor++) {
-            GenerationContext ctx = new GenerationContext(floor, settings, pos);
+            ctx.setFloor(floor);
 
             Generateable room = roomFor(random, settings, ctx);
             Vec3i size = room.getSize();
@@ -110,11 +116,11 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
         Random random = chunkSeed(world.getSeed(), pos);
         DungeonSettings settings = getSettings();
 
-        DungeonChunk chunk = new DungeonChunk(ichunk, random, settings);
+        GenerationContext ctx = new GenerationContext(settings, pos, paletteFor(pos, seed));
+        DungeonChunk chunk = new DungeonChunk(ichunk, random, ctx);
         
         roomsFor(settings, pos, world.getSeed()).forEach((floor, room) -> {
-            GenerationContext ctx = new GenerationContext(floor, settings, pos);
-            chunk.setFloor(floor);
+            ctx.setFloor(floor);
             
             Vec3i size = room.getSize();
 
