@@ -80,9 +80,9 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
 
     }
 
-    public static class Condition<T,K> implements Predicate<K> {
+    public static class Condition<T,K> implements Predicate<K>, INBTSerializable {
 
-        public static final BiPredicate<Integer, GenerationContext> FLOOR =(floor, ctx) -> {
+        public static final BiPredicate<Integer, GenerationContext> FLOOR = (floor, ctx) -> {
             if(floor >= 0) return ctx.floor == floor;
             int floors = ctx.settings.floors;
             return ctx.floor - floors == floor;
@@ -106,12 +106,8 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
             this.required = required;
             this.single = single;
         }
-        
-        public boolean test(K k) {
-            return predicateForAll().test(k);
-        }
 
-        private Optional<Predicate<K>> predicateForOne(T[] array) {
+        private Optional<Predicate<K>> mergeForArray(T[] array) {
             if(list.size() == 0) return Optional.empty();
             
             return Optional.of(Arrays.stream(array)
@@ -119,14 +115,41 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
                         .reduce(ctx -> false, Predicate::or, (p1, p2) -> p1));
         }
 
-        private <T,K> Predicate<K> predicateForAll() {
-           
-            Predicate<K> p1 = predicateForOne(reject).orElse(ctx -> false).negate();
-            Predicate<K> p2 = predicateForOne(allow).orElse(ctx -> true);
-            Predicate<K> p3 = predicateForOne(required.negate()).orElse(ctx -> false).negate();
+        public boolean test(K k) {
 
-            return p1.and(p2).and(p3);
+            Predicate<K> p1 = mergeForArray(reject).orElse(ctx -> false).negate();
+            Predicate<K> p2 = mergeForArray(allow).orElse(ctx -> true);
+            Predicate<K> p3 = mergeForArray(required.negate()).orElse(ctx -> false).negate();
 
+            return p1.and(p2).and(p3).test(k);
+        }
+
+        private T[] fromList(ListNBT list) {
+            return (T[]) list.stream().map(INBT::toString).toArray();
+        }
+
+        private toList(T[] t) {
+            ListNBT list = new ListNBT();
+            list.addAll(t);
+            return list;
+        }
+
+        @Override
+        public CompoundNBT serializeNBT() {
+            CompoundNBT nbt = new CompoundNBT();
+    
+            nbt.putList("allow", toList(allow));
+            nbt.putList("reject", toList(allow));
+            nbt.putList("required", toList(required));
+    
+            return nbt;
+        }
+    
+        @Override
+        public void deserializeNBT(CompoundNBT nbt) {
+            if(nbt.contains("allow")) this.allow = fromList(nbt.getList("allow", 8));
+            if(nbt.contains("reject")) this.allow = fromList(nbt.getList("reject", 8));
+            if(nbt.contains("required")) this.allow = fromList(nbt.getList("required", 8));
         }
 
     }
@@ -185,8 +208,9 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
             String display = JSONUtils.getString(json, "name", "???");
 
             Condtion<GenerationContext,?>[] conditions = arrayToStream(condtionJson, JsonElement::getAsJsonObject)
-                .map(Serializer::getCondition)
+                .map(Serializer::getGenerationCondition)
                 .filter(Optional::isPresent)
+                .map(Optional::get)
                 .toArray();
 
             Part[] parts = getParts(json);
@@ -214,10 +238,10 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
         }
 
         /**
-         * @param type The type of c
-         * @return the predicate
+         * @param object The JSON object
+         * @return The parsed condition if valid
          */
-        private static Optional<Condition<?,GenerationContext>> getCondition(JsonObject object) {
+        private static Optional<Condition<?,GenerationContext>> getGenerationCondition(JsonObject object) {
 
             String type = JSONUtils.getString(c, "type", null);
 
