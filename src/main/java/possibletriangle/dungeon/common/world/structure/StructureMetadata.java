@@ -6,6 +6,8 @@ import com.google.gson.*;
 import javafx.util.Pair;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -29,11 +31,31 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
 
     public static final Serializer SERIALIZER = new Serializer();
 
-    public final String display;
-    public final float weight;
-    public final Predicate<GenerationContext> predicate;
-    public final String[] categories;
-    public final Part[] parts;
+    private String display;
+    private float weight;
+    private Predicate<GenerationContext> predicate;
+    private String[] categories;
+    private Part[] parts;
+
+    public String getDisplay() {
+        return display;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public Predicate<GenerationContext> getPredicate() {
+        return predicate;
+    }
+
+    public String[] getCategories() {
+        return categories;
+    }
+
+    public Part[] getParts() {
+        return parts;
+    }
 
     public static class Part implements Predicate<Generateable> {
 
@@ -78,13 +100,20 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
         CompoundNBT nbt = new CompoundNBT();
 
         nbt.putFloat("weight", weight);
+        nbt.putString("display", display);
+        ListNBT categories = new ListNBT();
+
+        Arrays.stream(this.categories).map(StringNBT::new).forEach(categories::add);
+        nbt.put("categories", categories);
 
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundNBT nbt) {
-        //this.weight = nbt.getFloat("weigth");
+        if(nbt.contains("weight")) this.weight = nbt.getFloat("weight");
+        if(nbt.contains("display")) this.display = nbt.getString("display");
+        if(nbt.contains("categories")) this.categories = nbt.getList("categories", 8).stream().map(INBT::toString).toArray(String[]::new);
     }
 
     public static class Serializer implements IMetadataSectionSerializer<StructureMetadata> {

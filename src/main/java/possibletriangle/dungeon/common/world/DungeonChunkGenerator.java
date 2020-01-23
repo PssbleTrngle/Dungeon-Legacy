@@ -56,7 +56,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
      * @return If a structure fits the current requirements, like size or the structures' conditions defined by its .mcmeta file
      */
     private static boolean fits(Generateable structure, GenerationContext ctx) {
-        return structure != null && structure.getSize().getY() <= ctx.settings.floors - ctx.floor && structure.getMeta().predicate.test(ctx);
+        return structure != null && structure.getSize().getY() <= ctx.settings.floors - ctx.floor && structure.getMeta().getPredicate().test(ctx);
     }
 
     /**

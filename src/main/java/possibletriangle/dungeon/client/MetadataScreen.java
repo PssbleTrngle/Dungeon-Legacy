@@ -15,7 +15,7 @@ import possibletriangle.dungeon.common.block.tile.MetadataTile;
 
 public class MetadataScreen extends Screen {
 
-    private TextFieldWidget nameEdit, weightEdit;
+    private TextFieldWidget nameEdit, weightEdit, categoriesEdit;
     private final MetadataTile tile;
 
     public MetadataScreen(MetadataTile tile) {
@@ -27,6 +27,7 @@ public class MetadataScreen extends Screen {
     public void tick() {
         this.nameEdit.tick();
         this.weightEdit.tick();
+        this.categoriesEdit.tick();
     }
 
     @Override
@@ -42,9 +43,14 @@ public class MetadataScreen extends Screen {
         this.nameEdit.setText(tile.getName());
         this.children.add(this.nameEdit);
 
-        this.weightEdit = new TextFieldWidget(this.font, this.width / 2 - 152, 80, 80, 20, I18n.format("structure_block.position.x"));
-        this.weightEdit.setMaxStringLength(15);
-        this.weightEdit.setText(Float.toString(tile.getMeta().weight));
+        this.categoriesEdit = new TextFieldWidget(this.font, this.width / 2 - 152, 80, 300, 20, I18n.format("metadata_block.categories")) {};
+        this.categoriesEdit.setMaxStringLength(128);
+        this.categoriesEdit.setText(tile.getName());
+        this.children.add(this.categoriesEdit);
+
+        this.weightEdit = new TextFieldWidget(this.font, this.width / 2 - 152, 100, 80, 20, I18n.format("metadata_block.weight"));
+        this.weightEdit.setMaxStringLength(6);
+        this.weightEdit.setText(Float.toString(tile.getMeta().getWeight()));
         this.children.add(this.weightEdit);
 
         this.setFocusedDefault(this.nameEdit);
@@ -63,6 +69,10 @@ public class MetadataScreen extends Screen {
 
         this.drawString(this.font, I18n.format("structure_block.structure_name"), this.width / 2 - 153, 30, 10526880);
         this.nameEdit.render(width, height, f);
+
+        this.weightEdit.render(width, height, f);
+
+        this.categoriesEdit.render(width, height, f);
 
         super.render(width, height, f);
     }

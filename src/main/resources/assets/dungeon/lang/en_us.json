@@ -38,6 +38,7 @@
 	"block.dungeon.porous_stone": "Porous Rock",
 	"block.dungeon.gravelous_gravel": "Gravelous Gravel",
 	"block.dungeon.morsh_wood": "Morsh Wood",
+	"block.dungeon.metadata_block": "Structure Metadata Block",
 
 	"generator.dungeon": "Dungeon",
 	"itemGroup.dungeon": "Dungeon",
@@ -48,9 +49,9 @@
 
 	"command.dungeon.get.room": "Looks like you are in a $s",
 	"command.dungeon.get.floor_less": "on the $i floor",
-	"command.dungeon.get.floor": "on the $i floor of $i",
+	"command.dungeon.get.floor": "on the floor $i of $i",
 	"command.dungeon.get.size": "It spans $i by $i chunks over $i floors",
-	"command.dungeon.get.palette": "The block theme can only be descibed as $s",
+	"command.dungeon.get.palette": "The block theme can only be described as $s",
 	"command.dungeon.get.weight": "I sense this room has a weight of $i",
 	"command.dungeon.get.no_dungeon": "The world or dimension you are in is not a dungeon",
 	"command.dungeon.get.no_room": "You are not in a room"
