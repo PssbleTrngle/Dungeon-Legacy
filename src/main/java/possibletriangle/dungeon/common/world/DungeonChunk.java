@@ -13,6 +13,7 @@ import net.minecraft.world.gen.feature.template.PlacementSettings;
 import possibletriangle.dungeon.common.block.IPlaceholder;
 import possibletriangle.dungeon.common.block.Palette;
 import possibletriangle.dungeon.common.block.Type;
+import possibletriangle.dungeon.common.data.DungeonLoot;
 
 import java.util.Random;
 
@@ -20,25 +21,18 @@ public class DungeonChunk {
 
     private final IChunk chunk;
     private final Random random;
-    private int floor = 0;
     private final DungeonSettings settings;
     private final PlacementSettings placement;
     private final Palette palette;
     private int variant;
 
-    void setFloor(int floor) {
-        this.floor = floor;
-    }
-
-    public DungeonChunk(IChunk chunk, Random random, DungeonSettings settings) {
+    public DungeonChunk(IChunk chunk, Random random, GenerationContext ctx) {
         this.variant = random.nextInt(32);
         this.chunk = chunk;
         this.random = random;
-        this.settings = settings;
-        this.palette = Palette.random(random);
+        this.settings = ctx.settings;
+        this.palette = ctx.palette;
         this.placement = new PlacementSettings().setRotation(Rotation.randomRotation(random));
-        //this.palette = Palette.random(random);
-        //this.palette = getPos().x % 2 == getPos().z % 2 ? Palette.NATURE : Palette.NETHER;
     }
 
     public ChunkPos getPos() {
@@ -87,11 +81,12 @@ public class DungeonChunk {
         Rotation rotation = pos.getX() * pos.getZ() == 0 ? Rotation.NONE : this.placement.getRotation();
         BlockPos rotated = this.rotate(pos, rotation, size);
         BlockPos real = getPos().asBlockPos().add(rotated);
+
         nbt.putInt("x", real.getX());
         nbt.putInt("y", real.getY());
         nbt.putInt("z", real.getZ());
 
-
+        nbt.putString("LootTable", DungeonLoot.Rarity.COMMON.path().toString());
 
         chunk.addTileEntity(nbt);
     }
@@ -133,7 +128,7 @@ public class DungeonChunk {
 
         return new BlockPos(
                 (int) (centered[0] * cos - centered[1] * sin + center),
-                in.getY() + floor * (DungeonSettings.FLOOR_HEIGHT + 1),
+                in.getY() + ctx.getFloor() * (DungeonSettings.FLOOR_HEIGHT + 1),
                 (int) (centered[0] * sin + centered[1] * cos + center)
         );
     }
