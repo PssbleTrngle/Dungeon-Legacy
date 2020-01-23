@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.WorldGenRegion;
 import possibletriangle.dungeon.common.block.Palette;
 import possibletriangle.dungeon.common.block.TemplateBlock;
 import possibletriangle.dungeon.common.world.room.Generateable;
@@ -47,9 +48,9 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
      * @param ctx The context containing the ChunkPos and the floor
      * @return The Room type used for the current chunk and floor
      */
-    private static StructureType typeFor(GenerationContext ctx) {
-        boolean hallway = ctx.pos.x % 2 == ctx.pos.z % 2;
-        if(hallway) return StructureType.HALLWAY;
+    private static StructureType typeFor(GenerationContext ctx, Random random) {
+        boolean even = ctx.pos.x % 2 == ctx.pos.z % 2;
+        if(even || random.nextInt(3) == 0) return StructureType.HALLWAY;
         return StructureType.ROOM;
     }
 
@@ -65,9 +66,9 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
      * @param ctx The context containing the ChunkPos and the floor
      * @return The found structure
      */
-    private static Generateable roomFor(Random random, DungeonSettings settings, GenerationContext ctx) {
+    private static Generateable roomFor(Random random, GenerationContext ctx) {
         Generateable structure;
-        StructureType type = typeFor(ctx);
+        StructureType type = typeFor(ctx, random);
 
         do {
             structure = Structures.random(type, random);
@@ -98,7 +99,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
         for(int floor = 0; floor < settings.floors; floor++) {
             ctx.setFloor(floor);
 
-            Generateable room = roomFor(random, settings, ctx);
+            Generateable room = roomFor(random, ctx);
             Vec3i size = room.getSize();
             rooms.put(floor, room);
 
@@ -126,7 +127,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
             Vec3i size = room.getSize();
 
             /* Generate Room and Wall */
-            room.generate(chunk, random, ctx, new BlockPos(0, 0, 0));
+            room.generate(chunk, random, ctx, new BlockPos(1, 0, 1));
             Wall.generate(chunk, size.getY(), random, settings);
 
             this.generateCeiling(floor, size.getY(), chunk);
@@ -148,7 +149,8 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
         for(int x = 0; x < 16; x++)
             for(int z = 0; z < 16; z++) {
                 BlockPos p = new BlockPos(x, (DungeonSettings.FLOOR_HEIGHT + 1) * (height - 1) + DungeonSettings.FLOOR_HEIGHT, z);
-                chunk.setBlockState(p, ceiling);
+                if(!chunk.getBlockState(p).isSolid())
+                    chunk.setBlockState(p, ceiling);
             }
     }
 
@@ -156,4 +158,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
     public int func_222529_a(int i, int i1, Heightmap.Type type) {
         return 0;
     }
+
+    @Override
+    public void decorate(WorldGenRegion region) {}
 }

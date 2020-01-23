@@ -59,9 +59,7 @@ public class StructureType extends ForgeRegistryEntry<StructureType> {
 
     public static boolean validRoom(Generateable structure) {
         Vec3i size = structure.getActualSize();
-        int floorHeight = DungeonSettings.FLOOR_HEIGHT;
-        return size.getX() % 16 == 0 && size.getZ() % 16 == 0
-                && (size.getY() - floorHeight) % (floorHeight + 1) == 0;
+        return size.getX() % 16 == 0 && size.getZ() % 16 == 0 && structure.getSize().getY() > 0;
     }
 
     final Predicate<Generateable> valid;

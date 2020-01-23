@@ -3,6 +3,7 @@ package possibletriangle.dungeon.common.world.structure.metadata.condition;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.world.GenerationContext;
 
 import java.util.Optional;
@@ -19,13 +20,13 @@ public class GenerationCondition extends Condition<GenerationContext> {
 
     @Override
     protected BiPredicate<String, GenerationContext> getPredicate() {
-        return null;
+        return Optional.ofNullable((BiPredicate<String, GenerationContext>) this.type).orElse((s, ctx) -> true);
     }
 
     public void setType(ResourceLocation name) {
-        Optional.ofNullable(GameRegistry.findRegistry(ConditionType.class).getValue(name)).ifPresent(
-                type -> this.type = type
-        );
+        ConditionType type = GameRegistry.findRegistry(ConditionType.class).getValue(name);
+        if(type != null) this.type = type;
+        else DungeonMod.LOGGER.error("Condition Type {} could not be found", name.toString());
     }
 
     @Override
