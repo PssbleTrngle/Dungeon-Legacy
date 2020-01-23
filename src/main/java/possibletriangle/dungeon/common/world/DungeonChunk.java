@@ -144,6 +144,6 @@ public class DungeonChunk {
     }
 
     public BlockState getBlockState(BlockPos pos) {
-        return chunk.getBlockState(pos);
+        return chunk.getBlockState(rotate(pos, this.placement.getRotation(), 1));
     }
 }

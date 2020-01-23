@@ -30,15 +30,10 @@
 	"block.dungeon.placeholder_button": "Placeholder (Button)",
 	"block.dungeon.placeholder_lever": "Placeholder (Lever)",
 
-	"block.dungeon.spawn": "Spawn",
-	"block.dungeon.fake_wall": "Fake Wall",
-	"block.dungeon.fake_wall_sided": "Fake Wall (Sided)",
-	"block.dungeon.redstone_link": "Redstone Link",
-
 	"block.dungeon.porous_stone": "Porous Rock",
 	"block.dungeon.gravelous_gravel": "Gravelous Gravel",
 	"block.dungeon.morsh_wood": "Morsh Wood",
-	"block.dungeon.metadata_block": "Structure Metadata Block",
+	"block.dungeon.metadata_block": "\u00A7dStructure Metadata Block",
 
 	"generator.dungeon": "Dungeon",
 	"itemGroup.dungeon": "Dungeon",
@@ -47,12 +42,12 @@
 	"entity.dungeon.curse_normal": "Curse",
 	"entity.dungeon.curse_fast": "Curse",
 
-	"command.dungeon.get.room": "Looks like you are in a $s",
-	"command.dungeon.get.floor_less": "on the $i floor",
-	"command.dungeon.get.floor": "on the floor $i of $i",
-	"command.dungeon.get.size": "It spans $i by $i chunks over $i floors",
-	"command.dungeon.get.palette": "The block theme can only be described as $s",
-	"command.dungeon.get.weight": "I sense this room has a weight of $i",
-	"command.dungeon.get.no_dungeon": "The world or dimension you are in is not a dungeon",
-	"command.dungeon.get.no_room": "You are not in a room"
+	"command.dungeon.get.room": "\u00A7bLooks like you are in a \u00A76%s",
+	"command.dungeon.get.floor_less": "\u00A7bon the \u00A76%i floor",
+	"command.dungeon.get.floor": "\u00A7bon the floor \u00A76%i of \u00A76%i",
+	"command.dungeon.get.size": "\u00A7bIt spans \u00A76%i by %i chunks over \u00A76%i floors",
+	"command.dungeon.get.palette": "\u00A7bThe block theme can only be described as \u00A76%s",
+	"command.dungeon.get.weight": "\u00A7bI sense this room has a weight of \u00A76%i",
+	"command.dungeon.get.no_dungeon": "\u00A7cThe world or dimension you are in is not a dungeon",
+	"command.dungeon.get.no_room": "\u00A7cYou are not in a room"
 }

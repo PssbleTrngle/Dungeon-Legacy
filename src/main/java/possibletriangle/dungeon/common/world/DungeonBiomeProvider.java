@@ -18,7 +18,9 @@ import java.util.*;
 public class DungeonBiomeProvider extends OverworldBiomeProvider {
 
     public DungeonBiomeProvider(World world) {
-        super(new OverworldBiomeProviderSettings().setWorldInfo(world.getWorldInfo()).setGeneratorSettings(new OverworldGenSettings()));
+        super(new OverworldBiomeProviderSettings()
+                .setWorldInfo(world.getWorldInfo())
+                .setGeneratorSettings(new OverworldGenSettings()));
     }
 
 }
