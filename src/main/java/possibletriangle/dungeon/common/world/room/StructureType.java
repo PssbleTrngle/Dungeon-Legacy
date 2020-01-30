@@ -43,8 +43,10 @@ public class StructureType extends ForgeRegistryEntry<StructureType> {
     /**
      * The doors used to be randomly placed at the room walls
      */
-    @ObjectHolder("door")
-    public static final StructureType DOOR = null;
+    @ObjectHolder("door/big")
+    public static final StructureType BIG_DOOR = null;
+    @ObjectHolder("door/small")
+    public static final StructureType SMALL_DOOR = null;
     /**
      * Rare rooms containing a boss enemy
      * Spawning at a minimum distance from other boss rooms and the world spawn
@@ -57,9 +59,18 @@ public class StructureType extends ForgeRegistryEntry<StructureType> {
     @ObjectHolder("base")
     public static final StructureType BASE = null;
 
+    public static Predicate<Generateable> hasSize(int x, int y, int z) {
+        return structure -> {
+            Vec3i size = structure.getActualSize();
+            return size.getX() == x && size.getZ() == z && size.getY() == y;
+        };
+    }
+
     public static boolean validRoom(Generateable structure) {
         Vec3i size = structure.getActualSize();
-        return size.getX() % 16 == 0 && size.getZ() % 16 == 0 && structure.getSize().getY() > 0;
+        boolean x = (size.getZ() - 15) % 16 == 0;
+        boolean z = (size.getZ() - 15) % 16 == 0;
+        return x && z && structure.getSize().getY() > 0;
     }
 
     final Predicate<Generateable> valid;

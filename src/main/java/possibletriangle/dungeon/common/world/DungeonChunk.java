@@ -1,6 +1,7 @@
 package possibletriangle.dungeon.common.world;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.Direction;
@@ -26,11 +27,19 @@ public class DungeonChunk {
     private int variant;
 
     public DungeonChunk(IChunk chunk, Random random, GenerationContext ctx) {
-        this.variant = random.nextInt(32);
+        this(random.nextInt(32), chunk, random, ctx, new PlacementSettings().setRotation(Rotation.randomRotation(random)));
+    }
+
+    private DungeonChunk(int variant, IChunk chunk, Random random, GenerationContext ctx, PlacementSettings placement) {
+        this.variant = variant;
         this.chunk = chunk;
         this.random = random;
         this.ctx = ctx;
-        this.placement = new PlacementSettings().setRotation(Rotation.randomRotation(random));
+        this.placement = placement;
+    }
+
+    public DungeonChunk with(Rotation rotation) {
+        return new DungeonChunk(variant, chunk, random, ctx, placement.setRotation(rotation));
     }
 
     public ChunkPos getPos() {
@@ -89,8 +98,8 @@ public class DungeonChunk {
         chunk.addTileEntity(nbt);
     }
 
-    public BlockState setBlockState(BlockPos pos, BlockState state, Rotation rotation, int size) {
-        if(pos.getX() * pos.getZ() == 0 && rotation != Rotation.NONE) setBlockState(pos, state, Rotation.NONE, size);
+    public BlockState setBlockState(BlockPos pos, BlockState state, Rotation rotation) {
+        if(pos.getX() * pos.getZ() == 0 && rotation != Rotation.NONE) setBlockState(pos, state, Rotation.NONE);
 
         if(ctx.settings.replacePlaceholders && state.getBlock() instanceof IPlaceholder) {
 
@@ -111,7 +120,7 @@ public class DungeonChunk {
                             .stream()
                             .reduce(state, (s, p) -> rotateProperty(s, p, rotation), (a, b) -> a);
 
-            BlockPos rotated = this.rotate(pos, rotation, size);
+            BlockPos rotated = this.rotate(pos, rotation, 1);
             return chunk.setBlockState(rotated, rotatedState, false);
         }
     }
@@ -129,14 +138,6 @@ public class DungeonChunk {
                 in.getY() + ctx.getFloor() * (DungeonSettings.FLOOR_HEIGHT + 1),
                 (int) (centered[0] * sin + centered[1] * cos + center)
         );
-    }
-
-    public BlockState setBlockState(BlockPos pos, BlockState state, int size) {
-        return setBlockState(pos, state, this.placement.getRotation(), size);
-    }
-
-    public BlockState setBlockState(BlockPos pos, BlockState state, Rotation rotation) {
-        return setBlockState(pos, state, rotation, 1);
     }
 
     public BlockState setBlockState(BlockPos pos, BlockState state) {

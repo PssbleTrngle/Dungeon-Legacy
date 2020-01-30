@@ -24,7 +24,9 @@ public abstract class Generateable {
     public final Vec3i getSize() {
         Vec3i actual = getActualSize();
         int height = (actual.getY() - DungeonSettings.FLOOR_HEIGHT) / (DungeonSettings.FLOOR_HEIGHT + 1) + 1;
-        return new Vec3i(actual.getX() / 16, Math.max(1, height), actual.getZ() / 16);
+        int x = (actual.getZ() - 15) / 16 + 1;
+        int z = (actual.getZ() - 15) / 16 + 1;
+        return new Vec3i(x, Math.max(1, height), z);
     }
 
     /**
