@@ -1,9 +1,12 @@
 {
     "structure": {
+        "weight": 0,
         "parts": [
             {
                 "categories": {
-                    "allowed": [ "free" ]
+                    "allowed": [
+                        "free"
+                    ]
                 },
                 "position": {
                     "x": 3,

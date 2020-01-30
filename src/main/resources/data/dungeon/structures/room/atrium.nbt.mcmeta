@@ -1,6 +1,5 @@
 {
     "structure": {
-        "weight": 20,
         "conditions": [
             {
                 "type": "floor",
