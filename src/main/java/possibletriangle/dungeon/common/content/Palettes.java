@@ -82,7 +82,9 @@ public class Palettes {
                     .put(Blocks.DANDELION, Blocks.POPPY, Blocks.BLUE_ORCHID, Blocks.AZURE_BLUET).forTypes(Type.PLANT)
                     .put(Blocks.STONE_BUTTON).forTypes(Type.BUTTON)
                     .put(new Variant(Blocks.MELON, Blocks.PUMPKIN)).forTypes(Type.FRUIT)
-                    .put(Blocks.POLISHED_ANDESITE).forTypes(Type.SEAL),
+                    .put(Blocks.POLISHED_ANDESITE).forTypes(Type.SEAL)
+                    .put(Blocks.BOOKSHELF).forTypes(Type.BOOKSHELF)
+                    .put(new Variant(Blocks.STRIPPED_OAK_LOG, Blocks.STRIPPED_SPRUCE_LOG, Blocks.STRIPPED_DARK_OAK_LOG)).forTypes(Type.STRIPPED_LOG),
 
             /* ------------------   NATURE  ------------------ */
             new Palette(1F, () -> Biomes.FOREST).setRegistryName(DungeonMod.MODID, "nature")

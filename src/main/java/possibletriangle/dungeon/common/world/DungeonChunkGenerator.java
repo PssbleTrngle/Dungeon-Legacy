@@ -128,7 +128,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
 
             /* Generate Room and Wall */
             room.generate(chunk, random, ctx, new BlockPos(1, 0, 1));
-            Wall.generate(chunk, size.getY(), random, settings);
+            Wall.generate(chunk, size.getY(), random, ctx);
 
             this.generateCeiling(floor, size.getY(), chunk);
         });

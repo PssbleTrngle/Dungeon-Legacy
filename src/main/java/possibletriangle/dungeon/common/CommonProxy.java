@@ -1,7 +1,8 @@
 package possibletriangle.dungeon.common;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.resources.IReloadableResourceManager;
@@ -20,6 +21,7 @@ import possibletriangle.dungeon.common.block.Palette;
 import possibletriangle.dungeon.common.block.tile.MetadataTile;
 import possibletriangle.dungeon.common.content.Palettes;
 import possibletriangle.dungeon.common.block.Type;
+import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.DungeonWorldType;
 import possibletriangle.dungeon.common.world.room.HallwayMaze;
 import possibletriangle.dungeon.common.world.room.Structures;
@@ -30,7 +32,10 @@ import possibletriangle.dungeon.common.world.structure.metadata.condition.FloorC
 import possibletriangle.dungeon.common.world.structure.metadata.condition.ModCondition;
 import possibletriangle.dungeon.common.world.structure.metadata.condition.PaletteCondition;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -82,8 +87,9 @@ public class CommonProxy {
                 new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.MODID, "hallway"),
                 new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.MODID, "boss"),
                 new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.MODID, "base"),
-                new StructureType(s -> true).setRegistryName("door/small"),
-                new StructureType(s -> true).setRegistryName("door/big")
+                new StructureType(StructureType.hasSize(2, 5, 4)).setRegistryName("door/small"),
+                new StructureType(StructureType.hasSize(2, 5, 5)).setRegistryName("door/big"),
+                new StructureType(StructureType.hasSize(5, DungeonSettings.FLOOR_HEIGHT, 15)).setRegistryName("shop")
             );
         }
 
@@ -110,47 +116,38 @@ public class CommonProxy {
             );
         }
 
+        private static final ArrayList<Block> BLOCKS = new ArrayList<>();
+
         @SubscribeEvent
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
 
             Arrays.stream(Type.values())
                     .map(Type::block)
-                    .forEach(event.getRegistry()::register);
+                    .forEach(BLOCKS::add);
 
-            event.getRegistry().registerAll(
-                new BreakableBlock(Blocks.STONE).setRegistryName(DungeonMod.MODID, "porous_stone"),
-                new BreakableBlock(Blocks.GRAVEL).setRegistryName(DungeonMod.MODID, "gravelous_gravel"),
-                new BreakableBlock(Blocks.OAK_PLANKS).setRegistryName(DungeonMod.MODID, "morsh_wood"),
-                new MetadataBlock().setRegistryName(DungeonMod.MODID, "metadata_block")
-            );
+            BLOCKS.addAll(Arrays.asList(
+                    new BreakableBlock(Blocks.STONE).setRegistryName(DungeonMod.MODID, "porous_stone"),
+                    new BreakableBlock(Blocks.GRAVEL).setRegistryName(DungeonMod.MODID, "gravelous_gravel"),
+                    new BreakableBlock(Blocks.OAK_PLANKS).setRegistryName(DungeonMod.MODID, "morsh_wood"),
+
+                    new MetadataBlock().setRegistryName(DungeonMod.MODID, "metadata_block")
+
+                    //new LogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)),
+                    //new Block(Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)),
+                    //new LeavesBlock(Block.Properties.create(Material.WOOD, MaterialColor.FOLIAGE).hardnessAndResistance(0.2F).sound(SoundType.PLANT).tickRandomly())
+            ));
+
+            BLOCKS.forEach(event.getRegistry()::register);
 
         }
 
         @SubscribeEvent
         public static void onItemsRegistry(final RegistryEvent.Register<Item> event) {
-
-            registerBlockItems(event,
-                Arrays.stream(Type.values())
-                    .map(type -> type.name().toLowerCase())
-                    .map(name -> new ResourceLocation(DungeonMod.MODID, "placeholder_" + name))
-            );
-
-            registerBlockItems(event,
-                Arrays.stream(new String[]{ "porous_stone", "gravelous_gravel", "morsh_wood", "metadata_block" })
-                    .map(name -> new ResourceLocation(DungeonMod.MODID, name))
-            );
-
-        }
-
-        private static void registerBlockItems(RegistryEvent.Register<Item> event, Stream<ResourceLocation> blocks) {
             Item.Properties properties = new Item.Properties().group(DungeonMod.GROUP);
-
-            blocks
-                .map(GameRegistry.findRegistry(Block.class)::getValue)
-                .filter(Objects::nonNull)
-                .filter(b -> b.getRegistryName() != null)
-                .map(b -> new BlockItem(b, properties).setRegistryName(b.getRegistryName()))
-                .forEach(event.getRegistry()::register);
+            BLOCKS.stream()
+                    .filter(b -> b.getRegistryName() != null)
+                    .map(b -> new BlockItem(b, properties).setRegistryName(b.getRegistryName()))
+                    .forEach(event.getRegistry()::register);
         }
 
     }

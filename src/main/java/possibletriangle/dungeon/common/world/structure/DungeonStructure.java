@@ -40,7 +40,7 @@ public class DungeonStructure extends Generateable {
 
     @Override
     public Vec3i getActualSize() {
-        return new Vec3i(16, this.size.getY(), 16);
+        return this.size;
     }
 
     @Override
