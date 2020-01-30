@@ -26,6 +26,7 @@ public enum Type {
     STAIRS_WOOD(TemplateStairs::new),
     SLAB_WOOD(TemplateSlab::new),
     LEAVES(TemplateTransparent::new),
+    STRIPPED_LOG(TemplatePillar::new),
     LOG(TemplatePillar::new),
 
     DIRT(TemplateGrass::new),
@@ -34,8 +35,9 @@ public enum Type {
     PLANT(TemplateFlower::new),
     CROP(TemplateCrop::new),
     FRUIT,
+    BOOKSHELF,
 
-    FENCE,
+    FENCE(TemplateFence::new),
     FLUID_UNSAFE,
     
     PRESSURE_PLATE(TemplatePlate::new),

@@ -70,7 +70,7 @@ async function fallback({ name, type }) {
 }
 
 function* each(object) {
-	for(let key in object)
+	for (let key in object)
 		yield [key, object[key]];
 }
 
@@ -268,6 +268,43 @@ const Types = {
 
 	},
 
+	async fence({ name, full }) {
+
+		await write('blockstates', name, {
+			multipart: [
+				{ apply: { model: `${MOD}:block/${name}_post` } },
+				{
+					when: { north: 'true' },
+					apply: { model: `${MOD}:block/${name}_side`, uvlock: true }
+				},
+				{
+					when: { east: 'true' },
+					apply: { model: `${MOD}:block/${name}_side`, y: 90, uvlock: true }
+				},
+				{
+					when: { south: 'true' },
+					apply: { model: `${MOD}:block/${name}_side`, y: 180, uvlock: true }
+				},
+				{
+					when: { west: 'true' },
+					apply: { model: `${MOD}:block/${name}_side`, y: 270, uvlock: true }
+				}
+			]
+		});
+
+		await Promise.all(['side', 'post']
+			.map(suffix =>
+				write('models/block', `${name}_${suffix}`, {
+					parent: 'block/fence_side',
+					textures: {
+						texture: `${MOD}:block/${full}`
+					}
+				})
+			)
+		);
+
+	},
+
 	async pressure_plate({ name, texture }) {
 
 		await write('blockstates', name, {
@@ -278,7 +315,7 @@ const Types = {
 		});
 
 		await Promise.all([['pressure_plate_down', '_down'], ['pressure_plate_up', '']]
-			.map(([ parent, suffix ]) => 
+			.map(([parent, suffix]) =>
 				write('models/block', name + suffix, {
 					parent: `block/${parent}`,
 					textures: {
@@ -316,7 +353,7 @@ const Types = {
 		));
 
 		await Promise.all([['button', ''], ['button_pressed', '_pressed']]
-			.map(([ parent, suffix ]) => 
+			.map(([parent, suffix]) =>
 				write('models/block', name + suffix, {
 					parent: `block/${parent}`,
 					textures: {
@@ -354,7 +391,7 @@ const Types = {
 		));
 
 		await Promise.all([['lever', ''], ['lever_on', '_on']]
-			.map(([ parent, suffix ]) => 
+			.map(([parent, suffix]) =>
 				write('models/block', name + suffix, {
 					parent: `block/${parent}`,
 					textures: {

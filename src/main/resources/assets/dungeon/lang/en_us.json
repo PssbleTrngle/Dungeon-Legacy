@@ -29,6 +29,12 @@
 	"block.dungeon.placeholder_pressure_plate": "Placeholder (Pressure Plate)",
 	"block.dungeon.placeholder_button": "Placeholder (Button)",
 	"block.dungeon.placeholder_lever": "Placeholder (Lever)",
+	"block.dungeon.placeholder_bookshelf": "Placeholder (Bookshelf)",
+	"block.dungeon.placeholder_stripped_log": "Placeholder (Stripped Log)",
+
+	"block.dungeon.mahogany_planks": "Mahogany Planks",
+	"block.dungeon.mahogany_log": "Mahogany Log",
+	"block.dungeon.mahogany_leaves": "Mahogany Leaves",
 
 	"block.dungeon.porous_stone": "Porous Rock",
 	"block.dungeon.gravelous_gravel": "Gravelous Gravel",

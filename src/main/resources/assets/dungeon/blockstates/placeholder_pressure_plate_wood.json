@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "dungeon:block/placeholder_pressure_plate_wood"
+    },
+    "powered=true": {
+      "model": "dungeon:block/placeholder_pressure_plate_wood_down"
+    }
+  }
+}
