@@ -116,7 +116,7 @@ public class Palettes {
                     .put(Blocks.MUSHROOM_STEM).forTypes(Type.LOG),
 
             /* ------------------  QUARTZ  ------------------ */
-            new Palette(0.2F, () -> Biomes.PLAINS).setRegistryName(DungeonMod.MODID, "quartz")
+            new Palette(0F, () -> Biomes.PLAINS).setRegistryName(DungeonMod.MODID, "quartz")
                     .put(Blocks.QUARTZ_BLOCK).forTypes(Type.WALL, Type.FLOOR)
                     .put(Blocks.CHISELED_QUARTZ_BLOCK).forTypes(Type.RUNE, Type.PATH)
                     .put(Blocks.QUARTZ_SLAB).forTypes(Type.SLAB, Type.SLAB_WALL)
@@ -127,7 +127,7 @@ public class Palettes {
                     .put(Blocks.QUARTZ_PILLAR).forTypes(Type.PILLAR),
 
             /* ------------------  SAND  ------------------ */
-            new Palette(0.3F, () -> Biomes.DESERT).setRegistryName(DungeonMod.MODID, "sand")
+            new Palette(0F, () -> Biomes.DESERT).setRegistryName(DungeonMod.MODID, "sand")
                     .put(Blocks.SANDSTONE).forTypes(Type.WALL, Type.FLOOR, Type.PILLAR)
                     .put(Blocks.CHISELED_SANDSTONE).forTypes(Type.RUNE)
                     .put(Blocks.SAND).forTypes(Type.PATH, Type.FALLING, Type.FARMLAND)
@@ -142,7 +142,7 @@ public class Palettes {
                     .put(Blocks.GOLD_BLOCK, Blocks.LAPIS_BLOCK, Blocks.COAL_BLOCK).forTypes(Type.GEM),
 
             /* ------------------   NETHER  ------------------ */
-            new Palette(0.2F, () -> Biomes.NETHER).setRegistryName(DungeonMod.MODID, "nether")
+            new Palette(0F, () -> Biomes.NETHER).setRegistryName(DungeonMod.MODID, "nether")
                     .put(new BlockCollection()
                                 .add(Blocks.NETHERRACK, 1F)
                                 .add(Blocks.SOUL_SAND, 0.1F))
@@ -174,7 +174,7 @@ public class Palettes {
                     .put(Blocks.MUSHROOM_STEM).forTypes(Type.LOG),
 
             /* ------------------  PRISMARINE  ------------------ */
-            new Palette(0.2F, () -> Biomes.OCEAN).setRegistryName(DungeonMod.MODID, "prismarine")
+            new Palette(0F, () -> Biomes.OCEAN).setRegistryName(DungeonMod.MODID, "prismarine")
                     .put(Blocks.PRISMARINE).forTypes(Type.FLOOR)
                     .put(Blocks.DARK_PRISMARINE).forTypes(Type.PATH, Type.PILLAR)
                     .put(Blocks.SEA_LANTERN).forTypes(Type.LAMP)
@@ -192,7 +192,7 @@ public class Palettes {
                         .forTypes(Type.PLANT, Type.CROP),
 
             /* ------------------  END  ------------------ */
-            new Palette(0.2F, () -> Biomes.THE_END).setRegistryName(DungeonMod.MODID, "end")
+            new Palette(0F, () -> Biomes.THE_END).setRegistryName(DungeonMod.MODID, "end")
                     .put(Blocks.END_STONE).forTypes(Type.FLOOR)
                     .put(Blocks.END_STONE_BRICKS).forTypes(Type.PATH)
                     .put(Blocks.PURPUR_BLOCK).forTypes(Type.WALL)

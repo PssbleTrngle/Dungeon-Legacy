@@ -16,11 +16,11 @@ import possibletriangle.dungeon.common.block.TemplateBlock;
 import possibletriangle.dungeon.common.world.room.Generateable;
 import possibletriangle.dungeon.common.world.room.Structures;
 import possibletriangle.dungeon.common.world.room.StructureType;
+import possibletriangle.dungeon.common.world.structure.metadata.Part;
 import possibletriangle.dungeon.common.world.wall.Wall;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
 
@@ -29,7 +29,8 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
      */
     public static Random chunkSeed(long worldSeed, ChunkPos pos) {
         /* TODO generate a real seed for a chunk like below but better  */
-        return new Random(worldSeed ^ ((pos.x & pos.z) * 10000));
+        //return new Random(worldSeed ^ ((pos.x & pos.z) * 10000));
+        return new Random();
     }
 
     public DungeonChunkGenerator(World world, DungeonSettings settings) {
@@ -111,6 +112,14 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
         return rooms;
     }
 
+    public static Optional<Generateable> partFor(Part part, Random random) {
+        for(int i = 0; i < 20; i++) {
+            Generateable structure = Structures.random(StructureType.PART, random);
+            if(part.test(structure) || true) return Optional.of(structure);
+        }
+        return Optional.empty();
+    }
+
     @Override
     public void makeBase(IWorld world, IChunk ichunk) {
 
@@ -128,6 +137,10 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
 
             /* Generate Room and Wall */
             room.generate(chunk, random, ctx, new BlockPos(1, 0, 1));
+            Arrays.stream(room.getMeta().getParts()).forEach(part ->
+                        partFor(part, random).ifPresent(structure ->
+                            structure.generate(chunk, random, ctx, part.getPos(random))
+                        ));
             Wall.generate(chunk, size.getY(), random, ctx);
 
             this.generateCeiling(floor, size.getY(), chunk);

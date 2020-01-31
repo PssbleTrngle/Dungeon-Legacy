@@ -31,7 +31,7 @@ public class HallwayMaze extends Generateable {
 
     @Override
     public StructureMetadata getMeta() {
-        return new StructureMetadata(1, "Hallway");
+        return new StructureMetadata(1, "Maze Hallway");
     }
 
     /**

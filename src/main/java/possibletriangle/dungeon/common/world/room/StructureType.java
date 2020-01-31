@@ -59,6 +59,12 @@ public class StructureType extends ForgeRegistryEntry<StructureType> {
     @ObjectHolder("base")
     public static final StructureType BASE = null;
 
+    /**
+     * A substructure part
+     */
+    @ObjectHolder("part")
+    public static final StructureType PART = null;
+
     public static Predicate<Generateable> hasSize(int x, int y, int z) {
         return structure -> {
             Vec3i size = structure.getActualSize();

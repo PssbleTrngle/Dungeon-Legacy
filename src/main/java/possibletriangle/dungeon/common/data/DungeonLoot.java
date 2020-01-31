@@ -15,12 +15,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.functions.EnchantRandomly;
 import net.minecraft.world.storage.loot.functions.SetContents;
+import net.minecraft.world.storage.loot.functions.SetDamage;
 import possibletriangle.dungeon.DungeonMod;
+import possibletriangle.dungeon.common.CommonProxy;
+import possibletriangle.dungeon.common.block.BreakableBlock;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class DungeonLoot extends LootTableProvider {
 
@@ -44,21 +49,32 @@ public class DungeonLoot extends LootTableProvider {
 
     public void addTables() {
 
-        Item[] swords = new Item[]{ Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.DIAMOND_SWORD };
-        Item[] axes = new Item[]{ Items.WOODEN_AXE, Items.STONE_AXE, Items.IRON_AXE, Items.DIAMOND_AXE };
-
         LootPool.Builder pool = LootPool.builder()
                 .name(Rarity.COMMON.path().getPath())
                 .rolls(ConstantRange.of(4));
 
-        Arrays.stream(swords).forEach(i -> pool.addEntry(
-                ItemLootEntry.builder(i)
-                    .acceptFunction(EnchantRandomly.func_215900_c())
+        HashMap<Item, Block> breakers = new HashMap<>();
+        breakers.put(Items.GOLDEN_PICKAXE, BreakableBlock.STONE);
+        breakers.put(Items.GOLDEN_AXE, BreakableBlock.WOOD);
+        breakers.put(Items.GOLDEN_SHOVEL, BreakableBlock.GRAVEL);
+        breakers.forEach((item, block) -> pool.addEntry(
+                ItemLootEntry.builder(item)
+                        .acceptFunction(CanBreak.builder(block))
+                        .acceptFunction(SetDamage.func_215931_a(new RandomValueRange(10, 20)))
         ));
 
-        Arrays.stream(axes).forEach(i -> pool.addEntry(
-                ItemLootEntry.builder(i)
-                    .acceptFunction(EnchantRandomly.func_215900_c())
+        Item[] swords = new Item[]{ Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.DIAMOND_SWORD };
+        IntStream.range(0, swords.length).forEach(i -> pool.addEntry(
+               ItemLootEntry.builder(swords[i])
+                       .weight(swords.length - i)
+                       .acceptFunction(EnchantRandomly.func_215900_c())
+        ));
+
+        Item[] axes = new Item[]{ Items.WOODEN_AXE, Items.STONE_AXE, Items.IRON_AXE, Items.DIAMOND_AXE };
+        IntStream.range(0, axes.length).forEach(i -> pool.addEntry(
+                ItemLootEntry.builder(axes[i])
+                        .weight(axes.length - i)
+                        .acceptFunction(EnchantRandomly.func_215900_c())
         ));
 
         lootTables.put(Rarity.COMMON, LootTable.builder().addLootPool(pool));

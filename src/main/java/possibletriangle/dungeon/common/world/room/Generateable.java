@@ -34,7 +34,7 @@ public abstract class Generateable {
      * @return The amount of space required
      */
     public Vec3i getActualSize() {
-        return new Vec3i(16, DungeonSettings.FLOOR_HEIGHT, 16);
+        return new Vec3i(15, DungeonSettings.FLOOR_HEIGHT, 15);
     }
 
     /**

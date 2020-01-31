@@ -115,11 +115,12 @@ public class DungeonChunk {
 
         } else {
 
-            BlockState rotatedState =
+            /*BlockState rotatedState =
                     state.getProperties()
                             .stream()
                             .reduce(state, (s, p) -> rotateProperty(s, p, rotation), (a, b) -> a);
-
+*/
+            BlockState rotatedState = state.rotate(rotation);
             BlockPos rotated = this.rotate(pos, rotation, 1);
             return chunk.setBlockState(rotated, rotatedState, false);
         }
