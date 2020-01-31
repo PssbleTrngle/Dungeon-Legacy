@@ -89,7 +89,8 @@ public class CommonProxy {
                 new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.MODID, "base"),
                 new StructureType(StructureType.hasSize(2, 5, 4)).setRegistryName("door/small"),
                 new StructureType(StructureType.hasSize(2, 5, 5)).setRegistryName("door/big"),
-                new StructureType(StructureType.hasSize(5, DungeonSettings.FLOOR_HEIGHT, 15)).setRegistryName("shop")
+                new StructureType(StructureType.hasSize(5, DungeonSettings.FLOOR_HEIGHT, 15)).setRegistryName("shop"),
+                new StructureType(s -> true).setRegistryName("part")
             );
         }
 

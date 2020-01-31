@@ -139,7 +139,7 @@ public class Serializer implements IMetadataSectionSerializer<StructureMetadata>
             Condition<String[]> condition = new CategoryCondition(allow, reject, required);
 
             try {
-                AxisAlignedBB pos = getPos(JSONUtils.getJsonObject(part, "pos"));
+                AxisAlignedBB pos = getPos(JSONUtils.getJsonObject(part, "position"));
                 AxisAlignedBB size = getPos(JSONUtils.getJsonObject(part, "size"));
 
                 list.add(new Part(condition, pos, size));

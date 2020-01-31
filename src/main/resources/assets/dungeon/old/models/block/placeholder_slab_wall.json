@@ -1,8 +1,0 @@
-{
-  "parent": "block/slab",
-  "textures": {
-    "top": "dungeon:block/placeholder_wall",
-    "bottom": "dungeon:block/placeholder_wall",
-    "side": "dungeon:block/placeholder_wall"
-  }
-}
