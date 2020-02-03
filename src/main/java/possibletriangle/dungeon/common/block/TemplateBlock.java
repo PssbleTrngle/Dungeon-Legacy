@@ -13,6 +13,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 
+import javax.annotation.Nonnull;
+
 @ObjectHolder(DungeonMod.MODID)
 public class TemplateBlock extends Block implements IPlaceholder {
 

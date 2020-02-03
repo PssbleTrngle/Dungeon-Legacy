@@ -3,6 +3,7 @@ package possibletriangle.dungeon.common.world;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Rotation;
@@ -11,6 +12,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
+import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.IPlaceholder;
 import possibletriangle.dungeon.common.block.Palette;
 import possibletriangle.dungeon.common.block.Type;
@@ -46,40 +48,6 @@ public class DungeonChunk {
         return this.chunk.getPos();
     }
 
-    private static BlockState rotateProperty(BlockState state, IProperty<?> property, Rotation rotation) {
-        Class clazz = property.getValueClass();
-        if(clazz.isInstance(Rotation.NONE)) {
-
-            IProperty<Rotation> p = (IProperty<Rotation>) property;
-            Rotation r = state.get(p).add(rotation);
-            if(p.getAllowedValues().contains(r)) return state.with(p, r);
-
-        } else if(clazz.isInstance(Direction.DOWN)) {
-
-            IProperty<Direction> p = (IProperty<Direction>) property;
-            Direction d = state.get(p);
-            for(int i = 0; i < rotation.ordinal(); i++) d = d.rotateAround(Direction.Axis.Y);
-            if(p.getAllowedValues().contains(d)) return state.with(p, d);
-
-        } else if(clazz.isInstance(Direction.Axis.X) && rotation != Rotation.NONE && rotation != rotation.CLOCKWISE_180) {
-
-            IProperty<Direction.Axis> p = (IProperty<Direction.Axis>) property;
-            Direction.Axis a = state.get(p);
-            switch (a) {
-                case X:
-                    a = Direction.Axis.Z;
-                    break;
-                case Z:
-                    a = Direction.Axis.X;
-                    break;
-            }
-            if (p.getAllowedValues().contains(a)) return state.with(p, a);
-
-        }
-
-        return state;
-    }
-
     public void setTileEntity(BlockPos pos, CompoundNBT nbt) {
         this.setTileEntity(pos, nbt, 1);
     }
@@ -93,7 +61,38 @@ public class DungeonChunk {
         nbt.putInt("y", real.getY());
         nbt.putInt("z", real.getZ());
 
-        nbt.putString("LootTable", DungeonLoot.Rarity.COMMON.path().toString());
+        String type = nbt.getString("id");
+
+        switch (type) {
+            case "minecraft:spawner":
+                nbt.putInt("MaxNearbyEntities", 6);
+                nbt.putInt("RequiredPlayerRange", 10);
+                nbt.putInt("SpawnCount", 4);
+                nbt.putInt("MaxSpawnDelay", 800);
+                nbt.putInt("MinSpawnDelay", 200);
+                nbt.putInt("SpawnRange", 3);
+                nbt.putInt("SpawnRange", 3);
+
+                CompoundNBT data = new CompoundNBT();
+                data.putString("id", "minecraft:zombie");
+                nbt.put("SpawnData", data);
+
+                ListNBT potentials = new ListNBT();
+                CompoundNBT entry = new CompoundNBT();
+                entry.put("Entity", data);
+                entry.putInt("Weight", 1);
+                potentials.add(entry);
+                nbt.put("SpawnPotentials", potentials);
+                break;
+
+            case "minecraft:chest":
+                nbt.putString("LootTable", DungeonLoot.Rarity.COMMON.path().toString());
+                nbt.putLong("LootTableSeed", random.nextLong());
+                break;
+
+            default:
+                DungeonMod.LOGGER.info("Unsupported TileEntity: {}", type);
+        }
 
         chunk.addTileEntity(nbt);
     }
@@ -106,20 +105,14 @@ public class DungeonChunk {
             Type type = ((IPlaceholder) state.getBlock()).getType();
             BlockState replace = ctx.palette.blockFor(type, random, variant);
 
-            BlockState applied =
-                    state.getProperties()
-                            .stream()
-                            .reduce(replace, (s, p) -> s.has(p) ? s.with((IProperty) p, state.get(p)) : s, (a, b) -> a);
+            BlockState applied = state.getProperties()
+                .stream()
+                .reduce(replace, (s, p) -> s.has(p) ? s.with((IProperty) p, state.get(p)) : s, (a, b) -> a);
 
             return this.setBlockState(pos, applied);
 
         } else {
 
-            /*BlockState rotatedState =
-                    state.getProperties()
-                            .stream()
-                            .reduce(state, (s, p) -> rotateProperty(s, p, rotation), (a, b) -> a);
-*/
             BlockState rotatedState = state.rotate(rotation);
             BlockPos rotated = this.rotate(pos, rotation, 1);
             return chunk.setBlockState(rotated, rotatedState, false);

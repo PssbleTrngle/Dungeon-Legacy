@@ -1,5 +1,5 @@
 {
-  "parent": "block/fence_side",
+  "parent": "block/fence_post",
   "textures": {
     "texture": "dungeon:block/placeholder_planks"
   }

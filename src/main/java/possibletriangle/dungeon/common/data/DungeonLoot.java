@@ -3,6 +3,7 @@ package possibletriangle.dungeon.common.data;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mojang.datafixers.kinds.Const;
 import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
@@ -15,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.functions.EnchantRandomly;
 import net.minecraft.world.storage.loot.functions.SetContents;
+import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraft.world.storage.loot.functions.SetDamage;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.CommonProxy;
@@ -47,37 +49,85 @@ public class DungeonLoot extends LootTableProvider {
         this.generator = generator;
     }
 
-    public void addTables() {
-
-        LootPool.Builder pool = LootPool.builder()
-                .name(Rarity.COMMON.path().getPath())
-                .rolls(ConstantRange.of(4));
-
-        HashMap<Item, Block> breakers = new HashMap<>();
-        breakers.put(Items.GOLDEN_PICKAXE, BreakableBlock.STONE);
-        breakers.put(Items.GOLDEN_AXE, BreakableBlock.WOOD);
-        breakers.put(Items.GOLDEN_SHOVEL, BreakableBlock.GRAVEL);
-        breakers.forEach((item, block) -> pool.addEntry(
-                ItemLootEntry.builder(item)
-                        .acceptFunction(CanBreak.builder(block))
-                        .acceptFunction(SetDamage.func_215931_a(new RandomValueRange(10, 20)))
-        ));
-
-        Item[] swords = new Item[]{ Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.DIAMOND_SWORD };
-        IntStream.range(0, swords.length).forEach(i -> pool.addEntry(
-               ItemLootEntry.builder(swords[i])
-                       .weight(swords.length - i)
-                       .acceptFunction(EnchantRandomly.func_215900_c())
-        ));
-
-        Item[] axes = new Item[]{ Items.WOODEN_AXE, Items.STONE_AXE, Items.IRON_AXE, Items.DIAMOND_AXE };
-        IntStream.range(0, axes.length).forEach(i -> pool.addEntry(
-                ItemLootEntry.builder(axes[i])
-                        .weight(axes.length - i)
+    private void register(LootPool.Builder pool, Item... items) {
+        int m = 2;
+        int length = (int) Math.pow(items.length, m);
+        IntStream.range(0, items.length).forEach(i -> pool.addEntry(
+                ItemLootEntry.builder(items[i])
+                        .weight(length - (int) Math.pow(i, 2))
                         .acceptFunction(EnchantRandomly.func_215900_c())
         ));
+    }
 
-        lootTables.put(Rarity.COMMON, LootTable.builder().addLootPool(pool));
+    private LootPool.Builder breakers() {
+        LootPool.Builder pool = LootPool.builder()
+                .name("breakers")
+                .rolls(new RandomValueRange(0, 1));
+
+        HashMap<Item, Block> map = new HashMap<>();
+        map.put(Items.GOLDEN_PICKAXE, BreakableBlock.STONE);
+        map.put(Items.GOLDEN_AXE, BreakableBlock.WOOD);
+        map.put(Items.GOLDEN_SHOVEL, BreakableBlock.GRAVEL);
+        map.forEach((item, block) -> pool.addEntry(
+                ItemLootEntry.builder(item)
+                        .acceptFunction(SetDamage.func_215931_a(new RandomValueRange(0.6F, 0.9F)))
+                        .acceptFunction(CanBreak.builder(block))
+        ));
+
+        return pool;
+    }
+
+    private LootPool.Builder weapons() {
+        LootPool.Builder pool = LootPool.builder()
+                .name("weapons")
+                .rolls(new RandomValueRange(0, 2));
+
+        register(pool, Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.DIAMOND_SWORD);
+        register(pool, Items.WOODEN_AXE, Items.STONE_AXE, Items.IRON_AXE, Items.DIAMOND_AXE);
+
+        return pool;
+    }
+
+    private LootPool.Builder shiny() {
+        LootPool.Builder pool = LootPool.builder()
+                .name("shiny")
+                .rolls(new RandomValueRange(2, 4));
+
+        pool.addEntry(ItemLootEntry.builder(Items.GOLD_NUGGET)
+                .acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 8)))
+                .weight(10)
+        );
+
+        pool.addEntry(ItemLootEntry.builder(Items.GOLD_INGOT)
+                .acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 8)))
+                .weight(2)
+        );
+
+        pool.addEntry(ItemLootEntry.builder(Items.ENDER_PEARL)
+                .acceptFunction(SetCount.func_215932_a(ConstantRange.of(1)))
+                .weight(1)
+        );
+
+        return pool;
+    }
+
+    private LootPool.Builder food() {
+        LootPool.Builder pool = LootPool.builder()
+                .name("food")
+                .rolls(ConstantRange.of(4));
+        register(pool, Items.POTATO, Items.APPLE, Items.BREAD);
+
+        return pool;
+    }
+
+    private void addTables() {
+
+        lootTables.put(Rarity.COMMON, LootTable.builder()
+                .addLootPool(shiny())
+                .addLootPool(weapons())
+                .addLootPool(breakers())
+                .addLootPool(food())
+        );
 
     }
 

@@ -9,6 +9,67 @@
           "type": "minecraft:item",
           "functions": [
             {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.6,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "dungeon:can_break",
+              "block": {
+                "namespace": "dungeon",
+                "path": "morsh_wood"
+              }
+            }
+          ],
+          "name": "minecraft:golden_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.6,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "dungeon:can_break",
+              "block": {
+                "namespace": "dungeon",
+                "path": "gravelous_gravel"
+              }
+            }
+          ],
+          "name": "minecraft:golden_shovel"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.6,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "dungeon:can_break",
+              "block": {
+                "namespace": "dungeon",
+                "path": "porous_stone"
+              }
+            }
+          ],
+          "name": "minecraft:golden_pickaxe"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 16,
+          "functions": [
+            {
               "function": "minecraft:enchant_randomly"
             }
           ],
@@ -16,6 +77,7 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 15,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
@@ -25,6 +87,7 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 12,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
@@ -34,6 +97,7 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 7,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
@@ -43,6 +107,67 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 9,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:potato"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:apple"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:bread"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 9,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:gold_nugget"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:gold_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:ender_pearl"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 16,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
@@ -52,6 +177,7 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 15,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
@@ -61,6 +187,7 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 12,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"
@@ -70,6 +197,7 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 7,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"

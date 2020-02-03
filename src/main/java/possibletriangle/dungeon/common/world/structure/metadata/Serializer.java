@@ -98,8 +98,8 @@ public class Serializer implements IMetadataSectionSerializer<StructureMetadata>
 
         } else if(element.isJsonObject()) {
 
-            int from = JSONUtils.getInt(element, "from");
-            int to = JSONUtils.getInt(element, "to");
+            int from = element.getAsJsonObject().get("from").getAsInt();
+            int to = element.getAsJsonObject().get("to").getAsInt();
 
             return new Pair<>(from, to);
 

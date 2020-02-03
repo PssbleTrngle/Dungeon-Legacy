@@ -40,8 +40,8 @@ async function create(params) {
 	const func = Types.get(type);
 
 	if (func) {
-		await func(params);
 		await item(name);
+		await func(params);
 		success(name);
 	} else {
 		error(name);
@@ -128,6 +128,7 @@ const Types = {
 
 	async stairs({ name, full }) {
 
+		/*
 		const half = {
 			bottom: { x: 0 },
 			top: { x: 180 },
@@ -151,7 +152,53 @@ const Types = {
 		await write('blockstates', name, cycleProps(
 			{ facing, shape, half },
 			{ uvlock: true, model: `${MOD}:block/${name}` }
-		));
+		)); 
+		*/
+
+		await write('blockstates', name, {
+			variants: {
+				'facing=east,half=bottom,shape=straight': { model: `${MOD}:block/${name}` },
+				'facing=west,half=bottom,shape=straight': { model: `${MOD}:block/${name}`, y: 180, uvlock: true },
+				'facing=south,half=bottom,shape=straight': { model: `${MOD}:block/${name}`, y: 90, uvlock: true },
+				'facing=north,half=bottom,shape=straight': { model: `${MOD}:block/${name}`, y: 270, uvlock: true },
+				'facing=east,half=bottom,shape=outer_right': { model: `${MOD}:block/${name}_outer` },
+				'facing=west,half=bottom,shape=outer_right': { model: `${MOD}:block/${name}_outer`, y: 180, uvlock: true },
+				'facing=south,half=bottom,shape=outer_right': { model: `${MOD}:block/${name}_outer`, y: 90, uvlock: true },
+				'facing=north,half=bottom,shape=outer_right': { model: `${MOD}:block/${name}_outer`, y: 270, uvlock: true },
+				'facing=east,half=bottom,shape=outer_left': { model: `${MOD}:block/${name}_outer`, y: 270, uvlock: true },
+				'facing=west,half=bottom,shape=outer_left': { model: `${MOD}:block/${name}_outer`, y: 90, uvlock: true },
+				'facing=south,half=bottom,shape=outer_left': { model: `${MOD}:block/${name}_outer` },
+				'facing=north,half=bottom,shape=outer_left': { model: `${MOD}:block/${name}_outer`, y: 180, uvlock: true },
+				'facing=east,half=bottom,shape=inner_right': { model: `${MOD}:block/${name}_inner` },
+				'facing=west,half=bottom,shape=inner_right': { model: `${MOD}:block/${name}_inner`, y: 180, uvlock: true },
+				'facing=south,half=bottom,shape=inner_right': { model: `${MOD}:block/${name}_inner`, y: 90, uvlock: true },
+				'facing=north,half=bottom,shape=inner_right': { model: `${MOD}:block/${name}_inner`, y: 270, uvlock: true },
+				'facing=east,half=bottom,shape=inner_left': { model: `${MOD}:block/${name}_inner`, y: 270, uvlock: true },
+				'facing=west,half=bottom,shape=inner_left': { model: `${MOD}:block/${name}_inner`, y: 90, uvlock: true },
+				'facing=south,half=bottom,shape=inner_left': { model: `${MOD}:block/${name}_inner` },
+				'facing=north,half=bottom,shape=inner_left': { model: `${MOD}:block/${name}_inner`, y: 180, uvlock: true },
+				'facing=east,half=top,shape=straight': { model: `${MOD}:block/${name}`, x: 180, uvlock: true },
+				'facing=west,half=top,shape=straight': { model: `${MOD}:block/${name}`, x: 180, y: 180, uvlock: true },
+				'facing=south,half=top,shape=straight': { model: `${MOD}:block/${name}`, x: 180, y: 90, uvlock: true },
+				'facing=north,half=top,shape=straight': { model: `${MOD}:block/${name}`, x: 180, y: 270, uvlock: true },
+				'facing=east,half=top,shape=outer_right': { model: `${MOD}:block/${name}_outer`, x: 180, y: 90, uvlock: true },
+				'facing=west,half=top,shape=outer_right': { model: `${MOD}:block/${name}_outer`, x: 180, y: 270, uvlock: true },
+				'facing=south,half=top,shape=outer_right': { model: `${MOD}:block/${name}_outer`, x: 180, y: 180, uvlock: true },
+				'facing=north,half=top,shape=outer_right': { model: `${MOD}:block/${name}_outer`, x: 180, uvlock: true },
+				'facing=east,half=top,shape=outer_left': { model: `${MOD}:block/${name}_outer`, x: 180, uvlock: true },
+				'facing=west,half=top,shape=outer_left': { model: `${MOD}:block/${name}_outer`, x: 180, y: 180, uvlock: true },
+				'facing=south,half=top,shape=outer_left': { model: `${MOD}:block/${name}_outer`, x: 180, y: 90, uvlock: true },
+				'facing=north,half=top,shape=outer_left': { model: `${MOD}:block/${name}_outer`, x: 180, y: 270, uvlock: true },
+				'facing=east,half=top,shape=inner_right': { model: `${MOD}:block/${name}_inner`, x: 180, y: 90, uvlock: true },
+				'facing=west,half=top,shape=inner_right': { model: `${MOD}:block/${name}_inner`, x: 180, y: 270, uvlock: true },
+				'facing=south,half=top,shape=inner_right': { model: `${MOD}:block/${name}_inner`, x: 180, y: 180, uvlock: true },
+				'facing=north,half=top,shape=inner_right': { model: `${MOD}:block/${name}_inner`, x: 180, uvlock: true },
+				'facing=east,half=top,shape=inner_left': { model: `${MOD}:block/${name}_inner`, x: 180, uvlock: true },
+				'facing=west,half=top,shape=inner_left': { model: `${MOD}:block/${name}_inner`, x: 180, y: 180, uvlock: true },
+				'facing=south,half=top,shape=inner_left': { model: `${MOD}:block/${name}_inner`, x: 180, y: 90, uvlock: true },
+				'facing=north,half=top,shape=inner_left': { model: `${MOD}:block/${name}_inner`, x: 180, y: 270, uvlock: true }
+			}
+		});
 
 		await Promise.all(
 			['', 'outer', 'inner'].map(s =>
@@ -292,10 +339,17 @@ const Types = {
 			]
 		});
 
+		await write('models/item', name, {
+			parent: 'block/fence_inventory',
+			textures: {
+				texture: `${MOD}:block/${full}`
+			}
+		});
+
 		await Promise.all(['side', 'post']
 			.map(suffix =>
 				write('models/block', `${name}_${suffix}`, {
-					parent: 'block/fence_side',
+					parent: `block/fence_${suffix}`,
 					textures: {
 						texture: `${MOD}:block/${full}`
 					}
@@ -352,6 +406,13 @@ const Types = {
 			{ uvlock: true, model: `${MOD}:block/${name}` }
 		));
 
+		await write('models/item', name, {
+			parent: 'block/button_inventory',
+			textures: {
+				texture: `${MOD}:block/${texture}`
+			}
+		});
+
 		await Promise.all([['button', ''], ['button_pressed', '_pressed']]
 			.map(([parent, suffix]) =>
 				write('models/block', name + suffix, {
@@ -390,6 +451,13 @@ const Types = {
 			{ uvlock: true, model: `${MOD}:block/${name}` }
 		));
 
+		await write('models/item', name, {
+			parent: 'item/generated',
+			textures: {
+				layer0: `${MOD}:block/${name}`
+			}
+		});
+
 		await Promise.all([['lever', ''], ['lever_on', '_on']]
 			.map(([parent, suffix]) =>
 				write('models/block', name + suffix, {
@@ -397,6 +465,7 @@ const Types = {
 					textures: {
 						base: `${MOD}:block/${stone}`,
 						particle: `${MOD}:block/${stone}`,
+						lever: `${MOD}:block/${name}`,
 					}
 				})
 			)
