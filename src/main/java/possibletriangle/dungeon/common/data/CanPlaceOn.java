@@ -1,5 +1,6 @@
 package possibletriangle.dungeon.common.data;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
@@ -12,10 +13,14 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootFunction;
-import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.ILootCondition;
-import net.minecraft.world.storage.loot.functions.SetDamage;
 import possibletriangle.dungeon.DungeonMod;
+
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.StreamSupport;
 
 public class CanPlaceOn extends LootFunction {
 
@@ -23,12 +28,12 @@ public class CanPlaceOn extends LootFunction {
 
     private CanPlaceOn(ILootCondition[] conditions, ResourceLocation[] blocks) {
         super(conditions);
-        this.blocks = block;
+        this.blocks = blocks;
     }
 
     public static LootFunction.Builder<?> builder(Block... blocks) {
-        ResourceLocation[] locations = blocks.stream().map(Block::getRegistryName).filter(Object::notNull).toArray(ResourceLocation[]::new));
-        return builder(conditions -> new CanPlaceOn(conditions, locations);
+        ResourceLocation[] locations = Arrays.stream(blocks).map(Block::getRegistryName).filter(Objects::nonNull).toArray(ResourceLocation[]::new);
+        return builder(conditions -> new CanPlaceOn(conditions, locations));
     }
 
     @Override
@@ -38,7 +43,7 @@ public class CanPlaceOn extends LootFunction {
         
         ListNBT list = new ListNBT();
 
-        this.blocks.stream()
+        Arrays.stream(this.blocks)
             .map(ResourceLocation::toString)
             .map(StringNBT::new)
             .forEach(list::add);
@@ -57,7 +62,7 @@ public class CanPlaceOn extends LootFunction {
             super.serialize(object, functionClazz, serializationContext);
 
             JsonArray blocks = new JsonArray();
-            this.blocks.stream()
+            Arrays.stream(functionClazz.blocks)
                 .map(serializationContext::serialize)
                 .forEach(blocks::add);
 
@@ -65,8 +70,11 @@ public class CanPlaceOn extends LootFunction {
         }
 
         public CanPlaceOn deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
-            JsonArray blocks = JSONUtils.getArray(object, "blocks", new JsonArray());
-            ResourceLocation[] locations = ???;
+            JsonArray array = JSONUtils.getJsonArray(object, "blocks", new JsonArray());
+            ResourceLocation[] locations = StreamSupport
+                    .stream(Spliterators.spliteratorUnknownSize(array.iterator(), Spliterator.ORDERED), false)
+                    .map(e -> JSONUtils.deserializeClass(e, "block", deserializationContext, ResourceLocation.class))
+                    .toArray(ResourceLocation[]::new);
             return new CanPlaceOn(conditionsIn, locations);
         }
     }

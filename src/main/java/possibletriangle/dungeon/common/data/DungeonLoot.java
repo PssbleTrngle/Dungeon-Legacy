@@ -3,31 +3,34 @@ package possibletriangle.dungeon.common.data;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mojang.datafixers.kinds.Const;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;
 import net.minecraft.data.LootTableProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.functions.EnchantRandomly;
-import net.minecraft.world.storage.loot.functions.SetContents;
 import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraft.world.storage.loot.functions.SetDamage;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import possibletriangle.dungeon.DungeonMod;
-import possibletriangle.dungeon.common.CommonProxy;
 import possibletriangle.dungeon.common.block.BreakableBlock;
+import possibletriangle.dungeon.common.block.Palette;
+import possibletriangle.dungeon.common.block.Type;
+import possibletriangle.dungeon.common.world.room.StateProvider;
+import possibletriangle.dungeon.helper.RandomCollection;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class DungeonLoot extends LootTableProvider {
 
@@ -76,32 +79,37 @@ public class DungeonLoot extends LootTableProvider {
     }
 
     private LootPool.Builder keys() {
-        LootPool.Builder pool = LootPool.builder()
-                .name("breakers"));
+        LootPool.Builder pool = LootPool.builder().name("breakers");
 
-        /**
+        /*
          * Find all blocks which could replace a placeholder seal block
          */
-        Stream<StateProviders> providers = GameRegistry.findRegistry(Palette.class)
-                            .values().stream()
-                            .map(p -> p.blocksFor(Type.SEAL))
-                            .map(RandomCollection::all);
+        List<StateProvider> providers = GameRegistry.findRegistry(Palette.class)
+                .getValues().stream()
+                .map(p -> p.blocksFor(Type.SEAL))
+                .map(RandomCollection::all)
+                .flatMap(Arrays::stream)
+                .collect(Collectors.toList());
 
-        Block[] blocks = IntStream.range(0, Palette.MAX_VARIANT)
-            .map(i -> providers.map(p -> p.apply(i).toArray(BlockState[]::new)))
-            .flatten()
-            .filter(Object::notNull)
-            .map(BlockState::getBlock);
+        Function<StateProvider, Stream<BlockState>> extract = p -> IntStream.range(0, Palette.MAX_VARIANT).mapToObj(p::apply);
+
+        Block[] blocks = providers.stream()
+                .map(extract)
+                .flatMap(Function.identity())
+                .filter(Objects::nonNull)
+                .map(BlockState::getBlock)
+                .distinct()
+                .toArray(Block[]::new);;
 
         pool.addEntry(
             ItemLootEntry.builder(Items.STONE_BUTTON)
-                .weight(5);
+                .weight(5)
                 .acceptFunction(CanPlaceOn.builder(blocks))
         );
 
         pool.addEntry(
             ItemLootEntry.builder(Items.LEVER)
-                .weight(1);
+                .weight(1)
                 .acceptFunction(CanPlaceOn.builder(blocks))
         );
 
@@ -109,8 +117,7 @@ public class DungeonLoot extends LootTableProvider {
     }
 
     private LootPool.Builder breakers() {
-        LootPool.Builder pool = LootPool.builder()
-                .name("breakers"));
+        LootPool.Builder pool = LootPool.builder().name("breakers");
 
         HashMap<Item, Block> map = new HashMap<>();
         map.put(Items.GOLDEN_PICKAXE, BreakableBlock.STONE);
@@ -126,10 +133,9 @@ public class DungeonLoot extends LootTableProvider {
     }
 
     private LootPool.Builder armor() {
-        LootPool.Builder pool = LootPool.builder()
-                .name("armor"));
+        LootPool.Builder pool = LootPool.builder().name("armor");
 
-        HashMap<Item, Integer> items = HashMap.newHashMap();
+        HashMap<Item, Integer> items = Maps.newHashMap();
         
         items.put(Items.LEATHER_BOOTS, 60);
         items.put(Items.LEATHER_HELMET, 40);
@@ -152,10 +158,9 @@ public class DungeonLoot extends LootTableProvider {
     }
 
     private LootPool.Builder weapons() {
-        LootPool.Builder pool = LootPool.builder()
-                .name("weapons"));
+        LootPool.Builder pool = LootPool.builder().name("weapons");
 
-        HashMap<Item, Integer> items = HashMap.newHashMap();
+        HashMap<Item, Integer> items = Maps.newHashMap();
         
         items.put(Items.WOODEN_SWORD, 30);
         items.put(Items.STONE_SWORD, 15);
@@ -172,7 +177,7 @@ public class DungeonLoot extends LootTableProvider {
             ItemLootEntry.builder(Items.ARROW)
                 .weight(10)
                 .acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 5)))
-        )
+        );
 
         registerEnchanting(pool, items);
 
@@ -180,8 +185,7 @@ public class DungeonLoot extends LootTableProvider {
     }
 
     private LootPool.Builder shiny() {
-        LootPool.Builder pool = LootPool.builder()
-                .name("shiny"));
+        LootPool.Builder pool = LootPool.builder().name("shiny");
 
         pool.addEntry(ItemLootEntry.builder(Items.GOLD_NUGGET)
                 .acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 8)))
@@ -202,8 +206,7 @@ public class DungeonLoot extends LootTableProvider {
     }
 
     private LootPool.Builder food() {
-        LootPool.Builder pool = LootPool.builder()
-                .name("food"));
+        LootPool.Builder pool = LootPool.builder().name("food");
 
         register(pool, Items.POTATO, Items.APPLE, Items.BREAD);
 
@@ -213,16 +216,16 @@ public class DungeonLoot extends LootTableProvider {
     private void addTables() {
 
         lootTables.put(Rarity.COMMON, LootTable.builder()
-                .addLootPool(shiny().rolls(new RandomValueRange(2, 4))
-                .addLootPool(weapons().rolls(new RandomValueRange(0, 2))
-                .addLootPool(food().rolls(ConstantRange.of(4))
+                .addLootPool(shiny().rolls(new RandomValueRange(2, 4)))
+                .addLootPool(weapons().rolls(new RandomValueRange(0, 2)))
+                .addLootPool(food().rolls(ConstantRange.of(4)))
         );
 
         lootTables.put(Rarity.RARE, LootTable.builder()
-                .addLootPool(shiny().rolls(ConstantRange.of(4))
-                .addLootPool(breakers().rolls(new RandomValueRange(0, 1))
-                .addLootPool(food().rolls(ConstantRange.of(3))
-                .addLootPool(keys().rolls(new RandomValueRange(0, 1))
+                .addLootPool(shiny().rolls(ConstantRange.of(4)))
+                .addLootPool(breakers().rolls(new RandomValueRange(0, 1)))
+                .addLootPool(food().rolls(ConstantRange.of(3)))
+                .addLootPool(keys().rolls(new RandomValueRange(0, 1)))
         );
 
     }

@@ -1,18 +1,15 @@
 package possibletriangle.dungeon.common.world;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.state.IProperty;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
-import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.IPlaceholder;
 import possibletriangle.dungeon.common.block.Palette;
 import possibletriangle.dungeon.common.block.Type;
@@ -57,7 +54,7 @@ public class DungeonChunk {
      */
     public void setTileEntity(BlockPos pos, CompoundNBT nbt) {
         Rotation rotation = pos.getX() * pos.getZ() == 0 ? Rotation.NONE : this.placement.getRotation();
-        BlockPos rotated = this.rotate(pos, rotation, size);
+        BlockPos rotated = rotate(pos, rotation, 1);
         BlockPos real = getPos().asBlockPos().add(rotated);
 
         nbt.putInt("x", real.getX());
@@ -140,7 +137,7 @@ public class DungeonChunk {
      * @param rotation The rotation
      * @return A rotated BlockPos
      */
-    public static BlockPos rotate(BlockPos in, Rotation rotation, int size) {
+    public BlockPos rotate(BlockPos in, Rotation rotation, int size) {
         float phi = (float) (rotation.ordinal() * Math.PI / 2);
         int sin = (int) MathHelper.sin(phi);
         int cos = (int) MathHelper.cos(phi);

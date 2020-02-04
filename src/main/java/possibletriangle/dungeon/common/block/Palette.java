@@ -3,10 +3,12 @@ package possibletriangle.dungeon.common.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolder;
@@ -18,6 +20,7 @@ import possibletriangle.dungeon.helper.RandomCollection;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -38,7 +41,7 @@ public class Palette extends ForgeRegistryEntry<Palette> {
 
     private static final BlockState DEFAULT = Blocks.SPONGE.getDefaultState();
     private static final ResourceLocation DEFAULT_MOB = new ResourceLocation("zombie");
-    private static final Predicate<ResourceLocation> FILTER = r -> r != null && ModList.getList().isLoaded(r.getNamespace());
+    private static final Predicate<ResourceLocation> FILTER = r -> r != null && ModList.get().isLoaded(r.getNamespace());
 
     private static final RandomCollection<Palette> VALUES = new RandomCollection<>();
 
@@ -117,10 +120,11 @@ public class Palette extends ForgeRegistryEntry<Palette> {
     }
 
     public ResourceLocation randomMob(Random random) {
-        if(!this.mobs.empty()) return this.mobs.next(random);
-        Palette parent = this.parent.get();
-        if(parent == null || this.getRegistryName().equals(parent.getRegistryName())) return DEFAULT_MOB;
-        return parent.randomMob(random);
+        return this.mobs.next(random).orElseGet(() -> {
+            Palette parent = this.parent.get();
+            if(parent == null || this.getRegistryName().equals(parent.getRegistryName())) return DEFAULT_MOB;
+            return parent.randomMob(random);
+        });
     }
 
     public BlockCollection blocksFor(Type type) {

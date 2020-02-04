@@ -1,48 +1,29 @@
 package possibletriangle.dungeon.common.content;
 
 import net.minecraft.block.*;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.resources.IReloadableResourceManager;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.state.IProperty;
 import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.registries.RegistryBuilder;
 import possibletriangle.dungeon.DungeonMod;
-import possibletriangle.dungeon.common.block.BreakableBlock;
 import possibletriangle.dungeon.common.block.Palette;
 import possibletriangle.dungeon.common.block.Type;
-import possibletriangle.dungeon.common.world.DungeonWorldType;
-import possibletriangle.dungeon.common.world.room.HallwayMaze;
-import possibletriangle.dungeon.common.world.room.StateProvider;
-import possibletriangle.dungeon.common.world.room.Structures;
-import possibletriangle.dungeon.common.world.structure.StructureLoader;
 import possibletriangle.dungeon.helper.BlockCollection;
+import possibletriangle.dungeon.helper.RandomCollection;
 import possibletriangle.dungeon.helper.Variant;
-import possibletriangle.dungeon.helper.Fallback;
-import possibletriangle.dungeon.common.world.room.StructureType;
-import sun.management.counter.Variability;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class Palettes {
 
     public static BlockCollection withGroth(IntegerProperty property, Block... plants) {
         BlockCollection c = new BlockCollection();
-        Stream<BlockState> defaults = Arrays.stream(plants).map(Block::getDefaultState);
-        if(defaults.allMatch(state -> state.has(property))) {
+        Supplier<Stream<BlockState>> defaults = () -> Arrays.stream(plants).map(Block::getDefaultState);
+        if(defaults.get().allMatch(state -> state.has(property))) {
             property.getAllowedValues().stream().map(age ->
-                new Variant(defaults.map(s -> s.with(property, age)).toArray(BlockState[]::new))
+                new Variant(defaults.get().map(s -> s.with(property, age)).toArray(BlockState[]::new))
             ).forEach(s -> c.add(s, 1));
         }
         return c;
