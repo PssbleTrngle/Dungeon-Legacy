@@ -117,7 +117,14 @@ public class Palettes {
                     .put(new Variant(Blocks.MELON, Blocks.PUMPKIN)).forTypes(Type.FRUIT)
                     .put(Blocks.POLISHED_ANDESITE).forTypes(Type.SEAL)
                     .put(Blocks.BOOKSHELF).forTypes(Type.BOOKSHELF)
-                    .put(new Variant(Blocks.STRIPPED_OAK_LOG, Blocks.STRIPPED_SPRUCE_LOG, Blocks.STRIPPED_DARK_OAK_LOG)).forTypes(Type.STRIPPED_LOG),
+                    .put(new Variant(Blocks.STRIPPED_OAK_LOG, Blocks.STRIPPED_SPRUCE_LOG, Blocks.STRIPPED_DARK_OAK_LOG)).forTypes(Type.STRIPPED_LOG)
+                    .addMobs(new RandomCollection<ResourceLocation>()
+                        .add(new ResourceLocation("zombie"), 1.0F)
+                        .add(new ResourceLocation("skeleton"), 0.5F)
+                        .add(new ResourceLocation("creeper"), 0.1F)
+                        .add(new ResourceLocation("spider"), 0.1F)
+                        .add(new ResourceLocation("silverfish"), 0.1F)
+                     ),
 
             /* ------------------   NATURE  ------------------ */
             new Palette(1F, () -> Biomes.FOREST).setRegistryName(DungeonMod.MODID, "nature")
@@ -139,7 +146,10 @@ public class Palettes {
                     .put(new BlockCollection()
                                 .add(Blocks.GOLD_BLOCK, 1F)
                                 .add(Blocks.EMERALD_BLOCK, 2F))
-                        .forTypes(Type.GEM),
+                        .forTypes(Type.GEM)
+                    .addMobs(new RandomCollection<ResourceLocation>()
+                        .add(new ResourceLocation("cave_spider"), 0.8F)
+                    ),
 
             /* ------------------  MUSHROOM  ------------------ */
             new Palette(0.3F, () -> Biomes.MUSHROOM_FIELDS).setRegistryName(DungeonMod.MODID, "mushroom")
@@ -172,7 +182,11 @@ public class Palettes {
                             .add(Blocks.CACTUS, 0.2F))
                         .forTypes(Type.PLANT, Type.CROP)
                     .put(Blocks.MELON).forTypes(Type.FRUIT)
-                    .put(Blocks.GOLD_BLOCK, Blocks.LAPIS_BLOCK, Blocks.COAL_BLOCK).forTypes(Type.GEM),
+                    .put(Blocks.GOLD_BLOCK, Blocks.LAPIS_BLOCK, Blocks.COAL_BLOCK).forTypes(Type.GEM)
+                    .setMobs(new RandomCollection<ResourceLocation>()
+                        .add(new ResourceLocation("husk"), 1F)
+                        .add(new ResourceLocation("skeleton"), 0.3F)
+                    ),
 
             /* ------------------   NETHER  ------------------ */
             new Palette(0F, () -> Biomes.NETHER).setRegistryName(DungeonMod.MODID, "nether")
@@ -204,7 +218,12 @@ public class Palettes {
                     .put(Blocks.RED_CONCRETE_POWDER).forTypes(Type.FALLING)
                     .put(Blocks.RED_MUSHROOM_BLOCK).forTypes(Type.LEAVES)
                     .put(Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM).forTypes(Type.PLANT)
-                    .put(Blocks.MUSHROOM_STEM).forTypes(Type.LOG),
+                    .put(Blocks.MUSHROOM_STEM).forTypes(Type.LOG)
+                    .setMobs(new RandomCollection<ResourceLocation>()
+                        .add(new ResourceLocation("blaze"), 1F)
+                        .add(new ResourceLocation("wither_skeleton"), 0.2F)
+                        .add(new ResourceLocation("lava_slime"), 1F)
+                    ),
 
             /* ------------------  PRISMARINE  ------------------ */
             new Palette(0F, () -> Biomes.OCEAN).setRegistryName(DungeonMod.MODID, "prismarine")
@@ -238,6 +257,11 @@ public class Palettes {
                     .put(Blocks.BLACK_CONCRETE_POWDER).forTypes(Type.FALLING)
                     .put(Blocks.AIR).forTypes(Type.PLANT, Type.CROP)
                     .put(Blocks.PURPLE_STAINED_GLASS).forTypes(Type.GLASS)
+                    .setMobs(new RandomCollection<ResourceLocation>()
+                        .add(new ResourceLocation("shulker"), 1F)
+                        .add(new ResourceLocation("endermite"), 0.5F)
+                        .add(new ResourceLocation("enderman"), 0.1F)
+                    )
         );
 
     }

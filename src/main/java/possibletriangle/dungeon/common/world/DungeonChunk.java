@@ -74,7 +74,7 @@ public class DungeonChunk {
                 nbt.putInt("SpawnRange", 3);
 
                 CompoundNBT data = new CompoundNBT();
-                data.putString("id", "minecraft:zombie");
+                data.putString("id", ctx.palette.randomMob(random).toString());
                 nbt.put("SpawnData", data);
 
                 ListNBT potentials = new ListNBT();

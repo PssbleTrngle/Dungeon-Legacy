@@ -37,12 +37,17 @@ public class Palette extends ForgeRegistryEntry<Palette> {
     public static final Palette NETHER = null;
 
     private static final BlockState DEFAULT = Blocks.SPONGE.getDefaultState();
+    private static final ResourceLocation DEFAULT_MOB = new ResourceLocation("zombie");
+    private static final Predicate<ResourceLocation> FILTER = r -> ModList.getList().isLoaded(r.getDomain());
+
     private static final RandomCollection<Palette> VALUES = new RandomCollection<>();
 
     private final HashMap<Type, BlockCollection> blocks = new HashMap<>();
     private final float weight;
     private final Supplier<Palette> parent;
     public final Supplier<Biome> biome;
+
+    private RandomCollection<ResourceLocation> mobs = new RandomCollection<>();
 
     /**
      * Palettes are used to replace {@link possibletriangle.dungeon.common.block.IPlaceholder} blocks
@@ -56,7 +61,6 @@ public class Palette extends ForgeRegistryEntry<Palette> {
         this.weight = weight;
     }
 
-
     /**
      * Palettes are used to replace {@link possibletriangle.dungeon.common.block.Palette}
      * @param weight The weigth used in generation. A heigher weight causes a higher chance of generation
@@ -64,6 +68,16 @@ public class Palette extends ForgeRegistryEntry<Palette> {
      */
     public Palette(float weight, Supplier<Biome> biome) {
         this(weight, biome, () -> STONE);
+    }
+
+    public Palette addMobs(RandomCollection<ResourceLocation> mobs) {
+        this.mobs.addAll(mobs.filter(FILTER));
+        return this;
+    }
+
+    public Palette setMobs(RandomCollection<ResourceLocation> mobs) {
+        this.mobs = mobs.filter(FILTER);
+        return this;
     }
 
     /**
@@ -75,9 +89,7 @@ public class Palette extends ForgeRegistryEntry<Palette> {
     }
 
     public interface MultiConsumer<P,T> {
-
         P forTypes(T... types);
-
     }
 
     /**
@@ -102,6 +114,13 @@ public class Palette extends ForgeRegistryEntry<Palette> {
 
     public MultiConsumer<Palette,Type> put(BlockState... states) {
         return this.put(Arrays.stream(states).map(s -> (StateProvider) i -> s).toArray(StateProvider[]::new));
+    }
+
+    public ResourceLocation randomMob(Random random) {
+        if(!this.mobs.empty()) return this.mobs.next(random);
+        Palette parent = this.parent.get();
+        if(parent == null || this.getRegistryName().equals(parent.getRegistryName())) return DEFAULT_MOB;
+        return parent.randomMob(random);
     }
 
     public BlockCollection blocksFor(Type type) {
