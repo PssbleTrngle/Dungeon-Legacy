@@ -166,6 +166,13 @@ public class DungeonLoot extends LootTableProvider {
         items.put(Items.STONE_AXE, 15);
         items.put(Items.IRON_AXE, 5);
         items.put(Items.DIAMOND_AXE, 1);
+        
+        items.put(Items.BOW, 2);
+        pool.addEntry(
+            ItemLootEntry.builder(Items.ARROW)
+                .weight(10)
+                .acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 5)))
+        )
 
         registerEnchanting(pool, items);
 
