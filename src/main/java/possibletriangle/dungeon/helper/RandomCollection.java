@@ -10,10 +10,8 @@ public class RandomCollection<T> {
     private final NavigableMap<Double, T> map = new TreeMap<>();
     private double total = 0;
 
-    @SafeVarargs
     public RandomCollection(T... ts) {
-        for(T t : ts)
-            add(t, 1);
+        this.addAll(ts);
     }
 
     public RandomCollection<T> add(T t, float weight) {
@@ -21,6 +19,17 @@ public class RandomCollection<T> {
         total += weight;
         map.put(total, t);
         return this;
+    }
+
+    public RandomCollection<T> addAll(RandomCollection<T> other) {
+        other.map.forEach((weight, value) -> this.add(value, weight));
+        return this;
+    }
+
+    @SafeVarargs
+    public RandomCollection<T> addAll(T... ts) {
+        for(T t : ts)
+            add(t, 1);
     }
 
     public Optional<T> next(Random random) {
@@ -33,8 +42,20 @@ public class RandomCollection<T> {
         return map.values().size();
     }
 
+    public boolean empty() {
+        return this.size() == 0;
+    }
+
     public T[] all() {
         return (T[]) map.values().toArray();
+    }
+
+    public RandomCollection filter(Predicate<T> by) {
+        RandomCollection<T> filtered = new RandomCollection<>();
+        map.forEach((weight, value) -> {
+            if(by.test(value)) filtered.add(value, weight);
+        })
+        return filtered;
     }
 
 }

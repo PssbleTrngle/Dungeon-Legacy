@@ -93,7 +93,42 @@ public class DungeonChunk {
         nbt.putInt("y", real.getY());
         nbt.putInt("z", real.getZ());
 
+<<<<<<< HEAD
         nbt.putString("LootTable", DungeonLoot.Rarity.COMMON.path().toString());
+=======
+        String type = nbt.getString("id");
+
+        switch (type) {
+            case "minecraft:spawner":
+                nbt.putInt("MaxNearbyEntities", 6);
+                nbt.putInt("RequiredPlayerRange", 10);
+                nbt.putInt("SpawnCount", 4);
+                nbt.putInt("MaxSpawnDelay", 800);
+                nbt.putInt("MinSpawnDelay", 200);
+                nbt.putInt("SpawnRange", 3);
+                nbt.putInt("SpawnRange", 3);
+
+                CompoundNBT data = new CompoundNBT();
+                data.putString("id", ctx.palette.randomMob(random).toString());
+                nbt.put("SpawnData", data);
+
+                ListNBT potentials = new ListNBT();
+                CompoundNBT entry = new CompoundNBT();
+                entry.put("Entity", data);
+                entry.putInt("Weight", 1);
+                potentials.add(entry);
+                nbt.put("SpawnPotentials", potentials);
+                break;
+
+            case "minecraft:chest":
+                nbt.putString("LootTable", DungeonLoot.Rarity.COMMON.path().toString());
+                nbt.putLong("LootTableSeed", random.nextLong());
+                break;
+
+            default:
+                DungeonMod.LOGGER.info("Unsupported TileEntity: {}", type);
+        }
+>>>>>>> Spawn potentials in palettes
 
         chunk.addTileEntity(nbt);
     }
