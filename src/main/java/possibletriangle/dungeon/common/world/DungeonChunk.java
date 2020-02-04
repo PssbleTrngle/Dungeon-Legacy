@@ -29,7 +29,7 @@ public class DungeonChunk {
     private int variant;
 
     public DungeonChunk(IChunk chunk, Random random, GenerationContext ctx) {
-        this(random.nextInt(32), chunk, random, ctx, new PlacementSettings().setRotation(Rotation.randomRotation(random)));
+        this(random.nextInt(Palette.MAX_VARIANT), chunk, random, ctx, new PlacementSettings().setRotation(Rotation.randomRotation(random)));
     }
 
     private DungeonChunk(int variant, IChunk chunk, Random random, GenerationContext ctx, PlacementSettings placement) {

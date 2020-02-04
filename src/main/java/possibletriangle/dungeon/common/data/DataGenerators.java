@@ -11,6 +11,7 @@ public class DataGenerators {
 
     static {
         LootFunctionManager.registerFunction(new CanBreak.Serializer());
+        LootFunctionManager.registerFunction(new CanPlaceOn.Serializer());
     }
 
     @SubscribeEvent
