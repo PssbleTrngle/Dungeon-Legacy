@@ -38,8 +38,6 @@ public class Serializer implements IMetadataSectionSerializer<StructureMetadata>
 
         GenerationCondition[] conditions = arrayToStream(conditionJson, JsonElement::getAsJsonObject)
             .map(Serializer::getGenerationGeneration)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
             .toArray(GenerationCondition[]::new);
 
         Part[] parts = getParts(json);
@@ -57,28 +55,16 @@ public class Serializer implements IMetadataSectionSerializer<StructureMetadata>
      * @param object The JSON object
      * @return The parsed condition if valid
      */
-    private static Optional<GenerationCondition> getGenerationGeneration(JsonObject object) {
-
-        String type = JSONUtils.getString(object, "type", "");
+    private static GenerationCondition getGenerationGeneration(JsonObject object) {
 
         String[] allow = getStringArray(object, "allow");
         String[] reject = getStringArray(object, "reject");
         String[] required = getStringArray(object, "required");
 
-        switch (type) {
+        String type = JSONUtils.getString(object, "type", "");
+        ResourceLocation name = new ResourceLocation(DungeonMod.MODID, type);
 
-            case "floor":
-                return Optional.of(new GenerationCondition(allow, reject, required, new ResourceLocation(DungeonMod.MODID, "floor")));
-
-            case "mod":
-                return Optional.of(new GenerationCondition(allow, reject, required, new ResourceLocation(DungeonMod.MODID, "mod")));
-
-            case "palette":
-                return Optional.of(new GenerationCondition(allow, reject, required, new ResourceLocation(DungeonMod.MODID, "palette")));
-
-            default:
-                return Optional.empty();
-        }
+        return new GenerationCondition(allow, reject, required, name);
     }
 
     /**

@@ -17,16 +17,20 @@ public abstract class Generateable {
 
     public abstract void generate(DungeonChunk chunk, Random random, GenerationContext context, BlockPos at);
 
-    /**
-     * X and Z are the amount of chunks, Y is the amount of floors
-     * @return The amount of space required
-     */
-    public final Vec3i getSize() {
+    public static Vec3i roomSizeFromActual(Vec3i actual) {
         Vec3i actual = getActualSize();
         int height = (actual.getY() - DungeonSettings.FLOOR_HEIGHT) / (DungeonSettings.FLOOR_HEIGHT + 1) + 1;
         int x = (actual.getZ() - 15) / 16 + 1;
         int z = (actual.getZ() - 15) / 16 + 1;
         return new Vec3i(x, Math.max(1, height), z);
+    }
+
+    /**
+     * X and Z are the amount of chunks, Y is the amount of floors
+     * @return The amount of space required
+     */
+    public final Vec3i getSize() {
+        return roomSizeFromActual(getActualSize());
     }
 
     /**

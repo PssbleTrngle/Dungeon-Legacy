@@ -66,7 +66,7 @@ public abstract class Condition<K> implements INBTSerializable<CompoundNBT>, Pre
         CompoundNBT nbt = new CompoundNBT();
 
         nbt.put("allow", toList(allow));
-        nbt.put("reject", toList(allow));
+        nbt.put("reject", toList(reject));
         nbt.put("required", toList(required));
 
         return nbt;
@@ -75,7 +75,7 @@ public abstract class Condition<K> implements INBTSerializable<CompoundNBT>, Pre
     @Override
     public void deserializeNBT(CompoundNBT nbt) {
         if(nbt.contains("allow")) this.allow = fromList(nbt.getList("allow", 8));
-        if(nbt.contains("reject")) this.allow = fromList(nbt.getList("reject", 8));
-        if(nbt.contains("required")) this.allow = fromList(nbt.getList("required", 8));
+        if(nbt.contains("reject")) this.reject = fromList(nbt.getList("reject", 8));
+        if(nbt.contains("required")) this.required = fromList(nbt.getList("required", 8));
     }
 }
