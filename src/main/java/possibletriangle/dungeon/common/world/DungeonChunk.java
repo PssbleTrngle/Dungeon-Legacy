@@ -64,7 +64,7 @@ public class DungeonChunk {
         String type = nbt.getString("id");
 
         switch (type) {
-            case "minecraft:spawner":
+            case "minecraft:mob_spawner":
                 nbt.putInt("MaxNearbyEntities", 6);
                 nbt.putInt("RequiredPlayerRange", 10);
                 nbt.putInt("SpawnCount", 4);
@@ -89,9 +89,7 @@ public class DungeonChunk {
                 nbt.putString("LootTable", DungeonLoot.Rarity.COMMON.path().toString());
                 nbt.putLong("LootTableSeed", random.nextLong());
                 break;
-
-            default:
-                DungeonMod.LOGGER.info("Unsupported TileEntity: {}", type);
+                
         }
 
         chunk.addTileEntity(nbt);
