@@ -10,9 +10,12 @@ import net.minecraft.tileentity.StructureBlockTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.client.MetadataScreen;
+import possibletriangle.dungeon.common.world.room.Generateable;
 import possibletriangle.dungeon.common.world.structure.metadata.StructureMetadata;
 
 import javax.annotation.Nonnull;
@@ -27,6 +30,7 @@ public class MetadataTile extends TileEntity {
 
     private String name = "";
     private StructureMetadata meta = StructureMetadata.getDefault();
+    private BlockPos from, size;
 
     public String getName() {
         return name;
@@ -37,9 +41,8 @@ public class MetadataTile extends TileEntity {
     }
 
     public AxisAlignedBB getBounds() {
-        Vec3i size = Generateable.roomSizeFromActual(this.size);
-        Vec3i from = ???;
-        return new AxisAlignedBB(from, size);
+        BlockPos size = Generateable.roomSizeFromActual(this.size);
+        return new AxisAlignedBB(this.from, size);
     }
 
     public MetadataTile() {
@@ -67,7 +70,11 @@ public class MetadataTile extends TileEntity {
     public void structureBlockUpdated(@Nonnull StructureBlockTileEntity te) {
 
         DungeonMod.LOGGER.info("Updated structure block");
+
         this.name = te.getName();
+        this.from = te.getPosition();
+        this.size = te.getStructureSize();
+
         this.readMeta();
         markDirty();
 
@@ -91,6 +98,8 @@ public class MetadataTile extends TileEntity {
 
         if(compound.contains("name")) name = compound.getString("name");
         if(compound.contains("meta")) this.meta.deserializeNBT(compound.getCompound("meta"));
+        this.from = getPos(compound, "from");
+        this.size = getPos(compound, "size");
     }
 
     @Override
@@ -99,8 +108,23 @@ public class MetadataTile extends TileEntity {
 
         if(name != null) nbt.putString("name", name);
         nbt.put("meta", meta.serializeNBT());
+        putPos(this.from, "from", compound);
+        putPos(this.size, "size", compound);
 
         return nbt;
+    }
+
+    private void putPos(BlockPos pos, String key, CompoundNBT compound) {
+        compound.putInt(key + "X", pos.getX());
+        compound.putInt(key + "Y", pos.getY());
+        compound.putInt(key + "Z", pos.getZ());
+    }
+
+    private BlockPos getPos(CompoundNBT compound, String key) {
+        int x = compound.getInt(key + "X");
+        int y = compound.getInt(key + "Y");
+        int z = compound.getInt(key + "Z");
+        return new BlockPos(x, y, z);
     }
 
     @Override

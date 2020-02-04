@@ -1,5 +1,6 @@
 package possibletriangle.dungeon.common.content;
 
+<<<<<<< HEAD
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -8,34 +9,76 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.resources.IResourceManager;
+=======
+import net.minecraft.block.*;
+import net.minecraft.state.IntegerProperty;
+>>>>>>> Fixing imports and some syntax errors (again)
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.registries.RegistryBuilder;
 import possibletriangle.dungeon.DungeonMod;
-import possibletriangle.dungeon.common.block.BreakableBlock;
 import possibletriangle.dungeon.common.block.Palette;
 import possibletriangle.dungeon.common.block.Type;
+<<<<<<< HEAD
 import possibletriangle.dungeon.common.world.DungeonWorldType;
 import possibletriangle.dungeon.common.world.room.HallwayMaze;
 import possibletriangle.dungeon.common.world.room.Structures;
 import possibletriangle.dungeon.common.world.structure.StructureLoader;
+=======
+>>>>>>> Fixing imports and some syntax errors (again)
 import possibletriangle.dungeon.helper.BlockCollection;
+import possibletriangle.dungeon.helper.RandomCollection;
 import possibletriangle.dungeon.helper.Variant;
+<<<<<<< HEAD
 import possibletriangle.dungeon.helper.Fallback;
 import possibletriangle.dungeon.common.world.room.StructureType;
 
 import java.util.Arrays;
 import java.util.Objects;
+=======
+
+import java.util.Arrays;
+import java.util.function.Supplier;
+>>>>>>> Fixing imports and some syntax errors (again)
 import java.util.stream.Stream;
 
 public class Palettes {
 
+<<<<<<< HEAD
+=======
+    public static BlockCollection withGroth(IntegerProperty property, Block... plants) {
+        BlockCollection c = new BlockCollection();
+        Supplier<Stream<BlockState>> defaults = () -> Arrays.stream(plants).map(Block::getDefaultState);
+        if(defaults.get().allMatch(state -> state.has(property))) {
+            property.getAllowedValues().stream().map(age ->
+                new Variant(defaults.get().map(s -> s.with(property, age)).toArray(BlockState[]::new))
+            ).forEach(s -> c.add(s, 1));
+        }
+        return c;
+    }
+
+    /*
+    public static BlockState[] withGroth(Block plant) {
+        BlockState d = plant.getDefaultState();
+
+        Optional<IntegerProperty> age = d.getProperties()
+                .stream()
+                .filter(p -> p instanceof IntegerProperty)
+                .filter(p -> p.getName().equals("age"))
+                .findFirst()
+                .map(p -> (IntegerProperty) p);
+
+        return age.map(property -> {
+            BlockCollection c = new BlockCollection();
+            return property.getAllowedValues()
+                    .stream()
+                    .map(v -> d.with(property, v))
+                    .toArray(BlockState[]::new);
+        }).orElse(new BlockState[]{ d });
+    }
+    */
+
+>>>>>>> Fixing imports and some syntax errors (again)
     public static void register(RegistryEvent.Register<Palette> event) {
 
         event.getRegistry().registerAll(

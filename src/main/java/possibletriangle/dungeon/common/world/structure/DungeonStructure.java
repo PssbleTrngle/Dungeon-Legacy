@@ -10,7 +10,6 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ObjectIntIdentityMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.gen.feature.template.Template;
 import possibletriangle.dungeon.common.world.DungeonChunk;
 import possibletriangle.dungeon.common.world.GenerationContext;
@@ -39,7 +38,7 @@ public class DungeonStructure extends Generateable {
     }
 
     @Override
-    public Vec3i getActualSize() {
+    public BlockPos getActualSize() {
         return this.size;
     }
 
