@@ -36,6 +36,12 @@ public class MetadataTile extends TileEntity {
         return meta;
     }
 
+    public AxisAlignedBB getBounds() {
+        Vec3i size = Generateable.roomSizeFromActual(this.size);
+        Vec3i from = ???;
+        return new AxisAlignedBB(from, size);
+    }
+
     public MetadataTile() {
         super(TYPE);
     }

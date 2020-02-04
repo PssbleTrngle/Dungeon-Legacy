@@ -12,8 +12,8 @@ import java.util.function.Predicate;
 public class Part implements Predicate<Generateable> {
 
     private final Condition<String[]> categories;
-    private final AxisAlignedBB pos;
-    private final AxisAlignedBB size;
+    public final AxisAlignedBB pos;
+    public final AxisAlignedBB size;
 
     public BlockPos getPos(Random random) {
         int x = (int) (random.nextInt((int) (pos.maxX - pos.minX + 1)) + pos.minX);
@@ -28,6 +28,10 @@ public class Part implements Predicate<Generateable> {
         this.categories = categories;
     }
 
+    /**
+     * Test if a Generateable qualifies as a substructure part of the specified type
+     * @param structure The Substructure to test
+     */
     public boolean test(Generateable structure) {
         Vec3i size = structure.getActualSize();
         return categories.test(structure.getMeta().getCategories())

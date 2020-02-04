@@ -38,7 +38,7 @@ public class Palette extends ForgeRegistryEntry<Palette> {
 
     private static final BlockState DEFAULT = Blocks.SPONGE.getDefaultState();
     private static final ResourceLocation DEFAULT_MOB = new ResourceLocation("zombie");
-    private static final Predicate<ResourceLocation> FILTER = r -> ModList.getList().isLoaded(r.getDomain());
+    private static final Predicate<ResourceLocation> FILTER = r -> r != null && ModList.getList().isLoaded(r.getNamespace());
 
     private static final RandomCollection<Palette> VALUES = new RandomCollection<>();
 

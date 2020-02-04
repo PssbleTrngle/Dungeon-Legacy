@@ -99,6 +99,7 @@ public class HallwayMaze extends Generateable {
 
                 }
 
+                /* TODO I don't think torches generate yet, look into this */
                 if(!gen) chunk.setBlockState(new BlockPos(2, 5, z), Blocks.TORCH.getDefaultState(), rotation);
 
             }

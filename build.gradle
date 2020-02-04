@@ -24,13 +24,13 @@ ext.configFile = file('build.properties')
 ext.config = parseConfig(configFile)
 
 version = '1.0'
-group = 'com.yourname.modid' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'modid'
+group = 'possibletriangle.dungeon' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'dungeon'
 
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
@@ -87,7 +87,7 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'dungeon', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'dungeon', '--all', '--output', file('src/main/resources/data')
 
             mods {
                 dungeon {
