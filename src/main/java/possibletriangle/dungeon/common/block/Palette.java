@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Palette extends ForgeRegistryEntry<Palette> {
 
+    public static final int MAX_VARIANT = 32;
+
     @ObjectHolder("stone")
     public static final Palette STONE = null;
 
@@ -102,7 +104,7 @@ public class Palette extends ForgeRegistryEntry<Palette> {
         return this.put(Arrays.stream(states).map(s -> (StateProvider) i -> s).toArray(StateProvider[]::new));
     }
 
-    private BlockCollection blocksFor(Type type) {
+    public BlockCollection blocksFor(Type type) {
         return this.blocks.getOrDefault(type, new BlockCollection(i -> null));
     }
 

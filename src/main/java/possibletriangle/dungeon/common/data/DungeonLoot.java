@@ -47,9 +47,71 @@ public class DungeonLoot extends LootTableProvider {
         this.generator = generator;
     }
 
+<<<<<<< HEAD
     public void addTables() {
+=======
+    private void register(LootPool.Builder pool, Item... items) {
+        int m = 2;
+        int length = (int) Math.pow(items.length, m);
+        IntStream.range(0, items.length).forEach(i -> pool.addEntry(
+                ItemLootEntry.builder(items[i])
+                        .weight(length - (int) Math.pow(i, 2))
+        ));
+    }
+
+    private void registerEnchanting(LootPool.Builder pool, HashMap<Item, Integer> items) {
+
+        items.forEach((item, weight) -> pool.addEntry(
+                ItemLootEntry.builder(item)
+                        .weight(weight * 5)
+                        .acceptFunction(SetDamage.func_215931_a(new RandomValueRange(0.2F, 0.8F)))
+        ));
+
+        items.forEach((item, weight) -> pool.addEntry(
+                ItemLootEntry.builder(item)
+                        .weight(weight)
+                        .acceptFunction(SetDamage.func_215931_a(new RandomValueRange(0.6F, 0.9F)))
+                        .acceptFunction(EnchantRandomly.func_215900_c())
+        ));
+
+    }
+
+    private LootPool.Builder keys() {
+        LootPool.Builder pool = LootPool.builder()
+                .name("breakers"));
+
+        /**
+         * Find all blocks which could replace a placeholder seal block
+         */
+        Stream<StateProviders> providers = GameRegistry.findRegistry(Palette.class)
+                            .values().stream()
+                            .map(p -> p.blocksFor(Type.SEAL))
+                            .map(RandomCollection::all);
+
+        Block[] blocks = IntStream.range(0, Palette.MAX_VARIANT)
+            .map(i -> providers.map(p -> p.apply(i).toArray(BlockState[]::new)))
+            .flatten()
+            .filter(Object::notNull)
+            .map(BlockState::getBlock);
+
+        pool.addEntry(
+            ItemLootEntry.builder(Items.STONE_BUTTON)
+                .weight(5);
+                .acceptFunction(CanPlaceOn.builder(blocks))
+        );
+
+        pool.addEntry(
+            ItemLootEntry.builder(Items.LEVER)
+                .weight(1);
+                .acceptFunction(CanPlaceOn.builder(blocks))
+        );
+
+        return pool;
+    }
+>>>>>>> Key loot and better loot enchanting
 
         LootPool.Builder pool = LootPool.builder()
+<<<<<<< HEAD
                 .name(Rarity.COMMON.path().getPath())
                 .rolls(ConstantRange.of(4));
 
@@ -58,17 +120,109 @@ public class DungeonLoot extends LootTableProvider {
         breakers.put(Items.GOLDEN_AXE, BreakableBlock.WOOD);
         breakers.put(Items.GOLDEN_SHOVEL, BreakableBlock.GRAVEL);
         breakers.forEach((item, block) -> pool.addEntry(
+=======
+                .name("breakers"));
+
+        HashMap<Item, Block> map = new HashMap<>();
+        map.put(Items.GOLDEN_PICKAXE, BreakableBlock.STONE);
+        map.put(Items.GOLDEN_AXE, BreakableBlock.WOOD);
+        map.put(Items.GOLDEN_SHOVEL, BreakableBlock.GRAVEL);
+        map.forEach((item, block) -> pool.addEntry(
+>>>>>>> Key loot and better loot enchanting
                 ItemLootEntry.builder(item)
                         .acceptFunction(CanBreak.builder(block))
                         .acceptFunction(SetDamage.func_215931_a(new RandomValueRange(10, 20)))
         ));
 
+<<<<<<< HEAD
         Item[] swords = new Item[]{ Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.DIAMOND_SWORD };
         IntStream.range(0, swords.length).forEach(i -> pool.addEntry(
                ItemLootEntry.builder(swords[i])
                        .weight(swords.length - i)
                        .acceptFunction(EnchantRandomly.func_215900_c())
         ));
+=======
+        return pool;
+    }
+
+    private LootPool.Builder armor() {
+        LootPool.Builder pool = LootPool.builder()
+                .name("armor"));
+
+        HashMap<Item, Integer> items = HashMap.newHashMap();
+        
+        items.put(Items.LEATHER_BOOTS, 60);
+        items.put(Items.LEATHER_HELMET, 40);
+        items.put(Items.LEATHER_LEGGINGS, 40);
+        items.put(Items.LEATHER_CHESTPLATE, 20);
+        
+        items.put(Items.IRON_BOOTS, 15);
+        items.put(Items.IRON_HELMET, 10);
+        items.put(Items.IRON_LEGGINGS, 10);
+        items.put(Items.IRON_CHESTPLATE, 5);
+        
+        items.put(Items.DIAMOND_BOOTS, 3);
+        items.put(Items.DIAMOND_HELMET, 2);
+        items.put(Items.DIAMOND_LEGGINGS, 2);
+        items.put(Items.DIAMOND_CHESTPLATE, 1);
+
+        registerEnchanting(pool, items);
+
+        return pool;
+    }
+
+    private LootPool.Builder weapons() {
+        LootPool.Builder pool = LootPool.builder()
+                .name("weapons"));
+
+        HashMap<Item, Integer> items = HashMap.newHashMap();
+        
+        items.put(Items.WOODEN_SWORD, 30);
+        items.put(Items.STONE_SWORD, 15);
+        items.put(Items.IRON_SWORD, 5);
+        items.put(Items.DIAMOND_SWORD, 1);
+        
+        items.put(Items.WOODEN_AXE, 30);
+        items.put(Items.STONE_AXE, 15);
+        items.put(Items.IRON_AXE, 5);
+        items.put(Items.DIAMOND_AXE, 1);
+
+        registerEnchanting(pool, items);
+
+        return pool;
+    }
+
+    private LootPool.Builder shiny() {
+        LootPool.Builder pool = LootPool.builder()
+                .name("shiny"));
+
+        pool.addEntry(ItemLootEntry.builder(Items.GOLD_NUGGET)
+                .acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 8)))
+                .weight(10)
+        );
+
+        pool.addEntry(ItemLootEntry.builder(Items.GOLD_INGOT)
+                .acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 8)))
+                .weight(2)
+        );
+
+        pool.addEntry(ItemLootEntry.builder(Items.ENDER_PEARL)
+                .acceptFunction(SetCount.func_215932_a(ConstantRange.of(1)))
+                .weight(1)
+        );
+
+        return pool;
+    }
+
+    private LootPool.Builder food() {
+        LootPool.Builder pool = LootPool.builder()
+                .name("food"));
+
+        register(pool, Items.POTATO, Items.APPLE, Items.BREAD);
+
+        return pool;
+    }
+>>>>>>> Key loot and better loot enchanting
 
         Item[] axes = new Item[]{ Items.WOODEN_AXE, Items.STONE_AXE, Items.IRON_AXE, Items.DIAMOND_AXE };
         IntStream.range(0, axes.length).forEach(i -> pool.addEntry(
@@ -77,7 +231,22 @@ public class DungeonLoot extends LootTableProvider {
                         .acceptFunction(EnchantRandomly.func_215900_c())
         ));
 
+<<<<<<< HEAD
         lootTables.put(Rarity.COMMON, LootTable.builder().addLootPool(pool));
+=======
+        lootTables.put(Rarity.COMMON, LootTable.builder()
+                .addLootPool(shiny().rolls(new RandomValueRange(2, 4))
+                .addLootPool(weapons().rolls(new RandomValueRange(0, 2))
+                .addLootPool(food().rolls(ConstantRange.of(4))
+        );
+
+        lootTables.put(Rarity.RARE, LootTable.builder()
+                .addLootPool(shiny().rolls(ConstantRange.of(4))
+                .addLootPool(breakers().rolls(new RandomValueRange(0, 1))
+                .addLootPool(food().rolls(ConstantRange.of(3))
+                .addLootPool(keys().rolls(new RandomValueRange(0, 1))
+        );
+>>>>>>> Key loot and better loot enchanting
 
     }
 
