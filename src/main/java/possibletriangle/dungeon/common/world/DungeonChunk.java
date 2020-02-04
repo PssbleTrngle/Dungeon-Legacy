@@ -49,10 +49,6 @@ public class DungeonChunk {
     }
 
     public void setTileEntity(BlockPos pos, CompoundNBT nbt) {
-        this.setTileEntity(pos, nbt, 1);
-    }
-
-    public void setTileEntity(BlockPos pos, CompoundNBT nbt, int size) {
         Rotation rotation = pos.getX() * pos.getZ() == 0 ? Rotation.NONE : this.placement.getRotation();
         BlockPos rotated = this.rotate(pos, rotation, size);
         BlockPos real = getPos().asBlockPos().add(rotated);
@@ -89,7 +85,7 @@ public class DungeonChunk {
                 nbt.putString("LootTable", DungeonLoot.Rarity.COMMON.path().toString());
                 nbt.putLong("LootTableSeed", random.nextLong());
                 break;
-                
+
         }
 
         chunk.addTileEntity(nbt);
