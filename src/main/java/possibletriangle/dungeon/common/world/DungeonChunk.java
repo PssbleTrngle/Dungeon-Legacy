@@ -46,6 +46,7 @@ public class DungeonChunk {
         return this.chunk.getPos();
     }
 
+<<<<<<< HEAD
     private static BlockState rotateProperty(BlockState state, IProperty<?> property, Rotation rotation) {
         Class clazz = property.getValueClass();
         if(clazz.isInstance(Rotation.NONE)) {
@@ -80,6 +81,15 @@ public class DungeonChunk {
         return state;
     }
 
+=======
+    /**
+     * Place a TileEntity at the given position
+     * Will spawn loot for chest and insert spawn potentials for spawners 
+     * 
+     * @param pos The not yet rotated position
+     * @param nbt The Tile's NBT Data
+     */
+>>>>>>> Some comments I guess
     public void setTileEntity(BlockPos pos, CompoundNBT nbt) {
         Rotation rotation = pos.getX() * pos.getZ() == 0 ? Rotation.NONE : this.placement.getRotation();
         BlockPos rotated = this.rotate(pos, rotation, size);
@@ -127,6 +137,19 @@ public class DungeonChunk {
         chunk.addTileEntity(nbt);
     }
 
+    /**
+     * Retrieve the block at a specific position
+     * Will rotate about the rotation of this chunk
+     * @param pos The position
+     */
+    public BlockState getBlockState(BlockPos pos) {
+        return chunk.getBlockState(rotate(pos, this.placement.getRotation(), 1));
+    }
+
+    public BlockState setBlockState(BlockPos pos, BlockState state) {
+        return setBlockState(pos, state, this.placement.getRotation());
+    }
+
     public BlockState setBlockState(BlockPos pos, BlockState state, Rotation rotation) {
         if(pos.getX() * pos.getZ() == 0 && rotation != Rotation.NONE) setBlockState(pos, state, Rotation.NONE);
 
@@ -155,7 +178,14 @@ public class DungeonChunk {
         }
     }
 
-    private BlockPos rotate(BlockPos in, Rotation rotation, int size) {
+    /**
+     * Rotate a BlockPos around the center of a room
+     * @param in The BlockPos to rotate
+     * @param size The size of the room in chunks
+     * @param rotation The rotation
+     * @return A rotated BlockPos
+     */
+    public static BlockPos rotate(BlockPos in, Rotation rotation, int size) {
         float phi = (float) (rotation.ordinal() * Math.PI / 2);
         int sin = (int) MathHelper.sin(phi);
         int cos = (int) MathHelper.cos(phi);
@@ -168,13 +198,5 @@ public class DungeonChunk {
                 in.getY() + ctx.getFloor() * (DungeonSettings.FLOOR_HEIGHT + 1),
                 (int) (centered[0] * sin + centered[1] * cos + center)
         );
-    }
-
-    public BlockState setBlockState(BlockPos pos, BlockState state) {
-        return setBlockState(pos, state, this.placement.getRotation());
-    }
-
-    public BlockState getBlockState(BlockPos pos) {
-        return chunk.getBlockState(rotate(pos, this.placement.getRotation(), 1));
     }
 }
