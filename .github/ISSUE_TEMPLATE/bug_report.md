@@ -21,4 +21,4 @@ If applicable, add screenshots to help explain your problem.
 
 **Version (please complete the following information):**
  - Mod [e.g. 1.4.3]
- - Forge [e.g.  1.15.12-23]
+ - Forge [e.g.  1.14.2-28.1.106]
