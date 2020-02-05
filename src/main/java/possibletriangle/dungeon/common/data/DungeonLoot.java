@@ -95,7 +95,7 @@ public class DungeonLoot extends LootTableProvider {
                 .getValues().stream()
                 .map(p -> p.blocksFor(Type.SEAL))
                 .map(RandomCollection::all)
-                .flatMap(Arrays::stream)
+                .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
         Function<StateProvider, Stream<BlockState>> extract = p -> IntStream.range(0, Palette.MAX_VARIANT).mapToObj(p::apply);
