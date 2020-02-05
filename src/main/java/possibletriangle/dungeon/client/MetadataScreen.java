@@ -32,6 +32,8 @@ public class MetadataScreen extends Screen {
 
     @Override
     protected void init() {
+        StructureMetadata meta = tile.getMeta();
+
         this.minecraft.keyboardListener.enableRepeatEvents(true);
 
         this.nameEdit = new TextFieldWidget(this.font, this.width / 2 - 152, 40, 300, 20, I18n.format("structure_block.structure_name")) {
@@ -45,16 +47,38 @@ public class MetadataScreen extends Screen {
 
         this.categoriesEdit = new TextFieldWidget(this.font, this.width / 2 - 152, 70, 300, 20, I18n.format("metadata_block.categories")) {};
         this.categoriesEdit.setMaxStringLength(128);
-        this.categoriesEdit.setText(tile.getName());
+        this.categoriesEdit.setText(String.join(", ", meta.getCategories()));
         this.children.add(this.categoriesEdit);
 
         this.weightEdit = new TextFieldWidget(this.font, this.width / 2 - 152, 100, 80, 20, I18n.format("metadata_block.weight"));
         this.weightEdit.setMaxStringLength(6);
-        this.weightEdit.setText(Float.toString(tile.getMeta().getWeight()));
+        this.weightEdit.setText(Float.toString(tile.meta.getWeight()));
         this.children.add(this.weightEdit);
 
         this.setFocusedDefault(this.nameEdit);
 
+    }
+
+    /**
+     * Generates a new StructureMetadata object from the given input
+     * Used to store in TileEntity when pressing OK and
+     * saved to File when pressing SAVE
+     */
+    public StructureMetadata generateMeta() {
+
+        String name = new ResourceLocation(this.nameEdit.getText());
+
+        String[] categories = Arrays.stream(this.categoriesEdit.getText()
+            .split(","))
+            .map(String::trim)
+            .distinct()
+            .filter(s -> s.length > 0)
+            .toArray(String[]::new);
+
+        float weight = Float.parseFloat(weightEdit.getText());
+
+        StructureMetadata original = tile.getMeta();
+        return new StructureMetadata(weight, name, original.getConditions(), categories, original.getParts());
     }
 
     public void removed() {
