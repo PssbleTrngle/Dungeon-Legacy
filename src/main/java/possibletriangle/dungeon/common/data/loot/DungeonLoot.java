@@ -78,7 +78,7 @@ public class DungeonLoot extends LootTableProvider {
 
     }
 
-    private LootPool.Builder keys(ILootPool pool) {
+    private static LootPool.Builder keys(ILootPool pool) {
 
         /*
          * Find all blocks which could replace a placeholder seal block
@@ -111,7 +111,7 @@ public class DungeonLoot extends LootTableProvider {
         );
     }
 
-    private LootPool.Builder breakers(ILootPool pool) {
+    private static LootPool.Builder breakers(ILootPool pool) {
 
         new HashMap<>() {{
 
@@ -126,7 +126,7 @@ public class DungeonLoot extends LootTableProvider {
         ));
     }
 
-    private LootPool.Builder armor(ILootPool pool) {
+    private static LootPool.Builder armor(ILootPool pool) {
 
         Map<Item, Integer> items = new HashMap<>() {{
             put(Items.LEATHER_BOOTS, 60);
@@ -146,7 +146,7 @@ public class DungeonLoot extends LootTableProvider {
         registerEnchanting(pool, items);
     }
 
-    private LootPool.Builder weapons(ILootPool pool) {
+    private static LootPool.Builder weapons(ILootPool pool) {
 
         Map<Item, Integer> items = new HashMap<>() {{
             put(Items.WOODEN_SWORD, 30);
@@ -169,7 +169,7 @@ public class DungeonLoot extends LootTableProvider {
         registerEnchanting(pool, items);
     }
 
-    private LootPool.Builder shiny(ILootPool pool) {
+    private static LootPool.Builder gold(ILootPool pool) {
 
         pool.addEntry(ItemLootEntry.builder(Items.GOLD_NUGGET)
                 .acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 8)))
@@ -182,7 +182,7 @@ public class DungeonLoot extends LootTableProvider {
         );
     }
 
-    private LootPool.Builder tools(ILootPool pool) {
+    private static LootPool.Builder tools(ILootPool pool) {
 
         pool.addEntry(ItemLootEntry.builder(Items.ENDER_PEARL)
                 .acceptFunction(SetCount.func_215932_a(ConstantRange.of(1)))
@@ -190,7 +190,7 @@ public class DungeonLoot extends LootTableProvider {
         );
     }
 
-    private LootPool.Builder food(ILootPool pool) {
+    private static LootPool.Builder food(ILootPool pool) {
         
         pool.addEntry(ItemLootEntry.builder(Items.POTATO).weight(8).acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 6)));
         pool.addEntry(ItemLootEntry.builder(Items.APPLE).weight(5).acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 4)));
@@ -198,11 +198,19 @@ public class DungeonLoot extends LootTableProvider {
 
     }
 
+    private static LootPool.Builder potions(ILootPool pool) {
+        /* TODO */
+    }
+
+    private static LootPool.Builder grenades(ILootPool pool) {
+        /* TODO */
+    }
+
     private void addTables() {
 
         lootTables.put(Rarity.COMMON, LootTable.builder()
                 .addLootPool(new DungeonLootPool("shiny", new RandomValueRange(0, 1))
-                    .add(DungeonLoot::shiny)
+                    .add(DungeonLoot::gold)
                 ).getPool()
                 .addLootPool(new DungeonLootPool("food", ConstantRange.of(4))
                     .add(DungeonLoot::food)
@@ -210,13 +218,14 @@ public class DungeonLoot extends LootTableProvider {
                 .addLootPool(new DungeonLootPool("battle", new RandomValueRange(1, 2))
                     .add(DungeonLoot::armor, 3)
                     .add(DungeonLoot::weapons, 3)
+                    .add(DungeonLoot::grenades, 3)
                     .add(DungeonLoot::tools, 1)
                 ).getPool()
         );
 
         lootTables.put(Rarity.RARE, LootTable.builder()
                 .addLootPool(new DungeonLootPool("shiny", new RandomValueRange(2, 5))
-                    .add(DungeonLoot::shiny)
+                    .add(DungeonLoot::gold)
                 ).getPool()
                 .addLootPool(new DungeonLootPool("food", new RandomValueRange(0, 2))
                     .add(DungeonLoot::food)
@@ -224,6 +233,7 @@ public class DungeonLoot extends LootTableProvider {
                 .addLootPool(new DungeonLootPool("battle", new RandomValueRange(1, 2))
                     .add(DungeonLoot::armor, 3)
                     .add(DungeonLoot::weapons, 3)
+                    .add(DungeonLoot::potions, 1)
                 ).getPool()
                 .addLootPool(new DungeonLootPool("tools", new RandomValueRange(1, 2))
                     .add(DungeonLoot::tools, 2)
