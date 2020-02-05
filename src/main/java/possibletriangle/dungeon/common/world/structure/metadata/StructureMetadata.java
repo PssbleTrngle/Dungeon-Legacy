@@ -40,6 +40,10 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
         return categories;
     }
 
+    public GenerationCondition[] getConditions() {
+        return conditions;
+    }
+
     public Part[] getParts() {
         return parts;
     }
