@@ -72,7 +72,7 @@ public class MetadataScreen extends Screen {
             .split(","))
             .map(String::trim)
             .distinct()
-            .filter(s -> s.length > 0)
+            .filter(s -> s.matches("^[a-zA-Z0-9-_]+$"))
             .toArray(String[]::new);
 
         float weight = Float.parseFloat(weightEdit.getText());
