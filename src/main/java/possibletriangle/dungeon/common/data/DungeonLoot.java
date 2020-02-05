@@ -98,10 +98,8 @@ public class DungeonLoot extends LootTableProvider {
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
-        Function<StateProvider, Stream<BlockState>> extract = p -> IntStream.range(0, Palette.MAX_VARIANT).mapToObj(p::apply);
-
         Block[] blocks = providers.stream()
-                .map(extract)
+                .map(p -> IntStream.range(0, Palette.MAX_VARIANT).mapToObj(p::apply))
                 .flatMap(Function.identity())
                 .filter(Objects::nonNull)
                 .map(BlockState::getBlock)
@@ -259,6 +257,7 @@ public class DungeonLoot extends LootTableProvider {
         lootTables.put(Rarity.COMMON, LootTable.builder()
                 .addLootPool(shiny().rolls(new RandomValueRange(2, 4)))
                 .addLootPool(weapons().rolls(new RandomValueRange(0, 2)))
+                .addLootPool(armor().rolls(new RandomValueRange(0, 2)))
                 .addLootPool(food().rolls(ConstantRange.of(4)))
         );
 
