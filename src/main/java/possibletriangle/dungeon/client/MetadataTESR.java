@@ -37,9 +37,9 @@ public class MetadataTESR extends TileEntityRenderer<MetadataTile> {
 
             AxisAlignedBB inner = new AxisAlignedBB(
                 posX, posY, posZ,
-                part.size.minX + (part.size.maxX - part.size.minX) * animation,
-                part.size.minY + (part.size.maxY - part.size.minY) * animation,
-                part.size.minZ + (part.size.maxZ - part.size.minZ) * animation
+                part.size.minX + (part.size.maxX - part.size.minX + 1) * animation,
+                part.size.minY + (part.size.maxY - part.size.minY + 1) * animation,
+                part.size.minZ + (part.size.maxZ - part.size.minZ + 1) * animation
             );
             
             this.drawBox(outer);
