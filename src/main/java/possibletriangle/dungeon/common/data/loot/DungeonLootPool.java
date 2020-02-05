@@ -8,12 +8,12 @@ public class DungeonLootPool {
         this.pool = LootPool.builder().name(name).rolls(rolls);
     }
 
-    public DungeonLootPool add(LootPoolEntry.Builder group, int weight) {
+    public DungeonLootPool add(ILootGroup group, int weight) {
         group.register(entry -> this.pool.addEntry(entry.weight(entry.getWeight() * weight)));
         return this;
     }
 
-    public DungeonLootPool add(LootPoolEntry.Builder group) {
+    public DungeonLootPool add(ILootGroup group) {
         return this.add(group, 1);
     }
 
