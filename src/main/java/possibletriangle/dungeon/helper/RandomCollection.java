@@ -4,6 +4,7 @@ import java.util.NavigableMap;
 import java.util.Optional;
 import java.util.Random;
 import java.util.TreeMap;
+import java.util.Collection;
 import java.util.function.Predicate;
 
 public class RandomCollection<T> {
@@ -48,8 +49,8 @@ public class RandomCollection<T> {
         return this.size() == 0;
     }
 
-    public T[] all() {
-        return (T[]) map.values().toArray();
+    public Collection<T> all() {
+        return map.values();
     }
 
     public RandomCollection filter(Predicate<T> by) {
