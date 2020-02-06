@@ -54,7 +54,7 @@ public class DungeonChunk {
      */
     public void setTileEntity(BlockPos pos, CompoundNBT nbt) {
         Rotation rotation = pos.getX() * pos.getZ() == 0 ? Rotation.NONE : this.placement.getRotation();
-        BlockPos rotated = rotate(pos, rotation, 1);
+        BlockPos rotated = rotate(pos, rotation);
         BlockPos real = getPos().asBlockPos().add(rotated);
 
         nbt.putInt("x", real.getX());
@@ -101,7 +101,7 @@ public class DungeonChunk {
      * @param pos The position
      */
     public BlockState getBlockState(BlockPos pos) {
-        return chunk.getBlockState(rotate(pos, this.placement.getRotation(), 1));
+        return chunk.getBlockState(rotate(pos, this.placement.getRotation()));
     }
 
     public BlockState setBlockState(BlockPos pos, BlockState state) {
@@ -125,7 +125,7 @@ public class DungeonChunk {
         } else {
 
             BlockState rotatedState = state.rotate(rotation);
-            BlockPos rotated = this.rotate(pos, rotation, 1);
+            BlockPos rotated = this.rotate(pos, rotation);
             return chunk.setBlockState(rotated, rotatedState, false);
         }
     }
@@ -137,12 +137,12 @@ public class DungeonChunk {
      * @param rotation The rotation
      * @return A rotated BlockPos
      */
-    public BlockPos rotate(BlockPos in, Rotation rotation, int size) {
+    public BlockPos rotate(BlockPos in, Rotation rotation) {
         float phi = (float) (rotation.ordinal() * Math.PI / 2);
         int sin = (int) MathHelper.sin(phi);
         int cos = (int) MathHelper.cos(phi);
 
-        int center = size * 8;
+        int center = ctx.getSize() * 8;
         float[] centered = new float[]{in.getX() - center, in.getZ() - center};
 
         return new BlockPos(
