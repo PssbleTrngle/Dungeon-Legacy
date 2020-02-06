@@ -35,6 +35,20 @@ public class DungeonCommand {
         );
     }
 
+    private static Optional<Pair<Integer,Generateable>> roomAt(BlockPos pos, World world) {
+
+        ChunkPos chunk = new ChunkPos(pos);
+        DungeonSettings settings = new DungeonSettings();
+        Map<Integer, Generateable> rooms = DungeonChunkGenerator.roomsFor(world, chunk);
+        int floor = pos.getY() / (DungeonSettings.FLOOR_HEIGHT + 1);
+
+        int nextFloor = rooms.keySet().stream().filter(f -> f <= floor).max(Comparator.comparingInt(a -> a)).orElse(0);
+        Generateable room = rooms.get(nextFloor);
+        if(room == null) return Optional.empty();
+        return Optional.of(new Pair(room, floor));
+
+    }
+
     private static int getRoom(CommandContext<CommandSource> context) {
         CommandSource source = context.getSource();
 
@@ -43,19 +57,10 @@ public class DungeonCommand {
             pos = BlockPosArgument.getBlockPos(context, "pos");
         } catch (CommandSyntaxException ignored) {}
 
-        ChunkPos chunk = new ChunkPos(pos);
         World world = source.getWorld();
-        DungeonSettings settings = new DungeonSettings();
-
-        Map<Integer, Generateable> rooms = DungeonChunkGenerator.roomsFor(settings, chunk, world.getSeed());
-        int floor = pos.getY() / (DungeonSettings.FLOOR_HEIGHT + 1);
-
-        source.sendFeedback(new StringTextComponent("Found " + rooms.size() + " rooms at " + chunk.toString()), true);
-
-        int nextFloor = rooms.keySet().stream().filter(f -> f <= floor).max(Comparator.comparingInt(a -> a)).orElse(0);
-        Generateable room = rooms.get(nextFloor);
-
-        if (room != null) {
+        roomAt(pos, world).ifPresent(pair -> {
+            int floor = pair.getValue();
+            Generateable room = pair.getKey();
             StructureMetadata meta = room.getMeta();
             Vec3i size = room.getSize();
 
@@ -64,9 +69,9 @@ public class DungeonCommand {
             source.sendFeedback(new TranslationTextComponent("command.dungeon.get.size", size.getX(), size.getZ(), size.getY()), false);
             source.sendFeedback(new TranslationTextComponent("command.dungeon.get.palette", "unknown"), false);
             source.sendFeedback(new TranslationTextComponent("command.dungeon.get.weight", meta.getWeight()), false);
-        } else {
+        }).orElse(() -> {
             source.sendFeedback(new TranslationTextComponent("command.dungeon.get.no_room"), false);
-        }
+        });
 
         return rooms.size();
     }
