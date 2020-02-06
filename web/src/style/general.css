@@ -1,66 +1,139 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    background-color: #222;
+body,
+html {
+  margin: 0;
+  padding: 0;
+  background-color: #222;
 }
 
 * {
-    font-family: sans-serif;
-    color: #EEE;
+  font-family: sans-serif;
+  color: #eee;
 }
 
 header {
-    position: relative;
-    background-color: #333;
-    padding: 5vh 0 calc(30vh - 10px) 0;
-    text-align: center;
-    height: 0;
-    border-bottom: 10px solid #111;
-    box-shadow: 0 -10px 20px 0 #0007 inset;
+  position: relative;
+  background-color: #333;
+  padding: 5vh 0 calc(30vh - 10px) 0;
+  text-align: center;
+  height: 0;
+  border-bottom: 10px solid #111;
+  box-shadow: 0 -10px 20px 0 #0007 inset;
 
-    background-size: cover;
+  overflow: hidden;
+}
 
-    overflow: hidden;
+header .banners img {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+img.fade-enter {
+  opacity: 0.01;
+}
+img.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
+}
+img.fade-exit {
+  opacity: 1;
+}
+
+img.fade-exit.fade-exit-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
 }
 
 header h1 {
-    color: #222;
-    font-size: 10vh;
-    text-shadow: 0 0 50px #FFF6, 0 0 1px #FFF;
-    
-    text-transform: uppercase;
-    font-family: 'Montserrat', sans-serif;
-    letter-spacing: 0.5vh;
+  color: #222;
+  font-size: 10vh;
+  text-shadow: 0 0 50px #fff6, 0 0 1px #fff;
+
+  text-transform: uppercase;
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: 0.5vh;
 }
 
 .container {
-    position: relative;
+  position: relative;
 }
 
 section {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    left: 0;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
 }
 
 section {
-    text-align: center;
-    padding-top: 20px;
+  text-align: center;
+  padding-top: 20px;
 }
 
-.fade-enter {
-    opacity: 0.01;
+section.fade-enter {
+  opacity: 0.01;
 }
-.fade-enter.fade-enter-active {
-    opacity: 1;
-    transition: opacity 300ms ease-in;
+section.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
 }
-.fade-exit {
-    opacity: 1;
+section.fade-exit {
+  opacity: 1;
 }
-  
-.fade-exit.fade-exit-active {
-    opacity: 0.01;
-    transition: opacity 300ms ease-in;
+
+section.fade-exit.fade-exit-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+.row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+}
+
+button,
+input {
+  border: #111 1px solid;
+  background-color: transparent;
+  padding: 15px;
+}
+
+button:hover,
+input {
+  background-color: #fff1;
+}
+
+button.selected {
+  background-color: #fff2;
+}
+
+button:focus,
+input:focus {
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+form > * {
+  margin: 10px 0;
+}
+
+input.invalid {
+  outline: 2px solid rgb(213, 17, 59);
+}
+
+label.tooltip {
+  position: absolute;
+  margin-left: 10px;
+  margin-top: 20px;
+  padding: 7px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  background: #000;
 }
