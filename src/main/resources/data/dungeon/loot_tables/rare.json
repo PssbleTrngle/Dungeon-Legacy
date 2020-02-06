@@ -2,13 +2,10 @@
   "type": "minecraft:chest",
   "pools": [
     {
-<<<<<<< HEAD
-      "name": "common",
-=======
       "name": "shiny",
       "rolls": {
-        "min": 0.0,
-        "max": 1.0,
+        "min": 2.0,
+        "max": 5.0,
         "type": "minecraft:uniform"
       },
       "entries": [
@@ -46,63 +43,14 @@
     },
     {
       "name": "food",
->>>>>>> Generated loot tables
-      "rolls": 4,
+      "rolls": {
+        "min": 0.0,
+        "max": 2.0,
+        "type": "minecraft:uniform"
+      },
       "entries": [
         {
           "type": "minecraft:item",
-<<<<<<< HEAD
-          "functions": [
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:wooden_sword"
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:stone_sword"
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:iron_sword"
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:diamond_sword"
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:wooden_axe"
-        },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-=======
           "weight": 8,
           "functions": [
             {
@@ -651,15 +599,10 @@
               }
             }
           ],
->>>>>>> Generated loot tables
           "name": "minecraft:stone_axe"
         },
         {
           "type": "minecraft:item",
-<<<<<<< HEAD
-          "functions": [
-            {
-=======
           "weight": 45,
           "functions": [
             {
@@ -721,7 +664,6 @@
               }
             },
             {
->>>>>>> Generated loot tables
               "function": "minecraft:enchant_randomly"
             }
           ],
@@ -729,10 +671,6 @@
         },
         {
           "type": "minecraft:item",
-<<<<<<< HEAD
-          "functions": [
-            {
-=======
           "weight": 3,
           "functions": [
             {
@@ -743,13 +681,10 @@
               }
             },
             {
->>>>>>> Generated loot tables
               "function": "minecraft:enchant_randomly"
             }
           ],
           "name": "minecraft:diamond_axe"
-<<<<<<< HEAD
-=======
         },
         {
           "type": "minecraft:item",
@@ -833,9 +768,20 @@
             }
           ],
           "name": "minecraft:arrow"
-        },
+        }
+      ]
+    },
+    {
+      "name": "tools",
+      "rolls": {
+        "min": 1.0,
+        "max": 2.0,
+        "type": "minecraft:uniform"
+      },
+      "entries": [
         {
           "type": "minecraft:item",
+          "weight": 2,
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -843,7 +789,97 @@
             }
           ],
           "name": "minecraft:ender_pearl"
->>>>>>> Generated loot tables
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 5,
+          "functions": [
+            {
+              "function": "dungeon:can_place_on",
+              "blocks": [
+                {
+                  "namespace": "minecraft",
+                  "path": "polished_andesite"
+                }
+              ]
+            }
+          ],
+          "name": "minecraft:stone_button"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "dungeon:can_place_on",
+              "blocks": [
+                {
+                  "namespace": "minecraft",
+                  "path": "polished_andesite"
+                }
+              ]
+            }
+          ],
+          "name": "minecraft:lever"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.6,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "dungeon:can_break",
+              "block": {
+                "namespace": "dungeon",
+                "path": "gravelous_gravel"
+              }
+            }
+          ],
+          "name": "minecraft:golden_shovel"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.6,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "dungeon:can_break",
+              "block": {
+                "namespace": "dungeon",
+                "path": "morsh_wood"
+              }
+            }
+          ],
+          "name": "minecraft:golden_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.6,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "dungeon:can_break",
+              "block": {
+                "namespace": "dungeon",
+                "path": "porous_stone"
+              }
+            }
+          ],
+          "name": "minecraft:golden_pickaxe"
         }
       ]
     }
