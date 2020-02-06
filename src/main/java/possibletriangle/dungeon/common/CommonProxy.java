@@ -138,7 +138,9 @@ public class CommonProxy {
                     new BreakableBlock(Blocks.GRAVEL).setRegistryName(DungeonMod.MODID, "gravelous_gravel"),
                     new BreakableBlock(Blocks.OAK_PLANKS).setRegistryName(DungeonMod.MODID, "morsh_wood"),
 
-                    new MetadataBlock().setRegistryName(DungeonMod.MODID, "metadata_block")
+                    new MetadataBlock().setRegistryName(DungeonMod.MODID, "metadata_block"),
+
+                    new TotemBlock().setRegistryName(DungeonMod.MODID, "totem")
 
                     //new LogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)),
                     //new Block(Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)),
