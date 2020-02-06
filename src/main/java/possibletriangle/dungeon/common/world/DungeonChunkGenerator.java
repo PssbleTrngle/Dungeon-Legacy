@@ -82,6 +82,12 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
         Random random = chunkSeed(seed, pos);
         return Palette.random(random);
     }
+    
+    public static Map<Integer,Generateable> roomsFor(World world, ChunkPos pos) {
+        /* Get settings from world */
+        DungeonSettings settings = new DungeonSettings();
+        return roomsFor(settings, pos, world.getSeed());
+    }
 
     /**
      * Retrieves all rooms for a specific ChunkPos.

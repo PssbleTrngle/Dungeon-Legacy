@@ -179,7 +179,6 @@ public class DungeonChunk {
     /**
      * Rotate a BlockPos around the center of a room
      * @param in The BlockPos to rotate
-     * @param size The size of the room in chunks
      * @param rotation The rotation
      * @return A rotated BlockPos
      */

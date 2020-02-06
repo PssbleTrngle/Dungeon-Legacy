@@ -115,6 +115,11 @@ public class CommonProxy {
                     .build(null)
                     .setRegistryName(DungeonMod.MODID, "metadata")
             );
+            event.getRegistry().register(TileEntityType.Builder.create(
+                    TotemTile::new, TotemBlock.TOTEM)
+                    .build(null)
+                    .setRegistryName(DungeonMod.MODID, "totem")
+            );
         }
 
         private static final ArrayList<Block> BLOCKS = new ArrayList<>();
