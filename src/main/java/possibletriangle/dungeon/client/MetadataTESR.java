@@ -20,7 +20,7 @@ public class MetadataTESR extends TileEntityRenderer<MetadataTile> {
 
         this.drawBox(tile.getBounds());
 
-        Arrays.stream(meta.getParts()).forEach(part -> {
+        for(Part part : meta.getParts()) {
 
             double posX = part.pos.minX;
             double posY = part.pos.minY;
@@ -44,7 +44,7 @@ public class MetadataTESR extends TileEntityRenderer<MetadataTile> {
             
             this.drawBox(outer);
             this.drawBox(inner);
-        });
+        };
         
         GlStateManager.popMatrix();
 
