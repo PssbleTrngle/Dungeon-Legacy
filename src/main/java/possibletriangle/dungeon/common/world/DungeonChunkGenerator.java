@@ -101,11 +101,10 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
             ctx.setFloor(floor);
 
             Generateable room = roomFor(random, ctx);
-            Vec3i size = room.getSize();
             rooms.put(floor, room);
 
             /* If the room is higher than 1 floor, skip the next floors to not override it */
-            int height = size.getY();
+            int height = room.getSize().getY();
             if(height > 1) floor += height - 1;
         }
 
@@ -132,18 +131,20 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
         
         roomsFor(settings, pos, world.getSeed()).forEach((floor, room) -> {
             ctx.setFloor(floor);
+            ctx.setSize(room);
             
-            Vec3i size = room.getSize();
+            int height = room.getSize().getY();
 
             /* Generate Room and Wall */
             room.generate(chunk, random, ctx, new BlockPos(1, 0, 1));
             Arrays.stream(room.getMeta().getParts()).forEach(part ->
-                        partFor(part, random).ifPresent(structure ->
-                            structure.generate(chunk, random, ctx, part.getPos(random))
-                        ));
-            Wall.generate(chunk, size.getY(), random, ctx);
+                partFor(part, random).ifPresent(structure ->
+                    structure.generate(chunk, random, ctx, part.getPos(random))
+                )
+            );
+            Wall.generate(chunk, height, random, ctx);
 
-            this.generateCeiling(floor, size.getY(), chunk);
+            this.generateCeiling(floor, height, chunk);
         });
     }
 
