@@ -1,45 +1,35 @@
 package possibletriangle.dungeon.common;
 
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.RegistryBuilder;
 import possibletriangle.dungeon.DungeonMod;
-import possibletriangle.dungeon.common.block.BreakableBlock;
-import possibletriangle.dungeon.common.block.MetadataBlock;
-import possibletriangle.dungeon.common.block.Palette;
+import possibletriangle.dungeon.common.block.*;
 import possibletriangle.dungeon.common.block.tile.MetadataTile;
+import possibletriangle.dungeon.common.block.tile.TotemTile;
 import possibletriangle.dungeon.common.content.Palettes;
-import possibletriangle.dungeon.common.block.Type;
-import possibletriangle.dungeon.common.data.CanBreak;
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.DungeonWorldType;
 import possibletriangle.dungeon.common.world.room.HallwayMaze;
+import possibletriangle.dungeon.common.world.room.StructureType;
 import possibletriangle.dungeon.common.world.room.Structures;
 import possibletriangle.dungeon.common.world.structure.StructureLoader;
-import possibletriangle.dungeon.common.world.room.StructureType;
 import possibletriangle.dungeon.common.world.structure.metadata.condition.ConditionType;
 import possibletriangle.dungeon.common.world.structure.metadata.condition.FloorCondition;
 import possibletriangle.dungeon.common.world.structure.metadata.condition.ModCondition;
 import possibletriangle.dungeon.common.world.structure.metadata.condition.PaletteCondition;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 public class CommonProxy {
 

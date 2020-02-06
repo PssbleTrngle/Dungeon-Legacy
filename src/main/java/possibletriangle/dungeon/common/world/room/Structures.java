@@ -1,17 +1,11 @@
 package possibletriangle.dungeon.common.world.room;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
 import possibletriangle.dungeon.DungeonMod;
-import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.helper.RandomCollection;
 
 import java.util.HashMap;
 import java.util.Random;
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public abstract class Structures {
@@ -59,6 +53,6 @@ public abstract class Structures {
      * @param random The seeded random
      */
     public static Generateable random(StructureType type, Random random) {
-        return VALUES.getOrDefault(type, new RandomCollection<>()).next(random).orElseThrow(NullPointerException::new);
+        return VALUES.getOrDefault(type, new RandomCollection<>()).next(random).orElseThrow(() -> new NullPointerException("No structures register for requested type " + type.getRegistryName()));
     }
 }

@@ -13,7 +13,7 @@ import net.minecraft.world.gen.feature.template.PlacementSettings;
 import possibletriangle.dungeon.common.block.IPlaceholder;
 import possibletriangle.dungeon.common.block.Palette;
 import possibletriangle.dungeon.common.block.Type;
-import possibletriangle.dungeon.common.data.DungeonLoot;
+import possibletriangle.dungeon.common.data.loot.DungeonLoot;
 
 import java.util.Random;
 

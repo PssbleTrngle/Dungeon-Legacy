@@ -1,17 +1,13 @@
 package possibletriangle.dungeon.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.IGuiEventListener;
-import net.minecraft.client.gui.screen.EditStructureScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.gui.widget.Widget;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.state.properties.StructureMode;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.common.MinecraftForge;
 import possibletriangle.dungeon.common.block.tile.MetadataTile;
+import possibletriangle.dungeon.common.world.structure.metadata.StructureMetadata;
+
+import java.util.Arrays;
 
 public class MetadataScreen extends Screen {
 
@@ -52,7 +48,7 @@ public class MetadataScreen extends Screen {
 
         this.weightEdit = new TextFieldWidget(this.font, this.width / 2 - 152, 100, 80, 20, I18n.format("metadata_block.weight"));
         this.weightEdit.setMaxStringLength(6);
-        this.weightEdit.setText(Float.toString(tile.meta.getWeight()));
+        this.weightEdit.setText(Float.toString(meta.getWeight()));
         this.children.add(this.weightEdit);
 
         this.setFocusedDefault(this.nameEdit);
@@ -66,7 +62,7 @@ public class MetadataScreen extends Screen {
      */
     public StructureMetadata generateMeta() {
 
-        String name = new ResourceLocation(this.nameEdit.getText());
+        String name = this.nameEdit.getText();
 
         String[] categories = Arrays.stream(this.categoriesEdit.getText()
             .split(","))

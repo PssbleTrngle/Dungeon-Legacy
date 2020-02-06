@@ -1,4 +1,4 @@
-package possibletriangle.dungeon.common.data;
+package possibletriangle.dungeon.common.data.loot;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;

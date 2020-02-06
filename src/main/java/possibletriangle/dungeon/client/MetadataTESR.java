@@ -4,10 +4,10 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.util.math.AxisAlignedBB;
 import possibletriangle.dungeon.common.block.tile.MetadataTile;
+import possibletriangle.dungeon.common.world.structure.metadata.Part;
 import possibletriangle.dungeon.common.world.structure.metadata.StructureMetadata;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
 
 public class MetadataTESR extends TileEntityRenderer<MetadataTile> {
 

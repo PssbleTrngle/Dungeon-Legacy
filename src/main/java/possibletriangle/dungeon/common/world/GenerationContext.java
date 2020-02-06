@@ -1,7 +1,9 @@
 package possibletriangle.dungeon.common.world;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import possibletriangle.dungeon.common.block.Palette;
+import possibletriangle.dungeon.common.world.room.Generateable;
 
 public class GenerationContext {
 
