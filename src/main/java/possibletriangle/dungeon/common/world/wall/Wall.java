@@ -1,9 +1,6 @@
 package possibletriangle.dungeon.common.world.wall;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.tileentity.StructureBlockTileEntity;
 import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import possibletriangle.dungeon.common.block.TemplateBlock;
 import possibletriangle.dungeon.common.world.DungeonChunk;
@@ -33,7 +30,7 @@ public class Wall {
         for (int x = 0; x < 16; x++)
             for (int z = 0; z < 16; z++)
                 if (x * z == 0)
-                    for (int y = 0; y < (DungeonSettings.FLOOR_HEIGHT + 1) * floors; y++)
+                    for (int y = 0; y < (DungeonSettings.FLOOR_HEIGHT + 1) * floors - 1; y++)
                         chunk.setBlockState(new BlockPos(x, y, z), TemplateBlock.WALL.getDefaultState());
 
         for(int floor = 0; floor < floors; floor++)

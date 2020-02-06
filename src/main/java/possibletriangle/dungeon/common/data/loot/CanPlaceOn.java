@@ -1,4 +1,4 @@
-package possibletriangle.dungeon.common.data;
+package possibletriangle.dungeon.common.data.loot;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;

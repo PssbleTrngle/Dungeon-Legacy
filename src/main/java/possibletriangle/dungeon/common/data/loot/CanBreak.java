@@ -1,4 +1,4 @@
-package possibletriangle.dungeon.common.data;
+package possibletriangle.dungeon.common.data.loot;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -6,6 +6,10 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootFunction;
 import net.minecraft.world.storage.loot.conditions.ILootCondition;
+<<<<<<< HEAD
+=======
+import possibletriangle.dungeon.DungeonMod;
+>>>>>>> Fixing imports and some syntax errors (yes, again)
 
 public class CanBreak extends LootFunction {
 

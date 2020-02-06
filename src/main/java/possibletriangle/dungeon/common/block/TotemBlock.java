@@ -7,18 +7,15 @@ import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.StructureBlockTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ObjectHolder;
-import possibletriangle.dungeon.DungeonMod;
-import possibletriangle.dungeon.common.block.tile.MetadataTile;
+import possibletriangle.dungeon.common.block.tile.TotemTile;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -30,7 +27,7 @@ public class TotemBlock extends ContainerBlock {
     public static final Block TOTEM = null;
 
     public TotemBlock() {
-        super(Block.Properties.create(Material.ROCK, MaterialColor.DARK_GRAY)
+        super(Block.Properties.create(Material.ROCK, MaterialColor.GRAY)
                 .hardnessAndResistance(-1.0F, 3600000.0F)
                 .noDrops()
         );
