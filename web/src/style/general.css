@@ -1,0 +1,66 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    background-color: #222;
+}
+
+* {
+    font-family: sans-serif;
+    color: #EEE;
+}
+
+header {
+    position: relative;
+    background-color: #333;
+    padding: 5vh 0 calc(30vh - 10px) 0;
+    text-align: center;
+    height: 0;
+    border-bottom: 10px solid #111;
+    box-shadow: 0 -10px 20px 0 #0007 inset;
+
+    background-size: cover;
+
+    overflow: hidden;
+}
+
+header h1 {
+    color: #222;
+    font-size: 10vh;
+    text-shadow: 0 0 50px #FFF6, 0 0 1px #FFF;
+    
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.5vh;
+}
+
+.container {
+    position: relative;
+}
+
+section {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+section {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.fade-enter {
+    opacity: 0.01;
+}
+.fade-enter.fade-enter-active {
+    opacity: 1;
+    transition: opacity 300ms ease-in;
+}
+.fade-exit {
+    opacity: 1;
+}
+  
+.fade-exit.fade-exit-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in;
+}
