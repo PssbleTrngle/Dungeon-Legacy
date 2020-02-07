@@ -7,6 +7,7 @@ const progress = (...s) => console.log(chalk.cyanBright([...s, '...'].join(' '))
 const error = (...s) => console.log(chalk.redBright(['✗', ...s].join('    ')));
 
 const MOD = 'dungeon';
+exports.MOD = MOD;
 const assets = `${__dirname}/../../src/main/resources/assets/${MOD}`;
 
 async function clean() {
@@ -14,13 +15,17 @@ async function clean() {
 
 	const promises = ['blockstates', 'models']
 		.map(name => `${assets}/${name}`)
+		.map(p => [
+			`${p}/**/!(parent)/*.json`,
+			`${p}/*.json`
+		]).reduce((a, e) => [...a, ...e], [])
 		.map(folder => new Promise(res => rimraf(folder, res)));
 
 	await Promise.all(promises);
 
 }
 
-async function write(dir, name, data) {
+exports.write = async (dir, name, data) => {
 
 	const path = `${assets}/${dir}`;
 
@@ -30,43 +35,43 @@ async function write(dir, name, data) {
 }
 
 async function item(name) {
-	await write('models/item', name, {
+	exports.write('models/item', name, {
 		parent: `${MOD}:block/${name}`
 	});
 }
 
-async function create(params) {
-	const { type, name } = params;
-	const func = Types.get(type);
-
-	if (func) {
-		await func(params);
-		await item(name);
-		success(name);
-	} else {
-		error(name);
+async function get(name) {
+	const path = `./types/${name}.js`;
+	try {
+		return require(path);
+	} catch (e) {
+		throw `Could not find type ${name} at '${path}'`;
 	}
 }
 
-function defaultState(name) {
-	return write('blockstates', name, {
-		variants: {
-			'': { model: `${MOD}:block/${name}` }
-		}
-	});
-}
+async function create(params) {
+	const { type, name } = params;
+	try {
+		const func = await get(type);
 
-async function fallback({ name, type }) {
+		await exports.write('blockstates', name, {
+			variants: {
+				'': { model: `${MOD}:block/${name}` }
+			}
+		});
 
-	await defaultState(name);
-
-	await write('models/block', name, {
-		parent: `block/${type}`,
-		textures: {
-			all: `${MOD}:block/${name}`
-		}
-	});
-
+<<<<<<< HEAD
+	if (func) {
+=======
+		await item(name);
+>>>>>>> Split block type funcions to seperate files & keep 'parent/*' files when cleaning
+		await func(params);
+		await item(name);
+		success(name);
+	} catch (msg) {
+		error(name);
+		error(msg);
+	}
 }
 
 function* each(object) {
@@ -74,7 +79,7 @@ function* each(object) {
 		yield [key, object[key]];
 }
 
-function cycleProps(props, defaults) {
+exports.cycleProps = (props, defaults) => {
 
 	const rec = (props, done = { '': defaults }) => {
 
@@ -116,6 +121,7 @@ function cycleProps(props, defaults) {
 
 }
 
+<<<<<<< HEAD
 const Types = {
 
 	get(name) {
@@ -406,6 +412,8 @@ const Types = {
 
 }
 
+=======
+>>>>>>> Split block type funcions to seperate files & keep 'parent/*' files when cleaning
 const blocks = require('./blocks.json')
 
 async function run() {

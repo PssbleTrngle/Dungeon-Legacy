@@ -1,4 +1,4 @@
-{ 
+{
   "scripts": {
     "run": "node ./src/Generator.js"
   }
