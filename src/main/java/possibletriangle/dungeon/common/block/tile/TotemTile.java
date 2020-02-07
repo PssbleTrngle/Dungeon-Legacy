@@ -211,13 +211,10 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
         return true;
     }
 
-    /**
-     * Only called if the block state property is set as CLAIMED
-     * Thus, an unclaimed TotemTile will return the color for INVALID and not UNCLAIMED
-     */
     public Color getColor() {
         if(this.team != null) return team.getColor();
         else if(this.player != null) return new Color(255, 255, 255);
+        else if(this.inRoom()) return new Color(42,42,42);
         return TotemBlock.INVALID;
     }
 

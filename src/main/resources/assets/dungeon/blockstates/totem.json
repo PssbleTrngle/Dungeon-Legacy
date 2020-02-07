@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "state=unclaimed": "dungeon:block/totem_unclaimed",
+    "state=claimed": "dungeon:block/totem_claimed",
+    "state=invalid": "dungeon:block/totem_invalid"
+  }
+}
