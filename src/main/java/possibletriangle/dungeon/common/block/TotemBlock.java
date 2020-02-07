@@ -44,15 +44,8 @@ public class TotemBlock extends ContainerBlock {
     public void blockColors(ColorHandlerEvent.Block event) {
 
         event.getBlockColors().register((s,w,p,i) -> {
-            if(!(s.getBlock() instanceof TotemBlock) || i == 0) return -1;
-            State state = s.get(STATE);
-
-            switch(state) {
-                case UNCLAIMED: return new Color(42,42,42);
-                case INVALID: return INVALID;
-                case CLAIMED: return getTE(w, p).map(TotemTile::getColor).orElse(INVALID);
-            }
-
+            if(i == 0) return -1;
+            return getTE(w, p).map(TotemTile::getColor).orElse(INVALID);
         }, TOTEM);
 
     }
@@ -84,7 +77,7 @@ public class TotemBlock extends ContainerBlock {
     }
 
     public enum State {
-        UNCLAIMED, CLAIMED, INVALID;
+        UNCLAIMED, CLAIMED, INVALID
     }
 
 }

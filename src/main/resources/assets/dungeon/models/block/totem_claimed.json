@@ -1,0 +1,10 @@
+{
+  "parent": "dungeon:block/parent/obelisk",
+  "textures": {
+    "down": "dungeon:block/totem_down",
+    "up": "dungeon:block/totem_up",
+    "bottom": "dungeon:block/totem_bottom",
+    "top": "dungeon:block/totem_top_claimed",
+    "runes": "dungeon:block/totem_runes_claimed"
+  }
+}
