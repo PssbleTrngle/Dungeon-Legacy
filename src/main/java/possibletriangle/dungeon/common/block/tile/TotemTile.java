@@ -1,6 +1,7 @@
 package possibletriangle.dungeon.common.block.tile;
 
 import com.google.common.collect.Lists;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -15,11 +16,14 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.common.DungeonCommand;
+import possibletriangle.dungeon.common.block.TotemBlock;
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.room.Generateable;
 
 import javax.annotation.Nullable;
+import java.awt.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @ObjectHolder("dungeon")
@@ -211,11 +215,11 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
         return true;
     }
 
-    public Color getColor() {
-        if(this.team != null) return team.getColor();
-        else if(this.player != null) return new Color(255, 255, 255);
-        else if(this.inRoom()) return new Color(42,42,42);
-        return TotemBlock.INVALID;
+    public int getColor() {
+        if(this.team != null) return Optional.ofNullable(team.getColor().getColor()).orElse(TotemBlock.State.CLAIMED.color);
+        else if(this.player != null) return TotemBlock.State.CLAIMED.color;
+        else if(this.inRoom()) return TotemBlock.State.UNCLAIMED.color;
+        return TotemBlock.State.INVALID.color;
     }
 
     @Override
