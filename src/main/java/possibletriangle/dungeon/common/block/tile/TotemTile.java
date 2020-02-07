@@ -68,6 +68,9 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
             markDirty();
 
         });
+
+        if(!this.inRoom()) updateState(TotemBlock.State.INVALID);
+
     }
 
     public boolean inRoom() {
@@ -182,8 +185,10 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
             Team team = player.getTeam();
             if(team != null) this.team = team;
             else this.player = player.getUniqueID();
-            markDirty();
+            this.markDirty();
             /* Particles */
+
+            this.updateState(TotemBlock.State.CLAIMED);
 
             return true;
         }
@@ -206,6 +211,16 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
         return true;
     }
 
+    /**
+     * Only called if the block state property is set as CLAIMED
+     * Thus, an unclaimed TotemTile will return the color for INVALID and not UNCLAIMED
+     */
+    public Color getColor() {
+        if(this.team != null) return team.getColor();
+        else if(this.player != null) return new Color(255, 255, 255);
+        return TotemBlock.INVALID;
+    }
+
     @Override
     public void read(CompoundNBT compound) {
         super.read(compound);
@@ -224,7 +239,7 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
             putPos(this.roomSize, "roomSize", compound);
             compound.putInt("floor", this.floor);
         }
-        
+
         if(this.player != null) compound.putUniqueId("player", this.player);
         if(this.team != null) compound.putString("team", this.team.getName());
 
@@ -253,6 +268,13 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
 
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
+    }
+
+    private void updateState(TotemBlock.State state) {
+        if(this.world == null) return;
+
+        BlockState block = TotemBlock.TOTEM.getDefaultState().with(TotemBlock.STATE, state);
+        this.world.setBlockState(getPos(), block);
     }
 
 }
