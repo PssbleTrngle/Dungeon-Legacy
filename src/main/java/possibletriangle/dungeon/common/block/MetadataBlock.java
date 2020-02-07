@@ -42,7 +42,7 @@ public class MetadataBlock extends ContainerBlock {
         return new MetadataTile();
     }
 
-    public Optional<MetadataTile> getTE(IWorldReader world, BlockPos pos) {
+    public Optional<MetadataTile> getTE(IBlockReader world, BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
         if(te instanceof MetadataTile) return Optional.of((MetadataTile) te);
         return Optional.empty();
