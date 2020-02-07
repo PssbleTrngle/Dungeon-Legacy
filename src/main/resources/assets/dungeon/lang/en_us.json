@@ -55,5 +55,22 @@
 	"command.dungeon.get.palette": "\u00A7bThe block theme can only be described as \u00A76%s",
 	"command.dungeon.get.weight": "\u00A7bI sense this room has a weight of \u00A76%i",
 	"command.dungeon.get.no_dungeon": "\u00A7cThe world or dimension you are in is not a dungeon",
-	"command.dungeon.get.no_room": "\u00A7cYou are not in a room"
+	"command.dungeon.get.no_room": "\u00A7cYou are not in a room",
+
+	"message.obelisk.claimed": "You claimed this totem!",
+	"message.obelisk.crowded": "There are too many players nearby",
+
+	"message.catch.assigned.predator": "You are a predator",
+	"message.catch.assigned.prey": "You are the prey",
+	"message.catch.countdown": "%i seconds until the rolls will be swapped",
+
+	"message.battle_season.on": "The battle season has begun",
+	"message.battle_season.off": "The battle season has ended",
+
+	"message.lifeline.drained": "You are running out of breath",
+
+	"message.puppeteer.dawn": "The sun will rise soon",
+	"message.puppeteer.dusk": "The sun will set soon",
+	"message.puppeteer.notify": "You sense the blood of someone nearby",
+	"message.puppeteer.notified": "The puppeteer has seen you"
 }
