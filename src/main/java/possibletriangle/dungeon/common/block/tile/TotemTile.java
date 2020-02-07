@@ -58,13 +58,16 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
     public void onLoad() {
         super.onLoad();
 
+        /* Find the room it was placed in and save the required information */
         ChunkPos chunk = new ChunkPos(getPos());
         DungeonCommand.roomAt(chunk.asBlockPos(), world).ifPresent(pair -> {
+
             Generateable room = pair.getValue();
             this.floor = pair.getKey();
             this.roomSize = room.getSize();
+            markDirty();
+
         });
-        markDirty();
     }
 
     public boolean inRoom() {
@@ -92,6 +95,7 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
     }
 
     public void tick() {
+        if(!inRoom()) return;
 
         List<PlayerEntity> claiming = this.world.getEntitiesWithinAABB(PlayerEntity.class, claimRange());
 
@@ -216,8 +220,11 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
     public CompoundNBT write(CompoundNBT compound) {
         CompoundNBT nbt = super.write(compound);
 
-        putPos(this.roomSize, "roomSize", compound);
-        compound.putInt("floor", this.floor);
+        if(this.inRoom()) {
+            putPos(this.roomSize, "roomSize", compound);
+            compound.putInt("floor", this.floor);
+        }
+        
         if(this.player != null) compound.putUniqueId("player", this.player);
         if(this.team != null) compound.putString("team", this.team.getName());
 
