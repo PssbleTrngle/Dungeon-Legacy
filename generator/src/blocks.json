@@ -47,5 +47,5 @@
 	{ "name": "mahogany_leaves", "type": "cube" },
 	
     { "name": "metadata_block", "type": "cube" },
-    { "name": "totem", "type": "obelisk" }
+    { "name": "obelisk", "type": "obelisk" }
 ]

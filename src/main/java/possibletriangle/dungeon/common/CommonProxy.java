@@ -15,7 +15,7 @@ import net.minecraftforge.registries.RegistryBuilder;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.*;
 import possibletriangle.dungeon.common.block.tile.MetadataTile;
-import possibletriangle.dungeon.common.block.tile.TotemTile;
+import possibletriangle.dungeon.common.block.tile.ObeliskTile;
 import possibletriangle.dungeon.common.content.Palettes;
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.DungeonWorldType;
@@ -108,9 +108,9 @@ public class CommonProxy {
                     .setRegistryName(DungeonMod.MODID, "metadata")
             );
             event.getRegistry().register(TileEntityType.Builder.create(
-                    TotemTile::new, TotemBlock.TOTEM)
+                    ObeliskTile::new, ObeliskBlock.TOTEM)
                     .build(null)
-                    .setRegistryName(DungeonMod.MODID, "totem")
+                    .setRegistryName(DungeonMod.MODID, "obelisk")
             );
         }
 
@@ -130,7 +130,7 @@ public class CommonProxy {
 
                     new MetadataBlock().setRegistryName(DungeonMod.MODID, "metadata_block"),
 
-                    new TotemBlock().setRegistryName(DungeonMod.MODID, "totem")
+                    new ObeliskBlock().setRegistryName(DungeonMod.MODID, "obelisk")
 
                     //new LogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)),
                     //new Block(Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)),

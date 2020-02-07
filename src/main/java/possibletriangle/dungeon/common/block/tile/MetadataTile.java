@@ -98,8 +98,8 @@ public class MetadataTile extends TileEntity {
 
         if(compound.contains("name")) name = compound.getString("name");
         if(compound.contains("meta")) this.meta.deserializeNBT(compound.getCompound("meta"));
-        this.from = TotemTile.getPos(compound, "from");
-        this.size = TotemTile.getPos(compound, "size");
+        this.from = ObeliskTile.getPos(compound, "from");
+        this.size = ObeliskTile.getPos(compound, "size");
     }
 
     @Override
@@ -108,8 +108,8 @@ public class MetadataTile extends TileEntity {
 
         if(name != null) nbt.putString("name", name);
         nbt.put("meta", meta.serializeNBT());
-        TotemTile.putPos(this.from, "from", compound);
-        TotemTile.putPos(this.size, "size", compound);
+        ObeliskTile.putPos(this.from, "from", compound);
+        ObeliskTile.putPos(this.size, "size", compound);
 
         return nbt;
     }

@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -16,21 +17,21 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.common.DungeonCommand;
-import possibletriangle.dungeon.common.block.TotemBlock;
+import possibletriangle.dungeon.common.block.ObeliskBlock;
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.room.Generateable;
 
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 @ObjectHolder("dungeon")
-public class TotemTile extends TileEntity implements ITickableTileEntity {
+public class ObeliskTile extends TileEntity implements ITickableTileEntity {
 
-    @ObjectHolder("totem")
-    public static final TileEntityType<TotemTile> TYPE = null;
+    @ObjectHolder("obelisk")
+    public static final TileEntityType<ObeliskTile> TYPE = null;
 
     private static final AxisAlignedBB EMPTY = new AxisAlignedBB(0,0,0,0,0,0);
 
@@ -54,13 +55,14 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
      */
     private static final int CLAIM_DURATION = 6;
 
-    public TotemTile() {
+    public ObeliskTile() {
         super(TYPE);
     }
 
     @Override
     public void onLoad() {
         super.onLoad();
+        if(this.inRoom()) return;
 
         /* Find the room it was placed in and save the required information */
         ChunkPos chunk = new ChunkPos(getPos());
@@ -73,7 +75,7 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
 
         });
 
-        if(!this.inRoom()) updateState(TotemBlock.State.INVALID);
+        if(!this.inRoom()) updateState(ObeliskBlock.State.INVALID);
 
     }
 
@@ -160,7 +162,13 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
             if(this.claimProgress < CLAIM_DURATION * 20) {
 
                 this.claimProgress++;
-                /* Particles */
+
+                if(this.world != null) {
+                    double x = Math.random() * 2 - 3.5 + getPos().getX();
+                    double y = Math.random() * 2 + getPos().getY();
+                    double z = Math.random() * 2 - 3.5 + getPos().getZ();
+                    this.world.addParticle(ParticleTypes.END_ROD, x, y, z, 0, 0, 0);
+                }
 
             } else {
 
@@ -174,7 +182,14 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
     }
 
     public void abort() {
-        /* Particles */
+
+        if(this.world != null) IntStream.range(0, 10).forEach(i -> {
+            double x = Math.random() * 2 - 3.5 + getPos().getX();
+            double y = Math.random() * 2 + getPos().getY();
+            double z = Math.random() * 2 - 3.5 + getPos().getZ();
+            this.world.addParticle(ParticleTypes.POOF, x, y, z, 0, 0, 0);
+        });
+
         this.claiming = null;
         markDirty();
     }
@@ -190,9 +205,15 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
             if(team != null) this.team = team;
             else this.player = player.getUniqueID();
             this.markDirty();
-            /* Particles */
 
-            this.updateState(TotemBlock.State.CLAIMED);
+            if(this.world != null) IntStream.range(0, 20).forEach(i -> {
+                double x = Math.random() * 2 - 3.5 + getPos().getX();
+                double y = Math.random() * 2 + getPos().getY();
+                double z = Math.random() * 2 - 3.5 + getPos().getZ();
+                this.world.addParticle(ParticleTypes.ENCHANT, x, y, z, 0, 0, 0);
+            });
+
+            this.updateState(ObeliskBlock.State.CLAIMED);
 
             return true;
         }
@@ -212,14 +233,18 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
     }
 
     public boolean click(PlayerEntity player) {
-        return true;
+        return false;
     }
 
+    /**
+     * Called when the blockstate is changed to re-render BlockColor for the model
+     * @return The current representing color as RGB int
+     */
     public int getColor() {
-        if(this.team != null) return Optional.ofNullable(team.getColor().getColor()).orElse(TotemBlock.State.CLAIMED.color);
-        else if(this.player != null) return TotemBlock.State.CLAIMED.color;
-        else if(this.inRoom()) return TotemBlock.State.UNCLAIMED.color;
-        return TotemBlock.State.INVALID.color;
+        if(this.team != null) return Optional.ofNullable(team.getColor().getColor()).orElse(ObeliskBlock.State.CLAIMED.color);
+        else if(this.player != null) return ObeliskBlock.State.CLAIMED.color;
+        else if(this.inRoom()) return ObeliskBlock.State.UNCLAIMED.color;
+        return ObeliskBlock.State.INVALID.color;
     }
 
     @Override
@@ -271,10 +296,10 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
         return this.write(new CompoundNBT());
     }
 
-    private void updateState(TotemBlock.State state) {
+    private void updateState(ObeliskBlock.State state) {
         if(this.world == null) return;
 
-        BlockState block = TotemBlock.TOTEM.getDefaultState().with(TotemBlock.STATE, state);
+        BlockState block = ObeliskBlock.TOTEM.getDefaultState().with(ObeliskBlock.STATE, state);
         this.world.setBlockState(getPos(), block);
     }
 

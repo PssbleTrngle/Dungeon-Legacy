@@ -6,10 +6,11 @@ module.exports = async ({ name }) => {
 
     await write('blockstates', name, {
         variants: {
-            ...states.reduce((o, s) => ({
-                ...o,
-                [`state=${s}`]: `${MOD}:block/${name}_${s}`
-            }), {})
+            ...states.map(s => ([`state=${s}`, `${MOD}:block/${name}_${s}`]))
+                .reduce((o, [key, model]) => ({
+                    ...o,
+                    [key]: { model }
+                }), {})
         }
     });
 
@@ -19,8 +20,8 @@ module.exports = async ({ name }) => {
             down: `${MOD}:block/${name}_down`,
             up: `${MOD}:block/${name}_up`,
             bottom: `${MOD}:block/${name}_bottom`,
-            top: `${MOD}:block/${name}_top_${s}`,
-            runes: `${MOD}:block/${name}_runes_${s}`,
+            top: `${MOD}:block/${name}_top`,
+            runes: `${MOD}:block/${name}_runes`,
         }
     })));
 
