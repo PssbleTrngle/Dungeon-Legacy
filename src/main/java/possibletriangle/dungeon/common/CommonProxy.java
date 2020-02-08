@@ -10,10 +10,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.RegistryBuilder;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.*;
+import possibletriangle.dungeon.common.block.placeholder.Type;
 import possibletriangle.dungeon.common.block.tile.MetadataTile;
 import possibletriangle.dungeon.common.block.tile.ObeliskTile;
 import possibletriangle.dungeon.common.content.Palettes;
@@ -34,10 +36,10 @@ import java.util.Arrays;
 public class CommonProxy {
 
     public void init(final FMLCommonSetupEvent event) {
-
         new DungeonWorldType();
-
     }
+
+    public void clientSetup(FMLClientSetupEvent event) {}
 
     public void reloadRooms(IReloadableResourceManager manager) {
 

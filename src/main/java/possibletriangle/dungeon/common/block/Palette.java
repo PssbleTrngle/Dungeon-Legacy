@@ -13,6 +13,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
+import possibletriangle.dungeon.common.block.placeholder.IPlaceholder;
+import possibletriangle.dungeon.common.block.placeholder.Type;
 import possibletriangle.dungeon.common.world.room.StateProvider;
 import possibletriangle.dungeon.helper.BlockCollection;
 import possibletriangle.dungeon.helper.RandomCollection;
@@ -53,7 +55,7 @@ public class Palette extends ForgeRegistryEntry<Palette> {
     private RandomCollection<ResourceLocation> mobs = new RandomCollection<>();
 
     /**
-     * Palettes are used to replace {@link possibletriangle.dungeon.common.block.IPlaceholder} blocks
+     * Palettes are used to replace {@link IPlaceholder} blocks
      * @param weight The weigth used in generation. A heigher weight causes a higher chance of generation
      * @param biome The biome associated with this palette
      * @param parent The palette used as a fallback
@@ -96,7 +98,7 @@ public class Palette extends ForgeRegistryEntry<Palette> {
     }
 
     /**
-     * Associate a collection of blocks with one ore multiple {@link possibletriangle.dungeon.common.block.Type}
+     * Associate a collection of blocks with one ore multiple {@link Type}
      * @param collection the blocks
      */
     public MultiConsumer<Palette,Type> put(BlockCollection collection) {

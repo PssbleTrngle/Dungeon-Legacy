@@ -39,8 +39,8 @@ public class ObeliskBlock extends ContainerBlock {
     public static final IProperty<State> STATE = EnumProperty.create("state", State.class);
     private static final VoxelShape SHAPE = Stream.of(
             Block.makeCuboidShape(0, 0, 0, 16, 16, 16),
-            Block.makeCuboidShape(1, 17, 1, 14, 22, 14),
-            Block.makeCuboidShape(0, 23, 0, 16, 32, 16)
+            Block.makeCuboidShape(1, 16, 1, 15, 22, 15),
+            Block.makeCuboidShape(0, 22, 0, 16, 32, 16)
     ).reduce(VoxelShapes.empty(), VoxelShapes::or, (v1, v2) -> v1);
 
     @ObjectHolder("dungeon:obelisk")

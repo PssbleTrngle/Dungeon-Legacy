@@ -35,7 +35,7 @@ exports.write = async (dir, name, data) => {
 }
 
 async function item(name) {
-	exports.write('models/item', name, {
+	return exports.write('models/item', name, {
 		parent: `${MOD}:block/${name}`
 	});
 }

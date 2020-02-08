@@ -1,4 +1,4 @@
-package possibletriangle.dungeon.common.block;
+package possibletriangle.dungeon.common.block.placeholder;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

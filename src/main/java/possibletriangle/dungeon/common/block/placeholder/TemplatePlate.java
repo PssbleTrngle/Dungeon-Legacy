@@ -1,6 +1,5 @@
-package possibletriangle.dungeon.common.block;
+package possibletriangle.dungeon.common.block.placeholder;
 
-import net.minecraft.block.LeverBlock;
 import net.minecraft.block.PressurePlateBlock;
 
 public class TemplatePlate extends PressurePlateBlock implements IPlaceholder {

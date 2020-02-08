@@ -1,8 +1,6 @@
-package possibletriangle.dungeon.common.block;
+package possibletriangle.dungeon.common.block.placeholder;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.block.FlowerBlock;
-import net.minecraft.block.StairsBlock;
 import net.minecraft.potion.Effects;
 
 public class TemplateFlower extends FlowerBlock implements IPlaceholder {

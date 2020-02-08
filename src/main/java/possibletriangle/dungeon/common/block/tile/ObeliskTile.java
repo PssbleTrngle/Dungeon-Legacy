@@ -2,10 +2,12 @@ package possibletriangle.dungeon.common.block.tile;
 
 import com.google.common.collect.Lists;
 import net.minecraft.block.BlockState;
+import net.minecraft.command.impl.TeamCommand;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -15,9 +17,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ObjectHolder;
-import possibletriangle.dungeon.common.DungeonCommand;
 import possibletriangle.dungeon.common.block.ObeliskBlock;
+import possibletriangle.dungeon.common.world.DungeonChunkGenerator;
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.room.Generateable;
 
@@ -27,10 +32,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
-@ObjectHolder("dungeon")
 public class ObeliskTile extends TileEntity implements ITickableTileEntity {
 
-    @ObjectHolder("obelisk")
+    @ObjectHolder("dungeon:obelisk")
     public static final TileEntityType<ObeliskTile> TYPE = null;
 
     private static final AxisAlignedBB EMPTY = new AxisAlignedBB(0,0,0,0,0,0);
@@ -59,14 +63,31 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
         super(TYPE);
     }
 
+    public void updateTeam() {
+        if(this.world != null && this.player != null) {
+            PlayerEntity player = this.world.getPlayerByUuid(this.player);
+            if(player != null) {
+                Team team = player.getTeam();
+                if(team != null) {
+                    this.player = null;
+                    this.team = team;
+                    markDirty();
+                    updateState();
+                }
+            }
+        }
+    }
+
     @Override
     public void onLoad() {
         super.onLoad();
         if(this.inRoom()) return;
 
+        updateTeam();
+
         /* Find the room it was placed in and save the required information */
         ChunkPos chunk = new ChunkPos(getPos());
-        DungeonCommand.roomAt(chunk.asBlockPos(), world).ifPresent(pair -> {
+        DungeonChunkGenerator.roomAt(chunk.asBlockPos(), world).ifPresent(pair -> {
 
             Generateable room = pair.getValue();
             this.floor = pair.getKey();
@@ -100,20 +121,32 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
             this.roomSize.getZ() * 16
         );
 
-        return new AxisAlignedBB(start, end).grow(2);
+        return new AxisAlignedBB(start, end);
     }
 
     public void tick() {
         if(!inRoom()) return;
 
-        List<PlayerEntity> claiming = this.world.getEntitiesWithinAABB(PlayerEntity.class, claimRange());
+        if(!isClaimed()) {
+            List<PlayerEntity> claiming = this.world.getEntitiesWithinAABB(PlayerEntity.class, claimRange());
+            if (claiming.size() == 1)
+                this.loadClaiming(claiming.get(0));
+            else if (this.claiming != null)
+                this.abort();
+        }
 
-        if(claiming.size() == 1)
-            this.loadClaiming(claiming.get(0));
-
-        else if(this.claiming != null)
-            this.abort();
-
+        {
+            AxisAlignedBB box = this.roomBox();
+            double s = 0.5;
+            for(double x = box.minX; x <= box.maxX; x += s)
+                for(double y = box.minY; y <= box.maxY; y += s)
+                    for(double z = box.minZ; z <= box.maxZ; z += s) {
+                        int bx = x <= box.minX || x > box.maxX - s ? 0 : 1;
+                        int by = y <= box.minY || y > box.maxY - s ? 0 : 1;
+                        int bz = z <= box.minZ || z > box.maxZ - s ? 0 : 1;
+                        if(bx + by + bz < 2) world.addParticle(ParticleTypes.FLAME, x, y, z, 0, 0, 0);
+                    }
+        }
 
         if(isClaimed()) {
             List<PlayerEntity> inRoom = this.world.getEntitiesWithinAABB(PlayerEntity.class, roomBox());
@@ -136,14 +169,17 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
     }
 
     public void leftRoom(PlayerEntity player) {
+        assert world != null;
         if(isOwner(player)) {
             player.sendStatusMessage(new StringTextComponent("You left your base"), true);
         }
     }
 
     public void enteredRoom(PlayerEntity player) {
+        assert world != null;
         if(isOwner(player)) {
             player.sendStatusMessage(new StringTextComponent("You entered your base"), true);
+            player.setSpawnPoint(getPos(), true, world.getDimension().getType());
         }
     }
 
@@ -155,6 +191,15 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
         }
     }
 
+    public void particleIn(IParticleData particle, double radius, int count) {
+        if(world instanceof ServerWorld) {
+            double x = Math.random() * radius + 0.5 - radius / 2 + getPos().getX();
+            double y = Math.random() * radius + getPos().getY();
+            double z = Math.random() * radius + 0.5 - radius / 2 + getPos().getZ();
+            ((ServerWorld) world).spawnParticle(particle, x, y, z, count, 0, 0, 0, 0);
+        }
+    }
+
     public void loadClaiming(PlayerEntity player) {
         if(this.claiming == null) this.claiming = player.getUniqueID();
         else if(this.claiming.equals(player.getUniqueID())) {
@@ -162,13 +207,7 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
             if(this.claimProgress < CLAIM_DURATION * 20) {
 
                 this.claimProgress++;
-
-                if(this.world != null) {
-                    double x = Math.random() * 2 - 3.5 + getPos().getX();
-                    double y = Math.random() * 2 + getPos().getY();
-                    double z = Math.random() * 2 - 3.5 + getPos().getZ();
-                    this.world.addParticle(ParticleTypes.END_ROD, x, y, z, 0, 0, 0);
-                }
+                particleIn(ParticleTypes.END_ROD, 2, 1);
 
             } else {
 
@@ -177,19 +216,13 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
             }
 
         }
-            
+
         markDirty();
     }
 
     public void abort() {
 
-        if(this.world != null) IntStream.range(0, 10).forEach(i -> {
-            double x = Math.random() * 2 - 3.5 + getPos().getX();
-            double y = Math.random() * 2 + getPos().getY();
-            double z = Math.random() * 2 - 3.5 + getPos().getZ();
-            this.world.addParticle(ParticleTypes.POOF, x, y, z, 0, 0, 0);
-        });
-
+        particleIn(ParticleTypes.POOF, 3, 20);
         this.claiming = null;
         markDirty();
     }
@@ -206,12 +239,12 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
             else this.player = player.getUniqueID();
             this.markDirty();
 
-            if(this.world != null) IntStream.range(0, 20).forEach(i -> {
-                double x = Math.random() * 2 - 3.5 + getPos().getX();
-                double y = Math.random() * 2 + getPos().getY();
-                double z = Math.random() * 2 - 3.5 + getPos().getZ();
-                this.world.addParticle(ParticleTypes.ENCHANT, x, y, z, 0, 0, 0);
-            });
+            if(this.world instanceof ServerWorld) {
+                double x = getPos().getX() + 0.5;
+                double y = getPos().getY() + 1;
+                double z = getPos().getZ() + 0.5;
+                ((ServerWorld) world).spawnParticle(ParticleTypes.ENCHANT, x, y, z, 100, 0, 0, 0, 5);
+            };
 
             this.updateState(ObeliskBlock.State.CLAIMED);
 
@@ -294,6 +327,12 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
 
     public CompoundNBT getUpdateTag() {
         return this.write(new CompoundNBT());
+    }
+
+    private void updateState() {
+        if(this.world == null) return;
+        ObeliskBlock.State state = world.getBlockState(getPos()).get(ObeliskBlock.STATE);
+        this.updateState(state);
     }
 
     private void updateState(ObeliskBlock.State state) {

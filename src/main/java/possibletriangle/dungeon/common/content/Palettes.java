@@ -7,7 +7,7 @@ import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.event.RegistryEvent;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.Palette;
-import possibletriangle.dungeon.common.block.Type;
+import possibletriangle.dungeon.common.block.placeholder.Type;
 import possibletriangle.dungeon.helper.BlockCollection;
 import possibletriangle.dungeon.helper.RandomCollection;
 import possibletriangle.dungeon.helper.Variant;
