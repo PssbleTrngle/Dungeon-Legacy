@@ -3,7 +3,7 @@ package possibletriangle.dungeon.common.world.room;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import possibletriangle.dungeon.common.block.TemplateBlock;
+import possibletriangle.dungeon.common.block.placeholder.TemplateBlock;
 import possibletriangle.dungeon.common.world.DungeonChunk;
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.GenerationContext;

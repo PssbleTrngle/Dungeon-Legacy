@@ -1,12 +1,12 @@
-package possibletriangle.dungeon.common.block;
+package possibletriangle.dungeon.common.block.placeholder;
 
-import net.minecraft.block.SlabBlock;
+import net.minecraft.block.FenceBlock;
 
-public class TemplateSlab extends SlabBlock implements IPlaceholder {
+public class TemplateFence extends FenceBlock implements IPlaceholder {
 
     private final Type type;
 
-    public TemplateSlab(Type type) {
+    public TemplateFence(Type type) {
         super(TemplateBlock.PROPERTIES());
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());

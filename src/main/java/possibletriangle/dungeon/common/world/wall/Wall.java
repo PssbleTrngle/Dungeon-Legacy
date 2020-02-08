@@ -2,7 +2,7 @@ package possibletriangle.dungeon.common.world.wall;
 
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import possibletriangle.dungeon.common.block.TemplateBlock;
+import possibletriangle.dungeon.common.block.placeholder.TemplateBlock;
 import possibletriangle.dungeon.common.world.DungeonChunk;
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.GenerationContext;

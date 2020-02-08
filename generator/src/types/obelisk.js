@@ -3,6 +3,10 @@ const { write, MOD } = require('../Generator');
 module.exports = async ({ name }) => {
 
     const states = ['unclaimed', 'claimed', 'invalid'];
+    
+	await write('models/item', name, {
+		parent: `${MOD}:block/${name}_${states[0]}`
+	});
 
     await write('blockstates', name, {
         variants: {

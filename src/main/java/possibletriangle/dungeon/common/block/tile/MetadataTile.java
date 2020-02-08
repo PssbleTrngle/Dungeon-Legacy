@@ -15,12 +15,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.client.MetadataScreen;
+import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.room.Generateable;
 import possibletriangle.dungeon.common.world.structure.metadata.StructureMetadata;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 @ObjectHolder("dungeon")
 public class MetadataTile extends TileEntity {
@@ -32,6 +34,10 @@ public class MetadataTile extends TileEntity {
     private StructureMetadata meta = StructureMetadata.getDefault();
     private BlockPos from, size;
 
+    public BlockPos getOffset() {
+        return from;
+    }
+
     public String getName() {
         return name;
     }
@@ -40,9 +46,15 @@ public class MetadataTile extends TileEntity {
         return meta;
     }
 
-    public AxisAlignedBB getBounds() {
-        BlockPos size = Generateable.roomSizeFromActual(this.size);
-        return new AxisAlignedBB(this.from, size);
+    public Optional<AxisAlignedBB> getBounds() {
+        if(this.size == null) return Optional.empty();
+        BlockPos r = Generateable.roomSizeFromActual(this.size);
+        BlockPos size = new BlockPos(
+                (r.getX() - 1) * 16 + 15,
+                r.getY() * DungeonSettings.FLOOR_HEIGHT,
+                (r.getZ() - 1) * 16 + 15
+        );
+        return Optional.of(new AxisAlignedBB(new BlockPos(0,0,0), size).offset(getOffset()));
     }
 
     public MetadataTile() {
@@ -69,10 +81,9 @@ public class MetadataTile extends TileEntity {
 
     public void structureBlockUpdated(@Nonnull StructureBlockTileEntity te) {
 
-        DungeonMod.LOGGER.info("Updated structure block");
-
+        BlockPos offset = te.getPos().subtract(this.getPos());
         this.name = te.getName();
-        this.from = te.getPosition();
+        this.from = te.getPosition().add(offset);
         this.size = te.getStructureSize();
 
         this.readMeta();

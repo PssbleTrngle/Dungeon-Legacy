@@ -1,7 +1,10 @@
 package possibletriangle.dungeon.client;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.AxisAlignedBB;
 import possibletriangle.dungeon.common.block.tile.MetadataTile;
 import possibletriangle.dungeon.common.world.structure.metadata.Part;
@@ -16,10 +19,17 @@ public class MetadataTESR extends TileEntityRenderer<MetadataTile> {
 		GlStateManager.pushMatrix();
         GlStateManager.translated(x, y, z);
 
+        GlStateManager.disableFog();
+        GlStateManager.disableLighting();
+        GlStateManager.disableTexture();
+        GlStateManager.enableBlend();
+        this.setLightmapDisabled(true);
+
         StructureMetadata meta = tile.getMeta();
 
-        this.drawBox(tile.getBounds());
+        tile.getBounds().ifPresent(this::drawBox);
 
+        GlStateManager.lineWidth(2.0F);
         for(Part part : meta.getParts()) {
 
             double posX = part.pos.minX;
@@ -31,7 +41,7 @@ public class MetadataTESR extends TileEntityRenderer<MetadataTile> {
                 part.pos.maxX + part.size.maxX,
                 part.pos.maxY + part.size.maxY,
                 part.pos.maxZ + part.size.maxZ
-            );
+            ).offset(tile.getOffset());
 
             double animation = Math.sin(System.currentTimeMillis() / 6000F * Math.PI);
 
@@ -40,22 +50,60 @@ public class MetadataTESR extends TileEntityRenderer<MetadataTile> {
                 part.size.minX + (part.size.maxX - part.size.minX + 1) * animation,
                 part.size.minY + (part.size.maxY - part.size.minY + 1) * animation,
                 part.size.minZ + (part.size.maxZ - part.size.minZ + 1) * animation
-            );
-            
+            ).offset(tile.getOffset());
+
             this.drawBox(outer);
             this.drawBox(inner);
-        };
-        
+        }
+
+
+        this.setLightmapDisabled(false);
+        GlStateManager.lineWidth(1.0F);
+        GlStateManager.enableLighting();
+        GlStateManager.enableTexture();
+        GlStateManager.enableDepthTest();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableFog();
         GlStateManager.popMatrix();
 
     }
 
     private void drawBox(AxisAlignedBB box) {
-        GlStateManager.pushMatrix();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder builder = tessellator.getBuffer();
 
+        double x1 = box.minX;
+        double y1 = box.minY;
+        double z1 = box.minZ;
+        double x2 = box.maxX;
+        double y2 = box.maxY;
+        double z2 = box.maxZ;
 
+        float r = 1;
+        float g = 1;
+        float b = 1;
 
-        GlStateManager.popMatrix();
+        builder.begin(3, DefaultVertexFormats.POSITION_COLOR);
+        builder.pos(x1, y1, z1).color(r, g, b, 0).endVertex();
+        builder.pos(x1, y1, z1).color(r, g, b, 1).endVertex();
+        builder.pos(x2, y1, z1).color(r, g, b, 1).endVertex();
+        builder.pos(x2, y1, z2).color(r, g, b, 1).endVertex();
+        builder.pos(x1, y1, z2).color(r, g, b, 1).endVertex();
+        builder.pos(x1, y1, z1).color(r, g, b, 1).endVertex();
+        builder.pos(x1, y2, z1).color(r, g, b, 1).endVertex();
+        builder.pos(x2, y2, z1).color(r, g, b, 1).endVertex();
+        builder.pos(x2, y2, z2).color(r, g, b, 1).endVertex();
+        builder.pos(x1, y2, z2).color(r, g, b, 1).endVertex();
+        builder.pos(x1, y2, z1).color(r, g, b, 1).endVertex();
+        builder.pos(x1, y2, z2).color(r, g, b, 1).endVertex();
+        builder.pos(x1, y1, z2).color(r, g, b, 1).endVertex();
+        builder.pos(x2, y1, z2).color(r, g, b, 1).endVertex();
+        builder.pos(x2, y2, z2).color(r, g, b, 1).endVertex();
+        builder.pos(x2, y2, z1).color(r, g, b, 1).endVertex();
+        builder.pos(x2, y1, z1).color(r, g, b, 1).endVertex();
+        builder.pos(x2, y1, z1).color(r, g, b, 0).endVertex();
+        tessellator.draw();
+
     }
 
 }

@@ -24,7 +24,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.BreakableBlock;
 import possibletriangle.dungeon.common.block.Palette;
-import possibletriangle.dungeon.common.block.Type;
+import possibletriangle.dungeon.common.block.placeholder.Type;
 import possibletriangle.dungeon.common.world.room.StateProvider;
 import possibletriangle.dungeon.helper.RandomCollection;
 

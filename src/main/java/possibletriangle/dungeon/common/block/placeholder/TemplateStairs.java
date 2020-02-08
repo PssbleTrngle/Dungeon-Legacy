@@ -1,15 +1,14 @@
-package possibletriangle.dungeon.common.block;
+package possibletriangle.dungeon.common.block.placeholder;
 
 import net.minecraft.block.Blocks;
-import net.minecraft.block.FenceBlock;
 import net.minecraft.block.StairsBlock;
 
-public class TemplateFence extends FenceBlock implements IPlaceholder {
+public class TemplateStairs extends StairsBlock implements IPlaceholder {
 
     private final Type type;
 
-    public TemplateFence(Type type) {
-        super(TemplateBlock.PROPERTIES());
+    public TemplateStairs(Type type) {
+        super(Blocks.STONE.getDefaultState(), TemplateBlock.PROPERTIES());
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
     }

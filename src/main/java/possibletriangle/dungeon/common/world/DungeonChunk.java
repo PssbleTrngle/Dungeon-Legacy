@@ -9,9 +9,9 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
-import possibletriangle.dungeon.common.block.IPlaceholder;
+import possibletriangle.dungeon.common.block.placeholder.IPlaceholder;
 import possibletriangle.dungeon.common.block.Palette;
-import possibletriangle.dungeon.common.block.Type;
+import possibletriangle.dungeon.common.block.placeholder.Type;
 import possibletriangle.dungeon.common.data.loot.DungeonLoot;
 
 import java.util.Random;

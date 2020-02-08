@@ -1,4 +1,4 @@
-package possibletriangle.dungeon.common.block;
+package possibletriangle.dungeon.common.block.placeholder;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.BlockRenderLayer;
@@ -7,7 +7,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 

@@ -2,10 +2,16 @@ package possibletriangle.dungeon.common.block.tile;
 
 import com.google.common.collect.Lists;
 import net.minecraft.block.BlockState;
+import net.minecraft.command.impl.TeamCommand;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
+<<<<<<< HEAD:src/main/java/possibletriangle/dungeon/common/block/tile/TotemTile.java
+=======
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
+>>>>>>> Obelisk & Metadata TESR Outline:src/main/java/possibletriangle/dungeon/common/block/tile/ObeliskTile.java
 import net.minecraft.scoreboard.Team;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -14,9 +20,17 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ObjectHolder;
+<<<<<<< HEAD:src/main/java/possibletriangle/dungeon/common/block/tile/TotemTile.java
 import possibletriangle.dungeon.common.DungeonCommand;
 import possibletriangle.dungeon.common.block.TotemBlock;
+=======
+import possibletriangle.dungeon.common.block.ObeliskBlock;
+import possibletriangle.dungeon.common.world.DungeonChunkGenerator;
+>>>>>>> Obelisk & Metadata TESR Outline:src/main/java/possibletriangle/dungeon/common/block/tile/ObeliskTile.java
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.room.Generateable;
 
@@ -26,11 +40,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+<<<<<<< HEAD:src/main/java/possibletriangle/dungeon/common/block/tile/TotemTile.java
 @ObjectHolder("dungeon")
 public class TotemTile extends TileEntity implements ITickableTileEntity {
 
     @ObjectHolder("totem")
     public static final TileEntityType<TotemTile> TYPE = null;
+=======
+public class ObeliskTile extends TileEntity implements ITickableTileEntity {
+
+    @ObjectHolder("dungeon:obelisk")
+    public static final TileEntityType<ObeliskTile> TYPE = null;
+>>>>>>> Obelisk & Metadata TESR Outline:src/main/java/possibletriangle/dungeon/common/block/tile/ObeliskTile.java
 
     private static final AxisAlignedBB EMPTY = new AxisAlignedBB(0,0,0,0,0,0);
 
@@ -58,13 +79,30 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
         super(TYPE);
     }
 
+    public void updateTeam() {
+        if(this.world != null && this.player != null) {
+            PlayerEntity player = this.world.getPlayerByUuid(this.player);
+            if(player != null) {
+                Team team = player.getTeam();
+                if(team != null) {
+                    this.player = null;
+                    this.team = team;
+                    markDirty();
+                    updateState();
+                }
+            }
+        }
+    }
+
     @Override
     public void onLoad() {
         super.onLoad();
 
+        updateTeam();
+
         /* Find the room it was placed in and save the required information */
         ChunkPos chunk = new ChunkPos(getPos());
-        DungeonCommand.roomAt(chunk.asBlockPos(), world).ifPresent(pair -> {
+        DungeonChunkGenerator.roomAt(chunk.asBlockPos(), world).ifPresent(pair -> {
 
             Generateable room = pair.getValue();
             this.floor = pair.getKey();
@@ -98,20 +136,32 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
             this.roomSize.getZ() * 16
         );
 
-        return new AxisAlignedBB(start, end).grow(2);
+        return new AxisAlignedBB(start, end);
     }
 
     public void tick() {
         if(!inRoom()) return;
 
-        List<PlayerEntity> claiming = this.world.getEntitiesWithinAABB(PlayerEntity.class, claimRange());
+        if(!isClaimed()) {
+            List<PlayerEntity> claiming = this.world.getEntitiesWithinAABB(PlayerEntity.class, claimRange());
+            if (claiming.size() == 1)
+                this.loadClaiming(claiming.get(0));
+            else if (this.claiming != null)
+                this.abort();
+        }
 
-        if(claiming.size() == 1)
-            this.loadClaiming(claiming.get(0));
-
-        else if(this.claiming != null)
-            this.abort();
-
+        {
+            AxisAlignedBB box = this.roomBox();
+            double s = 0.5;
+            for(double x = box.minX; x <= box.maxX; x += s)
+                for(double y = box.minY; y <= box.maxY; y += s)
+                    for(double z = box.minZ; z <= box.maxZ; z += s) {
+                        int bx = x <= box.minX || x > box.maxX - s ? 0 : 1;
+                        int by = y <= box.minY || y > box.maxY - s ? 0 : 1;
+                        int bz = z <= box.minZ || z > box.maxZ - s ? 0 : 1;
+                        if(bx + by + bz < 2) world.addParticle(ParticleTypes.FLAME, x, y, z, 0, 0, 0);
+                    }
+        }
 
         if(isClaimed()) {
             List<PlayerEntity> inRoom = this.world.getEntitiesWithinAABB(PlayerEntity.class, roomBox());
@@ -134,14 +184,17 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
     }
 
     public void leftRoom(PlayerEntity player) {
+        assert world != null;
         if(isOwner(player)) {
             player.sendStatusMessage(new StringTextComponent("You left your base"), true);
         }
     }
 
     public void enteredRoom(PlayerEntity player) {
+        assert world != null;
         if(isOwner(player)) {
             player.sendStatusMessage(new StringTextComponent("You entered your base"), true);
+            player.setSpawnPoint(getPos(), true, world.getDimension().getType());
         }
     }
 
@@ -153,6 +206,15 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
         }
     }
 
+    public void particleIn(IParticleData particle, double radius, int count) {
+        if(world instanceof ServerWorld) {
+            double x = Math.random() * radius + 0.5 - radius / 2 + getPos().getX();
+            double y = Math.random() * radius + getPos().getY();
+            double z = Math.random() * radius + 0.5 - radius / 2 + getPos().getZ();
+            ((ServerWorld) world).spawnParticle(particle, x, y, z, count, 0, 0, 0, 0);
+        }
+    }
+
     public void loadClaiming(PlayerEntity player) {
         if(this.claiming == null) this.claiming = player.getUniqueID();
         else if(this.claiming.equals(player.getUniqueID())) {
@@ -160,7 +222,11 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
             if(this.claimProgress < CLAIM_DURATION * 20) {
 
                 this.claimProgress++;
+<<<<<<< HEAD:src/main/java/possibletriangle/dungeon/common/block/tile/TotemTile.java
                 /* Particles */
+=======
+                particleIn(ParticleTypes.END_ROD, 2, 1);
+>>>>>>> Obelisk & Metadata TESR Outline:src/main/java/possibletriangle/dungeon/common/block/tile/ObeliskTile.java
 
             } else {
 
@@ -169,12 +235,17 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
             }
 
         }
-            
+
         markDirty();
     }
 
     public void abort() {
+<<<<<<< HEAD:src/main/java/possibletriangle/dungeon/common/block/tile/TotemTile.java
         /* Particles */
+=======
+
+        particleIn(ParticleTypes.POOF, 3, 20);
+>>>>>>> Obelisk & Metadata TESR Outline:src/main/java/possibletriangle/dungeon/common/block/tile/ObeliskTile.java
         this.claiming = null;
         markDirty();
     }
@@ -192,7 +263,18 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
             this.markDirty();
             /* Particles */
 
+<<<<<<< HEAD:src/main/java/possibletriangle/dungeon/common/block/tile/TotemTile.java
             this.updateState(TotemBlock.State.CLAIMED);
+=======
+            if(this.world instanceof ServerWorld) {
+                double x = getPos().getX() + 0.5;
+                double y = getPos().getY() + 1;
+                double z = getPos().getZ() + 0.5;
+                ((ServerWorld) world).spawnParticle(ParticleTypes.ENCHANT, x, y, z, 100, 0, 0, 0, 5);
+            };
+
+            this.updateState(ObeliskBlock.State.CLAIMED);
+>>>>>>> Obelisk & Metadata TESR Outline:src/main/java/possibletriangle/dungeon/common/block/tile/ObeliskTile.java
 
             return true;
         }
@@ -271,7 +353,17 @@ public class TotemTile extends TileEntity implements ITickableTileEntity {
         return this.write(new CompoundNBT());
     }
 
+<<<<<<< HEAD:src/main/java/possibletriangle/dungeon/common/block/tile/TotemTile.java
     private void updateState(TotemBlock.State state) {
+=======
+    private void updateState() {
+        if(this.world == null) return;
+        ObeliskBlock.State state = world.getBlockState(getPos()).get(ObeliskBlock.STATE);
+        this.updateState(state);
+    }
+
+    private void updateState(ObeliskBlock.State state) {
+>>>>>>> Obelisk & Metadata TESR Outline:src/main/java/possibletriangle/dungeon/common/block/tile/ObeliskTile.java
         if(this.world == null) return;
 
         BlockState block = TotemBlock.TOTEM.getDefaultState().with(TotemBlock.STATE, state);

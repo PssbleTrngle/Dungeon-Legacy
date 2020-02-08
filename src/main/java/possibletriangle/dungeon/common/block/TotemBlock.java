@@ -32,6 +32,14 @@ import java.util.Optional;
 public class TotemBlock extends ContainerBlock {
 
     public static final IProperty<State> STATE = EnumProperty.create("state", State.class);
+<<<<<<< HEAD:src/main/java/possibletriangle/dungeon/common/block/TotemBlock.java
+=======
+    private static final VoxelShape SHAPE = Stream.of(
+            Block.makeCuboidShape(0, 0, 0, 16, 16, 16),
+            Block.makeCuboidShape(1, 16, 1, 15, 22, 15),
+            Block.makeCuboidShape(0, 22, 0, 16, 32, 16)
+    ).reduce(VoxelShapes.empty(), VoxelShapes::or, (v1, v2) -> v1);
+>>>>>>> Obelisk & Metadata TESR Outline:src/main/java/possibletriangle/dungeon/common/block/ObeliskBlock.java
 
     @ObjectHolder("dungeon:totem")
     public static final Block TOTEM = null;

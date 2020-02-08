@@ -16,9 +16,10 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import possibletriangle.dungeon.client.ClientProxy;
 import possibletriangle.dungeon.common.CommonProxy;
 import possibletriangle.dungeon.common.DungeonCommand;
-import possibletriangle.dungeon.common.block.TemplateBlock;
+import possibletriangle.dungeon.common.block.placeholder.TemplateBlock;
 
 @Mod(DungeonMod.MODID)
 public class DungeonMod {
@@ -32,7 +33,7 @@ public class DungeonMod {
 
     public static final String MODID = "dungeon";
 
-    public static CommonProxy proxy = DistExecutor.runForDist(() -> CommonProxy::new, () -> CommonProxy::new);
+    public static CommonProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
     public static final Logger LOGGER = LogManager.getLogger();
 
@@ -50,7 +51,9 @@ public class DungeonMod {
         proxy.init(event);
     }
 
-    private void doClientStuff(final FMLClientSetupEvent event) {}
+    private void doClientStuff(final FMLClientSetupEvent event) {
+        proxy.clientSetup(event);
+    }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {}
 

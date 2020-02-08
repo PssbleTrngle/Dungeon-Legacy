@@ -18,6 +18,7 @@ import net.minecraft.world.biome.Biomes;
 import net.minecraftforge.event.RegistryEvent;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.Palette;
+<<<<<<< HEAD
 import possibletriangle.dungeon.common.block.Type;
 <<<<<<< HEAD
 import possibletriangle.dungeon.common.world.DungeonWorldType;
@@ -26,6 +27,9 @@ import possibletriangle.dungeon.common.world.room.Structures;
 import possibletriangle.dungeon.common.world.structure.StructureLoader;
 =======
 >>>>>>> Fixing imports and some syntax errors (again)
+=======
+import possibletriangle.dungeon.common.block.placeholder.Type;
+>>>>>>> Obelisk & Metadata TESR Outline
 import possibletriangle.dungeon.helper.BlockCollection;
 import possibletriangle.dungeon.helper.RandomCollection;
 import possibletriangle.dungeon.helper.Variant;

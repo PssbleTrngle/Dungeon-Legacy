@@ -1,18 +1,15 @@
-package possibletriangle.dungeon.common.block;
+package possibletriangle.dungeon.common.block.placeholder;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.RotatedPillarBlock;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.FallingBlock;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 
 @ObjectHolder(DungeonMod.MODID)
-public class TemplatePillar extends RotatedPillarBlock implements IPlaceholder {
+public class TemplateFalling extends FallingBlock implements IPlaceholder {
 
     private final Type type;
 
-    public TemplatePillar(Type type) {
+    public TemplateFalling(Type type) {
         super(TemplateBlock.PROPERTIES());
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());

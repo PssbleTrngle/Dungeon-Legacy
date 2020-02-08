@@ -1,10 +1,10 @@
 package possibletriangle.dungeon.common.world;
 
+import javafx.util.Pair;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunk;
@@ -12,17 +12,24 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.WorldGenRegion;
 import possibletriangle.dungeon.common.block.Palette;
-import possibletriangle.dungeon.common.block.TemplateBlock;
+import possibletriangle.dungeon.common.block.placeholder.TemplateBlock;
 import possibletriangle.dungeon.common.world.room.Generateable;
 import possibletriangle.dungeon.common.world.room.Structures;
 import possibletriangle.dungeon.common.world.room.StructureType;
 import possibletriangle.dungeon.common.world.structure.metadata.Part;
 import possibletriangle.dungeon.common.world.wall.Wall;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
+
+    public static Optional<DungeonSettings> getSettings(World world) {
+        if(world.getWorldType() instanceof  DungeonWorldType) {
+            world.getWorldInfo().getGeneratorOptions();
+            return Optional.of(new DungeonSettings());
+        }
+        return Optional.empty();
+    }
 
     /**
      * @return The seeded random used to generate this chunk
@@ -35,6 +42,19 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
 
     public DungeonChunkGenerator(World world, DungeonSettings settings) {
         super(world, new DungeonBiomeProvider(world), settings);
+    }
+
+    public static Optional<Pair<Integer,Generateable>> roomAt(BlockPos pos, World world) {
+
+        ChunkPos chunk = new ChunkPos(pos);
+        Map<Integer, Generateable> rooms = roomsFor(world, chunk);
+        int floor = pos.getY() / (DungeonSettings.FLOOR_HEIGHT + 1);
+
+        int nextFloor = rooms.keySet().stream().filter(f -> f <= floor).max(Comparator.comparingInt(a -> a)).orElse(0);
+        Generateable room = rooms.get(nextFloor);
+        if(room == null) return Optional.empty();
+        return Optional.of(new Pair(floor, room));
+
     }
 
     @Override
@@ -52,6 +72,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
     private static StructureType typeFor(GenerationContext ctx, Random random) {
         boolean even = ctx.pos.x % 2 == ctx.pos.z % 2;
         if(even || random.nextInt(3) == 0) return StructureType.HALLWAY;
+        if(random.nextInt(32) == 0) return StructureType.BASE;
         return StructureType.ROOM;
     }
 
@@ -85,8 +106,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
     
     public static Map<Integer,Generateable> roomsFor(World world, ChunkPos pos) {
         /* Get settings from world */
-        DungeonSettings settings = new DungeonSettings();
-        return roomsFor(settings, pos, world.getSeed());
+        return getSettings(world).map(settings -> roomsFor(settings, pos, world.getSeed())).orElse(new HashMap<>());
     }
 
     /**

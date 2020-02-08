@@ -6,9 +6,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.ContainerBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.StructureBlockTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -51,10 +54,20 @@ public class MetadataBlock extends ContainerBlock {
     @Override
     public void onNeighborChange(BlockState state, IWorldReader world, BlockPos pos, BlockPos neighbor) {
         TileEntity structureBlock = world.getTileEntity(neighbor);
-        if(structureBlock instanceof StructureBlockTileEntity) {
-
+        if(structureBlock instanceof StructureBlockTileEntity)
             getTE(world, pos).ifPresent(te -> te.structureBlockUpdated((StructureBlockTileEntity) structureBlock));
+    }
 
+    @Override
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.onBlockPlacedBy(world, pos, state, placer, stack);
+
+        for (Direction d : Direction.values()) {
+            TileEntity structureBlock = world.getTileEntity(pos.add(d.getDirectionVec()));
+            if (structureBlock instanceof StructureBlockTileEntity) {
+                getTE(world, pos).ifPresent(te -> te.structureBlockUpdated((StructureBlockTileEntity) structureBlock));
+                break;
+            }
         }
     }
 

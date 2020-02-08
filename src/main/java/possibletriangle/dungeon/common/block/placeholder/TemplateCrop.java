@@ -1,11 +1,8 @@
-package possibletriangle.dungeon.common.block;
+package possibletriangle.dungeon.common.block.placeholder;
 
 import net.minecraft.block.*;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraftforge.common.IPlantable;
 
 public class TemplateCrop extends CropsBlock implements IPlaceholder {
 

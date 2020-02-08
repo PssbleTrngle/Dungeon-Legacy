@@ -1,14 +1,12 @@
-package possibletriangle.dungeon.common.block;
+package possibletriangle.dungeon.common.block.placeholder;
 
-import net.minecraft.block.AbstractButtonBlock;
 import net.minecraft.block.LeverBlock;
-import net.minecraft.block.StoneButtonBlock;
 
-public class TemplateButton extends StoneButtonBlock implements IPlaceholder {
+public class TemplateLever extends LeverBlock implements IPlaceholder {
 
     private final Type type;
 
-    public TemplateButton(Type type) {
+    public TemplateLever(Type type) {
         super(TemplateBlock.PROPERTIES());
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
