@@ -1,0 +1,61 @@
+{
+	"parent": "block/block",
+	"textures": {
+		"particle": "#bottom",
+		"bottom": "block/obelisk_bottom",
+		"top": "block/obelisk_top",
+		"up": "block/obelisk_up",
+		"down": "block/obelisk_down",
+		"runes": "block/obelisk_runes_unclaimed"
+	},
+	"elements": [ 	 
+		{
+			"__comment": "Box1",
+			"from": [ 0, 0, 0 ],
+			"to": [ 16, 16, 16 ],
+			"faces": {
+				"down": { "uv": [ 0, 0, 16, 16 ], "texture": "#down" },
+				"up": { "uv": [ 0, 0, 16, 16 ], "texture": "#down" },
+				"north": { "uv": [ 0, 0, 16, 16 ], "texture": "#bottom" },
+				"south": { "uv": [ 0, 0, 16, 16 ], "texture": "#bottom" },
+				"west": { "uv": [ 0, 0, 16, 16 ], "texture": "#bottom" },
+				"east": { "uv": [ 0, 0, 16, 16 ], "texture": "#bottom" }
+			}
+		},
+		{
+			"__comment": "Box1",
+			"from": [ 1, 16, 1 ],
+			"to": [ 15, 22, 15 ],
+			"faces": {
+				"north": { "uv": [ 1, 10, 15, 16 ], "texture": "#top" },
+				"south": { "uv": [ 1, 10, 15, 16 ], "texture": "#top" },
+				"west": { "uv": [ 1, 10, 15, 16 ], "texture": "#top" },
+				"east": { "uv": [ 1, 10, 15, 16 ], "texture": "#top" }
+			}
+		},
+		{
+			"__comment": "Box1",
+			"from": [ 0, 22, 0 ],
+			"to": [ 16, 32, 16 ],
+			"faces": {
+				"down": { "uv": [ 0, 0, 16, 16 ], "texture": "#down" },
+				"up": { "uv": [ 0, 0, 16, 16 ], "texture": "#up" },
+				"north": { "uv": [ 0, 0, 16, 10 ], "texture": "#top" },
+				"south": { "uv": [ 0, 0, 16, 10 ], "texture": "#top" },
+				"west": { "uv": [ 0, 0, 16, 10 ], "texture": "#top" },
+				"east": { "uv": [ 0, 0, 16, 10 ], "texture": "#top" }
+			}
+		},
+		{
+			"__comment": "Box1",
+			"from": [ 0, 22, 0 ],
+			"to": [ 16, 32, 16 ],
+			"faces": {
+				"north": { "uv": [ 0, 0, 16, 10 ], "texture": "#runes", "tintindex": 1 },
+				"south": { "uv": [ 0, 0, 16, 10 ], "texture": "#runes", "tintindex": 1 },
+				"west": { "uv": [ 0, 0, 16, 10 ], "texture": "#runes", "tintindex": 1 },
+				"east": { "uv": [ 0, 0, 16, 10 ], "texture": "#runes", "tintindex": 1 }
+			}
+		}
+	]
+}
