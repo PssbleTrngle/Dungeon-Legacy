@@ -51,7 +51,18 @@ async function get(name) {
 
 async function create(params) {
 	const { type, name } = params;
-	try {
+
+	if(type === 'item') {
+		
+		await exports.write('models/item', name, {
+			parent: 'item/generated',
+			textures: {
+				layer0: `${MOD}:item/${name}`
+			}
+		});
+		
+		success(name);
+	} else try {
 		const func = await get(type);
 
 		await exports.write('blockstates', name, {
@@ -123,7 +134,7 @@ async function run() {
 	console.clear();
 	await clean();
 
-	progress(`Started Generator for ${blocks.length} blocks`)
+	progress(`Started Generator for ${blocks.length} models`)
 	console.log('')
 
 	Promise.all(
