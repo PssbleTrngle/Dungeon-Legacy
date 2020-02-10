@@ -9,9 +9,34 @@
                     ]
                 },
                 "position": {
+<<<<<<< HEAD
                     "x": 5,
                     "y": 3,
+=======
+                    "x": 2,
+                    "y": 2,
+                    "z": 2
+                },
+                "size": {
+                    "x": 5,
+                    "y": {
+                        "from": 1,
+                        "to": 8
+                    },
+>>>>>>> Working on some structures
                     "z": 5
+                }
+            },
+            {
+                "categories": {
+                    "allowed": [
+                        "free"
+                    ]
+                },
+                "position": {
+                    "x": 9,
+                    "y": 2,
+                    "z": 8
                 },
                 "size": {
                     "x": 3,
