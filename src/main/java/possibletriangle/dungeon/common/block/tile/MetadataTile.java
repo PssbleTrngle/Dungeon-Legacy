@@ -12,6 +12,7 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.client.MetadataScreen;
@@ -61,12 +62,19 @@ public class MetadataTile extends TileEntity {
         super(TYPE);
     }
 
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return this.getBounds().orElseGet(super::getRenderBoundingBox);
+    }
+
     public void readMeta() {
         if(!this.world.isRemote && name != null) try {
+            ServerWorld world = (ServerWorld) this.world;
 
             ResourceLocation n = new ResourceLocation(name);
-            ResourceLocation path = new ResourceLocation(n.getNamespace(), "structures/" + n.getPath());
-            IReloadableResourceManager manager = this.world.getServer().getResourceManager();
+            ResourceLocation path = new ResourceLocation(n.getNamespace(), "structures/" + n.getPath() + ".nbt");
+            IReloadableResourceManager manager = world.getServer().getResourceManager();
+
             manager.getAllResources(path).stream().map(r ->
                     r.getMetadata(StructureMetadata.SERIALIZER)
             ).filter(Objects::nonNull).findFirst().ifPresent(meta -> {
