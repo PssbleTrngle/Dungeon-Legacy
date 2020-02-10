@@ -47,5 +47,13 @@
 	{ "name": "mahogany_leaves", "type": "cube" },
 	
     { "name": "metadata_block", "type": "cube" },
-    { "name": "obelisk", "type": "obelisk" }
+	{ "name": "obelisk", "type": "obelisk" },
+	
+    { "name": "redstone_receiver", "type": "redstone_receiver" },
+	{ "name": "redstone_sender", "type": "redstone_sender" },
+	
+	{ "name": "smoke_grenade", "type": "item" },
+	{ "name": "heat_grenade", "type": "item" },
+	{ "name": "gravity_grenade", "type": "item" },
+	{ "name": "frost_grenade", "type": "item" }
 ]

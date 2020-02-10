@@ -21,7 +21,7 @@ import possibletriangle.dungeon.common.CommonProxy;
 import possibletriangle.dungeon.common.DungeonCommand;
 import possibletriangle.dungeon.common.block.placeholder.TemplateBlock;
 
-@Mod(DungeonMod.MODID)
+@Mod(DungeonMod.ID)
 public class DungeonMod {
 
     public static final ItemGroup GROUP = new ItemGroup("dungeon") {
@@ -31,7 +31,7 @@ public class DungeonMod {
         }
     };
 
-    public static final String MODID = "dungeon";
+    public static final String ID = "dungeon";
 
     public static CommonProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 

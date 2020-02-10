@@ -22,7 +22,7 @@ public class DungeonCommand {
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
         dispatcher.register(
-          Commands.literal(DungeonMod.MODID)
+          Commands.literal(DungeonMod.ID)
             .then(Commands.literal("room")
                 .then(Commands.literal("get")
                     .then(Commands.argument("pos", BlockPosArgument.blockPos())

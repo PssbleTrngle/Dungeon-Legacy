@@ -1,33 +1,14 @@
 package possibletriangle.dungeon.common.world.room;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.*;
 import possibletriangle.dungeon.DungeonMod;
-import possibletriangle.dungeon.common.world.DungeonSettings;
-import possibletriangle.dungeon.common.world.room.StateProvider;
-import possibletriangle.dungeon.helper.BlockCollection;
-import possibletriangle.dungeon.helper.RandomCollection;
 
 import java.util.Collection;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-@ObjectHolder(DungeonMod.MODID)
+@ObjectHolder(DungeonMod.ID)
 public class StructureType extends ForgeRegistryEntry<StructureType> {
 
     /**

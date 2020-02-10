@@ -4,7 +4,7 @@ import net.minecraft.block.FallingBlock;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 
-@ObjectHolder(DungeonMod.MODID)
+@ObjectHolder(DungeonMod.ID)
 public class TemplateFalling extends FallingBlock implements IPlaceholder {
 
     private final Type type;

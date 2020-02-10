@@ -44,7 +44,7 @@ public class ObeliskBlock extends ContainerBlock {
     ).reduce(VoxelShapes.empty(), VoxelShapes::or, (v1, v2) -> v1);
 
     @ObjectHolder("dungeon:obelisk")
-    public static final Block TOTEM = null;
+    public static final Block OBELISK = null;
 
     public ObeliskBlock() {
         super(Block.Properties.create(Material.ROCK, MaterialColor.GRAY)
@@ -65,7 +65,7 @@ public class ObeliskBlock extends ContainerBlock {
         event.getBlockColors().register((s,w,p,i) -> {
             if(i != 1) return -1;
             return getTE(w, p).map(ObeliskTile::getColor).orElse(State.INVALID.color);
-        }, TOTEM);
+        }, OBELISK);
 
     }
     

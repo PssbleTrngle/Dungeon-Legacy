@@ -26,7 +26,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-@ObjectHolder(DungeonMod.MODID)
+@ObjectHolder(DungeonMod.ID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Palette extends ForgeRegistryEntry<Palette> {
 

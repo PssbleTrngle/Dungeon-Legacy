@@ -10,7 +10,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 
-@ObjectHolder(DungeonMod.MODID)
+@ObjectHolder(DungeonMod.ID)
 public class TemplateTransparent extends TemplateBlock {
 
     private final boolean hideNeighboors;

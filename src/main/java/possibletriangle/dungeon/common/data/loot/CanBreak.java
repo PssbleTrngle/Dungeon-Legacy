@@ -42,7 +42,7 @@ public class CanBreak extends LootFunction {
 
     public static class Serializer extends LootFunction.Serializer<CanBreak> {
         public Serializer() {
-            super(new ResourceLocation(DungeonMod.MODID, "can_break"), CanBreak.class);
+            super(new ResourceLocation(DungeonMod.ID, "can_break"), CanBreak.class);
         }
 
         public void serialize(JsonObject object, CanBreak functionClazz, JsonSerializationContext serializationContext) {

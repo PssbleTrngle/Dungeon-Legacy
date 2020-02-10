@@ -1,21 +1,12 @@
 package possibletriangle.dungeon.common.block.placeholder;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 
-import javax.annotation.Nonnull;
-
-@ObjectHolder(DungeonMod.MODID)
+@ObjectHolder(DungeonMod.ID)
 public class TemplateBlock extends Block implements IPlaceholder {
 
     @ObjectHolder("placeholder_pillar")

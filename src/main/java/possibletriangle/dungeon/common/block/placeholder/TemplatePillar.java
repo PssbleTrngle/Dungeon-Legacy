@@ -4,7 +4,7 @@ import net.minecraft.block.RotatedPillarBlock;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 
-@ObjectHolder(DungeonMod.MODID)
+@ObjectHolder(DungeonMod.ID)
 public class TemplatePillar extends RotatedPillarBlock implements IPlaceholder {
 
     private final Type type;

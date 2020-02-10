@@ -2,7 +2,6 @@ package possibletriangle.dungeon.common.block.tile;
 
 import com.google.common.collect.Lists;
 import net.minecraft.block.BlockState;
-import net.minecraft.command.impl.TeamCommand;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -18,8 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.common.block.ObeliskBlock;
 import possibletriangle.dungeon.common.world.DungeonChunkGenerator;
@@ -30,7 +27,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.IntStream;
 
 public class ObeliskTile extends TileEntity implements ITickableTileEntity {
 
@@ -83,11 +79,8 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
         super.onLoad();
         if(this.inRoom()) return;
 
-        updateTeam();
-
         /* Find the room it was placed in and save the required information */
-        ChunkPos chunk = new ChunkPos(getPos());
-        DungeonChunkGenerator.roomAt(chunk.asBlockPos(), world).ifPresent(pair -> {
+        DungeonChunkGenerator.roomAt(getPos(), world).ifPresent(pair -> {
 
             Generateable room = pair.getValue();
             this.floor = pair.getKey();
@@ -96,7 +89,9 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
 
         });
 
-        if(!this.inRoom()) updateState(ObeliskBlock.State.INVALID);
+        updateTeam();
+
+        //if(!this.inRoom()) updateState(ObeliskBlock.State.INVALID);
 
     }
 
@@ -338,7 +333,7 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
     private void updateState(ObeliskBlock.State state) {
         if(this.world == null) return;
 
-        BlockState block = ObeliskBlock.TOTEM.getDefaultState().with(ObeliskBlock.STATE, state);
+        BlockState block = ObeliskBlock.OBELISK.getDefaultState().with(ObeliskBlock.STATE, state);
         this.world.setBlockState(getPos(), block);
     }
 

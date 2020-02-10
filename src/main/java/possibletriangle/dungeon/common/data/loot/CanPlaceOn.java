@@ -55,7 +55,7 @@ public class CanPlaceOn extends LootFunction {
 
     public static class Serializer extends LootFunction.Serializer<CanPlaceOn> {
         public Serializer() {
-            super(new ResourceLocation(DungeonMod.MODID, "can_place_on"), CanPlaceOn.class);
+            super(new ResourceLocation(DungeonMod.ID, "can_place_on"), CanPlaceOn.class);
         }
 
         public void serialize(JsonObject object, CanPlaceOn functionClazz, JsonSerializationContext serializationContext) {
