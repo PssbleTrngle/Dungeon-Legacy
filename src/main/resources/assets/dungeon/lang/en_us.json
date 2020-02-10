@@ -40,13 +40,22 @@
 	"block.dungeon.gravelous_gravel": "Gravelous Gravel",
 	"block.dungeon.morsh_wood": "Rotten Wood",
 	"block.dungeon.metadata_block": "\u00A7dStructure Metadata Block",
+	"block.dungeon.obelisk": "Obelisk",
+	"block.dungeon.redstone_receiver": "Redstone Receiver",
+	"block.dungeon.redstone_sender": "Redstone Transmitter",
+
+	"item.dungeon.smoke_grenade": "Smoke Grenade",
+	"item.dungeon.frost_grenade": "Frost Grenade",
+	"item.dungeon.gravity_grenade": "Gravity Grenade",
 
 	"generator.dungeon": "Dungeon",
 	"itemGroup.dungeon": "Dungeon",
+	"tooltip.dungeon.keystone": "Keystones",
 
 	"entity.dungeon.curse_slow": "Curse",
 	"entity.dungeon.curse_normal": "Curse",
 	"entity.dungeon.curse_fast": "Curse",
+	"entity.dungeon.grenade": "Grenade",
 
 	"command.dungeon.get.room": "\u00A7bLooks like you are in a \u00A76%s",
 	"command.dungeon.get.floor_less": "\u00A7bon the \u00A76%i floor",
