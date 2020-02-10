@@ -125,7 +125,8 @@ public class DungeonChunk {
                 break;
 
             case "minecraft:chest":
-                nbt.putString("LootTable", DungeonLoot.Rarity.COMMON.path().toString());
+                DungeonLoot.Rarity rarity = random.nextInt(4) == 0 ? DungeonLoot.Rarity.COMMON : DungeonLoot.Rarity.RARE;
+                nbt.putString("LootTable", rarity.path().toString());
                 nbt.putLong("LootTableSeed", random.nextLong());
                 break;
 

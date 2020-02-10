@@ -28,8 +28,23 @@ public class CanBreak extends LootFunction {
     protected ItemStack doApply(ItemStack stack, LootContext context) {
 
         CompoundNBT nbt = stack.getOrCreateTag();
+<<<<<<< HEAD
         if(this.block != null)
             nbt.putString("CanBreak", this.block.getRegistryName().toString());
+=======
+        if(this.block != null) {
+            ListNBT list = new ListNBT();
+            list.add(new StringNBT(this.block.toString()));
+            nbt.put("CanDestroy", list);
+        }
+        return stack;
+    }
+
+    public static class Serializer extends LootFunction.Serializer<CanBreak> {
+        public Serializer() {
+            super(new ResourceLocation(DungeonMod.ID, "can_break"), CanBreak.class);
+        }
+>>>>>>> Rename MODID variable
 
         return stack;
     }

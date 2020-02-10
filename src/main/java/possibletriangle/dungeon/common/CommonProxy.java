@@ -2,6 +2,8 @@ package possibletriangle.dungeon.common;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.resources.IReloadableResourceManager;
@@ -20,9 +22,16 @@ import possibletriangle.dungeon.common.block.tile.MetadataTile;
 import possibletriangle.dungeon.common.block.tile.TotemTile;
 import possibletriangle.dungeon.common.content.Palettes;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import possibletriangle.dungeon.common.block.Type;
 =======
 >>>>>>> Fixing imports and some syntax errors (yes, again)
+=======
+import possibletriangle.dungeon.common.entity.GrenadeEntity;
+import possibletriangle.dungeon.common.item.grenade.GrenadeFrost;
+import possibletriangle.dungeon.common.item.grenade.GrenadeGravity;
+import possibletriangle.dungeon.common.item.grenade.GrenadeSmoke;
+>>>>>>> Rename MODID variable
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.DungeonWorldType;
 import possibletriangle.dungeon.common.world.room.HallwayMaze;
@@ -63,17 +72,17 @@ public class CommonProxy {
         @SubscribeEvent
         public static void onNewRegistry(final RegistryEvent.NewRegistry event) {
             new RegistryBuilder<Palette>()
-                    .setName(new ResourceLocation(DungeonMod.MODID, "palette"))
+                    .setName(new ResourceLocation(DungeonMod.ID, "palette"))
                     .setType(Palette.class)
                     .create();
 
             new RegistryBuilder<StructureType>()
-                    .setName(new ResourceLocation(DungeonMod.MODID, "structure_type"))
+                    .setName(new ResourceLocation(DungeonMod.ID, "structure_type"))
                     .setType(StructureType.class)
                     .create();
 
             new RegistryBuilder<ConditionType>()
-                    .setName(new ResourceLocation(DungeonMod.MODID, "condition"))
+                    .setName(new ResourceLocation(DungeonMod.ID, "condition"))
                     .setType(ConditionType.class)
                     .create();
         }
@@ -81,10 +90,10 @@ public class CommonProxy {
         @SubscribeEvent
         public static void onStructureTypeRegistry(final RegistryEvent.Register<StructureType> event) {
             event.getRegistry().registerAll(
-                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.MODID, "room"),
-                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.MODID, "hallway"),
-                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.MODID, "boss"),
-                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.MODID, "base"),
+                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.ID, "room"),
+                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.ID, "hallway"),
+                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.ID, "boss"),
+                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.ID, "base"),
                 new StructureType(StructureType.hasSize(2, 5, 4)).setRegistryName("door/small"),
                 new StructureType(StructureType.hasSize(2, 5, 5)).setRegistryName("door/big"),
                 new StructureType(StructureType.hasSize(5, DungeonSettings.FLOOR_HEIGHT, 15)).setRegistryName("shop"),
@@ -100,9 +109,9 @@ public class CommonProxy {
         @SubscribeEvent
         public static void onConditionRegistry(final RegistryEvent.Register<ConditionType> event) {
             event.getRegistry().registerAll(
-                    new ModCondition().setRegistryName(DungeonMod.MODID, "mod"),
-                    new PaletteCondition().setRegistryName(DungeonMod.MODID, "palette"),
-                    new FloorCondition().setRegistryName(DungeonMod.MODID, "floor")
+                    new ModCondition().setRegistryName(DungeonMod.ID, "mod"),
+                    new PaletteCondition().setRegistryName(DungeonMod.ID, "palette"),
+                    new FloorCondition().setRegistryName(DungeonMod.ID, "floor")
             );
         }
 
@@ -111,12 +120,18 @@ public class CommonProxy {
             event.getRegistry().register(TileEntityType.Builder.create(
                     MetadataTile::new, MetadataBlock.METADATA_BLOCK)
                     .build(null)
-                    .setRegistryName(DungeonMod.MODID, "metadata")
+                    .setRegistryName(DungeonMod.ID, "metadata")
             );
             event.getRegistry().register(TileEntityType.Builder.create(
+<<<<<<< HEAD
                     TotemTile::new, TotemBlock.TOTEM)
                     .build(null)
                     .setRegistryName(DungeonMod.MODID, "totem")
+=======
+                    ObeliskTile::new, ObeliskBlock.OBELISK)
+                    .build(null)
+                    .setRegistryName(DungeonMod.ID, "obelisk")
+>>>>>>> Rename MODID variable
             );
         }
 
@@ -130,13 +145,20 @@ public class CommonProxy {
                     .forEach(BLOCKS::add);
 
             BLOCKS.addAll(Arrays.asList(
-                    new BreakableBlock(Blocks.STONE).setRegistryName(DungeonMod.MODID, "porous_stone"),
-                    new BreakableBlock(Blocks.GRAVEL).setRegistryName(DungeonMod.MODID, "gravelous_gravel"),
-                    new BreakableBlock(Blocks.OAK_PLANKS).setRegistryName(DungeonMod.MODID, "morsh_wood"),
+                    new BreakableBlock(Blocks.STONE).setRegistryName(DungeonMod.ID, "porous_stone"),
+                    new BreakableBlock(Blocks.GRAVEL).setRegistryName(DungeonMod.ID, "gravelous_gravel"),
+                    new BreakableBlock(Blocks.OAK_PLANKS).setRegistryName(DungeonMod.ID, "morsh_wood"),
 
-                    new MetadataBlock().setRegistryName(DungeonMod.MODID, "metadata_block"),
+                    new MetadataBlock().setRegistryName(DungeonMod.ID, "metadata_block"),
 
+<<<<<<< HEAD
                     new TotemBlock().setRegistryName(DungeonMod.MODID, "totem")
+=======
+                    new ObeliskBlock().setRegistryName(DungeonMod.ID, "obelisk"),
+
+                    new RedstoneReceiverBlock().setRegistryName(DungeonMod.ID, "redstone_receiver"),
+                    new RedstoneSenderBlock().setRegistryName(DungeonMod.ID, "redstone_sender")
+>>>>>>> Rename MODID variable
 
                     //new LogBlock(MaterialColor.WOOD, Block.Properties.create(Material.WOOD, MaterialColor.OBSIDIAN).hardnessAndResistance(2.0F).sound(SoundType.WOOD)),
                     //new Block(Block.Properties.create(Material.WOOD, MaterialColor.WOOD).hardnessAndResistance(2.0F, 3.0F).sound(SoundType.WOOD)),
@@ -154,6 +176,20 @@ public class CommonProxy {
                     .filter(b -> b.getRegistryName() != null)
                     .map(b -> new BlockItem(b, properties).setRegistryName(b.getRegistryName()))
                     .forEach(event.getRegistry()::register);
+
+            event.getRegistry().registerAll(
+                    new GrenadeSmoke().setRegistryName(DungeonMod.ID, "smoke_grenade"),
+                    new GrenadeFrost().setRegistryName(DungeonMod.ID, "frost_grenade"),
+                    new GrenadeGravity().setRegistryName(DungeonMod.ID, "gravity_grenade")
+            );
+        }
+
+        @SubscribeEvent
+        public static void onEntityTypeRegistry(final RegistryEvent.Register<EntityType<?>> event) {
+            event.getRegistry().register(
+                    EntityType.Builder.<GrenadeEntity>create(GrenadeEntity::new, EntityClassification.MISC).size(0.25F, 0.25F)
+                            .build("grenade").setRegistryName(DungeonMod.ID, "grenade")
+            );
         }
 
     }

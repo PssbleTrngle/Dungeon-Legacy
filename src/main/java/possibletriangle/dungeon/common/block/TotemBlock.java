@@ -41,8 +41,13 @@ public class TotemBlock extends ContainerBlock {
     ).reduce(VoxelShapes.empty(), VoxelShapes::or, (v1, v2) -> v1);
 >>>>>>> Obelisk & Metadata TESR Outline:src/main/java/possibletriangle/dungeon/common/block/ObeliskBlock.java
 
+<<<<<<< HEAD:src/main/java/possibletriangle/dungeon/common/block/TotemBlock.java
     @ObjectHolder("dungeon:totem")
     public static final Block TOTEM = null;
+=======
+    @ObjectHolder("dungeon:obelisk")
+    public static final Block OBELISK = null;
+>>>>>>> Rename MODID variable:src/main/java/possibletriangle/dungeon/common/block/ObeliskBlock.java
 
     public TotemBlock() {
         super(Block.Properties.create(Material.ROCK, MaterialColor.GRAY)
@@ -57,9 +62,15 @@ public class TotemBlock extends ContainerBlock {
     public void blockColors(ColorHandlerEvent.Block event) {
 
         event.getBlockColors().register((s,w,p,i) -> {
+<<<<<<< HEAD:src/main/java/possibletriangle/dungeon/common/block/TotemBlock.java
             if(i == 0) return -1;
             return getTE(w, p).map(TotemTile::getColor).orElse(State.INVALID.color);
         }, TOTEM);
+=======
+            if(i != 1) return -1;
+            return getTE(w, p).map(ObeliskTile::getColor).orElse(State.INVALID.color);
+        }, OBELISK);
+>>>>>>> Rename MODID variable:src/main/java/possibletriangle/dungeon/common/block/ObeliskBlock.java
 
     }
     

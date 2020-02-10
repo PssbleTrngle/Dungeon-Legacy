@@ -62,7 +62,7 @@ public class Serializer implements IMetadataSectionSerializer<StructureMetadata>
         String[] required = getStringArray(object, "required");
 
         String type = JSONUtils.getString(object, "type", "");
-        ResourceLocation name = new ResourceLocation(DungeonMod.MODID, type);
+        ResourceLocation name = new ResourceLocation(DungeonMod.ID, type);
 
         return new GenerationCondition(allow, reject, required, name);
     }

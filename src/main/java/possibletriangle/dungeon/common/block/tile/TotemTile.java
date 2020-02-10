@@ -2,7 +2,6 @@ package possibletriangle.dungeon.common.block.tile;
 
 import com.google.common.collect.Lists;
 import net.minecraft.block.BlockState;
-import net.minecraft.command.impl.TeamCommand;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
@@ -21,8 +20,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ObjectHolder;
 <<<<<<< HEAD:src/main/java/possibletriangle/dungeon/common/block/tile/TotemTile.java
 import possibletriangle.dungeon.common.DungeonCommand;
@@ -98,11 +95,8 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
     public void onLoad() {
         super.onLoad();
 
-        updateTeam();
-
         /* Find the room it was placed in and save the required information */
-        ChunkPos chunk = new ChunkPos(getPos());
-        DungeonChunkGenerator.roomAt(chunk.asBlockPos(), world).ifPresent(pair -> {
+        DungeonChunkGenerator.roomAt(getPos(), world).ifPresent(pair -> {
 
             Generateable room = pair.getValue();
             this.floor = pair.getKey();
@@ -111,7 +105,13 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
 
         });
 
+<<<<<<< HEAD:src/main/java/possibletriangle/dungeon/common/block/tile/TotemTile.java
         if(!this.inRoom()) updateState(TotemBlock.State.INVALID);
+=======
+        updateTeam();
+
+        //if(!this.inRoom()) updateState(ObeliskBlock.State.INVALID);
+>>>>>>> Rename MODID variable:src/main/java/possibletriangle/dungeon/common/block/tile/ObeliskTile.java
 
     }
 
@@ -366,7 +366,11 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
 >>>>>>> Obelisk & Metadata TESR Outline:src/main/java/possibletriangle/dungeon/common/block/tile/ObeliskTile.java
         if(this.world == null) return;
 
+<<<<<<< HEAD:src/main/java/possibletriangle/dungeon/common/block/tile/TotemTile.java
         BlockState block = TotemBlock.TOTEM.getDefaultState().with(TotemBlock.STATE, state);
+=======
+        BlockState block = ObeliskBlock.OBELISK.getDefaultState().with(ObeliskBlock.STATE, state);
+>>>>>>> Rename MODID variable:src/main/java/possibletriangle/dungeon/common/block/tile/ObeliskTile.java
         this.world.setBlockState(getPos(), block);
     }
 
