@@ -7,8 +7,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.WorldGenRegion;
 import possibletriangle.dungeon.common.block.Palette;
@@ -75,6 +78,18 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
         if(random.nextInt(32) == 0) return StructureType.BASE;
         return StructureType.ROOM;
     }
+
+    @Override
+    public void generateBiomes(IChunk chunk) {
+        Biome biome = Optional.ofNullable(paletteFor(chunk.getPos(), world.getSeed()).biome.get()).orElse(Biomes.THE_VOID);
+        Biome[] biomes = new Biome[16 * 16];
+        for(int x = 0; x < biomes.length; x++)
+            biomes[x] = biome;
+        chunk.setBiomes(biomes);
+    }
+
+    @Override
+    public void carve(IChunk chunkIn, GenerationStage.Carving carvingSettings) {}
 
     /**
      * @return If a structure fits the current requirements, like size or the structures' conditions defined by its .mcmeta file
@@ -165,7 +180,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
             room.generate(chunk, random, ctx, new BlockPos(1, 0, 1));
             Arrays.stream(room.getMeta().getParts()).forEach(part ->
                 partFor(part, random).ifPresent(structure ->
-                    structure.generate(chunk, random, ctx, part.getPos(random))
+                    structure.generate(chunk, random, ctx, part.randomPos(random))
                 )
             );
             Wall.generate(chunk, height, random, ctx);
