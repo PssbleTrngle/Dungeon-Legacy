@@ -70,10 +70,14 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
 
         nbt.putFloat("weight", weight);
         nbt.putString("display", display);
-        ListNBT categories = new ListNBT();
 
+        ListNBT categories = new ListNBT();
         Arrays.stream(this.categories).map(StringNBT::new).forEach(categories::add);
         nbt.put("categories", categories);
+
+        ListNBT parts = new ListNBT();
+        Arrays.stream(this.parts).map(Part::serializeNBT).forEach(parts::add);
+        nbt.put("parts", parts);
 
         return nbt;
     }
@@ -82,7 +86,11 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
     public void deserializeNBT(CompoundNBT nbt) {
         if(nbt.contains("weight")) this.weight = nbt.getFloat("weight");
         if(nbt.contains("display")) this.display = nbt.getString("display");
-        if(nbt.contains("categories")) this.categories = nbt.getList("categories", 8).stream().map(INBT::toString).toArray(String[]::new);
+        if(nbt.contains("categories"))
+            this.categories = nbt.getList("categories", 8).stream().map(INBT::toString).toArray(String[]::new);
+
+        if(nbt.contains("parts"))
+            this.parts = nbt.getList("parts", 10).stream().map(n -> (CompoundNBT) n).map(Part::new).toArray(Part[]::new);
     }
 
 }
