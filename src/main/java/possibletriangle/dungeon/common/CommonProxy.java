@@ -22,9 +22,12 @@ import possibletriangle.dungeon.common.block.tile.MetadataTile;
 import possibletriangle.dungeon.common.block.tile.ObeliskTile;
 import possibletriangle.dungeon.common.content.Palettes;
 import possibletriangle.dungeon.common.entity.GrenadeEntity;
+import possibletriangle.dungeon.common.item.ScrollItem;
 import possibletriangle.dungeon.common.item.grenade.GrenadeFrost;
 import possibletriangle.dungeon.common.item.grenade.GrenadeGravity;
 import possibletriangle.dungeon.common.item.grenade.GrenadeSmoke;
+import possibletriangle.dungeon.common.item.spells.ShockwaveSpell;
+import possibletriangle.dungeon.common.item.spells.Spell;
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.DungeonWorldType;
 import possibletriangle.dungeon.common.world.room.HallwayMaze;
@@ -77,6 +80,11 @@ public class CommonProxy {
             new RegistryBuilder<ConditionType>()
                     .setName(new ResourceLocation(DungeonMod.ID, "condition"))
                     .setType(ConditionType.class)
+                    .create();
+
+            new RegistryBuilder<Spell>()
+                    .setName(new ResourceLocation(DungeonMod.ID, "spell"))
+                    .setType(Spell.class)
                     .create();
         }
 
@@ -163,7 +171,16 @@ public class CommonProxy {
             event.getRegistry().registerAll(
                     new GrenadeSmoke().setRegistryName(DungeonMod.ID, "smoke_grenade"),
                     new GrenadeFrost().setRegistryName(DungeonMod.ID, "frost_grenade"),
-                    new GrenadeGravity().setRegistryName(DungeonMod.ID, "gravity_grenade")
+                    new GrenadeGravity().setRegistryName(DungeonMod.ID, "gravity_grenade"),
+
+                    new ScrollItem().setRegistryName(DungeonMod.ID, "scroll")
+            );
+        }
+
+        @SubscribeEvent
+        public static void onSpellRegistry(final RegistryEvent.Register<Spell> event) {
+            event.getRegistry().registerAll(
+                new ShockwaveSpell().setRegistryName(DungeonMod.ID, "shockwave")
             );
         }
 

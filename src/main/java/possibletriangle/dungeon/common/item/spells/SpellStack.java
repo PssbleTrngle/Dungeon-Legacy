@@ -1,6 +1,11 @@
-package possibletriangle.common.item.spells;
+package possibletriangle.dungeon.common.item.spells;
 
-public final class SpellStack implements INBTSerializable<NBTCompound> {
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
+public final class SpellStack implements INBTSerializable<CompoundNBT> {
 
     private int power;
     private Spell spell;
@@ -15,10 +20,10 @@ public final class SpellStack implements INBTSerializable<NBTCompound> {
 
     public int getPower() {
         if(isEmpty()) return 0;
-        return Math.clamp(this.power, 1, getSpell().maxPower());
+        return Math.min(Math.max(this.power, 1),  getSpell().maxPower());
     }
 
-    public SpellStack(int power, Spell spell) {
+    public SpellStack(Spell spell, int power) {
         this.power = power;
         this.spell = spell;
     }
@@ -42,5 +47,8 @@ public final class SpellStack implements INBTSerializable<NBTCompound> {
         this.spell = GameRegistry.findRegistry(Spell.class).getValue(new ResourceLocation(nbt.getString("spell")));
     }
 
+    public String getTranslationKey() {
+        return isEmpty() ? "spell.empty" : "spell." + getSpell().getRegistryName().toString().replace(":", ".");
+    }
     
 }

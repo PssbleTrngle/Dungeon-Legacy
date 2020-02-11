@@ -48,6 +48,11 @@
 	"item.dungeon.frost_grenade": "Frost Grenade",
 	"item.dungeon.gravity_grenade": "Gravity Grenade",
 
+	"spell.power": "Power: %i",
+	"spell.empty": "Empty Scroll",
+	"spell.dungeon.shockwave": "Shockwave",
+	"spell.dungeon.shockwave.description": "Shockwave",
+
 	"generator.dungeon": "Dungeon",
 	"itemGroup.dungeon": "Dungeon",
 	"tooltip.dungeon.keystone": "Keystones",
