@@ -8,6 +8,13 @@ public abstract class Spell extends ForgeRegistryEntry<Spell> {
 
     public abstract int maxPower();
 
+    public abstract int getCooldown();
+
+    /**
+     * The amount of time it takes to cast this spell in ticks
+     */
+    public abstract int getCharge();
+
     public abstract use(UseContext context);
 
     public static class UseContext {
