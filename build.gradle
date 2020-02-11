@@ -48,11 +48,8 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
+            
+            property 'forge.logging.markers', 'SCAN,REGISTRIES'
             property 'forge.logging.console.level', 'debug'
 
             mods {
@@ -63,12 +60,9 @@ minecraft {
         }
 
         server {
-            workingDirectory project.file('run')
+            workingDirectory project.file('server')
 
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
+            property 'forge.logging.markers', 'SCAN,REGISTRIES'
             property 'forge.logging.console.level', 'debug'
 
             mods {
@@ -81,13 +75,10 @@ minecraft {
         data {
             workingDirectory project.file('run')
 
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
+            property 'forge.logging.markers', 'SCAN,REGISTRIES'
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'dungeon', '--all', '--output', file('src/main/resources/data')
+            args '--mod', 'dungeon', '--all', '--output', file('src/generated/resources/')
 
             mods {
                 dungeon {
@@ -128,15 +119,18 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "dungeon",
-            "Specification-Vendor": "examplemodsareus",
-            "Specification-Version": "1", // We are version 1 of ourselves
+            "Specification-Title": "Dungeon",
+            "Specification-Vendor": "dungeon",
+            "Specification-Version": "1",
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
+            "Implementation-Vendor" :"dungeon",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
+    
+    exclude "**/*.bat"
+    exclude "**/*.xcf"
 }
 
 // Example configuration to allow publishing using the maven-publish task
