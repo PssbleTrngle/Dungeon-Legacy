@@ -67,5 +67,6 @@ public class DungeonMod {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onServerStarting(final FMLServerStartingEvent  event) {
         DungeonCommand.register(event.getCommandDispatcher());
+        GameCommand.register(event.getCommandDispatcher());
     }
 }
