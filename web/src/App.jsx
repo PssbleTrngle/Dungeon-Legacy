@@ -1,20 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import './style/room.css';
 import './style/general.css';
-import { Switch, BrowserRouter as Router, Route, useLocation, Link, useParams } from 'react-router-dom';
+import './style/wiki.css';
+import './style/submit.css';
+import { Switch, BrowserRouter as Router, Route, useLocation, Link } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import Submit from './Submit';
+import Wiki from './Wiki';
+
+export const Popup = ({ children, hovered }) => {
+    return hovered ? (
+        <div className='popup' style={{
+            top: hovered.y,
+            left: hovered.x,
+        }}>
+            {children}
+        </div>
+    ) : null;
+}
 
 function App() {
 
    const doors = [
       { href: '/wiki', text: 'About the mod', component: Wiki },
       { href: '/submit', text: 'Submit a Structure', component: Submit },
-      { href: '/download', text: 'Get the Mod', component: Download },
+      { href: '/download', text: 'Get the Mod', link: 'https://www.cursforge.com/DieIDHaltMannKP' },
    ];
 
    return (
       <Router>
-         <Header />
+         {/* <Header /> */}
 
          <Transitions>
 
@@ -22,7 +37,7 @@ function App() {
                <Route exact path="/">
                   <Home {...{ doors }} />
                </Route>
-               {doors.map(({ href, component }) =>
+               {doors.filter(d => !!d.component).map(({ href, component }) =>
                   <Route key={href} path={`${href}/:page?`} {...{ component }} />
                )}
             </Switch>
@@ -52,129 +67,6 @@ function Transitions({ children }) {
    );
 }
 
-function Download() {
-   return (
-      <h1>Download</h1>
-   );
-}
-
-function Selection({ of, name }) {
-   const [value, set] = useState('');
-   const select = (e, key) => {
-      e.preventDefault();
-      set(key);
-   }
-
-   return (
-      <>
-         <div className='row selection'>
-            {of.map(({ name, key }) =>
-               <button {...{ key }} onClick={e => select(e, key)} className={value === key ? 'selected' : ''}>
-                  {name}
-               </button>
-            )}
-            <input type='hidden'{...{ name, value }} />
-         </div>
-      </>
-   );
-
-}
-
-function Input({ validate, placeholder, name }) {
-
-   const [value, setValue] = useState('');
-   const [valid, setValid] = useState(true);
-   const [reason, setReason] = useState(null);
-
-   const onChange = async e => {
-      const { value } = e.target;
-      setValue(value);
-
-      if (validate) {
-         const valid = await validate(value);
-         if (valid === true) {
-            setValid(true);
-            setReason(null);
-         } else {
-            setValid(false);
-            setReason(valid);
-         }
-      }
-   }
-
-   return (
-      <>
-         <input
-            type='text'
-            className={valid ? 'valid' : 'invalid'}
-            {...{ value, onChange, placeholder, name }}
-         >
-         </input>
-         {reason && <label className='tooltip'>{reason}</label>}
-      </>
-   );
-}
-
-function Upload({ extension, name }) {
-   return (
-      <input
-         type='file'
-         accept={extension}
-         {...{ name }}
-      />
-   )
-}
-
-function Submit() {
-   const types = [
-      { name: 'Room', key: 'room' },
-      { name: 'Hallway', key: 'hallway' },
-      { name: 'Base', key: 'base' },
-      { name: 'Big Door', key: 'door/big' },
-      { name: 'Small Door', key: 'door/small' },
-   ];
-
-   const nameTaken = async name => {
-      const existing = ['well', 'fountain', 'treasure'].map(s => s.toLowerCase());
-      return existing.some(e => e === name.toLowerCase());
-   }
-
-   return (
-      <>
-         <h1>Submit a structure</h1>
-
-         <form method='POST' action='/submit'>
-
-            <label>Select a type</label>
-            <Selection name='type' of={types} />
-
-            <Input name='name' placeholder='Structure Name' validate={async value => {
-               if (!/^[a-zA-Z]{3,20}$/.test(value)) return 'Invalid Name';
-               if (await nameTaken(value)) return 'Name Taken';
-               return true;
-            }} />
-
-            <div className='row'>
-               <Upload name='structure' extension='.nbt' />
-               <Upload name='metadata' extension='.nbt.mcmeta' />
-            </div>
-
-         </form>
-      </>
-   );
-}
-
-function Wiki() {
-   const { page } = useParams();
-
-   return (
-      <>
-         <h1>Wiki</h1>
-         <p>{page}</p>
-      </>
-   );
-}
-
 function Home({ doors }) {
    return (
       <div className='scene'>
@@ -185,8 +77,10 @@ function Home({ doors }) {
             <div className='wall'>
 
                <div className='doors'>
-                  {doors.map(({ href, text }) =>
-                     <Link className='door' to={href}>{text}</Link>
+                  {doors.map(({ href, text, link }) =>
+                     link
+                        ? <Link className='door' to={href}>{text}</Link>
+                        : <a className='door' href={link}>{text}</a>
                   )}
                </div>
 

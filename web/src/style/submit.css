@@ -1,0 +1,26 @@
+.submit form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.submit form input[type=text] {
+    width: 60%;
+    max-width: 300px;
+}
+
+.submit form input[type=submit] {
+    padding: 15px 70px;
+    font-weight: 666;
+}
+
+.submit form input[type=submit]:not(:disabled) {
+    background-color: rgb(23, 164, 196);
+}
+
+.submit form input[type=submit]:not(:disabled):hover {
+    background-color: rgb(64, 214, 231);
+}
+
+.submit form input[type=submit]:not(:disabled):focus {
+    outline: 2px solid rgb(64, 214, 231) ;
+}

@@ -96,10 +96,12 @@ section.fade-exit.fade-exit-active {
 }
 
 button,
-input {
+input,
+input + label {
   border: #111 1px solid;
   background-color: transparent;
   padding: 15px;
+  transition: background 0.1s linear;
 }
 
 button:hover,
@@ -112,12 +114,22 @@ button.selected {
 }
 
 button:focus,
-input:focus {
-  outline: none;
+input:focus,
+input[type="file"]:focus + label {
+  outline: 1px solid rgb(61, 196, 211);
+  z-index: 1;
 }
 
+
+input[type="submit"],
 button {
+  background-image: linear-gradient(to top, #0006, #fff2);
   cursor: pointer;
+}
+
+input[type="submit"]:hover,
+button:hover {
+  background-color: #FFF2;
 }
 
 form > * {
@@ -136,4 +148,53 @@ label.tooltip {
   border-radius: 10px;
   font-size: 0.8rem;
   background: #000;
+}
+
+input[type="file"] {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+input[type="file"] + label {
+  font-size: 1rem;
+  background-color: #333;
+  border-radius: 0.2rem;
+  display: inline-block;
+  cursor: pointer;
+  margin: 0 5px;
+  text-align: left;
+  text-transform: capitalize;
+  position: relative;
+  padding: 10px;
+  overflow: hidden;
+}
+
+input[type="file"] + label > span {
+  font-size: 0.8rem;
+  position: absolute;
+  right: 0;
+  top: -3px;
+  padding: 15px;
+  background-color: #fff2;
+}
+
+input[type="file"]:focus + label,
+input[type="file"] + label:hover {
+  background-color: #555;
+}
+
+input[type="file"].invalid + label {
+  outline: 2px solid rgb(213, 17, 59);
+}
+
+.selection.invalid {
+  outline: 2px solid rgb(213, 17, 59);
+}
+
+input:disabled, input:hover:disabled {
+  background: #FFF1;
 }
