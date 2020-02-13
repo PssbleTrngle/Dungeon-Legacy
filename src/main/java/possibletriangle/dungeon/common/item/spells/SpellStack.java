@@ -31,7 +31,10 @@ public final class SpellStack implements INBTSerializable<CompoundNBT> {
     public SpellStack(CompoundNBT nbt) {
         this.deserializeNBT(nbt);
     }
-    
+
+    public int getColor() {
+        return isEmpty() ? -1 : getSpell().getColor();
+    }
 
     @Override
     public CompoundNBT serializeNBT() {

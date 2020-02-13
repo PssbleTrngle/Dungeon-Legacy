@@ -7,11 +7,11 @@ import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;
 
-public class ShockwaveSpell extends Spell {
+public class BlackholeSpell extends Spell {
 
     @Override
     public int maxPower() {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -21,12 +21,12 @@ public class ShockwaveSpell extends Spell {
 
     @Override
     public int getCharge() {
-        return 20 * 2;
+        return 20 * 4;
     }
 
     @Override
     public int getColor() {
-        return new Color(101, 123, 154).getRGB();
+        return 0x000000;
     }
 
     @Override
@@ -35,10 +35,7 @@ public class ShockwaveSpell extends Spell {
         double radius = 2 + context.stack.getPower();
         context.inRange(radius, LivingEntity.class).forEach(hit -> {
             Vec3d vec = hit.getPositionVector().subtract(context.pos);
-            hit.move(MoverType.SELF, vec.scale(3));
+            hit.move(MoverType.SELF, vec.scale(-4));
         });
-
-        context.world.spawnParticle(ParticleTypes.EXPLOSION, context.pos.x, context.pos.y, context.pos.z, 1, 0, 0, 0, 1);
-
     }
 }

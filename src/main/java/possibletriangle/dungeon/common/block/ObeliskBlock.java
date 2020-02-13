@@ -33,7 +33,6 @@ import java.awt.*;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ObeliskBlock extends ContainerBlock {
 
     public static final IProperty<State> STATE = EnumProperty.create("state", State.class);
@@ -58,16 +57,6 @@ public class ObeliskBlock extends ContainerBlock {
     public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         return SHAPE;
     }
-
-    @SubscribeEvent
-    public static void blockColors(ColorHandlerEvent.Block event) {
-
-        event.getBlockColors().register((s,w,p,i) -> {
-            if(i != 1) return -1;
-            return getTE(w, p).map(ObeliskTile::getColor).orElse(State.INVALID.color);
-        }, OBELISK);
-
-    }
     
 	@Override
 	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
@@ -82,6 +71,7 @@ public class ObeliskBlock extends ContainerBlock {
     }
 
     public static Optional<ObeliskTile> getTE(IBlockReader world, BlockPos pos) {
+        if(world == null) return Optional.empty();
         TileEntity te = world.getTileEntity(pos);
         if(te instanceof ObeliskTile) return Optional.of((ObeliskTile) te);
         return Optional.empty();

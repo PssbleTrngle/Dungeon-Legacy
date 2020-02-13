@@ -6,10 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -34,9 +31,14 @@ public class ScrollItem extends Item {
     
     @ObjectHolder("dungeon:scroll")
     public static final Item SCROLL = null;
+    public static final ResourceLocation MODEL_EMPTY = new ResourceLocation(DungeonMod.ID, "empty");
 
     public ScrollItem() {
         super(new Properties().group(DungeonMod.GROUP).maxStackSize(1));
+        addPropertyOverride(MODEL_EMPTY, (stack, world, entity) -> {
+            SpellStack spell = getSpell(stack);
+            return spell.isEmpty() ? 1 : 0;
+        });
     }
     
     public static void setSpell(ItemStack stack, SpellStack spell) {

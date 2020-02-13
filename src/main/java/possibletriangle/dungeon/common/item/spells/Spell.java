@@ -29,6 +29,8 @@ public abstract class Spell extends ForgeRegistryEntry<Spell> {
 
     public abstract void use(UseContext context);
 
+    public abstract int getColor();
+
     public static class UseContext {
         public final Vec3d pos;
         public final ServerWorld world;

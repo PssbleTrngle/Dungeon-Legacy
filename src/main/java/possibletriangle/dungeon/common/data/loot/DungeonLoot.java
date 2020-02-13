@@ -111,7 +111,7 @@ public class DungeonLoot extends LootTableProvider {
 
         ILootFunction.IBuilder lore = () -> new SetLore(new ILootCondition[0], true, Arrays.asList(
                 new StringTextComponent(""),
-                new TranslationTextComponent("item.canPlace").applyTextStyles(TextFormatting.RESET, TextFormatting.GRAY),
+                new TranslationTextComponent("model.canPlace").applyTextStyles(TextFormatting.RESET, TextFormatting.GRAY),
                 new TranslationTextComponent("tooltip.dungeon.keystone").applyTextStyles(TextFormatting.RESET, TextFormatting.DARK_GRAY)
         ), null);
 
