@@ -1,11 +1,11 @@
-import React, { useState, useContext, createContext, useEffect, useRef } from 'react';
+import React, { useState, useContext, createContext, useEffect, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Popup } from './App';
+import querystring from 'querystring';
 
 function Selection({ of, name }) {
    const [value, set] = useState('');
    const ref = useRef();
-   const { valid, onChange } = useValidation(name, ({ value }) => {
+   const { valid, onChange, className } = useValidation(name, ({ value }) => {
       console.log(value);
       return value.length > 0;
    }, ref);
@@ -18,7 +18,7 @@ function Selection({ of, name }) {
 
    return (
       <>
-         <div className={`row selection ${valid ? 'valid' : 'invalid'}`}>
+         <div className={`row selection ${className}`}>
             {of.map(({ name, key }) =>
                <button {...{ key }} onClick={e => select(e, key)} className={value === key ? 'selected' : ''}>
                   {name}
@@ -120,8 +120,10 @@ function useForm() {
 function useValidation(name, validate, ref) {
    const [, setValid, isValid] = useForm();
    const valid = isValid(name);
+   const [changed, setChanged] = useState(false);
 
    const onChange = async () => {
+      setChanged(true);
       setValid(name, await validate(ref.current));
    }
 
@@ -133,27 +135,27 @@ function useValidation(name, validate, ref) {
       if (ref.current) v();
    }, [name, ref]);
 
-   return { valid, onChange };
+   const className = (!valid && changed) ? 'invalid' : 'valid';
+   return { valid, onChange, changed, className };
 }
 
 function Validating({ name, validate, type, placeholder, onChange: change, ...props }) {
    const ref = useRef();
-   const { valid, onChange } = useValidation(name, validate, ref);
+   const { onChange, className } = useValidation(name, validate, ref);
 
    return <input
-      className={valid ? 'valid' : 'invalid'}
       id={name}
       onChange={e => {
          if (change) change(e);
          onChange(e);
       }}
-      {...{ name, ref, type, placeholder, ...props }}
+      {...{ name, ref, type, placeholder, className, ...props }}
    />
 }
 
 function SubmitButton() {
    const [valid] = useForm();
-   const [hovered, hover] = useState(false);
+   const [, hover] = useState(false);
 
    return (<>
       <input
@@ -169,18 +171,29 @@ function SubmitButton() {
    </>);
 }
 
+function useApi(endpoint = '', count) {
+   const [models, setModels] = useState(null);
+
+   const query = querystring.encode({ count });
+
+   useEffect(() => {
+      fetch(`/api/${endpoint}?${query}`)
+         .then(r => r.json())
+         .then(r => setModels(r))
+         .catch(e => console.error(e));
+   }, [endpoint, query]);
+
+   return models;
+}
+
 function Submit() {
-   const types = [
-      { name: 'Room', key: 'room' },
-      { name: 'Hallway', key: 'hallway' },
-      { name: 'Base', key: 'base' },
-      { name: 'Big Door', key: 'door/big' },
-      { name: 'Small Door', key: 'door/small' },
-   ];
+
+   const types = useApi('types') ?? [];
+   const submissions = useApi('submissions') ?? []
+   const names = useMemo(() => submissions.map(s => s.name).map(s => s.toLowerCase()), [submissions]);
 
    const nameTaken = async name => {
-      const existing = ['well', 'fountain', 'treasure'].map(s => s.toLowerCase());
-      return existing.some(e => e === name.toLowerCase());
+      return names.some(e => e === name.toLowerCase());
    }
 
    const valid = useState({});

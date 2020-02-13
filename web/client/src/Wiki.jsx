@@ -51,9 +51,9 @@ function usePage() {
     const key = param || 'home';
 
     useEffect(() => {
-        fetch(require(`./wiki/${key}.md`))
+        fetch(`./wiki/${key}`)
             .then(r => r.text())
-            .catch(() => '*505 - Internal Server Error*')
+            .catch(e => `*${e}*`)
             .then(p => setPage(p))
     }, [key]);
 
