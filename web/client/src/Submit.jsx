@@ -1,6 +1,7 @@
 import React, { useState, useContext, createContext, useEffect, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import querystring from 'querystring';
+import { useApi } from './App';
 
 function Selection({ of, name }) {
    const [value, set] = useState('');
@@ -169,21 +170,6 @@ function SubmitButton() {
          <p>You are missing something</p>
       }
    </>);
-}
-
-function useApi(endpoint = '', count) {
-   const [models, setModels] = useState(null);
-
-   const query = querystring.encode({ count });
-
-   useEffect(() => {
-      fetch(`/api/${endpoint}?${query}`)
-         .then(r => r.json())
-         .then(r => setModels(r))
-         .catch(e => console.error(e));
-   }, [endpoint, query]);
-
-   return models;
 }
 
 function Submit() {

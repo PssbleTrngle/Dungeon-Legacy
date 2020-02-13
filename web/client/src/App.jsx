@@ -7,16 +7,32 @@ import { Switch, BrowserRouter as Router, Route, useLocation, Link } from 'react
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import Submit from './Submit';
 import Wiki from './Wiki';
+import Submissions from './Submissions';
 
 export const Popup = ({ children, hovered }) => {
-    return hovered ? (
-        <div className='popup' style={{
-            top: hovered.y,
-            left: hovered.x,
-        }}>
-            {children}
-        </div>
-    ) : null;
+   return hovered ? (
+      <div className='popup' style={{
+         top: hovered.y,
+         left: hovered.x,
+      }}>
+         {children}
+      </div>
+   ) : null;
+}
+
+export function useApi(endpoint = '', count) {
+   const [models, setModels] = useState(null);
+
+   const query = querystring.encode({ count });
+
+   useEffect(() => {
+      fetch(`/api/${endpoint}?${query}`)
+         .then(r => r.json())
+         .then(r => setModels(r))
+         .catch(e => console.error(e));
+   }, [endpoint, query]);
+
+   return models;
 }
 
 function App() {
@@ -37,6 +53,9 @@ function App() {
                <Route exact path="/">
                   <Home {...{ doors }} />
                </Route>
+
+               <Route path='/submission' component={Submissions} />
+
                {doors.filter(d => !!d.component).map(({ href, component }) =>
                   <Route key={href} path={`${href}/:page?`} {...{ component }} />
                )}

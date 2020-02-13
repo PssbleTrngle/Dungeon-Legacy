@@ -1,4 +1,4 @@
-import { Model, Sequelize, INTEGER, HasManyCreateAssociationMixin, Association, STRING, DATE, ENUM, literal, HasManyRemoveAssociationMixin } from 'sequelize';
+import { Model, Sequelize, INTEGER, HasManyCreateAssociationMixin, Association, STRING, DATE, ENUM, literal, HasManyRemoveAssociationMixin, BOOLEAN } from 'sequelize';
 import { FORCE_DB, DEBUG } from './config';
 import { info, success } from './index'
 
@@ -15,6 +15,7 @@ export class Submission extends Model {
     public id!: string;
     public file!: string;
     public name!: string;
+    public hasMetadata!: boolean;
 
     public readonly type!: Type;
 
@@ -46,14 +47,17 @@ export async function setup() {
             type: STRING(64),
             allowNull: false,
         },
-        type: INTEGER(),
+        hasMetadata: {
+            type: BOOLEAN
+        },
     }, {
         sequelize,
         tableName: 'submissions',
         defaultScope: {
             include: [
                 { model: Type, as: 'type' }
-            ]
+            ],
+            attributes: { exclude: ['file'] },
         }
     });
 

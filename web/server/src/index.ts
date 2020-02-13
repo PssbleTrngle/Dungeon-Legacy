@@ -1,5 +1,5 @@
-import express from 'express';
-import { PORT, DEBUG } from './config';
+import express, { RequestHandler } from 'express';
+import { PORT, DEBUG, UPLOAD_FOLDER } from './config';
 import chalk from 'chalk';
 import bodyParser from 'body-parser';
 import { Server } from 'http';
@@ -8,6 +8,8 @@ import fileUpload, { UploadedFile } from 'express-fileupload';
 import { v4 as uuid } from 'uuid';
 import { Type, Submission } from './database';
 import { AssertionError } from 'assert';
+import Mime from 'mime';
+import Path from 'path';
 
 export const error = (...s: unknown[]) => console.log(chalk.red('❌ ', ...s));
 export const info = (...s: unknown[]) => console.log(chalk.cyanBright(...s));
@@ -47,7 +49,7 @@ app.get('/wiki/:page', async (req, res) => {
 
 function move(uuid: string, file: UploadedFile) {
     const ext = file.name.slice(0, file.name.indexOf('.'));
-    return new Promise((yes, no) => file.mv(`./submissions/${uuid}.${ext}`, e => {
+    return new Promise((yes, no) => file.mv(`${UPLOAD_FOLDER}/${uuid}.${ext}`, e => {
         if (e) no(e);
         else yes();
     }))
@@ -57,6 +59,34 @@ app.get('/submissions', async (req, res) => {
     const limit = Number.parseInt(req.query.count) || 10
     const submissions = await Submission.findAll({ limit });
     res.send(submissions);
+});
+
+const admin: RequestHandler = async (req, res, next) => {
+    const isAdmin = DEBUG;
+
+    if (isAdmin) next();
+    else res.status(403).send('You are not authorized to do this');
+}
+
+app.get('/download/submission/:file', admin, async (req, res) => {
+    const { file } = req.params;
+    const match = file.match(/^([0-9])+\.([a-zA-Z\.]+)$/);
+    if (!match) return res.status(404).send('Invalid file name');
+    const [, id, ext] = match;
+
+    const submission = await Submission.findByPk(id, { include: ['file'] });
+
+    if (!submission) return res.status(404).send('Submission not found');
+
+    const filepath = `${UPLOAD_FOLDER}/${submission.file}.${ext}`;
+
+    const filename = Path.basename(file);
+    const mimetype = Mime.getType(file);
+
+    res.setHeader('Content-disposition', `attachment; filename=${filename}`);
+    if (mimetype) res.setHeader('Content-type', mimetype);
+
+    res.download(filepath);
 });
 
 app.get('/types', async (req, res) => {
@@ -77,7 +107,7 @@ app.post('/submit', async (req, res) => {
         /* Validate for Structure Name */
         const name = (req.body.name ?? '').toString();
         if (!/^[a-zA-Z]{3,20}$/.test(name)) throw 'Not a valid name';
-        if(await Submission.findOne({ where: { name } })) throw 'Name taken';
+        if (await Submission.findOne({ where: { name } })) throw 'Name taken';
 
         /* Validate for Structure Files */
         if (!req.files) throw 'No files added';
@@ -93,7 +123,7 @@ app.post('/submit', async (req, res) => {
         ).catch(e => error(e));
 
         /* Create Submission Entry */
-        await Submission.create({ file, type, name });
+        await Submission.create({ file, type, name, hasMetadata: !!metadata });
 
         res.send({ success: true, message: `Added '${name} as ${type} using ${structure.size}b` })
 
