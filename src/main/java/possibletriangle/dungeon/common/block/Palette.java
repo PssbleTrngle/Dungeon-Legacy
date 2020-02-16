@@ -147,9 +147,9 @@ public class Palette extends ForgeRegistryEntry<Palette> {
 
         DungeonMod.LOGGER.info("Registered {} palettes", event.getRegistry().getEntries().size());
         event.getRegistry().forEach(palette -> {
-            String[] missing = Arrays.stream(Type.values())
+            String[] missing = Type.values()
                     .filter(t -> !palette.blocks.containsKey(t))
-                    .map(Enum::name)
+                    .map(Type::name)
                     .toArray(String[]::new);
 
             DungeonMod.LOGGER.info("Palette '{}' is missing {} types ({})",

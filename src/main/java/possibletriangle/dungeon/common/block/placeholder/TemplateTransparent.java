@@ -10,6 +10,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 
+import java.util.function.Function;
+
 @ObjectHolder(DungeonMod.ID)
 public class TemplateTransparent extends TemplateBlock {
 
@@ -18,6 +20,10 @@ public class TemplateTransparent extends TemplateBlock {
     public TemplateTransparent(Type type, boolean hideNeighboors) {
         super(type);
         this.hideNeighboors = hideNeighboors;
+    }
+
+    public static TemplateTransparent hide(Type type) {
+        return new TemplateTransparent(type, true);
     }
 
     public TemplateTransparent(Type type) {

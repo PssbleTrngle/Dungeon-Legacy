@@ -52,6 +52,7 @@
     { "name": "redstone_receiver", "type": "redstone_receiver" },
 	{ "name": "redstone_sender", "type": "redstone_sender" },
 	
+	{ "name": "scroll", "type": "item" },
 	{ "name": "smoke_grenade", "type": "item" },
 	{ "name": "heat_grenade", "type": "item" },
 	{ "name": "gravity_grenade", "type": "item" },

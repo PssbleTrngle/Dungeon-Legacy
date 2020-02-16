@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,9 +23,13 @@ import possibletriangle.dungeon.common.block.tile.MetadataTile;
 import possibletriangle.dungeon.common.block.tile.ObeliskTile;
 import possibletriangle.dungeon.common.content.Palettes;
 import possibletriangle.dungeon.common.entity.GrenadeEntity;
+import possibletriangle.dungeon.common.item.ScrollItem;
 import possibletriangle.dungeon.common.item.grenade.GrenadeFrost;
 import possibletriangle.dungeon.common.item.grenade.GrenadeGravity;
 import possibletriangle.dungeon.common.item.grenade.GrenadeSmoke;
+import possibletriangle.dungeon.common.item.spells.BlackholeSpell;
+import possibletriangle.dungeon.common.item.spells.ShockwaveSpell;
+import possibletriangle.dungeon.common.item.spells.Spell;
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.DungeonWorldType;
 import possibletriangle.dungeon.common.world.room.HallwayMaze;
@@ -63,6 +68,21 @@ public class CommonProxy {
     public static class RegistryEvents {
 
         @SubscribeEvent
+        public static void blockColors(ColorHandlerEvent.Block event) {
+            event.getBlockColors().register((s,w,p,i) -> {
+                if(i != 1) return -1;
+                return ObeliskBlock.getTE(w, p).map(ObeliskTile::getColor).orElse(ObeliskBlock.State.INVALID.color);
+            }, ObeliskBlock.OBELISK);
+        }
+
+        @SubscribeEvent
+        public static void itemColors(ColorHandlerEvent.Item event) {
+            event.getItemColors().register((s,i) ->
+                i == 1 ? ScrollItem.getSpell(s).getColor() : -1
+            , ScrollItem.SCROLL);
+        }
+
+        @SubscribeEvent
         public static void onNewRegistry(final RegistryEvent.NewRegistry event) {
             new RegistryBuilder<Palette>()
                     .setName(new ResourceLocation(DungeonMod.ID, "palette"))
@@ -77,6 +97,11 @@ public class CommonProxy {
             new RegistryBuilder<ConditionType>()
                     .setName(new ResourceLocation(DungeonMod.ID, "condition"))
                     .setType(ConditionType.class)
+                    .create();
+
+            new RegistryBuilder<Spell>()
+                    .setName(new ResourceLocation(DungeonMod.ID, "spell"))
+                    .setType(Spell.class)
                     .create();
         }
 
@@ -127,7 +152,7 @@ public class CommonProxy {
         @SubscribeEvent
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> event) {
 
-            Arrays.stream(Type.values())
+            Type.values()
                     .map(Type::block)
                     .forEach(BLOCKS::add);
 
@@ -163,7 +188,17 @@ public class CommonProxy {
             event.getRegistry().registerAll(
                     new GrenadeSmoke().setRegistryName(DungeonMod.ID, "smoke_grenade"),
                     new GrenadeFrost().setRegistryName(DungeonMod.ID, "frost_grenade"),
-                    new GrenadeGravity().setRegistryName(DungeonMod.ID, "gravity_grenade")
+                    new GrenadeGravity().setRegistryName(DungeonMod.ID, "gravity_grenade"),
+
+                    new ScrollItem().setRegistryName(DungeonMod.ID, "scroll")
+            );
+        }
+
+        @SubscribeEvent
+        public static void onSpellRegistry(final RegistryEvent.Register<Spell> event) {
+            event.getRegistry().registerAll(
+                new ShockwaveSpell().setRegistryName(DungeonMod.ID, "shockwave"),
+                new BlackholeSpell().setRegistryName(DungeonMod.ID, "blackhole")
             );
         }
 

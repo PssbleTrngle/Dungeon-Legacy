@@ -48,8 +48,11 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
-            
-            property 'forge.logging.markers', 'SCAN,REGISTRIES'
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
             mods {
@@ -62,7 +65,10 @@ minecraft {
         server {
             workingDirectory project.file('server')
 
-            property 'forge.logging.markers', 'SCAN,REGISTRIES'
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
             mods {
@@ -75,10 +81,13 @@ minecraft {
         data {
             workingDirectory project.file('run')
 
-            property 'forge.logging.markers', 'SCAN,REGISTRIES'
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'dungeon', '--all', '--output', file('src/generated/resources/')
+            args '--mod', 'dungeon', '--all', '--output', file('src/generated/resources'), '--existing', file('src/main/resources')
 
             mods {
                 dungeon {

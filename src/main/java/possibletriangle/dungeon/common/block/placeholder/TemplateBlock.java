@@ -6,6 +6,8 @@ import net.minecraft.block.material.Material;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 
+import java.util.function.Function;
+
 @ObjectHolder(DungeonMod.ID)
 public class TemplateBlock extends Block implements IPlaceholder {
 
@@ -35,6 +37,10 @@ public class TemplateBlock extends Block implements IPlaceholder {
         super(PROPERTIES().lightValue(light));
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
+    }
+
+    public static <T extends Block> Function<Type<T>, Block> glowing(int light) {
+        return type -> new TemplateBlock(type, light);
     }
 
     @Override

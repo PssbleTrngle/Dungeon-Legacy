@@ -68,7 +68,7 @@ public class GrenadeEntity extends ThrowableEntity implements IRendersAsItem {
             return stack;
         } else {
             if (this.world != null)
-                DungeonMod.LOGGER.error("GrenadeEntity entity {} has no or invalid item", this.getEntityId());
+                DungeonMod.LOGGER.error("GrenadeEntity entity {} has no or invalid model", this.getEntityId());
             return ItemStack.EMPTY;
         }
     }
