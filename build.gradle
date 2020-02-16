@@ -63,7 +63,7 @@ minecraft {
         }
 
         server {
-            workingDirectory project.file('run')
+            workingDirectory project.file('server')
 
             // Recommended logging data for a userdev environment
             property 'forge.logging.markers', 'REGISTRIES'
@@ -128,15 +128,18 @@ dependencies {
 jar {
     manifest {
         attributes([
-            "Specification-Title": "dungeon",
-            "Specification-Vendor": "examplemodsareus",
-            "Specification-Version": "1", // We are version 1 of ourselves
+            "Specification-Title": "Dungeon",
+            "Specification-Vendor": "dungeon",
+            "Specification-Version": "1",
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"examplemodsareus",
+            "Implementation-Vendor" :"dungeon",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
+    
+    exclude "**/*.bat"
+    exclude "**/*.xcf"
 }
 
 // Example configuration to allow publishing using the maven-publish task
