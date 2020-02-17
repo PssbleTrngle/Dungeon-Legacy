@@ -16,9 +16,20 @@ jobs:
       
     - run: ./gradlew build
       
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: built
+        path: ./
+      
   publish:
     runs-on: ubuntu-latest
+    needs: build
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: built
+
       - if: github.action == 'closed' && github.pull_request.merged == 'true'
-      - uses: build
-      - run: echo Release
+        run: echo Release
