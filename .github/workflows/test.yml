@@ -15,10 +15,3 @@ jobs:
     - run: chmod +x ./gradlew
       
     - run: ./gradlew build
-      
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - if: github.action == 'closed' && github.pull_request.merged == 'true'
-      - uses: build
-      - run: echo Release
