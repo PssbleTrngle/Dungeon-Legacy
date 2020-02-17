@@ -1,11 +1,12 @@
 name: Test
 
 on:
+  repository_dispatch:
+    types: test
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
     - master
-  repository_dispatch:
 
 jobs:
   
