@@ -2,16 +2,28 @@ name: Release
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, closed]
     branches:
     - master
 
-jobs: 
+jobs:
+  
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
-    - run: |
-        chmod +x ./gradlew
-        ./gradlew build
+    - run: chmod +x ./gradlew
+      
+    - run: ./gradlew build
+     
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: build
+      
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - if: github.action == 'closed' && github.pull_request.merged == 'true'
+      - uses: build
+      - run: echo Release
