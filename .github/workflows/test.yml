@@ -17,11 +17,11 @@ jobs:
     - run: chmod +x ./gradlew
       
     - name: Setup project
-    - run: ./gradlew build
+      run: ./gradlew build
       
     - name: Upload artifact
-    - uses: actions/upload-artifact@v1.0.0
-    - with:
+      uses: actions/upload-artifact@v1.0.0
+      with:
         name: built
         path: ./
 
@@ -31,6 +31,6 @@ jobs:
     needs: build
     steps:
       - name: Download artifact
-      - uses: actions/download-artifact@v1.0.0
-      - with:
+        uses: actions/download-artifact@v1.0.0
+        with:
           name: built
