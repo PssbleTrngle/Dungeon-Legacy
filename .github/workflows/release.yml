@@ -1,24 +1,27 @@
+  
 name: Release
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [closed]
     branches:
     - master
 
 jobs:
-  
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - run: chmod +x ./gradlew
-      
-    - run: ./gradlew build
       
   publish:
+    if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.id, 1852879245)
     runs-on: ubuntu-latest
     steps:
-      - if: github.action == 'closed' && github.pull_request.merged == 'true'
-      - uses: build
-      - run: echo Release
+      - name: Checkout
+        uses: actions/checkout@v1
+      - run: chmod +x ./gradlew
+
+      - name: Build
+        run: ./gradlew build
+
+      - name: Upload jar
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: built
+          path: build/libs
