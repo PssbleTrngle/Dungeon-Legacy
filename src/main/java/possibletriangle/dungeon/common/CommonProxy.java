@@ -71,7 +71,7 @@ public class CommonProxy {
         public static void blockColors(ColorHandlerEvent.Block event) {
             event.getBlockColors().register((s,w,p,i) -> {
                 if(i != 1) return -1;
-                return ObeliskBlock.getTE(w, p).map(ObeliskTile::getColor).orElse(ObeliskBlock.State.INVALID.color);
+                return ObeliskBlock.getTE(w, p).map(ObeliskTile::getColor).orElseGet(() -> ObeliskBlock.State.INVALID.color);
             }, ObeliskBlock.OBELISK);
         }
 

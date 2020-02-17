@@ -41,9 +41,9 @@ public abstract class Condition<K> implements INBTSerializable<CompoundNBT>, Pre
 
     public boolean test(K k) {
 
-        Predicate<K> p1 = mergeForArray(reject, false).orElse(ctx -> false).negate();
-        Predicate<K> p2 = mergeForArray(allow, false).orElse(ctx -> true);
-        Predicate<K> p3 = mergeForArray(required, true).orElse(ctx -> false).negate();
+        Predicate<K> p1 = mergeForArray(reject, false).orElseGet(() -> ctx -> false).negate();
+        Predicate<K> p2 = mergeForArray(allow, false).orElseGet(() -> ctx -> true);
+        Predicate<K> p3 = mergeForArray(required, true).orElseGet(() -> ctx -> false).negate();
 
         return p1.and(p2).and(p3).test(k);
     }

@@ -53,7 +53,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
         Map<Integer, Generateable> rooms = roomsFor(world, chunk);
         int floor = pos.getY() / (DungeonSettings.FLOOR_HEIGHT + 1);
 
-        int nextFloor = rooms.keySet().stream().filter(f -> f <= floor).max(Comparator.comparingInt(a -> a)).orElse(0);
+        int nextFloor = rooms.keySet().stream().filter(f -> f <= floor).max(Comparator.comparingInt(a -> a)).orElseGet(() -> 0);
         Generateable room = rooms.get(nextFloor);
         if(room == null) return Optional.empty();
         return Optional.of(new Pair(floor, room));
@@ -81,7 +81,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
 
     @Override
     public void generateBiomes(IChunk chunk) {
-        Biome biome = Optional.ofNullable(paletteFor(chunk.getPos(), world.getSeed()).biome.get()).orElse(Biomes.THE_VOID);
+        Biome biome = Optional.ofNullable(paletteFor(chunk.getPos(), world.getSeed()).biome.get()).orElseGet(() -> Biomes.THE_VOID);
         Biome[] biomes = new Biome[16 * 16];
         for(int x = 0; x < biomes.length; x++)
             biomes[x] = biome;
@@ -121,7 +121,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
     
     public static Map<Integer,Generateable> roomsFor(World world, ChunkPos pos) {
         /* Get settings from world */
-        return getSettings(world).map(settings -> roomsFor(settings, pos, world.getSeed())).orElse(new HashMap<>());
+        return getSettings(world).map(settings -> roomsFor(settings, pos, world.getSeed())).orElseGet(() -> new HashMap<>());
     }
 
     /**

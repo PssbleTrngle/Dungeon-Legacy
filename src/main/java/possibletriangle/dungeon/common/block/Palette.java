@@ -134,7 +134,7 @@ public class Palette extends ForgeRegistryEntry<Palette> {
     }
 
     public BlockState blockFor(Type type, Random random, int variant) {
-        BlockState block = blocksFor(type).next(random).orElse(i -> null).apply(variant);
+        BlockState block = blocksFor(type).next(random).orElseGet(() -> i -> null).apply(variant);
         if(block != null) return block;
 
         Palette parent = this.parent.get();

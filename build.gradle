@@ -23,9 +23,9 @@ def parseConfig(File config) {
 ext.configFile = file('build.properties')
 ext.config = parseConfig(configFile)
 
-version = '1.0'
-group = 'possibletriangle.dungeon' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'dungeon'
+version = config.mod_version
+group = "possibletriangle.${config.mod_id}" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = config.mod_id
 
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
@@ -87,7 +87,7 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
 
-            args '--mod', 'dungeon', '--all', '--output', file('src/generated/resources'), '--existing', file('src/main/resources')
+            args '--mod', config.mod_id, '--all', '--output', file('src/generated/resources'), '--existing', file('src/main/resources')
 
             mods {
                 dungeon {

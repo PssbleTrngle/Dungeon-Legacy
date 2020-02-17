@@ -80,7 +80,7 @@ public class ObeliskBlock extends ContainerBlock {
     @Override
     public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
         player.sendStatusMessage(new StringTextComponent("Hi, my state is " + state.get(STATE).getName()), true);
-        return getTE(world, pos).map(te -> te.click(player)).orElse(false);
+        return getTE(world, pos).map(te -> te.click(player)).orElseGet(() -> false);
     }
 
     @Override

@@ -20,7 +20,7 @@ public class GenerationCondition extends Condition<GenerationContext> {
 
     @Override
     protected BiPredicate<String, GenerationContext> getPredicate() {
-        return Optional.ofNullable((BiPredicate<String, GenerationContext>) this.type).orElse((s, ctx) -> true);
+        return Optional.ofNullable((BiPredicate<String, GenerationContext>) this.type).orElseGet(() -> (s, ctx) -> true);
     }
 
     public void setType(ResourceLocation name) {
