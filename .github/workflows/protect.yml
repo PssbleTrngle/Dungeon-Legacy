@@ -9,7 +9,7 @@ on:
 jobs:
   
   check-branch:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
     - if: github.event.pull_request.head.ref == 'develop'
       name: Branch is develop
