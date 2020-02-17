@@ -7,9 +7,14 @@ on:
     - master
 
 jobs:
+  
+  print:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.event }}
       
   publish:
-    if: github.pull_request.merged == 'true'
+    if: github.event.pull_request.merged == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
