@@ -1,140 +1,126 @@
 {
   "variants": {
-    "facing=east,face=floor,powered=true": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever_on",
-      "y": 90
-    },
-    "facing=south,face=floor,powered=true": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever_on",
-      "y": 180
-    },
-    "facing=west,face=floor,powered=true": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever_on",
-      "y": 270
-    },
-    "facing=north,face=floor,powered=true": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever_on",
-      "y": 0
-    },
-    "facing=east,face=wall,powered=true": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever_on",
-      "y": 90,
-      "x": 90
-    },
-    "facing=south,face=wall,powered=true": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever_on",
-      "y": 180,
-      "x": 90
-    },
-    "facing=west,face=wall,powered=true": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever_on",
-      "y": 270,
-      "x": 90
-    },
-    "facing=north,face=wall,powered=true": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever_on",
-      "y": 0,
-      "x": 90
-    },
-    "facing=east,face=ceiling,powered=true": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever_on",
-      "y": 270,
-      "x": 180
-    },
-    "facing=south,face=ceiling,powered=true": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever_on",
-      "y": 0,
-      "x": 180
-    },
-    "facing=west,face=ceiling,powered=true": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever_on",
-      "y": 90,
-      "x": 180
-    },
-    "facing=north,face=ceiling,powered=true": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever_on",
-      "y": 180,
-      "x": 180
-    },
-    "facing=east,face=floor,powered=false": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever",
-      "y": 90
-    },
-    "facing=south,face=floor,powered=false": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever",
-      "y": 180
-    },
-    "facing=west,face=floor,powered=false": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever",
-      "y": 270
-    },
-    "facing=north,face=floor,powered=false": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever",
-      "y": 0
-    },
-    "facing=east,face=wall,powered=false": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever",
-      "y": 90,
-      "x": 90
-    },
-    "facing=south,face=wall,powered=false": {
-      "uvlock": true,
+    "face=FLOOR,facing=north,powered=false": {
       "model": "dungeon:block/placeholder_lever",
       "y": 180,
-      "x": 90
+      "uvlock": true
     },
-    "facing=west,face=wall,powered=false": {
-      "uvlock": true,
+    "face=WALL,facing=north,powered=false": {
       "model": "dungeon:block/placeholder_lever",
-      "y": 270,
-      "x": 90
+      "x": 90,
+      "y": 180,
+      "uvlock": true
     },
-    "facing=north,face=wall,powered=false": {
-      "uvlock": true,
+    "face=CEILING,facing=north,powered=false": {
       "model": "dungeon:block/placeholder_lever",
-      "y": 0,
-      "x": 90
+      "uvlock": true
     },
-    "facing=east,face=ceiling,powered=false": {
-      "uvlock": true,
+    "face=FLOOR,facing=south,powered=false": {
       "model": "dungeon:block/placeholder_lever",
-      "y": 270,
-      "x": 180
+      "uvlock": true
     },
-    "facing=south,face=ceiling,powered=false": {
-      "uvlock": true,
+    "face=WALL,facing=south,powered=false": {
       "model": "dungeon:block/placeholder_lever",
-      "y": 0,
-      "x": 180
+      "x": 90,
+      "uvlock": true
     },
-    "facing=west,face=ceiling,powered=false": {
-      "uvlock": true,
-      "model": "dungeon:block/placeholder_lever",
-      "y": 90,
-      "x": 180
-    },
-    "facing=north,face=ceiling,powered=false": {
-      "uvlock": true,
+    "face=CEILING,facing=south,powered=false": {
       "model": "dungeon:block/placeholder_lever",
       "y": 180,
-      "x": 180
+      "uvlock": true
+    },
+    "face=FLOOR,facing=west,powered=false": {
+      "model": "dungeon:block/placeholder_lever",
+      "y": 90,
+      "uvlock": true
+    },
+    "face=WALL,facing=west,powered=false": {
+      "model": "dungeon:block/placeholder_lever",
+      "x": 90,
+      "y": 90,
+      "uvlock": true
+    },
+    "face=CEILING,facing=west,powered=false": {
+      "model": "dungeon:block/placeholder_lever",
+      "y": 270,
+      "uvlock": true
+    },
+    "face=FLOOR,facing=east,powered=false": {
+      "model": "dungeon:block/placeholder_lever",
+      "y": 270,
+      "uvlock": true
+    },
+    "face=WALL,facing=east,powered=false": {
+      "model": "dungeon:block/placeholder_lever",
+      "x": 90,
+      "y": 270,
+      "uvlock": true
+    },
+    "face=CEILING,facing=east,powered=false": {
+      "model": "dungeon:block/placeholder_lever",
+      "y": 90,
+      "uvlock": true
+    },
+    "face=FLOOR,facing=north,powered=true": {
+      "model": "dungeon:block/placeholder_lever_on",
+      "y": 180,
+      "uvlock": true
+    },
+    "face=WALL,facing=north,powered=true": {
+      "model": "dungeon:block/placeholder_lever_on",
+      "x": 90,
+      "y": 180,
+      "uvlock": true
+    },
+    "face=CEILING,facing=north,powered=true": {
+      "model": "dungeon:block/placeholder_lever_on",
+      "uvlock": true
+    },
+    "face=FLOOR,facing=south,powered=true": {
+      "model": "dungeon:block/placeholder_lever_on",
+      "uvlock": true
+    },
+    "face=WALL,facing=south,powered=true": {
+      "model": "dungeon:block/placeholder_lever_on",
+      "x": 90,
+      "uvlock": true
+    },
+    "face=CEILING,facing=south,powered=true": {
+      "model": "dungeon:block/placeholder_lever_on",
+      "y": 180,
+      "uvlock": true
+    },
+    "face=FLOOR,facing=west,powered=true": {
+      "model": "dungeon:block/placeholder_lever_on",
+      "y": 90,
+      "uvlock": true
+    },
+    "face=WALL,facing=west,powered=true": {
+      "model": "dungeon:block/placeholder_lever_on",
+      "x": 90,
+      "y": 90,
+      "uvlock": true
+    },
+    "face=CEILING,facing=west,powered=true": {
+      "model": "dungeon:block/placeholder_lever_on",
+      "y": 270,
+      "uvlock": true
+    },
+    "face=FLOOR,facing=east,powered=true": {
+      "model": "dungeon:block/placeholder_lever_on",
+      "y": 270,
+      "uvlock": true
+    },
+    "face=WALL,facing=east,powered=true": {
+      "model": "dungeon:block/placeholder_lever_on",
+      "x": 90,
+      "y": 270,
+      "uvlock": true
+    },
+    "face=CEILING,facing=east,powered=true": {
+      "model": "dungeon:block/placeholder_lever_on",
+      "y": 90,
+      "uvlock": true
     }
   }
 }

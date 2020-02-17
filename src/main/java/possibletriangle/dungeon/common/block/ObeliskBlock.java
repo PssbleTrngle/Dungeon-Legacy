@@ -107,6 +107,11 @@ public class ObeliskBlock extends ContainerBlock {
         }
 
         @Override
+        public String toString() {
+            return getName();
+        }
+
+        @Override
         public String getName() {
             return this.name().toLowerCase();
         }

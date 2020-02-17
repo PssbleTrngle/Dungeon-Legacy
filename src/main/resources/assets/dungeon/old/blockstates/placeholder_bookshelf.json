@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "dungeon:block/placeholder_bookshelf"
+      },
+      {
+        "model": "dungeon:block/placeholder_bookshelf",
+        "y": 90
+      },
+      {
+        "model": "dungeon:block/placeholder_bookshelf",
+        "y": 180
+      },
+      {
+        "model": "dungeon:block/placeholder_bookshelf",
+        "y": 270
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "powered=true": {
+      "uvlock": true,
+      "model": "dungeon:block/redstone_receiver_powered"
+    },
+    "powered=false": {
+      "uvlock": true,
+      "model": "dungeon:block/redstone_receiver"
+    }
+  }
+}

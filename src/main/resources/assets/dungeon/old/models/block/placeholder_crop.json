@@ -1,0 +1,6 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "dungeon:block/placeholder_crop"
+  }
+}

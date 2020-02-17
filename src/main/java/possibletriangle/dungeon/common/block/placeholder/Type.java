@@ -41,15 +41,15 @@ public class Type<T extends Block> {
     public static final Type<Block> FARMLAND = new Type<>("FARMLAND", TemplateFarmland::new, Placeholders.farmland(() -> TemplateBlock.DIRT));
     public static final Type<Block> PLANT = new Type<>("PLANT", TemplateFlower::new, Placeholders::cross);
     public static final Type<Block> CROP = new Type<>("CROP", TemplateCrop::new, Placeholders::cross);
-    public static final Type<Block> FRUIT = new Type<>("FRUIT", TemplateBlock::new, Placeholders::full);
-    public static final Type<Block> BOOKSHELF = new Type<>("BOOKSHELF", TemplateBlock::new, Placeholders::full);
+    public static final Type<Block> FRUIT = new Type<>("FRUIT", TemplateBlock::new, Placeholders::pillar);
+    public static final Type<Block> BOOKSHELF = new Type<>("BOOKSHELF", TemplateBlock::new, Placeholders.pillar(() -> TemplateBlock.PLANKS));
 
-    public static final Type<FenceBlock> FENCE = new Type<>("FENCE", TemplateFence::new);
+    public static final Type<FenceBlock> FENCE = new Type<>("FENCE", TemplateFence::new, Placeholders.fence(() -> TemplateBlock.PLANKS));
     public static final Type<Block> FLUID_UNSAFE = new Type<>("FLUID_UNSAFE", TemplateBlock::new, Placeholders::full);
     
-    public static final Type<PressurePlateBlock> PRESSURE_PLATE = new Type<>("PRESSURE_PLATE", TemplatePlate::new);
+    public static final Type<PressurePlateBlock> PRESSURE_PLATE = new Type<>("PRESSURE_PLATE", TemplatePlate::new, Placeholders.plate(() -> TemplateBlock.FLOOR));
     public static final Type<AbstractButtonBlock> BUTTON = new Type<>("BUTTON", TemplateButton::new, Placeholders.button(() -> TemplateBlock.WALL));
-    public static final Type<LeverBlock> LEVER = new Type<>("LEVER", TemplateLever::new);
+    public static final Type<LeverBlock> LEVER = new Type<>("LEVER", TemplateLever::new, Placeholders.lever(() -> TemplateBlock.WALL));
 
     private final Function<Type<T>, T> block;
     private final BiConsumer<T, Placeholders> model;

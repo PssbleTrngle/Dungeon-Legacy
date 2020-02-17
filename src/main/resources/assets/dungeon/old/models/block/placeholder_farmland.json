@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_farmland",
+  "textures": {
+    "particle": "dungeon:block/placeholder_dirt",
+    "dirt": "dungeon:block/placeholder_dirt",
+    "top": "dungeon:block/placeholder_farmland"
+  }
+}

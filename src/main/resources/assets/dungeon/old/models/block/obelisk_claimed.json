@@ -1,0 +1,10 @@
+{
+  "parent": "dungeon:block/parent/obelisk",
+  "textures": {
+    "down": "dungeon:block/obelisk_down",
+    "up": "dungeon:block/obelisk_up",
+    "bottom": "dungeon:block/obelisk_bottom",
+    "top": "dungeon:block/obelisk_top",
+    "runes": "dungeon:block/obelisk_runes"
+  }
+}
