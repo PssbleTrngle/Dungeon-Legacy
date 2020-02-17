@@ -11,11 +11,9 @@ jobs:
   print:
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Python
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.8
-      - run: echo ${{ github.event }} | python -m json.tool
+      - run: echo ${{ github.event.pull_request.merged }}
+      - if: length(github.event.pull_request.labels) > 0
+        run: echo ${{ github.event.pull_request.labels[0].id }}
       
   publish:
     if: github.event.pull_request.merged == 'true'
