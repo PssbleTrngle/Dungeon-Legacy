@@ -2,8 +2,8 @@ package possibletriangle.dungeon;
 
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResourceManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -11,18 +11,17 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import possibletriangle.dungeon.client.ClientProxy;
 import possibletriangle.dungeon.common.CommonProxy;
-import possibletriangle.dungeon.common.block.TemplateBlock;
-import possibletriangle.dungeon.common.world.room.HallwayMaze;
-import possibletriangle.dungeon.common.world.room.Room;
-import possibletriangle.dungeon.common.world.structure.StructureLoader;
+import possibletriangle.dungeon.common.DungeonCommand;
+import possibletriangle.dungeon.common.block.placeholder.TemplateBlock;
 
-@Mod(DungeonMod.MODID)
+@Mod(DungeonMod.ID)
 public class DungeonMod {
 
     public static final ItemGroup GROUP = new ItemGroup("dungeon") {
@@ -32,9 +31,9 @@ public class DungeonMod {
         }
     };
 
-    public static final String MODID = "dungeon";
+    public static final String ID = "dungeon";
 
-    public static CommonProxy proxy = DistExecutor.runForDist(() -> CommonProxy::new, () -> CommonProxy::new);
+    public static CommonProxy proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 
     public static final Logger LOGGER = LogManager.getLogger();
 
@@ -52,23 +51,21 @@ public class DungeonMod {
         proxy.init(event);
     }
 
-    private void doClientStuff(final FMLClientSetupEvent event) {}
+    private void doClientStuff(final FMLClientSetupEvent event) {
+        proxy.clientSetup(event);
+    }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {}
 
     private void processIMC(final InterModProcessEvent event) {}
 
-    @SubscribeEvent
-    public void onServerStarted(FMLServerStartedEvent event) {}
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onServerWillStart(final FMLServerAboutToStartEvent event) {
+        proxy.reloadRooms(event.getServer().getResourceManager());
+    }
 
-    @SubscribeEvent
-    public void registerRooms(FMLServerStartingEvent event) {
-
-        IResourceManager manager = event.getServer().getResourceManager();
-        StructureLoader.reload(manager);
-        Room.register(new HallwayMaze(), Room.Type.HALLWAY);
-
-        DungeonMod.LOGGER.info("Registered {} structures", Room.count());
-
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onServerStarting(final FMLServerStartingEvent  event) {
+        DungeonCommand.register(event.getCommandDispatcher());
     }
 }

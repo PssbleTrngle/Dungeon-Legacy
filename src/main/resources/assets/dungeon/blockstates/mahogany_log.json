@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "dungeon:block/mahogany_log"
+    },
+    "axis=z": {
+      "model": "dungeon:block/mahogany_log",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "dungeon:block/mahogany_log",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

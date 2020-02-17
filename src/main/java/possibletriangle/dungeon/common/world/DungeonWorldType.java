@@ -15,4 +15,5 @@ public class DungeonWorldType extends WorldType {
     public ChunkGenerator<?> createChunkGenerator(World world) {
         return new DungeonChunkGenerator(world, new DungeonSettings());
     }
+
 }

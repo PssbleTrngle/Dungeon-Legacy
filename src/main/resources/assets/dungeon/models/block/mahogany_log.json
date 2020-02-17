@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "dungeon:block/mahogany_log_top",
+    "side": "dungeon:block/mahogany_log_side"
+  }
+}

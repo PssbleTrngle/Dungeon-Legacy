@@ -10,12 +10,11 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ObjectIntIdentityMap;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.gen.feature.template.Template;
 import possibletriangle.dungeon.common.world.DungeonChunk;
-import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.GenerationContext;
 import possibletriangle.dungeon.common.world.room.Generateable;
+import possibletriangle.dungeon.common.world.structure.metadata.StructureMetadata;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -23,7 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class DungeonStructure implements Generateable {
+public class DungeonStructure extends Generateable {
 
     private final StructureMetadata meta;
     private BlockPos size;
@@ -34,27 +33,24 @@ public class DungeonStructure implements Generateable {
         this.meta = meta;
     }
 
-    @Override
     public StructureMetadata getMeta() {
-        return meta;
+        return this.meta;
     }
 
     @Override
-    public Vec3i getSize(DungeonSettings options) {
-        return new Vec3i(1, Math.max(1, this.size.getY() / options.floorHeight), 1);
+    public BlockPos getActualSize() {
+        return this.size;
     }
 
     @Override
-    public void generate(DungeonChunk chunk, Random random, GenerationContext context) {
-        this.generate(chunk, new BlockPos(1, 0, 1));
-    }
+    public void generate(DungeonChunk chunk, Random random, GenerationContext context, BlockPos at) {
 
-    public void generate(DungeonChunk chunk, BlockPos pos) {
         this.blocks.forEach(l -> l.forEach(block -> {
-            BlockPos p = pos.add(block.pos);
+            BlockPos p = at.add(block.pos);
             chunk.setBlockState(p, block.state);
             if(block.nbt != null) chunk.setTileEntity(p, block.nbt);
         }));
+
     }
 
     public void read(CompoundNBT nbt) {
