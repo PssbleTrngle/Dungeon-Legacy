@@ -15,7 +15,7 @@ jobs:
       - run: echo "${{ toJSON(github.event.pull_request.labels.*.id) }}"
       
   publish:
-    if: github.event.pull_request.merged == 'true'
+    if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.id, 1852879245)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
