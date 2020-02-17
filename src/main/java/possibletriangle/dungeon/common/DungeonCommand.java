@@ -40,7 +40,7 @@ public class DungeonCommand {
             pos = BlockPosArgument.getBlockPos(context, "pos");
         } catch (CommandSyntaxException ignored) {}
 
-        World world = source.getWorld();
+        World world = source.func_197023_e();
         Optional<Pair<Integer, Generateable>> pair = DungeonChunkGenerator.roomAt(pos, world);
 
         return DungeonChunkGenerator.getSettings(world).map(settings -> {
