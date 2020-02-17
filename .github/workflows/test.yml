@@ -17,6 +17,6 @@ jobs:
     - run: ./gradlew build
 
   test:
-    -runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: build
