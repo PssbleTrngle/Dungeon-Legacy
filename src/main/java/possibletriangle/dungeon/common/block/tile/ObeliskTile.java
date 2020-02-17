@@ -82,8 +82,8 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
         /* Find the room it was placed in and save the required information */
         DungeonChunkGenerator.roomAt(getPos(), world).ifPresent(pair -> {
 
-            Generateable room = pair.getValue();
-            this.floor = pair.getKey();
+            Generateable room = pair.getSecond();
+            this.floor = pair.getFirst();
             this.roomSize = room.getSize();
             markDirty();
 

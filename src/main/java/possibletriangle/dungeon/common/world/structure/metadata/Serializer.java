@@ -5,7 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import javafx.util.Pair;
+import possibletriangle.dungeon.helper.Pair;
 import net.minecraft.resources.data.IMetadataSectionSerializer;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
@@ -100,7 +100,7 @@ public class Serializer implements IMetadataSectionSerializer<StructureMetadata>
         Pair<Integer, Integer> y = getCoordinate(json.get("y"));
         Pair<Integer, Integer> z = getCoordinate(json.get("z"));
 
-        return new AxisAlignedBB(x.getKey(), y.getKey(), z.getKey(), x.getValue(), y.getValue(), z.getValue());
+        return new AxisAlignedBB(x.getFirst(), y.getFirst(), z.getFirst(), x.getSecond(), y.getSecond(), z.getSecond());
 
     }
 
