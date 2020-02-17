@@ -1,6 +1,6 @@
 package possibletriangle.dungeon.common.world;
 
-import javafx.util.Pair;
+import possibletriangle.dungeon.helper.Pair;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
