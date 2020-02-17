@@ -26,7 +26,7 @@ public abstract class Structures {
         return VALUES.values().stream()
                 .map(RandomCollection::size)
                 .reduce(Integer::sum)
-                .orElse(0);
+                .orElseGet(() -> 0);
     }
 
     /**
