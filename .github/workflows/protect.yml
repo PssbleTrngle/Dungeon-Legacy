@@ -1,1 +1,19 @@
+name: Protect
 
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+    - master
+
+jobs:
+  
+  check-branch:
+    runs-on: self-hosted
+    steps:
+    - if: github.event.pull_request.head.ref == 'develop'
+      name: Branch is develop
+      run: exit 0
+    - if: github.event.pull_request.head.ref != 'develop'
+      name: Branch is not develop
+      run: exit 1
