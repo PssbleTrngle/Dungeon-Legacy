@@ -11,7 +11,7 @@ jobs:
   print:
     runs-on: ubuntu-latest
     steps:
-      - run: ech ${{ toJSON(github.event) }}
+      - run: echo ${{ toJSON(github.event) }}
       - run: echo ${{ github.event.pull_request.merged }}
       - run: echo ${{ toJSON(github.event.pull_request.labels.*.id) }}
       
