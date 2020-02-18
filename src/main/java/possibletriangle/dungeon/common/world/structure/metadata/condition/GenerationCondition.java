@@ -18,6 +18,11 @@ public class GenerationCondition extends Condition<GenerationContext> {
         setType(type);
     }
 
+    public GenerationCondition(CompoundNBT nbt) {
+        this(new String[0], new String[0], new String[0], null);
+        this.deserializeNBT(nbt);
+    }
+
     @Override
     protected BiPredicate<String, GenerationContext> getPredicate() {
         return Optional.ofNullable((BiPredicate<String, GenerationContext>) this.type).orElseGet(() -> (s, ctx) -> true);

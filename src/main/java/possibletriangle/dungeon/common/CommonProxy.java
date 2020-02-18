@@ -9,6 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.resources.IReloadableResourceManager;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -64,9 +66,12 @@ public class CommonProxy {
 
     }
 
+    public void openMetaTile(MetadataTile tile) {}
+
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
 
+        @OnlyIn(Dist.CLIENT)
         @SubscribeEvent
         public static void blockColors(ColorHandlerEvent.Block event) {
             event.getBlockColors().register((s,w,p,i) -> {
@@ -75,6 +80,7 @@ public class CommonProxy {
             }, ObeliskBlock.OBELISK);
         }
 
+        @OnlyIn(Dist.CLIENT)
         @SubscribeEvent
         public static void itemColors(ColorHandlerEvent.Item event) {
             event.getItemColors().register((s,i) ->
@@ -154,6 +160,7 @@ public class CommonProxy {
 
             Type.values()
                     .map(Type::block)
+                    .map(b -> (Block) b)
                     .forEach(BLOCKS::add);
 
             BLOCKS.addAll(Arrays.asList(
