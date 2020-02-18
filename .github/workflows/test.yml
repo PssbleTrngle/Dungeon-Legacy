@@ -27,7 +27,8 @@ jobs:
         name: built
         path: ./
 
-  test:
+  compile:
+    name: Will compile
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -35,8 +36,13 @@ jobs:
         uses: actions/download-artifact@v1.0.0
         with:
           name: built
+      - run: chmod +x built/gradlew
+      - name: Run Server
+        run: ./gradlew compileJava
+        working-directory: built
 
-  test-server:
+  server:
+    name: Server starts
     runs-on: ubuntu-latest
     needs: build
     steps:

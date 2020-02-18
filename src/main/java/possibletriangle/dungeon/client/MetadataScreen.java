@@ -82,7 +82,7 @@ public class MetadataScreen extends Screen {
         Optional.ofNullable(parts.get(index)).ifPresent(remove -> {
             remove.run();
             parts.remove(index);
-        })
+        });
     }
 
     private int getNumber(TextFieldWidget edit) {
