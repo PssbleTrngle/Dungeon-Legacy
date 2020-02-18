@@ -64,6 +64,27 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
         return SERIALIZER.deserialize(new JsonObject());
     }
 
+    /**
+     * Creates a copy including all parts and conditions
+     * @return The copy
+     */
+    public StructureMetadata clone() {
+        CompoundNBT nbt = this.serializeNBT();
+        StructureMetadata cloned = getDefault();
+        cloned.deserializeNBT(nbt);
+        return cloned;
+    }
+    
+    public static ListNBT serializeList(Stream<String> strings) {
+        ListNBT list = new ListNBT();
+        strings.map(StringNBT::new).forEach(list::add);
+        return list;
+    }
+
+    public static ListNBT serializeList(String... strings) {
+        return serializeList(Arrays.stream(strings));
+    }
+
     @Override
     public CompoundNBT serializeNBT() {
         CompoundNBT nbt = new CompoundNBT();
@@ -71,8 +92,7 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
         nbt.putFloat("weight", weight);
         nbt.putString("display", display);
 
-        ListNBT categories = new ListNBT();
-        Arrays.stream(this.categories).map(StringNBT::new).forEach(categories::add);
+        ListNBT categories = serializeList(this.categories);
         nbt.put("categories", categories);
 
         ListNBT parts = new ListNBT();
