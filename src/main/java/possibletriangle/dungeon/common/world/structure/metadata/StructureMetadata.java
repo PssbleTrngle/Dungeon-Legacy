@@ -9,6 +9,9 @@ import net.minecraftforge.common.util.INBTSerializable;
 import possibletriangle.dungeon.common.world.GenerationContext;
 import possibletriangle.dungeon.common.world.structure.metadata.condition.Condition;
 import possibletriangle.dungeon.common.world.structure.metadata.condition.GenerationCondition;
+import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.List;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -64,6 +67,27 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
         return SERIALIZER.deserialize(new JsonObject());
     }
 
+    /**
+     * Creates a copy including all parts and conditions
+     * @return The copy
+     */
+    public StructureMetadata clone() {
+        CompoundNBT nbt = this.serializeNBT();
+        StructureMetadata cloned = getDefault();
+        cloned.deserializeNBT(nbt);
+        return cloned;
+    }
+    
+    public static ListNBT serializeList(Stream<String> strings) {
+        ListNBT list = new ListNBT();
+        strings.map(StringNBT::new).forEach(list::add);
+        return list;
+    }
+
+    public static ListNBT serializeList(String... strings) {
+        return serializeList(Arrays.stream(strings));
+    }
+
     @Override
     public CompoundNBT serializeNBT() {
         CompoundNBT nbt = new CompoundNBT();
@@ -71,13 +95,16 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
         nbt.putFloat("weight", weight);
         nbt.putString("display", display);
 
-        ListNBT categories = new ListNBT();
-        Arrays.stream(this.categories).map(StringNBT::new).forEach(categories::add);
+        ListNBT categories = serializeList(this.categories);
         nbt.put("categories", categories);
 
         ListNBT parts = new ListNBT();
         Arrays.stream(this.parts).map(Part::serializeNBT).forEach(parts::add);
         nbt.put("parts", parts);
+
+        ListNBT conditions = new ListNBT();
+        Arrays.stream(this.conditions).map(GenerationCondition::serializeNBT).forEach(conditions::add);
+        nbt.put("conditions", conditions);
 
         return nbt;
     }
@@ -86,8 +113,12 @@ public class StructureMetadata implements INBTSerializable<CompoundNBT> {
     public void deserializeNBT(CompoundNBT nbt) {
         if(nbt.contains("weight")) this.weight = nbt.getFloat("weight");
         if(nbt.contains("display")) this.display = nbt.getString("display");
+
         if(nbt.contains("categories"))
             this.categories = nbt.getList("categories", 8).stream().map(INBT::toString).toArray(String[]::new);
+
+        if(nbt.contains("conditions"))
+            this.conditions = nbt.getList("conditions", 10).stream().map(n -> (CompoundNBT) n).map(GenerationCondition::new).toArray(GenerationCondition[]::new);
 
         if(nbt.contains("parts"))
             this.parts = nbt.getList("parts", 10).stream().map(n -> (CompoundNBT) n).map(Part::new).toArray(Part[]::new);

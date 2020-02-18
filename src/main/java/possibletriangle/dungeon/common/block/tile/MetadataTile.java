@@ -103,10 +103,7 @@ public class MetadataTile extends TileEntity {
         if (!player.canUseCommandBlock()) {
             return false;
         } else {
-            if (!player.world.isRemote) {
-                Minecraft.getInstance().displayGuiScreen(new MetadataScreen(this));
-            }
-
+            DungeonMod.proxy.openMetaTile(this);
             return true;
         }
     }

@@ -39,7 +39,7 @@
 	"block.dungeon.porous_stone": "Porous Rock",
 	"block.dungeon.gravelous_gravel": "Gravelous Gravel",
 	"block.dungeon.morsh_wood": "Rotten Wood",
-	"block.dungeon.metadata_block": "\u00A7dStructure Metadata Block",
+	"block.dungeon.metadata_block": "\u00A7d [WIP] Structure Metadata Block",
 	"block.dungeon.obelisk": "Obelisk",
 	"block.dungeon.redstone_receiver": "Redstone Receiver",
 	"block.dungeon.redstone_sender": "Redstone Transmitter",
@@ -63,6 +63,10 @@
 	"entity.dungeon.curse_normal": "Curse",
 	"entity.dungeon.curse_fast": "Curse",
 	"entity.dungeon.grenade": "Grenade",
+
+	"metadata_block.weight": "Weight",
+	"metadata_block.add_part": "Add Part",
+	"metadata_block.remove_part": "-",
 
 	"command.dungeon.get.room": "\u00A7bLooks like you are in a \u00A76%s",
 	"command.dungeon.get.floor_less": "\u00A7bon the \u00A76%i floor",
