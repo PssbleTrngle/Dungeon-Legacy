@@ -38,22 +38,17 @@ public class RedstoneLinks extends BlockStateProvider {
             return ConfiguredModel.builder().modelFile(model).build();
         });
 
-        getVariantBuilder(RedstoneLinkBlock.SENDER).forAllStates(state -> {
+        directionalBlock(RedstoneLinkBlock.SENDER, state -> {
             boolean powered = state.get(RedstoneLinkBlock.POWERED);
-            Direction facing = state.get(RedstoneSenderBlock.FACING);
             ResourceLocation name = blockTexture(state.getBlock());
             String suffix =powered ? "_powered" : "";
             ResourceLocation side = new ResourceLocation("minecraft", "block/furnace_top");
-            ModelFile model = Arrays.stream(Direction.values()).filter(s -> s != Direction.NORTH).reduce(
+
+            return Arrays.stream(Direction.values()).filter(s -> s != Direction.NORTH).reduce(
                     withExistingParent(name.getPath() + suffix, new ResourceLocation("minecraft", "cube"))
-                    .texture("particle", side)
-                    .texture("north", extend(name, "_front" + suffix)),
+                            .texture("particle", side)
+                            .texture("north", extend(name, "_front" + suffix)),
                     (m, s) -> m.texture(s.getName(), side), (a, b) -> a);
-            return ConfiguredModel.builder()
-                    .modelFile(model)
-                    .rotationY((int) facing.getHorizontalAngle())
-                    .rotationX(facing.getAxis() == Direction.Axis.X ? -90 * facing.getAxisDirection().getOffset() : 0)
-                    .build();
         });
 
     }

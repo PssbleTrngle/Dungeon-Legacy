@@ -84,7 +84,7 @@ public class Placeholders extends BlockStateProvider  {
             ResourceLocation name = provider.locationFor(block);
             ResourceLocation t = provider.locationFor(dirt.get());
             ModelFile model = provider.withExistingParent(name.getPath(),
-                    new ResourceLocation("minecraft", "template_farmland"))
+                    provider.mcLoc( "template_farmland"))
                     .texture("particle", t)
                     .texture("dirt", t)
                     .texture("top", name);
@@ -105,7 +105,7 @@ public class Placeholders extends BlockStateProvider  {
             Stream<String> sides = Arrays.stream(Direction.values()).filter(d -> d.getAxis() != Direction.Axis.Y).map(Direction::getName);
 
             ModelFile model = sides.reduce(provider.withExistingParent(name.getPath(),
-                    new ResourceLocation("minecraft", "cube"))
+                    provider.mcLoc( "cube"))
                     .texture("particle", t)
                     .texture("down", t)
                     .texture("up", extend(name, "_top")),
@@ -128,7 +128,10 @@ public class Placeholders extends BlockStateProvider  {
         return (block, provider) -> {
             ResourceLocation name = provider.locationFor(block);
             ResourceLocation t = provider.locationFor(texture.get());
-            provider.stairsBlock(block, name.getPath(), t);
+            ModelFile stairs = provider.stairs(name.getPath(), t, t, t);
+            ModelFile inner = provider.stairsInner(name.getPath() + "_inner", t, t, t);
+            ModelFile outer = provider.stairsOuter(name.getPath() + "_outer", t, t, t);
+            provider.stairsBlock(block, stairs, inner, outer);
         };
     }
 
@@ -138,10 +141,10 @@ public class Placeholders extends BlockStateProvider  {
             ResourceLocation t = provider.locationFor(texture.get());
 
             ModelFile normal = provider.withExistingParent(name.getPath(),
-                    new ResourceLocation("minecraft", "block/button"))
+                    provider.mcLoc( "block/button"))
                     .texture("texture", t);
             ModelFile pressed = provider.withExistingParent(name.getPath() + "_pressed",
-                    new ResourceLocation("minecraft", "block/button_pressed"))
+                    provider.mcLoc( "block/button_pressed"))
                     .texture("texture", t);
 
             provider.getVariantBuilder(block).forAllStates(state -> {
@@ -168,10 +171,10 @@ public class Placeholders extends BlockStateProvider  {
             ResourceLocation t = provider.locationFor(texture.get());
 
             ModelFile up = provider.withExistingParent(name.getPath(),
-                    new ResourceLocation("minecraft", "block/pressure_plate_up"))
+                    provider.mcLoc( "block/pressure_plate_up"))
                     .texture("texture", t);
             ModelFile down = provider.withExistingParent(name.getPath() + "_down",
-                    new ResourceLocation("minecraft", "block/pressure_plate_down"))
+                    provider.mcLoc( "block/pressure_plate_down"))
                     .texture("texture", t);
             provider.getVariantBuilder(block).forAllStates(state -> {
                 boolean powered = state.get(PressurePlateBlock.POWERED);
@@ -188,12 +191,12 @@ public class Placeholders extends BlockStateProvider  {
             ResourceLocation t = provider.locationFor(texture.get());
 
             ModelFile off = provider.withExistingParent(name.getPath(),
-                    new ResourceLocation("minecraft", "block/lever"))
+                    provider.mcLoc( "block/lever"))
                     .texture("base", t)
                     .texture("particle", t)
                     .texture("lever", name);
             ModelFile on = provider.withExistingParent(name.getPath() + "_on",
-                    new ResourceLocation("minecraft", "block/lever_on"))
+                    provider.mcLoc( "block/lever_on"))
                     .texture("base", t)
                     .texture("particle", t)
                     .texture("lever", name);
