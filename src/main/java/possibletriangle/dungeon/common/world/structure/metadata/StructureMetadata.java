@@ -9,6 +9,9 @@ import net.minecraftforge.common.util.INBTSerializable;
 import possibletriangle.dungeon.common.world.GenerationContext;
 import possibletriangle.dungeon.common.world.structure.metadata.condition.Condition;
 import possibletriangle.dungeon.common.world.structure.metadata.condition.GenerationCondition;
+import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.List;
 
 import java.util.*;
 import java.util.function.Predicate;

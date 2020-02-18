@@ -37,7 +37,7 @@ jobs:
         with:
           name: built
       - run: chmod +x built/gradlew
-      - name: Run Server
+      - name: Compile Code
         run: ./gradlew compileJava
         working-directory: built
 

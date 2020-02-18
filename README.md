@@ -1,5 +1,7 @@
 # Dungeon
-[![Test](https://github.com/PssbleTrngle/Dungeon/workflows/Test/badge.svg?branch=develop)](https://github.com/PssbleTrngle/Dungeon/actions?query=workflow%3ATest)
+[![Master](https://github.com/PssbleTrngle/Dungeon/workflows/Test/badge.svg?branch=develop&event=pull_request)](https://github.com/PssbleTrngle/Dungeon/actions?query=workflow%3ATest)
+[![Develop](https://img.shields.io/github/workflow/status/PssbleTrngle/Dungeon/Test/develop?label=Develop&logo=github)](https://github.com/PssbleTrngle/Dungeon/actions?query=workflow%3ATest)
+[![](https://img.shields.io/github/last-commit/PssbleTrngle/Dungeon)](https://github.com/PssbleTrngle/Dungeon/commits/develop)
 
 Dungeon is a Minecraft Mod for [Forge](http://files.minecraftforge.net/).
 When loaded, a new world type will be available generating an endless dungeon, streching across multiple floors.

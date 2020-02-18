@@ -7,6 +7,9 @@ import net.minecraft.util.text.StringTextComponent;
 import possibletriangle.dungeon.common.block.tile.MetadataTile;
 import possibletriangle.dungeon.common.world.structure.metadata.StructureMetadata;
 import possibletriangle.dungeon.helper.Pair;
+import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.List;
 
 import java.util.Arrays;
 
