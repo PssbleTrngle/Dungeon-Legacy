@@ -10,6 +10,8 @@ import possibletriangle.dungeon.helper.Pair;
 import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.List;
+import java.util.function.Supplier;
+import net.minecraft.nbt.INBT;
 
 import java.util.Arrays;
 
