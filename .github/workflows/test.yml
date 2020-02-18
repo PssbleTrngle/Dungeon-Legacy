@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - run: chmod +x ./gradlew
       
     - name: Setup project
       run: ./gradlew
@@ -44,6 +43,7 @@ jobs:
         uses: actions/download-artifact@v1.0.0
         with:
           name: built
+      - run: chmod +x built/gradlew
       - name: Run Server
         run: ./gradlew runServer
         working-directory: built
