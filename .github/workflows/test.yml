@@ -40,7 +40,7 @@ jobs:
         with:
           name: built
       - name: Compile Code
-      - run: |
+        run: |
           chmod +x ./gradlew
           ./gradlew compileJava
         working-directory: built
@@ -55,7 +55,7 @@ jobs:
         with:
           name: built
       - name: Run Server
-      - run: |
+        run: |
           chmod +x ./gradlew
           ./gradlew runServer
         working-directory: built
