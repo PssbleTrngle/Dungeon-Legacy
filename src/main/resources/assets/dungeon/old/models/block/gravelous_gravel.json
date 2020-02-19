@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "dungeon:block/gravelous_gravel"
+  }
+}

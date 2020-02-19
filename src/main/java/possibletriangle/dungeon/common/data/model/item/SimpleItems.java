@@ -17,7 +17,7 @@ public class SimpleItems extends ItemModelProvider {
     }
 
     private void create(ResourceLocation item) {
-        getBuilder("item/" + item.getPath())
+        withExistingParent("item/" + item.getPath(), mcLoc("item/handheld"))
                 .texture("layer0", modLoc("item/" + item.getPath()));
     }
 

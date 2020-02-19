@@ -8,6 +8,9 @@ import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import possibletriangle.dungeon.DungeonMod;
+import possibletriangle.dungeon.common.block.ObeliskBlock;
+
+import java.util.HashMap;
 
 public class ItemBlocks extends ItemModelProvider {
 
@@ -16,8 +19,7 @@ public class ItemBlocks extends ItemModelProvider {
     }
 
     private void create(ResourceLocation block) {
-        getBuilder("item/" + block.getPath())
-                .parent(getExistingFile(modLoc("block/" + block.getPath())));
+        withExistingParent("item/" + block.getPath(), modLoc("block/" + block.getPath()));
     }
 
     private boolean exists(ResourceLocation block) {
@@ -32,6 +34,17 @@ public class ItemBlocks extends ItemModelProvider {
                 .filter(k -> k.getNamespace().equals(modid))
                 .filter(this::exists)
                 .forEach(this::create);
+
+        new HashMap<Block, String>() {{
+            put(ObeliskBlock.OBELISK, "_unclaimed");
+        }}.forEach((block, suffix) -> {
+            ResourceLocation r = block.getRegistryName();
+            assert r != null;
+            withExistingParent(
+                    "item/" + block.getRegistryName().getPath(),
+                    new ResourceLocation(r.getNamespace(), "block/" + r.getPath() + suffix)
+            );
+        });
 
     }
 

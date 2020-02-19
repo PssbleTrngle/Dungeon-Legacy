@@ -1,5 +1,5 @@
 {
-  "parent": "dungeon:block/parent/obelisk",
+  "parent": "dungeon:block/obelisk",
   "textures": {
     "down": "dungeon:block/obelisk_down",
     "up": "dungeon:block/obelisk_up",
