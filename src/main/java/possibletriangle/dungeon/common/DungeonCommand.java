@@ -3,7 +3,7 @@ package possibletriangle.dungeon.common;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import javafx.util.Pair;
+import possibletriangle.dungeon.helper.Pair;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.BlockPosArgument;
@@ -46,8 +46,8 @@ public class DungeonCommand {
         return DungeonChunkGenerator.getSettings(world).map(settings -> {
 
             if (pair.isPresent()) {
-                int floor = pair.get().getKey();
-                Generateable room = pair.get().getValue();
+                int floor = pair.get().getFirst();
+                Generateable room = pair.get().getSecond();
                 StructureMetadata meta = room.getMeta();
                 Vec3i size = room.getSize();
 

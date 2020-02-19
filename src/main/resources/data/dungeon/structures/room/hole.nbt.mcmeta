@@ -1,0 +1,12 @@
+{
+    "structure": {
+        "conditions": [
+            {
+                "type": "floor",
+                "allow": [
+                    0
+                ]
+            }
+        ]
+    }
+}

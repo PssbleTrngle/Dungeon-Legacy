@@ -82,8 +82,8 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
         /* Find the room it was placed in and save the required information */
         DungeonChunkGenerator.roomAt(getPos(), world).ifPresent(pair -> {
 
-            Generateable room = pair.getValue();
-            this.floor = pair.getKey();
+            Generateable room = pair.getSecond();
+            this.floor = pair.getFirst();
             this.roomSize = room.getSize();
             markDirty();
 
@@ -269,7 +269,7 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
      * @return The current representing color as RGB int
      */
     public int getColor() {
-        if(this.team != null) return Optional.ofNullable(team.getColor().getColor()).orElse(ObeliskBlock.State.CLAIMED.color);
+        if(this.team != null) return Optional.ofNullable(team.getColor().getColor()).orElseGet(() -> ObeliskBlock.State.CLAIMED.color);
         else if(this.player != null) return ObeliskBlock.State.CLAIMED.color;
         else if(this.inRoom()) return ObeliskBlock.State.UNCLAIMED.color;
         return ObeliskBlock.State.INVALID.color;

@@ -73,7 +73,7 @@ public class MetadataBlock extends ContainerBlock {
 
     @Override
     public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        return getTE(world, pos).map(te -> te.click(player)).orElse(false);
+        return getTE(world, pos).map(te -> te.click(player)).orElseGet(() -> false);
     }
 
     public BlockRenderType getRenderType(BlockState state) {

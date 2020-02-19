@@ -32,4 +32,9 @@ public class ClientProxy extends CommonProxy {
     public void clientSetup(FMLClientSetupEvent event) {
         ClientRegistry.bindTileEntitySpecialRenderer(MetadataTile.class, new MetadataTESR());
     }
+
+    @Override
+    public void openMetaTile(MetadataTile tile) {
+        Minecraft.getInstance().displayGuiScreen(new MetadataScreen(tile));
+    }
 }
