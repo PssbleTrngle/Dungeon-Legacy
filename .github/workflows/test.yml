@@ -54,6 +54,11 @@ jobs:
         uses: actions/download-artifact@v1.0.0
         with:
           name: built
+      - name: Create EULA
+        run: |
+          touch eula.txt
+          echo "eula=true" > eula.txt
+        working-directory: built/run
       - name: Run Server
         run: |
           chmod +x ./gradlew
