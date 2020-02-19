@@ -1,12 +1,7 @@
 {
-  "parent": "block/cube",
+  "parent": "block/cube_column",
   "textures": {
-    "particle": "dungeon:block/placeholder_fruit_top",
-    "down": "dungeon:block/placeholder_fruit_top",
-    "up": "dungeon:block/placeholder_fruit_top",
-    "north": "dungeon:block/placeholder_fruit_side",
-    "east": "dungeon:block/placeholder_fruit_side",
-    "south": "dungeon:block/placeholder_fruit_side",
-    "west": "dungeon:block/placeholder_fruit_side"
+    "side": "dungeon:block/placeholder_fruit_side",
+    "end": "dungeon:block/placeholder_fruit_end"
   }
 }

@@ -20,6 +20,12 @@ public class TemplateBlock extends Block implements IPlaceholder {
     @ObjectHolder("placeholder_wall")
     public static final Block WALL = null;
 
+    @ObjectHolder("placeholder_planks")
+    public static final Block PLANKS = null;
+
+    @ObjectHolder("placeholder_dirt")
+    public static final Block DIRT = null;
+
     private final Type type;
 
     public static Properties PROPERTIES() {

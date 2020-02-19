@@ -1,10 +1,10 @@
 {
   "variants": {
-    "type=bottom": {
-      "model": "dungeon:block/placeholder_slab_wall"
-    },
     "type=top": {
       "model": "dungeon:block/placeholder_slab_wall_top"
+    },
+    "type=bottom": {
+      "model": "dungeon:block/placeholder_slab_wall"
     },
     "type=double": {
       "model": "dungeon:block/placeholder_wall"

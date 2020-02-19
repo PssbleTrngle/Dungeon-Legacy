@@ -1,6 +1,15 @@
 {
-  "parent": "item/generated",
+  "parent": "item/handheld",
   "textures": {
-    "layer0": "dungeon:item/scroll"
-  }
+    "layer0": "dungeon:item/scroll",
+    "layer1": "dungeon:item/scroll_symbol"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "dungeon:empty": 1.0
+      },
+      "model": "dungeon:item/scroll_empty"
+    }
+  ]
 }

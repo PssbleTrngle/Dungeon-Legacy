@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "powered=true,facing=east": {
+      "uvlock": true,
+      "model": "dungeon:block/redstone_sender_powered",
+      "y": 90
+    },
+    "powered=false,facing=east": {
+      "uvlock": true,
+      "model": "dungeon:block/redstone_sender",
+      "y": 90
+    },
+    "powered=true,facing=south": {
+      "uvlock": true,
+      "model": "dungeon:block/redstone_sender_powered",
+      "y": 180
+    },
+    "powered=false,facing=south": {
+      "uvlock": true,
+      "model": "dungeon:block/redstone_sender",
+      "y": 180
+    },
+    "powered=true,facing=west": {
+      "uvlock": true,
+      "model": "dungeon:block/redstone_sender_powered",
+      "y": 270
+    },
+    "powered=false,facing=west": {
+      "uvlock": true,
+      "model": "dungeon:block/redstone_sender",
+      "y": 270
+    },
+    "powered=true,facing=north": {
+      "uvlock": true,
+      "model": "dungeon:block/redstone_sender_powered",
+      "y": 0
+    },
+    "powered=false,facing=north": {
+      "uvlock": true,
+      "model": "dungeon:block/redstone_sender",
+      "y": 0
+    },
+    "powered=true,facing=up": {
+      "uvlock": true,
+      "model": "dungeon:block/redstone_sender_powered",
+      "x": -90
+    },
+    "powered=false,facing=up": {
+      "uvlock": true,
+      "model": "dungeon:block/redstone_sender",
+      "x": -90
+    },
+    "powered=true,facing=down": {
+      "uvlock": true,
+      "model": "dungeon:block/redstone_sender_powered",
+      "x": 90
+    },
+    "powered=false,facing=down": {
+      "uvlock": true,
+      "model": "dungeon:block/redstone_sender",
+      "x": 90
+    }
+  }
+}

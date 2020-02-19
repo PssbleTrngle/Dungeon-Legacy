@@ -1,12 +1,7 @@
 {
-  "parent": "block/cube",
+  "parent": "block/cube_column",
   "textures": {
-    "particle": "dungeon:block/placeholder_planks",
-    "down": "dungeon:block/placeholder_planks",
-    "up": "dungeon:block/placeholder_planks",
-    "north": "dungeon:block/placeholder_bookshelf_side",
-    "east": "dungeon:block/placeholder_bookshelf_side",
-    "south": "dungeon:block/placeholder_bookshelf_side",
-    "west": "dungeon:block/placeholder_bookshelf_side"
+    "side": "dungeon:block/placeholder_bookshelf_side",
+    "end": "dungeon:block/placeholder_planks"
   }
 }

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "dungeon:block/porous_stone"
+    }
+  }
+}

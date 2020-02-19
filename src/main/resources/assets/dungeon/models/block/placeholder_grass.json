@@ -5,8 +5,8 @@
     "down": "dungeon:block/placeholder_dirt",
     "up": "dungeon:block/placeholder_grass_top",
     "north": "dungeon:block/placeholder_grass_side",
-    "east": "dungeon:block/placeholder_grass_side",
     "south": "dungeon:block/placeholder_grass_side",
-    "west": "dungeon:block/placeholder_grass_side"
+    "west": "dungeon:block/placeholder_grass_side",
+    "east": "dungeon:block/placeholder_grass_side"
   }
 }

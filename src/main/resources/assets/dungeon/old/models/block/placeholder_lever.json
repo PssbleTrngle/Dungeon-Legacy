@@ -1,0 +1,8 @@
+{
+  "parent": "block/lever",
+  "textures": {
+    "base": "dungeon:block/placeholder_wall",
+    "particle": "dungeon:block/placeholder_wall",
+    "lever": "dungeon:block/placeholder_lever"
+  }
+}

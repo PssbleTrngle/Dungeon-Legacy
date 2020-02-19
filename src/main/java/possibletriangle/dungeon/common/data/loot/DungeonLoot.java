@@ -183,7 +183,7 @@ public class DungeonLoot extends LootTableProvider {
 
         pool.accept(
             ItemLootEntry.builder(Items.ARROW)
-                .acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 5))),
+                .acceptFunction(SetCount.builder(new RandomValueRange(1, 5))),
                 10
         );
 
@@ -192,12 +192,12 @@ public class DungeonLoot extends LootTableProvider {
     private static void gold(BiConsumer<ItemLootEntry.Builder, Integer> pool) {
 
         pool.accept(ItemLootEntry.builder(Items.GOLD_NUGGET)
-                .acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 8)))
+                .acceptFunction(SetCount.builder(new RandomValueRange(1, 8)))
                 , 10
         );
 
         pool.accept(ItemLootEntry.builder(Items.GOLD_INGOT)
-                .acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 8)))
+                .acceptFunction(SetCount.builder(new RandomValueRange(1, 8)))
                 , 2
         );
     }
@@ -205,16 +205,16 @@ public class DungeonLoot extends LootTableProvider {
     private static void tools(BiConsumer<ItemLootEntry.Builder, Integer> pool) {
 
         pool.accept(ItemLootEntry.builder(Items.ENDER_PEARL)
-                .acceptFunction(SetCount.func_215932_a(ConstantRange.of(1)))
+                .acceptFunction(SetCount.builder(ConstantRange.of(1)))
                 , 1
         );
     }
 
     private static void food(BiConsumer<ItemLootEntry.Builder, Integer> pool) {
         
-        pool.accept(ItemLootEntry.builder(Items.POTATO).acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 6))), 8);
-        pool.accept(ItemLootEntry.builder(Items.APPLE).acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 4))), 5);
-        pool.accept(ItemLootEntry.builder(Items.BREAD).acceptFunction(SetCount.func_215932_a(new RandomValueRange(1, 2))), 1);
+        pool.accept(ItemLootEntry.builder(Items.POTATO).acceptFunction(SetCount.builder(new RandomValueRange(1, 6))), 8);
+        pool.accept(ItemLootEntry.builder(Items.APPLE).acceptFunction(SetCount.builder(new RandomValueRange(1, 4))), 5);
+        pool.accept(ItemLootEntry.builder(Items.BREAD).acceptFunction(SetCount.builder(new RandomValueRange(1, 2))), 1);
 
     }
 
@@ -260,7 +260,7 @@ public class DungeonLoot extends LootTableProvider {
             put(GrenadeItem.GRAVITY, 1);
         }}.forEach((item, weight) ->
                 pool.accept(ItemLootEntry.builder(item)
-                            .acceptFunction(SetCount.func_215932_a(ConstantRange.of(1)))
+                            .acceptFunction(SetCount.builder(ConstantRange.of(1)))
                         , weight)
         );
     }

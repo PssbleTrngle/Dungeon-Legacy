@@ -160,7 +160,7 @@ public class CommonProxy {
 
             Type.values()
                     .map(Type::block)
-                    .map(b -> (Block) b)
+                    .map(o -> (Block) o)
                     .forEach(BLOCKS::add);
 
             BLOCKS.addAll(Arrays.asList(

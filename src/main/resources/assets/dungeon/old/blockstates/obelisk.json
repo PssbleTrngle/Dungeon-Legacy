@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "state=unclaimed": {
+      "model": "dungeon:block/obelisk_unclaimed"
+    },
+    "state=claimed": {
+      "model": "dungeon:block/obelisk_claimed"
+    },
+    "state=invalid": {
+      "model": "dungeon:block/obelisk_invalid"
+    }
+  }
+}

@@ -6,7 +6,10 @@ import net.minecraftforge.client.model.generators.ExistingFileHelper;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import possibletriangle.dungeon.common.data.blockstate.Obelisks;
+import possibletriangle.dungeon.common.data.blockstate.Others;
 import possibletriangle.dungeon.common.data.blockstate.Placeholders;
+import possibletriangle.dungeon.common.data.blockstate.RedstoneLinks;
 import possibletriangle.dungeon.common.data.model.item.ItemBlocks;
 import possibletriangle.dungeon.common.data.model.item.Scrolls;
 import possibletriangle.dungeon.common.data.loot.CanBreak;
@@ -30,10 +33,14 @@ public class DataGenerators {
         ExistingFileHelper filehelper = event.getExistingFileHelper();
 
         generator.addProvider(new DungeonLoot(generator));
+
         generator.addProvider(new ItemBlocks(generator, filehelper));
         generator.addProvider(new SimpleItems(generator, filehelper));
         generator.addProvider(new Scrolls(generator, filehelper));
 
         generator.addProvider(new Placeholders(generator, filehelper));
+        generator.addProvider(new Others(generator, filehelper));
+        generator.addProvider(new Obelisks(generator, filehelper));
+        generator.addProvider(new RedstoneLinks(generator, filehelper));
     }
 }
