@@ -44,10 +44,10 @@ public class RedstoneLinks extends BlockStateProvider {
             String suffix =powered ? "_powered" : "";
             ResourceLocation side = new ResourceLocation("minecraft", "block/furnace_top");
 
-            return Arrays.stream(Direction.values()).filter(s -> s != Direction.NORTH).reduce(
+            return Arrays.stream(Direction.values()).filter(s -> s != Direction.UP).reduce(
                     withExistingParent(name.getPath() + suffix, new ResourceLocation("minecraft", "cube"))
                             .texture("particle", side)
-                            .texture("north", extend(name, "_front" + suffix)),
+                            .texture("up", extend(name, "_front" + suffix)),
                     (m, s) -> m.texture(s.getName(), side), (a, b) -> a);
         });
 

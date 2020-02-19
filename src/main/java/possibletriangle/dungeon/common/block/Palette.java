@@ -101,7 +101,7 @@ public class Palette extends ForgeRegistryEntry<Palette> {
      * Associate a collection of blocks with one ore multiple {@link Type}
      * @param collection the blocks
      */
-    public MultiConsumer<Palette,Type> put(BlockCollection collection) {
+    public final MultiConsumer<Palette,Type> put(BlockCollection collection) {
         return types -> {
             for(Type type : types)
                 this.blocks.putIfAbsent(type, collection);
@@ -109,15 +109,15 @@ public class Palette extends ForgeRegistryEntry<Palette> {
         };
     }
 
-    public MultiConsumer<Palette,Type> put(StateProvider... providers) {
+    public final MultiConsumer<Palette,Type> put(StateProvider... providers) {
         return this.put(new BlockCollection(providers));
     }
 
-    public MultiConsumer<Palette,Type> put(Block... blocks) {
+    public final MultiConsumer<Palette,Type> put(Block... blocks) {
         return this.put(Arrays.stream(blocks).map(Block::getDefaultState).toArray(BlockState[]::new));
     }
 
-    public MultiConsumer<Palette,Type> put(BlockState... states) {
+    public final MultiConsumer<Palette,Type> put(BlockState... states) {
         return this.put(Arrays.stream(states).map(s -> (StateProvider) i -> s).toArray(StateProvider[]::new));
     }
 

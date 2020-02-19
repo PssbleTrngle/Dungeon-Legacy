@@ -40,10 +40,8 @@ public class ItemBlocks extends ItemModelProvider {
         }}.forEach((block, suffix) -> {
             ResourceLocation r = block.getRegistryName();
             assert r != null;
-            withExistingParent(
-                    "item/" + block.getRegistryName().getPath(),
-                    new ResourceLocation(r.getNamespace(), "block/" + r.getPath() + suffix)
-            );
+            ResourceLocation parent = new ResourceLocation(r.getNamespace(), "block/" + r.getPath() + suffix);
+            withExistingParent("item/" + block.getRegistryName().getPath(), parent);
         });
 
     }
