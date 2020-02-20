@@ -3,6 +3,7 @@ package possibletriangle.dungeon.common.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
@@ -132,6 +133,14 @@ public class Palette extends ForgeRegistryEntry<Palette> {
     public BlockCollection blocksFor(Type type) {
         return this.blocks.getOrDefault(type, new BlockCollection(i -> null));
     }
+
+    public BlockState blockFor(Type type, Random random, int variant, BlockState from) {
+        BlockState replace = blockFor(type, random, variant);
+        return from.getProperties()
+                .stream()
+                .reduce(replace, (s, p) -> s.has(p) ? s.with((IProperty) p, from.get(p)) : s, (a, b) -> a);
+    }
+
 
     public BlockState blockFor(Type type, Random random, int variant) {
         BlockState block = blocksFor(type).next(random).orElseGet(() -> i -> null).apply(variant);

@@ -18,8 +18,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import possibletriangle.dungeon.client.ClientProxy;
 import possibletriangle.dungeon.common.CommonProxy;
-import possibletriangle.dungeon.common.DungeonCommand;
 import possibletriangle.dungeon.common.block.placeholder.TemplateBlock;
+import possibletriangle.dungeon.common.command.DungeonCommand;
 
 @Mod(DungeonMod.ID)
 public class DungeonMod {

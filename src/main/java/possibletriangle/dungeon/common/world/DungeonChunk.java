@@ -115,13 +115,8 @@ public class DungeonChunk {
         if(ctx.settings.replacePlaceholders && state.getBlock() instanceof IPlaceholder) {
 
             Type type = ((IPlaceholder) state.getBlock()).getType();
-            BlockState replace = ctx.palette.blockFor(type, random, variant);
-
-            BlockState applied = state.getProperties()
-                .stream()
-                .reduce(replace, (s, p) -> s.has(p) ? s.with((IProperty) p, state.get(p)) : s, (a, b) -> a);
-
-            return this.setBlockState(pos, applied);
+            BlockState replace = ctx.palette.blockFor(type, random, variant, state);
+            return this.setBlockState(pos, replace);
 
         } else {
 
