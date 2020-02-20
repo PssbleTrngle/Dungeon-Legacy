@@ -105,7 +105,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 150,
+          "weight": 225,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -115,35 +115,7 @@
               }
             }
           ],
-          "name": "minecraft:iron_helmet"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 30,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.2,
-                "max": 0.8
-              }
-            }
-          ],
-          "name": "minecraft:diamond_helmet"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 15,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.2,
-                "max": 0.8
-              }
-            }
-          ],
-          "name": "minecraft:diamond_chestplate"
+          "name": "minecraft:iron_boots"
         },
         {
           "type": "minecraft:item",
@@ -161,6 +133,48 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 30,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.2,
+                "max": 0.8
+              }
+            }
+          ],
+          "name": "minecraft:diamond_helmet"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 600,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.2,
+                "max": 0.8
+              }
+            }
+          ],
+          "name": "minecraft:leather_helmet"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 900,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.2,
+                "max": 0.8
+              }
+            }
+          ],
+          "name": "minecraft:leather_boots"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 600,
           "functions": [
             {
@@ -172,6 +186,48 @@
             }
           ],
           "name": "minecraft:leather_leggings"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 150,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.2,
+                "max": 0.8
+              }
+            }
+          ],
+          "name": "minecraft:iron_helmet"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 75,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.2,
+                "max": 0.8
+              }
+            }
+          ],
+          "name": "minecraft:iron_chestplate"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 30,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.2,
+                "max": 0.8
+              }
+            }
+          ],
+          "name": "minecraft:diamond_leggings"
         },
         {
           "type": "minecraft:item",
@@ -203,7 +259,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 225,
+          "weight": 15,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -211,116 +267,26 @@
                 "min": 0.2,
                 "max": 0.8
               }
-            }
-          ],
-          "name": "minecraft:iron_boots"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 900,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.2,
-                "max": 0.8
-              }
-            }
-          ],
-          "name": "minecraft:leather_boots"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 600,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.2,
-                "max": 0.8
-              }
-            }
-          ],
-          "name": "minecraft:leather_helmet"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 30,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.2,
-                "max": 0.8
-              }
-            }
-          ],
-          "name": "minecraft:diamond_leggings"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 75,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.2,
-                "max": 0.8
-              }
-            }
-          ],
-          "name": "minecraft:iron_chestplate"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 30,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.6,
-                "max": 0.9
-              }
-            },
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:iron_helmet"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 6,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.6,
-                "max": 0.9
-              }
-            },
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:diamond_helmet"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.6,
-                "max": 0.9
-              }
-            },
-            {
-              "function": "minecraft:enchant_randomly"
             }
           ],
           "name": "minecraft:diamond_chestplate"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 45,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.6,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:iron_boots"
         },
         {
           "type": "minecraft:item",
@@ -341,6 +307,57 @@
         },
         {
           "type": "minecraft:item",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.6,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:diamond_helmet"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 120,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.6,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:leather_helmet"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 180,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.6,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:leather_boots"
+        },
+        {
+          "type": "minecraft:item",
           "weight": 120,
           "functions": [
             {
@@ -355,6 +372,57 @@
             }
           ],
           "name": "minecraft:leather_leggings"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 30,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.6,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:iron_helmet"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.6,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:iron_chestplate"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 6,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.6,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:diamond_leggings"
         },
         {
           "type": "minecraft:item",
@@ -392,7 +460,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 45,
+          "weight": 3,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -405,58 +473,7 @@
               "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "minecraft:iron_boots"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 180,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.6,
-                "max": 0.9
-              }
-            },
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:leather_boots"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 120,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.6,
-                "max": 0.9
-              }
-            },
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:leather_helmet"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 6,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.6,
-                "max": 0.9
-              }
-            },
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:diamond_leggings"
+          "name": "minecraft:diamond_chestplate"
         },
         {
           "type": "minecraft:item",
@@ -465,15 +482,40 @@
             {
               "function": "minecraft:set_damage",
               "damage": {
-                "min": 0.6,
-                "max": 0.9
+                "min": 0.2,
+                "max": 0.8
               }
-            },
-            {
-              "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "minecraft:iron_chestplate"
+          "name": "minecraft:diamond_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 225,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.2,
+                "max": 0.8
+              }
+            }
+          ],
+          "name": "minecraft:stone_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 75,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.2,
+                "max": 0.8
+              }
+            }
+          ],
+          "name": "minecraft:iron_axe"
         },
         {
           "type": "minecraft:item",
@@ -491,7 +533,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
+          "weight": 225,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -501,7 +543,21 @@
               }
             }
           ],
-          "name": "minecraft:diamond_axe"
+          "name": "minecraft:stone_axe"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 75,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.2,
+                "max": 0.8
+              }
+            }
+          ],
+          "name": "minecraft:iron_sword"
         },
         {
           "type": "minecraft:item",
@@ -519,7 +575,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 75,
+          "weight": 15,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -529,35 +585,7 @@
               }
             }
           ],
-          "name": "minecraft:iron_sword"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 225,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.2,
-                "max": 0.8
-              }
-            }
-          ],
-          "name": "minecraft:stone_axe"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 225,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.2,
-                "max": 0.8
-              }
-            }
-          ],
-          "name": "minecraft:stone_sword"
+          "name": "minecraft:diamond_axe"
         },
         {
           "type": "minecraft:item",
@@ -575,28 +603,51 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 15,
+          "weight": 3,
           "functions": [
             {
               "function": "minecraft:set_damage",
               "damage": {
-                "min": 0.2,
-                "max": 0.8
+                "min": 0.6,
+                "max": 0.9
               }
+            },
+            {
+              "function": "minecraft:enchant_randomly"
             }
           ],
           "name": "minecraft:diamond_sword"
         },
         {
           "type": "minecraft:item",
-          "weight": 75,
+          "weight": 45,
           "functions": [
             {
               "function": "minecraft:set_damage",
               "damage": {
-                "min": 0.2,
-                "max": 0.8
+                "min": 0.6,
+                "max": 0.9
               }
+            },
+            {
+              "function": "minecraft:enchant_randomly"
+            }
+          ],
+          "name": "minecraft:stone_sword"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 15,
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.6,
+                "max": 0.9
+              }
+            },
+            {
+              "function": "minecraft:enchant_randomly"
             }
           ],
           "name": "minecraft:iron_axe"
@@ -620,7 +671,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "weight": 45,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -633,24 +684,7 @@
               "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "minecraft:diamond_axe"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 6,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.6,
-                "max": 0.9
-              }
-            },
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:bow"
+          "name": "minecraft:stone_axe"
         },
         {
           "type": "minecraft:item",
@@ -671,7 +705,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 45,
+          "weight": 6,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -684,11 +718,11 @@
               "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "minecraft:stone_axe"
+          "name": "minecraft:bow"
         },
         {
           "type": "minecraft:item",
-          "weight": 45,
+          "weight": 3,
           "functions": [
             {
               "function": "minecraft:set_damage",
@@ -701,7 +735,7 @@
               "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "minecraft:stone_sword"
+          "name": "minecraft:diamond_axe"
         },
         {
           "type": "minecraft:item",
@@ -719,40 +753,6 @@
             }
           ],
           "name": "minecraft:wooden_sword"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.6,
-                "max": 0.9
-              }
-            },
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:diamond_sword"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 15,
-          "functions": [
-            {
-              "function": "minecraft:set_damage",
-              "damage": {
-                "min": 0.6,
-                "max": 0.9
-              }
-            },
-            {
-              "function": "minecraft:enchant_randomly"
-            }
-          ],
-          "name": "minecraft:iron_axe"
         },
         {
           "type": "minecraft:item",
@@ -1086,11 +1086,11 @@
               "function": "dungeon:can_break",
               "block": {
                 "namespace": "dungeon",
-                "path": "morsh_wood"
+                "path": "gravelous_gravel"
               }
             }
           ],
-          "name": "minecraft:golden_axe"
+          "name": "minecraft:golden_shovel"
         },
         {
           "type": "minecraft:item",
@@ -1106,11 +1106,11 @@
               "function": "dungeon:can_break",
               "block": {
                 "namespace": "dungeon",
-                "path": "gravelous_gravel"
+                "path": "morsh_wood"
               }
             }
           ],
-          "name": "minecraft:golden_shovel"
+          "name": "minecraft:golden_axe"
         }
       ]
     }

@@ -29,6 +29,7 @@ public class Obelisks extends BlockStateProvider {
     protected void registerStatesAndModels() {
 
         withExistingParent("obelisk", new ResourceLocation("minecraft", "block"))
+                .texture("particle", "#top")
 
                 .element().from(0, 0, 0).to(16, 16, 16)
                 .allFaces((dir, face) -> face.texture(dir.getAxis() == Direction.Axis.Y ? "down" : "bottom").uvs(0, 0, 16, 16)).end()

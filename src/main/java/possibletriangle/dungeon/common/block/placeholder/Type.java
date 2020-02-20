@@ -45,6 +45,7 @@ public class Type<T extends Block> {
     public static final Type<Block> BOOKSHELF = new Type<>("BOOKSHELF", TemplateBlock::new, Placeholders.pillar(() -> TemplateBlock.PLANKS));
 
     public static final Type<FenceBlock> FENCE = new Type<>("FENCE", TemplateFence::new, Placeholders.fence(() -> TemplateBlock.PLANKS));
+    public static final Type<WallBlock> WALL_BLOCK = new Type<>("WALL_BLOCK", TemplateWall::new, Placeholders.wall(() -> TemplateBlock.WALL));
     public static final Type<Block> FLUID_UNSAFE = new Type<>("FLUID_UNSAFE", TemplateBlock::new, Placeholders::full);
     
     public static final Type<PressurePlateBlock> PRESSURE_PLATE = new Type<>("PRESSURE_PLATE", TemplatePlate::new, Placeholders.plate(() -> TemplateBlock.FLOOR));

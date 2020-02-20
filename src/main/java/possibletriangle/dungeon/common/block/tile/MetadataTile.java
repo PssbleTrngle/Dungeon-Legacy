@@ -18,6 +18,7 @@ import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.client.MetadataScreen;
 import possibletriangle.dungeon.common.world.DungeonSettings;
 import possibletriangle.dungeon.common.world.room.Generateable;
+import possibletriangle.dungeon.common.world.structure.StructureLoader;
 import possibletriangle.dungeon.common.world.structure.metadata.StructureMetadata;
 
 import javax.annotation.Nonnull;
@@ -68,22 +69,17 @@ public class MetadataTile extends TileEntity {
     }
 
     public void readMeta() {
-        if(!this.world.isRemote && name != null) try {
+        if(!this.world.isRemote && name != null) {
             ServerWorld world = (ServerWorld) this.world;
 
             ResourceLocation n = new ResourceLocation(name);
             ResourceLocation path = new ResourceLocation(n.getNamespace(), "structures/" + n.getPath() + ".nbt");
             IReloadableResourceManager manager = world.getServer().getResourceManager();
 
-            manager.getAllResources(path).stream().map(r ->
-                    r.getMetadata(StructureMetadata.SERIALIZER)
-            ).filter(Objects::nonNull).findFirst().ifPresent(meta -> {
+            StructureLoader.getMetadata(manager, path).ifPresent(meta -> {
                 this.meta = meta;
                 markDirty();
             });
-
-        } catch (IOException ex) {
-            DungeonMod.LOGGER.error("IOException on reloading metadata for {}", name, ex);
         }
     }
 

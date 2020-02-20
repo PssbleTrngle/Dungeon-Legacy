@@ -55,6 +55,19 @@ public class Placeholders extends BlockStateProvider  {
         return (block, provider) -> {
             ResourceLocation t = provider.locationFor(texture.get());
             provider.fenceBlock(block, t);
+
+            provider.withExistingParent("item/" + block.getRegistryName().getPath(), provider.mcLoc("block/fence_inventory"))
+                    .texture("texture", t);
+        };
+    }
+
+    public static BiConsumer<WallBlock, Placeholders> wall(Supplier<Block> texture) {
+        return (block, provider) -> {
+            ResourceLocation t = provider.locationFor(texture.get());
+            provider.wallBlock(block, t);
+
+            provider.withExistingParent("item/" + block.getRegistryName().getPath(), provider.mcLoc("block/wall_inventory"))
+                    .texture("wall", t);
         };
     }
 

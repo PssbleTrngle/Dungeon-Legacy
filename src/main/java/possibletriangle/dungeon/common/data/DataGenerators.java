@@ -34,13 +34,13 @@ public class DataGenerators {
 
         generator.addProvider(new DungeonLoot(generator));
 
+        generator.addProvider(new Placeholders(generator, filehelper));
+        generator.addProvider(new Others(generator, filehelper));
+        generator.addProvider(new RedstoneLinks(generator, filehelper));
+        generator.addProvider(new Obelisks(generator, filehelper));
+
         generator.addProvider(new ItemBlocks(generator, filehelper));
         generator.addProvider(new SimpleItems(generator, filehelper));
         generator.addProvider(new Scrolls(generator, filehelper));
-
-        generator.addProvider(new Placeholders(generator, filehelper));
-        generator.addProvider(new Others(generator, filehelper));
-        generator.addProvider(new Obelisks(generator, filehelper));
-        generator.addProvider(new RedstoneLinks(generator, filehelper));
     }
 }
