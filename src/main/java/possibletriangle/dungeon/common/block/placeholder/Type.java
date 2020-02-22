@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.model.BlockPartRotation;
 import possibletriangle.dungeon.common.data.blockstate.Placeholders;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -81,6 +82,10 @@ public class Type<T extends Block> {
 
     public static Stream<Type> values() {
         return VALUES.stream();
+    }
+
+    public static Optional<Type> byName(String name) {
+        return values().filter(t -> t.name().equalsIgnoreCase(name)).findFirst();
     }
 
 }

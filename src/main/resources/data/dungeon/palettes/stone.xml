@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<palette name="stone" weight="1" biome="plains" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="palette.xsd">
+	<replace>
+		<type>floor</type>
+		<type>pillar</type>
+		<collection>
+			<block id="stone" weight="1" />
+			<block id="andesite" weight="0.7" />
+		</collection>
+	</replace>
+	<replace>
+		<type>path</type>
+		<block id="cobblestone" />
+	</replace>
+	<replace>
+		<type>wall</type>
+		<collection>
+			<block weight="1" id="stone_bricks" />
+			<block weight="0.1" id="mossy_stone_bricks" />
+			<block weight="0.1" id="cracked_stone_bricks" />
+		</collection>
+	</replace>
+	<replace>
+		<type>gem</type>
+		<collection>
+			<block weight="1.5" id="diamond_block" />
+			<block weight="1.5" id="gold_block" />
+			<block weight="1" id="emerald_block" />
+			<block weight="0.1" id="lapis_block" />
+		</collection>
+	</replace>
+	<replace>
+		<type>rune</type>
+		<block id="chiseled_stone_bricks" />
+	</replace>
+	<replace>
+		<type>lamp</type>
+		<block id="redstone_lamp" />
+	</replace>
+	<replace>
+		<type>slab</type>
+		<block id="stone_slab" />
+	</replace>
+	<replace>
+		<type>stairs</type>
+		<block id="stone_stairs" />
+	</replace>
+	<replace>
+		<type>slab_wall</type>
+		<collection>
+			<block weight="1" id="stone_brick_slab" />
+			<block weight="0.1" id="mossy_stone_brick_slab" />
+		</collection>
+	</replace>
+	<replace>
+		<type>stairs_wall</type>
+		<collection>
+			<block weight="1" id="stone_brick_stairs" />
+			<block weight="0.1" id="mossy_stone_brick_stairs" />
+		</collection>
+	</replace>
+	<replace>
+		<type>grass</type>
+		<block id="grass_block" />
+	</replace>
+	<replace>
+		<type>glass</type>
+		<block id="glass" />
+	</replace>
+	<replace>
+		<type>falling</type>
+		<block id="gravel" />
+	</replace>
+	<replace>
+		<type>planks</type>
+		<variant>
+			<block id="oak_planks" />
+			<block id="spruce_planks" />
+			<block id="dark_oak_planks" />
+		</variant>
+	</replace>
+	<replace>
+		<type>stairs_wood</type>
+		<variant>
+			<block id="oak_stairs" />
+			<block id="spruce_stairs" />
+			<block id="dark_oak_stairs" />
+		</variant>
+	</replace>
+	<replace>
+		<type>slab_wood</type>
+		<variant>
+			<block id="oak_slab" />
+			<block id="spruce_slab" />
+			<block id="dark_oak_slab" />
+		</variant>
+	</replace>
+	<replace>
+		<type>log</type>
+		<variant>
+			<block id="oak_log" />
+			<block id="spruce_log" />
+			<block id="dark_oak_log" />
+		</variant>
+	</replace>
+	<replace>
+		<type>stripped_log</type>
+		<variant>
+			<block id="stripped_oak_log" />
+			<block id="stripped_spruce_log" />
+			<block id="stripped_dark_oak_log" />
+		</variant>
+	</replace>
+	<replace>
+		<type>leaves</type>
+		<variant>
+			<block id="oak_leaves" />
+			<block id="spruce_leaves" />
+			<block id="dark_oak_leaves" />
+		</variant>
+	</replace>
+	<replace>
+		<type>crop</type>
+		<variant>
+			<cycle key="age" />
+			<block id="wheat" />
+			<block id="potatoes" />
+			<block id="carrots" />
+			<block id="beetroots" />
+		</variant>
+	</replace>
+	<replace>
+		<type>fence</type>
+		<variant>
+			<block id="oak_fence" />
+			<block id="spruce_fence" />
+			<block id="dark_oak_fence" />
+		</variant>
+	</replace>
+	<replace>
+		<type>farmland</type>
+		<block id="farmland" />
+	</replace>
+	<replace>
+		<type>dirt</type>
+		<block id="dirt" />
+	</replace>
+	<replace>
+		<type>pressure_plate</type>
+		<block id="stone_pressure_plate" />
+	</replace>
+	<replace>
+		<type>fluid_unsafe</type>
+		<block id="lava" />
+	</replace>
+	<replace>
+		<type>wall_block</type>
+		<block id="stone_brick_wall" />
+	</replace>
+	<replace>
+		<type>lever</type>
+		<block id="lever" />
+	</replace>
+	<replace>
+		<type>button</type>
+		<block id="stone_button" />
+	</replace>
+	<replace>
+		<type>wall_block</type>
+		<block id="stone_brick_wall" />
+	</replace>
+	<replace>
+		<type>plant</type>
+		<collection>
+			<block id="dandelion" />
+			<block id="poppy" />
+			<block id="blue_orchid" />
+			<block id="azure_bluet" />
+		</collection>
+	</replace>
+	<replace>
+		<type>fruit</type>
+		<variant>
+			<block id="melon" />
+			<block id="pumpkin" />
+		</variant>
+	</replace>
+	<replace>
+		<type>seal</type>
+		<block id="polished_andesite" />
+	</replace>
+	<replace>
+		<type>bookshelf</type>
+		<block id="bookshelf" />
+	</replace>
+	<mob weight="1" id="zombie" />
+	<mob weight="0.1" id="creeper" />
+</palette>

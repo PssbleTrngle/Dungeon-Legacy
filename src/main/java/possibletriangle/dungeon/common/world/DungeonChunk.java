@@ -3,7 +3,6 @@ package possibletriangle.dungeon.common.world;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
-import net.minecraft.state.IProperty;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -11,7 +10,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import possibletriangle.dungeon.common.block.placeholder.IPlaceholder;
-import possibletriangle.dungeon.common.block.Palette;
+import possibletriangle.dungeon.palette.Palette;
 import possibletriangle.dungeon.common.block.placeholder.Type;
 import possibletriangle.dungeon.common.data.loot.DungeonLoot;
 

@@ -42,6 +42,7 @@ import possibletriangle.dungeon.common.world.structure.metadata.condition.Condit
 import possibletriangle.dungeon.common.world.structure.metadata.condition.FloorCondition;
 import possibletriangle.dungeon.common.world.structure.metadata.condition.ModCondition;
 import possibletriangle.dungeon.common.world.structure.metadata.condition.PaletteCondition;
+import possibletriangle.dungeon.palette.PaletteLoader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,15 +55,15 @@ public class CommonProxy {
 
     public void clientSetup(FMLClientSetupEvent event) {}
 
-    public void reloadRooms(IReloadableResourceManager manager) {
+    public void reload(IReloadableResourceManager manager) {
 
         Structures.clear();
-
         StructureType.values().stream()
                 .map(StructureLoader::new)
                 .forEach(manager::addReloadListener);
-
         Structures.register(new HallwayMaze(), StructureType.HALLWAY);
+
+        manager.addReloadListener(new PaletteLoader());
 
     }
 
@@ -90,10 +91,6 @@ public class CommonProxy {
 
         @SubscribeEvent
         public static void onNewRegistry(final RegistryEvent.NewRegistry event) {
-            new RegistryBuilder<Palette>()
-                    .setName(new ResourceLocation(DungeonMod.ID, "palette"))
-                    .setType(Palette.class)
-                    .create();
 
             new RegistryBuilder<StructureType>()
                     .setName(new ResourceLocation(DungeonMod.ID, "structure_type"))
@@ -123,11 +120,6 @@ public class CommonProxy {
                 new StructureType(StructureType.hasSize(5, DungeonSettings.FLOOR_HEIGHT, 15)).setRegistryName("shop"),
                 new StructureType(s -> true).setRegistryName("part")
             );
-        }
-
-        @SubscribeEvent
-        public static void onPalettesRegistry(final RegistryEvent.Register<Palette> event) {
-            Palettes.register(event);
         }
 
         @SubscribeEvent

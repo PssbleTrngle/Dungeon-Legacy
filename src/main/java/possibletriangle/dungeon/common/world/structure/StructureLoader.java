@@ -36,7 +36,7 @@ public class StructureLoader extends ReloadListener<List<DungeonStructure>> {
     }
 
     /**
-     * Loads all structures in the data folder
+     * Loads all structures in the palette folder
      * Called on server starting
      * @param manager The servers resource manager
      */

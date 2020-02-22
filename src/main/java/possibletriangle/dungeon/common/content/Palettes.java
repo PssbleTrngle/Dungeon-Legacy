@@ -2,14 +2,7 @@ package possibletriangle.dungeon.common.content;
 
 import net.minecraft.block.*;
 import net.minecraft.state.IntegerProperty;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.Biomes;
-import net.minecraftforge.event.RegistryEvent;
-import possibletriangle.dungeon.DungeonMod;
-import possibletriangle.dungeon.common.block.Palette;
-import possibletriangle.dungeon.common.block.placeholder.Type;
 import possibletriangle.dungeon.helper.BlockCollection;
-import possibletriangle.dungeon.helper.RandomCollection;
 import possibletriangle.dungeon.helper.Variant;
 
 import java.util.Arrays;
@@ -28,12 +21,12 @@ public class Palettes {
         }
         return c;
     }
-
+/*
     public static void register(RegistryEvent.Register<Palette> event) {
 
         event.getRegistry().registerAll(
 
-            /* ------------------   STONE  ------------------ */
+            // ------------------   STONE  ------------------
             new Palette(1F, () -> Biomes.PLAINS, () -> null).setRegistryName(DungeonMod.ID, "stone")
                     .put(new BlockCollection()
                                 .add(Blocks.STONE, 1F)
@@ -87,7 +80,7 @@ public class Palettes {
                         .add(new ResourceLocation("silverfish"), 0.1F)
                      ),
 
-            /* ------------------   NATURE  ------------------ */
+            // ------------------   NATURE  ------------------
             new Palette(1F, () -> Biomes.FOREST).setRegistryName(DungeonMod.ID, "nature")
                     .put(new Variant(Blocks.DARK_OAK_LOG, Blocks.SPRUCE_LOG, Blocks.JUNGLE_LOG, Blocks.OAK_LOG)).forTypes(Type.PILLAR)
                     .put(new BlockCollection()
@@ -112,14 +105,14 @@ public class Palettes {
                         .add(new ResourceLocation("cave_spider"), 0.8F)
                     ),
 
-            /* ------------------  MUSHROOM  ------------------ */
+            // ------------------  MUSHROOM  ------------------
             new Palette(0.3F, () -> Biomes.MUSHROOM_FIELDS).setRegistryName(DungeonMod.ID, "mushroom")
                     .put(Blocks.MYCELIUM).forTypes(Type.GRASS)
                     .put(new Variant(Blocks.RED_MUSHROOM_BLOCK, Blocks.BROWN_MUSHROOM_BLOCK)).forTypes(Type.LEAVES)
                     .put(Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM).forTypes(Type.PLANT)
                     .put(Blocks.MUSHROOM_STEM).forTypes(Type.LOG),
 
-            /* ------------------  QUARTZ  ------------------ */
+            // ------------------  QUARTZ  ------------------
             new Palette(0F, () -> Biomes.PLAINS).setRegistryName(DungeonMod.ID, "quartz")
                     .put(Blocks.QUARTZ_BLOCK).forTypes(Type.WALL, Type.FLOOR)
                     .put(Blocks.CHISELED_QUARTZ_BLOCK).forTypes(Type.RUNE, Type.PATH)
@@ -130,7 +123,7 @@ public class Palettes {
                     .put(Blocks.GLOWSTONE).forTypes(Type.LAMP)
                     .put(Blocks.QUARTZ_PILLAR).forTypes(Type.PILLAR),
 
-            /* ------------------  SAND  ------------------ */
+            // ------------------  SAND  ------------------
             new Palette(0F, () -> Biomes.DESERT).setRegistryName(DungeonMod.ID, "sand")
                     .put(Blocks.SANDSTONE).forTypes(Type.WALL, Type.FLOOR, Type.PILLAR)
                     .put(Blocks.CHISELED_SANDSTONE).forTypes(Type.RUNE)
@@ -151,7 +144,7 @@ public class Palettes {
                         .add(new ResourceLocation("skeleton"), 0.3F)
                     ),
 
-            /* ------------------   NETHER  ------------------ */
+            // ------------------   NETHER  ------------------
             new Palette(0F, () -> Biomes.NETHER).setRegistryName(DungeonMod.ID, "nether")
                     .put(new BlockCollection()
                                 .add(Blocks.NETHERRACK, 1F)
@@ -190,7 +183,7 @@ public class Palettes {
                         .add(new ResourceLocation("lava_slime"), 1F)
                     ),
 
-            /* ------------------  PRISMARINE  ------------------ */
+            // ------------------  PRISMARINE  ------------------
             new Palette(0F, () -> Biomes.OCEAN).setRegistryName(DungeonMod.ID, "prismarine")
                     .put(Blocks.PRISMARINE).forTypes(Type.FLOOR)
                     .put(Blocks.DARK_PRISMARINE).forTypes(Type.PATH, Type.PILLAR)
@@ -209,7 +202,7 @@ public class Palettes {
                     .put(new Variant(Blocks.BRAIN_CORAL, Blocks.BUBBLE_CORAL, Blocks.FIRE_CORAL, Blocks.TUBE_CORAL, Blocks.FIRE))
                         .forTypes(Type.PLANT, Type.CROP),
 
-            /* ------------------  END  ------------------ */
+            // ------------------  END  ------------------
             new Palette(0F, () -> Biomes.THE_END).setRegistryName(DungeonMod.ID, "end")
                     .put(Blocks.END_STONE).forTypes(Type.FLOOR)
                     .put(Blocks.END_STONE_BRICKS).forTypes(Type.PATH)
@@ -231,6 +224,6 @@ public class Palettes {
                     )
         );
 
-    }
+    }*/
 
 }

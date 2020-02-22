@@ -61,7 +61,7 @@ public class DungeonMod {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void onServerWillStart(final FMLServerAboutToStartEvent event) {
-        proxy.reloadRooms(event.getServer().getResourceManager());
+        proxy.reload(event.getServer().getResourceManager());
     }
 
     @SubscribeEvent(priority = EventPriority.HIGH)
