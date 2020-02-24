@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<palette name="stone" weight="1" biome="plains" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="palette.xsd">
+<palette weight="1" biome="nether" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com" xsi:schemaLocation="https://www.w3schools.com palette.xsd">
 	<replace>
 		<type>floor</type>
-		<type>pillar</type>
 		<collection>
 			<block id="stone" weight="1" />
 			<block id="andesite" weight="0.7" />
@@ -14,6 +13,7 @@
 	</replace>
 	<replace>
 		<type>wall</type>
+		<type>pillar</type>
 		<collection>
 			<block weight="1" id="stone_bricks" />
 			<block weight="0.1" id="mossy_stone_bricks" />
@@ -65,7 +65,9 @@
 	</replace>
 	<replace>
 		<type>glass</type>
-		<block id="glass" />
+		<variant>
+			<block id="glass" />
+		</variant>
 	</replace>
 	<replace>
 		<type>falling</type>

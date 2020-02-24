@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<palette weight="1" biome="nether" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com" xsi:schemaLocation="https://www.w3schools.com palette.xsd">
+    <replace>
+        <type>floor</type>
+        <collection>
+            <block id="stone" weight="1" />
+            <block id="mossy_cobblestone" weight="0.5" />
+        </collection>
+    </replace>
+    <replace>
+        <type>pillar</type>
+        <variant>
+            <block id="dark_oak_log"></block>
+            <block id="spruce_log"></block>
+            <block id="jungle_log"></block>
+            <block id="oak_log"></block>
+        </variant>
+    </replace>
+    <replace>
+        <type>path</type>
+        <collection>
+            <block weight="1" id="grass_path" />
+            <block weight="1" id="dirt" />
+            <block weight="1" id="coarse_dirt" />
+        </collection>
+    </replace>
+    <replace>
+        <type>wall</type>
+        <collection>
+            <block weight="1" id="stone_bricks" />
+            <block weight="0.8" id="mossy_stone_bricks" />
+            <block weight="0.6" id="cracked_stone_bricks" />
+        </collection>
+    </replace>
+    <replace>
+        <type>gem</type>
+        <collection>
+			<block weight="2" id="emerald_block" />
+			<block weight="1" id="gold_block" />
+        </collection>
+    </replace>
+    <mob weight="1" id="cave_spider" />
+</palette>

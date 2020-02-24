@@ -1,6 +1,5 @@
 package possibletriangle.dungeon.palette;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import possibletriangle.dungeon.helper.RandomCollection;
 
@@ -9,6 +8,12 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class BlockCollection extends StateProviderParent {
+
+    public BlockCollection() {}
+
+    public BlockCollection(IStateProvider[] providers) {
+        collection.addAll(providers);
+    }
 
     private final RandomCollection<IStateProvider> collection = new RandomCollection<>();
 

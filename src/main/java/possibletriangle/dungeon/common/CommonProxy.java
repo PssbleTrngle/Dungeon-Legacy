@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,7 +24,6 @@ import possibletriangle.dungeon.common.block.*;
 import possibletriangle.dungeon.common.block.placeholder.Type;
 import possibletriangle.dungeon.common.block.tile.MetadataTile;
 import possibletriangle.dungeon.common.block.tile.ObeliskTile;
-import possibletriangle.dungeon.common.content.Palettes;
 import possibletriangle.dungeon.common.entity.GrenadeEntity;
 import possibletriangle.dungeon.common.item.ScrollItem;
 import possibletriangle.dungeon.common.item.grenade.GrenadeFrost;
@@ -55,7 +55,9 @@ public class CommonProxy {
 
     public void clientSetup(FMLClientSetupEvent event) {}
 
-    public void reload(IReloadableResourceManager manager) {
+    public void reload(MinecraftServer server) {
+
+        IReloadableResourceManager manager = server.getResourceManager();
 
         Structures.clear();
         StructureType.values().stream()
@@ -63,7 +65,7 @@ public class CommonProxy {
                 .forEach(manager::addReloadListener);
         Structures.register(new HallwayMaze(), StructureType.HALLWAY);
 
-        manager.addReloadListener(new PaletteLoader());
+        manager.addReloadListener(new PaletteLoader(server.getNetworkTagManager()));
 
     }
 

@@ -13,7 +13,10 @@ import possibletriangle.dungeon.common.block.placeholder.IPlaceholder;
 import possibletriangle.dungeon.common.block.placeholder.Type;
 import possibletriangle.dungeon.helper.RandomCollection;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.Random;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -85,7 +88,14 @@ public class Palette {
     }
 
     private Optional<Palette> getParent() {
-        return find(this.parent).filter(parent -> parent.getName().equals(getName()));
+        return find(this.parent).filter(parent -> !this.equals(parent));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Palette)
+            return getName().toString().equalsIgnoreCase(((Palette) obj).getName().toString());
+        return super.equals(obj);
     }
 
     private IStateProvider blockFor(Type type) {

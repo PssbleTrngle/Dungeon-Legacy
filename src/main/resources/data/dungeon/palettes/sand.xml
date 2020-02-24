@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<palette weight="1" biome="desert" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com" xsi:schemaLocation="https://www.w3schools.com palette.xsd">
+    <replace>
+        <type>floor</type>
+        <block id="sandstone" />
+    </replace>
+    <replace>
+        <type>wall</type>
+        <type>pillar</type>
+        <block id="smooth_sandstone" />
+    </replace>
+    <replace>
+        <type>rune</type>
+        <block id="chiseled_sandstone" />
+    </replace>
+    <replace>
+        <type>path</type>
+        <type>falling</type>
+        <type>farmland</type>
+        <block id="sand" />
+    </replace>
+    <replace>
+        <type>grass</type>
+        <block id="dirt" />
+    </replace>
+    <replace>
+        <type>slab</type>
+        <type>slab_wall</type>
+        <block id="sandstone_slab" />
+    </replace>
+    <replace>
+        <type>stairs</type>
+        <type>stairs_wall</type>
+        <block id="sandstone_stairs" />
+    </replace>
+    <replace>
+        <type>wall_block</type>
+        <block id="sandstone_wall" />
+    </replace>
+    <replace>
+        <type>fence</type>
+        <block id="acacia_fence" />
+    </replace>
+    <replace>
+        <type>planks</type>
+        <block id="acacia_planks" />
+    </replace>
+    <replace>
+        <type>log</type>
+        <block id="acacia_log" />
+    </replace>
+    <replace>
+        <type>leaves</type>
+        <block id="acacia_leaves" />
+    </replace>
+    <replace>
+        <type>stairs_wood</type>
+        <block id="acacia_stairs" />
+    </replace>
+    <replace>
+        <type>slab_wood</type>
+        <block id="acacia_slab" />
+    </replace>
+    <replace>
+        <type>crop</type>
+        <type>plant</type>
+        <collection>
+            <block weight="1" id="dead_bush" />
+            <block weight="0.2" id="cactus" />
+        </collection>
+    </replace>
+    <replace>
+        <type>fruit</type>
+        <block id="melon" />
+    </replace>
+    <replace>
+        <type>gem</type>
+        <collection>
+            <block id="gold_block" />
+            <block id="coal_block" />
+            <block id="lapis_block" />
+        </collection>
+    </replace>
+    <mob weight="1" id="husk" />
+    <mob weight="0.3" id="skeleton" />
+</palette>

@@ -1,179 +1,193 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<xs:schema id="palette" elementFormDefault="qualified" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" vc:minVersion="1.1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xsd:schema
+	id="palette"
+	targetNamespace="https://www.w3schools.com"
+	xmlns="https://www.w3schools.com"
+	elementFormDefault="qualified"
+	xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+	vc:minVersion="1.1"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+>
 
-	<xs:element name="palette" type="palette" />
+	<xsd:element name="palette" type="palette" />
 
-	<xs:simpleType name="type">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="floor" />
-			<xs:enumeration value="wall" />
-			<xs:enumeration value="path" />
-			<xs:enumeration value="rune" />
-			<xs:enumeration value="gem" />
-			<xs:enumeration value="seal" />
-			<xs:enumeration value="glass" />
-			<xs:enumeration value="falling" />
-			<xs:enumeration value="pillar" />
-			<xs:enumeration value="lamp" />
-			<xs:enumeration value="stairs" />
-			<xs:enumeration value="slab" />
-			<xs:enumeration value="stairs_wall" />
-			<xs:enumeration value="slab_wall" />
-			<xs:enumeration value="planks" />
-			<xs:enumeration value="stairs_wood" />
-			<xs:enumeration value="slab_wood" />
-			<xs:enumeration value="leaves" />
-			<xs:enumeration value="stripped_log" />
-			<xs:enumeration value="log" />
-			<xs:enumeration value="dirt" />
-			<xs:enumeration value="grass" />
-			<xs:enumeration value="farmland" />
-			<xs:enumeration value="plant" />
-			<xs:enumeration value="crop" />
-			<xs:enumeration value="fruit" />
-			<xs:enumeration value="bookshelf" />
-			<xs:enumeration value="fence" />
-			<xs:enumeration value="wall_block" />
-			<xs:enumeration value="fluid_unsafe" />
-			<xs:enumeration value="pressure_plate" />
-			<xs:enumeration value="button" />
-			<xs:enumeration value="lever" />
-		</xs:restriction>
-	</xs:simpleType>
+	<xsd:simpleType name="type">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="floor" />
+			<xsd:enumeration value="wall" />
+			<xsd:enumeration value="path" />
+			<xsd:enumeration value="rune" />
+			<xsd:enumeration value="gem" />
+			<xsd:enumeration value="seal" />
+			<xsd:enumeration value="glass" />
+			<xsd:enumeration value="falling" />
+			<xsd:enumeration value="pillar" />
+			<xsd:enumeration value="lamp" />
+			<xsd:enumeration value="stairs" />
+			<xsd:enumeration value="slab" />
+			<xsd:enumeration value="stairs_wall" />
+			<xsd:enumeration value="slab_wall" />
+			<xsd:enumeration value="planks" />
+			<xsd:enumeration value="stairs_wood" />
+			<xsd:enumeration value="slab_wood" />
+			<xsd:enumeration value="leaves" />
+			<xsd:enumeration value="stripped_log" />
+			<xsd:enumeration value="log" />
+			<xsd:enumeration value="dirt" />
+			<xsd:enumeration value="grass" />
+			<xsd:enumeration value="farmland" />
+			<xsd:enumeration value="plant" />
+			<xsd:enumeration value="crop" />
+			<xsd:enumeration value="fruit" />
+			<xsd:enumeration value="bookshelf" />
+			<xsd:enumeration value="fence" />
+			<xsd:enumeration value="wall_block" />
+			<xsd:enumeration value="fluid_unsafe" />
+			<xsd:enumeration value="pressure_plate" />
+			<xsd:enumeration value="button" />
+			<xsd:enumeration value="lever" />
+		</xsd:restriction>
+	</xsd:simpleType>
 
-	<xs:complexType name="weighted">
-		<xs:attribute use="optional" type="xs:float" name="weight" default="1" />
-	</xs:complexType>
+	<xsd:complexType name="weighted">
+		<xsd:attribute use="optional" type="xsd:float" name="weight" default="1" />
+	</xsd:complexType>
 
-	<xs:complexType name="name">
-		<xs:complexContent>
-			<xs:extension base="weighted">
-				<xs:attribute use="optional" default="minecraft" name="mod" type="xs:string" />
-				<xs:attribute use="required" name="id" type="xs:string" />
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
+	<xsd:complexType name="name">
+		<xsd:complexContent>
+			<xsd:extension base="weighted">
+				<xsd:attribute use="optional" default="minecraft" name="mod" type="xsd:string" />
+				<xsd:attribute use="required" name="id" type="xsd:string" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
 
-	<xs:element name="provider" abstract="true" />
-	<xs:complexType name="provider">
-		<xs:complexContent>
-			<xs:extension base="weighted">
-				<xs:sequence>
-					<xs:element minOccurs="0" maxOccurs="unbounded" ref="property" />
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
+	<xsd:element name="provider" abstract="true" />
+	<xsd:complexType name="provider">
+		<xsd:complexContent>
+			<xsd:extension base="weighted">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" ref="property" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
 
-	<xs:complexType name="palette">
-		<xs:complexContent>
-			<xs:extension base="weighted">
-				<xs:sequence>
-					<xs:sequence>
-						<xs:element maxOccurs="unbounded" minOccurs="0" name="replace" type="replace" />
-					</xs:sequence>
-					<xs:sequence>
-						<xs:element maxOccurs="unbounded" minOccurs="0" name="mob" type="name" />
-					</xs:sequence>
-				</xs:sequence>
-				<xs:attribute use="required" name="name" type="xs:string" />
-				<xs:attribute use="required" name="biome" type="xs:string" />
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
+	<xsd:complexType name="palette">
+		<xsd:complexContent>
+			<xsd:extension base="weighted">
+				<xsd:sequence>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="replace" type="replace" />
+					</xsd:sequence>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="mob" type="name" />
+					</xsd:sequence>
+				</xsd:sequence>
+				<xsd:attribute use="required" name="biome" type="xsd:string" />
+				<xsd:attribute use="optional" default="dungeon:stone" name="parent" type="xsd:string" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
 
 
-	<xs:complexType name="replace">
-		<xs:sequence>
-			<xs:element maxOccurs="unbounded" minOccurs="1" name="type" type="type" />
-			<xs:element ref="provider" />
-		</xs:sequence>
-	</xs:complexType>
+	<xsd:complexType name="replace">
+		<xsd:sequence>
+			<xsd:element maxOccurs="unbounded" minOccurs="1" name="type" type="type" />
+			<xsd:element ref="provider" />
+		</xsd:sequence>
+	</xsd:complexType>
 
-	<xs:element name="property" abstract="true" />
+	<xsd:element name="property" abstract="true" />
 
-	<xs:element name="set" substitutionGroup="property">
-		<xs:complexType>
-			<xs:attribute use="required" name="key" type="xs:string" />
-			<xs:attribute use="required" name="value">
-				<xs:simpleType>
-					<xs:union memberTypes="xs:float xs:string" />
-				</xs:simpleType>
-			</xs:attribute>
-		</xs:complexType>
-	</xs:element>
+	<xsd:element name="set" substitutionGroup="property">
+		<xsd:complexType>
+			<xsd:attribute use="required" name="key" type="xsd:string" />
+			<xsd:attribute use="required" name="value">
+				<xsd:simpleType>
+					<xsd:union memberTypes="xsd:float xsd:string" />
+				</xsd:simpleType>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
 
-	<xs:element name="cycle" substitutionGroup="property">
-		<xs:complexType>
-			<xs:attribute use="required" name="key" type="xs:string" />
-		</xs:complexType>
-	</xs:element>
+	<xsd:element name="cycle" substitutionGroup="property">
+		<xsd:complexType>
+			<xsd:attribute use="required" name="key" type="xsd:string" />
+		</xsd:complexType>
+	</xsd:element>
 
-	<xs:element name="block" substitutionGroup="provider">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="provider">
-					<xs:attribute use="optional" default="minecraft" name="mod" type="xs:string" />
-					<xs:attribute use="required" name="id" type="xs:string" />
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xsd:element name="block" substitutionGroup="provider">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="provider">
+					<xsd:attribute use="optional" default="minecraft" name="mod" type="xsd:string" />
+					<xsd:attribute use="required" name="id" type="xsd:string" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
 
-	<xs:element name="tag" substitutionGroup="provider">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="provider">
-					<xs:attribute use="required" name="id" type="xs:string" />
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xsd:element name="tag" substitutionGroup="provider">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="provider">
+					<xsd:attribute use="required" name="id">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:pattern value="#.+" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:attribute>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
 
-	<xs:element name="collection" substitutionGroup="provider">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="provider">
-					<xs:sequence>
-						<xs:element maxOccurs="unbounded" minOccurs="1" ref="provider" />
-					</xs:sequence>
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xsd:element name="collection" substitutionGroup="provider">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="provider">
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" minOccurs="1" ref="provider" />
+					</xsd:sequence>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
 
-	<xs:element name="variant" substitutionGroup="provider">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="provider">
-					<xs:sequence>
-						<xs:element maxOccurs="32" minOccurs="1" ref="provider" />
-					</xs:sequence>
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xsd:element name="variant" substitutionGroup="provider">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="provider">
+					<xsd:sequence>
+						<xsd:element maxOccurs="32" minOccurs="1" ref="provider" />
+					</xsd:sequence>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
 
-	<xs:element name="fallback" substitutionGroup="provider">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="provider">
-					<xs:sequence>
-						<xs:element maxOccurs="unbounded" minOccurs="1" ref="provider" />
-					</xs:sequence>
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xsd:element name="fallback" substitutionGroup="provider">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="provider">
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" minOccurs="1" ref="provider" />
+					</xsd:sequence>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
 
-	<xs:element name="ref" substitutionGroup="provider">
-		<xs:complexType>
-			<xs:complexContent>
-				<xs:extension base="provider">
-					<xs:attribute use="required" name="to" type="type" />
-				</xs:extension>
-			</xs:complexContent>
-		</xs:complexType>
-	</xs:element>
+	<xsd:element name="ref" substitutionGroup="provider">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="provider">
+					<xsd:attribute use="required" name="to" type="type" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
 
-</xs:schema>
+</xsd:schema>

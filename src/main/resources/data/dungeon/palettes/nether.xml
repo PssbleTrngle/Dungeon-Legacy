@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<palette weight="1" biome="nether" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com" xsi:schemaLocation="https://www.w3schools.com palette.xsd">
+    <replace>
+        <type>floor</type>
+        <collection>
+            <block id="netherrack" weight="1" />
+            <block id="soul_sand" weight="0.1" />
+        </collection>
+    </replace>
+    <replace>
+        <type>path</type>
+        <collection>
+            <block weight="1" id="soul_sand" />
+            <block weight="3" id="gravel" />
+        </collection>
+    </replace>
+    <replace>
+        <type>wall</type>
+        <type>pillar</type>
+        <collection>
+            <block weight="1" id="nether_bricks" />
+            <block weight="0.2" id="red_nether_bricks" />
+        </collection>
+    </replace>
+    <replace>
+        <type>gem</type>
+        <collection>
+            <block weight="2" id="gold_block" />
+            <block weight="1" id="obsidian" />
+            <block weight="1" id="quartz_block" />
+        </collection>
+    </replace>
+    <replace>
+        <type>rune</type>
+        <block id="magma_block" />
+    </replace>
+    <replace>
+        <type>fruit</type>
+        <variant>
+            <block id="nether_wart_block" />
+            <block id="pumpkin" />
+        </variant>
+    </replace>
+    <replace>
+        <type>lamp</type>
+        <block id="glowstone" />
+    </replace>
+    <replace>
+        <type>glass</type>
+        <block id="red_stained_glass" />
+    </replace>
+    <replace>
+        <type>stairs</type>
+        <type>stairs_wall</type>
+        <block id="nether_brick_stairs" />
+    </replace>
+    <replace>
+        <type>slab</type>
+        <type>slab_wall</type>
+        <block id="nether_brick_slab" />
+    </replace>
+    <replace>
+        <type>crop</type>
+        <block id="nether_wart">
+            <cycle key="age" />
+        </block>
+    </replace>
+    <replace>
+        <type>falling</type>
+        <block id="red_concrete_powder" />
+    </replace>
+    <replace>
+        <type>leaves</type>
+        <variant>
+            <block id="red_mushroom_block" />
+            <block id="brown_mushroom_block" />
+        </variant>
+    </replace>
+    <replace>
+        <type>log</type>
+        <block id="mushroom_stem" />
+    </replace>
+    <replace>
+        <type>plant</type>
+        <collection>
+            <block id="red_mushroom" />
+            <block id="brown_mushroom" />
+        </collection>
+    </replace>
+    <replace>
+        <type>wall</type>
+        <block id="nether_brick_wall" />
+    </replace>
+    <replace>
+        <type>fence</type>
+        <block id="nether_brick_fence" />
+    </replace>
+    <replace>
+        <type>farmland</type>
+        <block id="soul_sand" />
+    </replace>
+    <mob weight="1" id="cave_spider" />
+</palette>

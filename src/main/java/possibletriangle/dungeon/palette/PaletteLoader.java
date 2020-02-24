@@ -4,9 +4,9 @@ import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.profiler.IProfiler;
-import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
-import net.minecraft.state.IProperty;
+import net.minecraft.tags.NetworkTagManager;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
@@ -15,30 +15,40 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.*;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.placeholder.Type;
 import possibletriangle.dungeon.helper.Pair;
 
-import javax.xml.parsers.*;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class PaletteLoader extends ReloadListener<List<Palette>> {
+public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
+
+    private final NetworkTagManager tags;
+    public PaletteLoader(NetworkTagManager tags) {
+        this.tags = tags;
+    }
 
     @Override
-    protected List<Palette> prepare(IResourceManager manager, IProfiler profiler) {
+    protected List<Supplier<Palette>> prepare(IResourceManager manager, IProfiler profiler) {
 
         Collection<ResourceLocation> resources = manager.getAllResourceLocations("palettes", s -> s.endsWith(".xml"));
         DungeonMod.LOGGER.info("Found {} palettes", resources.size());
@@ -50,13 +60,13 @@ public class PaletteLoader extends ReloadListener<List<Palette>> {
     }
 
     @Override
-    protected void apply(List<Palette> list, IResourceManager manager, IProfiler profiler) {
+    protected void apply(List<Supplier<Palette>> list, IResourceManager manager, IProfiler profiler) {
         DungeonMod.LOGGER.info("Loaded {} palettes", list.size());
         Palette.clear();
-        list.forEach(Palette::register);
+        list.stream().map(Supplier::get).forEach(Palette::register);
     }
 
-    private static Collection<Palette> load(IResourceManager manager, ResourceLocation path) {
+    private Collection<Supplier<Palette>> load(IResourceManager manager, ResourceLocation path) {
         try {
             String p = path.getPath();
             ResourceLocation name = new ResourceLocation(path.getNamespace(), p.substring(p.lastIndexOf('/') + 1, p.length() - 4));
@@ -70,8 +80,10 @@ public class PaletteLoader extends ReloadListener<List<Palette>> {
         }
     }
 
-    private static InputStream getSchema() throws FileNotFoundException {
-        return new FileInputStream(new File("C:\\Users\\firef\\Coding\\Java\\MC\\1.14\\Dungeon\\src\\main\\resources\\data\\dungeon\\palettes\\palette.xsd"));
+    private static Schema getSchema() throws SAXException {
+        File file = new File("C:\\Users\\firef\\Coding\\Java\\MC\\1.14\\Dungeon\\src\\main\\resources\\data\\dungeon\\palettes\\palette.xsd");
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        return factory.newSchema(file);
     }
 
     private static Stream<Element> elements(Element parent, String name) {
@@ -79,6 +91,7 @@ public class PaletteLoader extends ReloadListener<List<Palette>> {
         return IntStream.range(0, list.getLength())
                 .mapToObj(list::item)
                 .filter(e -> e.getNodeName().equalsIgnoreCase(name))
+                .filter(Element.class::isInstance)
                 .map(n -> (Element) n);
     }
 
@@ -88,21 +101,6 @@ public class PaletteLoader extends ReloadListener<List<Palette>> {
             return Optional.empty();
         }
         return Optional.ofNullable(GameRegistry.findRegistry(Block.class).getValue(name));
-    }
-
-    private static <V extends Comparable<V>> Optional<IProperty<V>> findProperty(Block block, Element e) {
-        String key = e.getAttribute("key");
-        return block.getDefaultState().getProperties().stream()
-                .filter(p -> p.getName().equalsIgnoreCase(key))
-                .findFirst()
-                .map(p -> (IProperty<V>) p);
-    }
-
-    private static <V extends Comparable<V>> Function<Random,V> cycle(IProperty<V> p) {
-        return r -> {
-            Object[] v = p.getAllowedValues().toArray();
-            return (V) v[r.nextInt(v.length)];
-        };
     }
 
     private static PropertyProvider[] findProperties(Element e) {
@@ -121,44 +119,98 @@ public class PaletteLoader extends ReloadListener<List<Palette>> {
         ).flatMap(Function.identity()).toArray(PropertyProvider[]::new);
     }
 
-    private static Stream<Pair<? extends IStateProvider,Float>> findProviders(Element parent) {
-        return Stream.of(
+    public static class StateProviderSupplier {
+        private float weight;
+        public final Supplier<Optional<Stream<IStateProvider>>> supplier;
 
-            elements(parent, "block").map(e -> {
-                String id = e.getAttribute("id");
-                String mod = e.getAttribute("mod");
-                ResourceLocation r = new ResourceLocation(mod, id);
-                return findBlock(r).map(b -> new Pair<>(new BlockProvider(b), e));
-            })
-            .filter(Optional::isPresent)
-            .map(Optional::get),
+        public StateProviderSupplier(Supplier<Optional<Stream<IStateProvider>>> supplier) {
+            this.supplier = supplier;
+        }
 
-            elements(parent, "collection").map(e -> {
+        float getWeight() {
+            return weight;
+        }
+
+        StateProviderSupplier setWeight(float weight) {
+            this.weight = weight;
+            return this;
+        }
+
+        public <T> Optional<Stream<T>> map(Function<IStateProvider,T> consumer) {
+            return this.supplier.get().map(s -> s.map(consumer));
+        }
+
+        public void forEach(Consumer<IStateProvider> consumer) {
+            this.supplier.get().ifPresent(s -> s.forEach(consumer));
+        }
+    }
+
+    private Optional<Tag<Block>> findTag(ResourceLocation name) {
+        boolean isMC = name.getNamespace().equals("minecraft");
+        return Optional.ofNullable(tags.getBlocks().get(name)).map(Optional::of).orElseGet(
+                isMC ? () -> findTag(new ResourceLocation("forge", name.getPath())) : () -> {
+                    DungeonMod.LOGGER.warn("Could not find tag '{}'", name);
+                    return Optional.empty();
+                });
+    }
+
+    private Optional<StateProviderSupplier> getProvider(Element e, String type) {
+        String id = e.getAttribute("id");
+        if(id.startsWith("#")) id = id.substring(1);
+        String mod = e.getAttribute("mod");
+        ResourceLocation r = new ResourceLocation(mod, id);
+        Stream<StateProviderSupplier> children = findProviders(e);
+
+        switch (type) {
+            case "tag":
+                return Optional.of(new StateProviderSupplier(() -> findTag(r)
+                        .map(Tag::getAllElements)
+                        .map(Collection::stream)
+                        .map(s -> s.map(BlockProvider::new))
+                ));
+
+            case "block":
+                return Optional.of(new StateProviderSupplier(() ->
+                        findBlock(r).map(BlockProvider::new).map(Stream::of)
+                ));
+
+            case"collection":
+                return Optional.of(new StateProviderSupplier(() -> {
                     BlockCollection collection = new BlockCollection();
-                    findProviders(e).forEach(pair -> collection.add(pair.getFirst(), pair.getSecond()));
-                    return new Pair<>(collection, e);
-                }),
+                    children.forEach(provider -> provider.forEach(p -> collection.add(p, provider.weight)));
+                    return Optional.of(collection).map(Stream::of);
+                }));
 
-            elements(parent, "variant").map(e -> {
-                Variant variant = new Variant(findProviders(e)
-                    .map(Pair::getFirst)
-                    .toArray(IStateProvider[]::new)
-                );
-                return new Pair<>(variant, e);
-            }),
-
-            elements(parent, "fallback").map(e -> {
-                Fallback fallback = new Fallback(findProviders(e)
-                        .map(Pair::getFirst)
+            case "variant":
+                return Optional.of(new StateProviderSupplier(() -> Optional.of(new Variant(children.map(provider -> provider.map(p -> p))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .flatMap(Function.identity())
                         .toArray(IStateProvider[]::new)
-                );
-                return new Pair<>(fallback, e);
-            })
+                )).map(Stream::of)));
 
-        ).flatMap(Function.identity()).map(p -> {
-            Element e = p.getSecond();
-            return new Pair<>(p.getFirst().setProperties(findProperties(e)), getWeight(e));
-        });
+            case "fallback":
+                return Optional.of(new StateProviderSupplier(() -> Optional.of(new Fallback(children.map(provider -> provider.map(p -> p))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .flatMap(Function.identity())
+                        .toArray(IStateProvider[]::new)
+                )).map(Stream::of)));
+
+            default: return Optional.empty();
+
+        }
+    }
+
+    private Stream<StateProviderSupplier> findProviders(Element parent) {
+        NodeList list = parent.getChildNodes();
+        return IntStream.range(0, list.getLength())
+                .mapToObj(list::item)
+                .filter(Element.class::isInstance)
+                .map(e -> (Element) e)
+                .map(e -> getProvider( e, e.getNodeName().toLowerCase()).map(p -> p.setWeight(getWeight(e))))
+                .filter(Optional::isPresent)
+                .map(Optional::get);
     }
 
     private static float getWeight(Element e) {
@@ -169,34 +221,55 @@ public class PaletteLoader extends ReloadListener<List<Palette>> {
         }
     }
 
-    private static Optional<Palette> parse(InputStream input, ResourceLocation name) {
+    private Optional<Supplier<Palette>> parse(InputStream input, ResourceLocation name) {
         try {
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            factory.setSchema(getSchema());
+            //factory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+            //        "http://www.w3.org/2001/XMLSchema");
             DocumentBuilder builder = factory.newDocumentBuilder();
             builder.setErrorHandler(new ErrorHandler());
 
             Document xml = builder.parse(input);
+
             Element paletteNode = xml.getDocumentElement();
             paletteNode.normalize();
 
             float weight = Float.parseFloat(paletteNode.getAttribute("weight"));
             Biome biome = GameRegistry.findRegistry(Biome.class).getValue(new ResourceLocation(paletteNode.getAttribute("biome")));
-            String parent = paletteNode.getAttribute("parent");
+            final String parent = paletteNode.hasAttribute("parent") ? paletteNode.getAttribute("parent") : "dungeon:stone";
 
-            Palette palette = new Palette(name, weight, () -> Optional.ofNullable(biome).orElse(Biomes.THE_VOID), new ResourceLocation(parent));
-
-            elements(paletteNode, "replace").forEach(replace -> {
+            List<Pair<Type[],List<StateProviderSupplier>>> replaces = elements(paletteNode, "replace").map(replace -> {
                 Type[] types = elements(replace, "type")
                         .map(Node::getTextContent)
                         .map(Type::byName)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .toArray(Type[]::new);
-                findProviders(replace).map(Pair::getFirst).findFirst().ifPresent(block -> palette.put(block, types));
-            });
 
-            return Optional.of(palette);
+                return new Pair<>(types, findProviders(replace).collect(Collectors.toList()));
+            }).collect(Collectors.toList());
+
+            return Optional.of(() -> {
+                Palette palette = new Palette(name, weight, () -> Optional.ofNullable(biome).orElse(Biomes.THE_VOID), new ResourceLocation(parent));
+
+                replaces.forEach(pair -> {
+                    Type[] types = pair.getFirst();
+                     IStateProvider[] providers = pair.getSecond().stream()
+                            .map(s -> s.supplier.get())
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .flatMap(Function.identity())
+                            .toArray(IStateProvider[]::new);
+
+                     if (providers.length == 1) palette.put(providers[0], types);
+                     else if(providers.length > 0) palette.put(new BlockCollection(providers), types);
+                });
+
+                return palette;
+            });
 
         } catch (SAXException | IOException | ParserConfigurationException ex) {
             return Optional.empty();
