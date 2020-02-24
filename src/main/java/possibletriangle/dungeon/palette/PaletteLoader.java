@@ -103,22 +103,6 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
         return Optional.ofNullable(GameRegistry.findRegistry(Block.class).getValue(name));
     }
 
-    private static PropertyProvider[] findProperties(Element e) {
-        return Stream.of(
-
-                elements(e, "set").map(c -> {
-                    String value = c.getAttribute("value");
-                    return new PropertyProvider(e.getAttribute("key"), (r, p) -> p.parseValue(value).map(Function.identity()));
-                }),
-
-                elements(e, "cycle").map(c -> new PropertyProvider(e.getAttribute("key"), (r, p) -> {
-                    Comparable[] v = p.getAllowedValues().toArray(new Comparable[0]);
-                    return Optional.of(v[r.nextInt(v.length)]);
-                }))
-
-        ).flatMap(Function.identity()).toArray(PropertyProvider[]::new);
-    }
-
     public static class StateProviderSupplier {
         private float weight;
         public final Supplier<Optional<Stream<IStateProvider>>> supplier;
