@@ -53,12 +53,16 @@ public class RandomCollection<T> {
         return map.values();
     }
 
-    public RandomCollection filter(Predicate<T> by) {
+    public RandomCollection<T> filter(Predicate<T> by) {
         RandomCollection<T> filtered = new RandomCollection<>();
         map.forEach((weight, value) -> {
             if(by.test(value)) filtered.add(value, weight);
         });
         return filtered;
+    }
+
+    public void clear() {
+        this.map.clear();
     }
 
 }

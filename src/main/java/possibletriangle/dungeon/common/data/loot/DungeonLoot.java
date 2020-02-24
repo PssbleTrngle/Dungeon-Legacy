@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import it.unimi.dsi.fastutil.Hash;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.data.DataGenerator;
@@ -14,33 +13,27 @@ import net.minecraft.data.LootTableProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.potion.Effects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import net.minecraft.world.storage.loot.functions.*;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.BreakableBlock;
-import possibletriangle.dungeon.common.block.Palette;
+import possibletriangle.dungeon.palette.Palette;
 import possibletriangle.dungeon.common.block.placeholder.Type;
 import possibletriangle.dungeon.common.item.grenade.GrenadeItem;
-import possibletriangle.dungeon.common.world.room.StateProvider;
-import possibletriangle.dungeon.helper.RandomCollection;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -94,19 +87,11 @@ public class DungeonLoot extends LootTableProvider {
         /*
          * Find all blocks which could replace a placeholder seal block
          */
-        List<StateProvider> providers = GameRegistry.findRegistry(Palette.class)
-                .getValues().stream()
+        Block[] blocks = Palette.values().stream()
                 .map(p -> p.blocksFor(Type.SEAL))
-                .map(RandomCollection::all)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-
-        Block[] blocks = providers.stream()
-                .map(p -> IntStream.range(0, Palette.MAX_VARIANT).mapToObj(p::apply))
                 .flatMap(Function.identity())
                 .filter(Objects::nonNull)
                 .map(BlockState::getBlock)
-                .distinct()
                 .toArray(Block[]::new);
 
         ILootFunction.IBuilder lore = () -> new SetLore(new ILootCondition[0], true, Arrays.asList(

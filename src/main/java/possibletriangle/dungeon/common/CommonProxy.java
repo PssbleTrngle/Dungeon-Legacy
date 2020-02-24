@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,7 +24,6 @@ import possibletriangle.dungeon.common.block.*;
 import possibletriangle.dungeon.common.block.placeholder.Type;
 import possibletriangle.dungeon.common.block.tile.MetadataTile;
 import possibletriangle.dungeon.common.block.tile.ObeliskTile;
-import possibletriangle.dungeon.common.content.Palettes;
 import possibletriangle.dungeon.common.entity.GrenadeEntity;
 import possibletriangle.dungeon.common.item.ScrollItem;
 import possibletriangle.dungeon.common.item.grenade.GrenadeFrost;
@@ -42,6 +42,7 @@ import possibletriangle.dungeon.common.world.structure.metadata.condition.Condit
 import possibletriangle.dungeon.common.world.structure.metadata.condition.FloorCondition;
 import possibletriangle.dungeon.common.world.structure.metadata.condition.ModCondition;
 import possibletriangle.dungeon.common.world.structure.metadata.condition.PaletteCondition;
+import possibletriangle.dungeon.palette.PaletteLoader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,15 +55,17 @@ public class CommonProxy {
 
     public void clientSetup(FMLClientSetupEvent event) {}
 
-    public void reloadRooms(IReloadableResourceManager manager) {
+    public void reload(MinecraftServer server) {
+
+        IReloadableResourceManager manager = server.getResourceManager();
 
         Structures.clear();
-
         StructureType.values().stream()
                 .map(StructureLoader::new)
                 .forEach(manager::addReloadListener);
-
         Structures.register(new HallwayMaze(), StructureType.HALLWAY);
+
+        manager.addReloadListener(new PaletteLoader(server.getNetworkTagManager()));
 
     }
 
@@ -90,10 +93,6 @@ public class CommonProxy {
 
         @SubscribeEvent
         public static void onNewRegistry(final RegistryEvent.NewRegistry event) {
-            new RegistryBuilder<Palette>()
-                    .setName(new ResourceLocation(DungeonMod.ID, "palette"))
-                    .setType(Palette.class)
-                    .create();
 
             new RegistryBuilder<StructureType>()
                     .setName(new ResourceLocation(DungeonMod.ID, "structure_type"))
@@ -123,11 +122,6 @@ public class CommonProxy {
                 new StructureType(StructureType.hasSize(5, DungeonSettings.FLOOR_HEIGHT, 15)).setRegistryName("shop"),
                 new StructureType(s -> true).setRegistryName("part")
             );
-        }
-
-        @SubscribeEvent
-        public static void onPalettesRegistry(final RegistryEvent.Register<Palette> event) {
-            Palettes.register(event);
         }
 
         @SubscribeEvent

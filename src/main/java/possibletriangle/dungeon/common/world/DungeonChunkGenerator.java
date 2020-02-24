@@ -14,7 +14,7 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.WorldGenRegion;
-import possibletriangle.dungeon.common.block.Palette;
+import possibletriangle.dungeon.palette.Palette;
 import possibletriangle.dungeon.common.block.placeholder.TemplateBlock;
 import possibletriangle.dungeon.common.world.room.Generateable;
 import possibletriangle.dungeon.common.world.room.Structures;

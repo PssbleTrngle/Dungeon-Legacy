@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<palette weight="1" biome="ocean" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com" xsi:schemaLocation="https://www.w3schools.com palette.xsd">
+    <replace>
+        <type>floor</type>
+        <block id="prismarine" />
+    </replace>
+    <replace>
+        <type>path</type>
+        <type>pillar</type>
+        <block id="dark_prismarine" />
+    </replace>
+    <replace>
+        <type>lamp</type>
+        <block id="sea_lantern" />
+    </replace>
+    <replace>
+        <type>wall</type>
+        <block id="prismarine_bricks" />
+    </replace>
+    <replace>
+        <type>gem</type>
+        <collection>
+            <block id="gold_block" />
+            <block id="lapis_block" />
+        </collection>
+    </replace>
+    <replace>
+        <type>stairs</type>
+        <block id="prismarine_stairs" />
+    </replace>
+    <replace>
+        <type>slab</type>
+        <block id="prismarine_slab" />
+    </replace>
+    <replace>
+        <type>stairs_wall</type>
+        <block id="prismarine_brick_stairs" />
+    </replace>
+    <replace>
+        <type>slab_wall</type>
+        <block id="prismarine_brick_slab" />
+    </replace>
+    <replace>
+        <type>farmland</type>
+        <type>dirt</type>
+        <type>grass</type>
+        <type>falling</type>
+        <block id="sand" />
+    </replace>
+    <replace>
+        <type>fruit</type>
+        <collection>
+            <block id="wet_sponge" />
+            <tag weight="0.2" id="#coral_blocks"></tag>
+        </collection>
+    </replace>
+    <replace>
+        <type>crop</type>
+        <block id="sugar_cane" />
+    </replace>
+    <replace>
+        <type>wall_block</type>
+        <block id="prismarine_wall" />
+    </replace>
+    <replace>
+        <type>plant</type>
+        <tag id="#corals"></tag>
+    </replace>
+</palette>

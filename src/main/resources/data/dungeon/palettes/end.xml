@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<palette weight="1" biome="end" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com" xsi:schemaLocation="https://www.w3schools.com palette.xsd">
+    <replace>
+        <type>floor</type>
+        <block id="end_stone" />
+    </replace>
+    <replace>
+        <type>path</type>
+        <block id="end_stone_bricks" />
+    </replace>
+    <replace>
+        <type>wall</type>
+        <block id="purpur_block" />
+    </replace>
+    <replace>
+        <type>pillar</type>
+        <block id="purpur_pillar" />
+    </replace>
+    <replace>
+        <type>gem</type>
+        <block id="obsidian" />
+    </replace>
+    <replace>
+        <type>stairs</type>
+        <block id="end_stone_brick_stairs" />
+    </replace>
+    <replace>
+        <type>slab</type>
+        <block id="end_stone_brick_slab" />
+    </replace>
+    <replace>
+        <type>stairs_wall</type>
+        <block id="purpur_stairs" />
+    </replace>
+    <replace>
+        <type>slab_wall</type>
+        <block id="purpur_slab" />
+    </replace>
+    <replace>
+        <type>falling</type>
+        <block id="black_concrete_powder" />
+    </replace>
+    <replace>
+        <type>crop</type>
+        <block id="air" />
+    </replace>
+    <replace>
+        <type>glass</type>
+        <block id="purple_stained_glass" />
+    </replace>
+    <replace>
+        <type>wall_block</type>
+        <block id="end_stone_brick_wall" />
+    </replace>
+    <mob weight="1" id="shulker" />
+    <mob weight="0.5" id="endermite" />
+    <mob weight="0.1" id="enderman" />
+</palette>

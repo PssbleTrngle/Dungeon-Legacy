@@ -14,10 +14,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.command.arguments.BlockPosArgument;
-import net.minecraft.command.arguments.BlockStateInput;
 import net.minecraft.command.arguments.ResourceLocationArgument;
-import net.minecraft.command.arguments.serializers.IntArgumentSerializer;
-import net.minecraft.command.impl.FillCommand;
 import net.minecraft.inventory.IClearable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.CachedBlockInfo;
@@ -26,22 +23,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.registries.IForgeRegistry;
-import possibletriangle.dungeon.common.block.Palette;
+import possibletriangle.dungeon.palette.Palette;
 import possibletriangle.dungeon.common.block.placeholder.IPlaceholder;
 
-import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class PaletteCommand {
 
     private static final Random RANDOM = new Random();
-    private static final IForgeRegistry<Palette> PALETTES = GameRegistry.findRegistry(Palette.class);
 
-    public static final SuggestionProvider<CommandSource> paletteSuggestions = (ctx, builder) -> ISuggestionProvider.suggestIterable(PALETTES.getKeys(), builder);
+    public static final SuggestionProvider<CommandSource> paletteSuggestions = (ctx, builder) -> ISuggestionProvider.suggestIterable(Palette.keys(), builder);
 
     private static final int MAX_SIZE = 32768;
     private static final Dynamic2CommandExceptionType TOO_BIG_EXCEPTION = new Dynamic2CommandExceptionType((max, size) -> new TranslationTextComponent("commands.fill.toobig", max, size));
@@ -80,8 +72,7 @@ public class PaletteCommand {
 
     private static Palette getPalette(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
         ResourceLocation name = ResourceLocationArgument.getResourceLocation(ctx, "palette");
-        Palette palette = PALETTES.getValue(name);
-        return Optional.ofNullable(palette).orElseThrow(() -> ResourceLocationArgument.UNKNOWN_ID.create(name));
+        return Palette.find(name).orElseThrow(() -> ResourceLocationArgument.UNKNOWN_ID.create(name));
     }
 
     private static int apply(CommandContext<CommandSource> ctx) throws CommandSyntaxException {

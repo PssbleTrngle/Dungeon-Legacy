@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<palette weight="1" biome="mushroom_fields" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.w3schools.com" xsi:schemaLocation="https://www.w3schools.com palette.xsd">
+    <replace>
+        <type>grass</type>
+        <block id="mycelium" />
+    </replace>
+    <replace>
+        <type>leaves</type>
+        <variant>
+            <block id="red_mushroom_block" />
+            <block id="brown_mushroom_block" />
+        </variant>
+    </replace>
+    <replace>
+        <type>log</type>
+        <block id="mushroom_stem" />
+    </replace>
+    <replace>
+        <type>plant</type>
+        <collection>
+            <block id="red_mushroom" />
+            <block id="brown_mushroom" />
+        </collection>
+    </replace>
+</palette>
