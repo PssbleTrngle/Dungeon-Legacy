@@ -33,7 +33,6 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -103,32 +102,6 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
         return Optional.ofNullable(GameRegistry.findRegistry(Block.class).getValue(name));
     }
 
-    public static class StateProviderSupplier {
-        private float weight;
-        public final Supplier<Optional<Stream<IStateProvider>>> supplier;
-
-        public StateProviderSupplier(Supplier<Optional<Stream<IStateProvider>>> supplier) {
-            this.supplier = supplier;
-        }
-
-        float getWeight() {
-            return weight;
-        }
-
-        StateProviderSupplier setWeight(float weight) {
-            this.weight = weight;
-            return this;
-        }
-
-        public <T> Optional<Stream<T>> map(Function<IStateProvider,T> consumer) {
-            return this.supplier.get().map(s -> s.map(consumer));
-        }
-
-        public void forEach(Consumer<IStateProvider> consumer) {
-            this.supplier.get().ifPresent(s -> s.forEach(consumer));
-        }
-    }
-
     private Optional<Tag<Block>> findTag(ResourceLocation name) {
         boolean isMC = name.getNamespace().equals("minecraft");
         return Optional.ofNullable(tags.getBlocks().get(name)).map(Optional::of).orElseGet(
@@ -143,10 +116,10 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
 
                 elements(e, "set").map(c -> {
                     String value = c.getAttribute("value");
-                    return new PropertyProvider(e.getAttribute("key"), (r, p) -> p.parseValue(value).map(Function.identity()));
+                    return new PropertyProvider(c.getAttribute("key"), (r, p) -> p.parseValue(value).map(Function.identity()));
                 }),
 
-                elements(e, "cycle").map(c -> new PropertyProvider(e.getAttribute("key"), (r, p) -> {
+                elements(e, "cycle").map(c -> new PropertyProvider(c.getAttribute("key"), (r, p) -> {
                     Comparable[] v = p.getAllowedValues().toArray(new Comparable[0]);
                     return Optional.of(v[r.nextInt(v.length)]);
                 }))
@@ -177,7 +150,7 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
             case"collection":
                 return Optional.of(new StateProviderSupplier(() -> {
                     BlockCollection collection = new BlockCollection();
-                    children.forEach(provider -> provider.forEach(p -> collection.add(p, provider.weight)));
+                    children.forEach(provider -> provider.forEach(p -> collection.add(p, provider.getWeight())));
                     return Optional.of(collection).map(Stream::of);
                 }));
 
@@ -208,13 +181,15 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
                 .mapToObj(list::item)
                 .filter(Element.class::isInstance)
                 .map(e -> (Element) e)
-                .map(e -> getProvider( e, e.getNodeName().toLowerCase()).map(p -> p.setWeight(getWeight(e))))
+                .map(e -> new Pair<>(e, getProvider( e, e.getNodeName().toLowerCase())))
+                .peek(pair -> pair.getSecond().ifPresent(p -> {
+                    PropertyProvider[] properties = findProperties(pair.getFirst());
+                    p.setWeight(getWeight(pair.getFirst()));
+                    p.setProperties(properties);
+                }))
+                .map(Pair::getSecond)
                 .filter(Optional::isPresent)
-                .map(Optional::get)
-                .peek(p -> {
-                    PropertyProvider[] properties = findProperties(e);
-                    if(p instanceof StateProvider) ((StateProvider) p).setProperties(properties);
-                });
+                .map(Optional::get);
     }
 
     private static float getWeight(Element e) {
@@ -231,8 +206,6 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
             factory.setSchema(getSchema());
-            //factory.setAttribute("http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-            //        "http://www.w3.org/2001/XMLSchema");
             DocumentBuilder builder = factory.newDocumentBuilder();
             builder.setErrorHandler(new ErrorHandler());
 
@@ -262,7 +235,7 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
                 replaces.forEach(pair -> {
                     Type[] types = pair.getFirst();
                      IStateProvider[] providers = pair.getSecond().stream()
-                            .map(s -> s.supplier.get())
+                            .map(StateProviderSupplier::supply)
                             .filter(Optional::isPresent)
                             .map(Optional::get)
                             .flatMap(Function.identity())

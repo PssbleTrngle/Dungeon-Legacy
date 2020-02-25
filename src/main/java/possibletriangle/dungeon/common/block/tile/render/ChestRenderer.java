@@ -1,6 +1,13 @@
 package possibletriangle.dungeon.common.block.tile.render;
 
-public class PlaceholderChestRender extends ChestTileEntityRenderer<ChestTileEntity> {
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.tileentity.ChestTileEntityRenderer;
+import net.minecraft.tileentity.ChestTileEntity;
+import net.minecraft.util.ResourceLocation;
+import possibletriangle.dungeon.common.block.placeholder.PlaceholderChest;
+import possibletriangle.dungeon.common.block.placeholder.PlaceholderTrappedChest;
+
+public class ChestRenderer extends ChestTileEntityRenderer<ChestTileEntity> {
 
     private ChestTileEntity tile;
 
@@ -8,8 +15,8 @@ public class PlaceholderChestRender extends ChestTileEntityRenderer<ChestTileEnt
 
 	@Override
 	public void render(ChestTileEntity tile, double x, double y, double z, float partialTicks, int destroyStage) {
-		tile = tile;
-		super.render(tileEntityIn, x, y, z, partialTicks, destroyStage);
+		this.tile = tile;
+		super.render(tile, x, y, z, partialTicks, destroyStage);
     }
     
     @Override
@@ -19,11 +26,11 @@ public class PlaceholderChestRender extends ChestTileEntityRenderer<ChestTileEnt
 		if(tile != null && tile.hasWorld()) {
 			if(location.getPath().contains("normal")) {
 				Block block = tile.getBlockState().getBlock();
-				if(block instanceof VariantChestBlock) {
-					VariantChestBlock vblock = (VariantChestBlock) block;
+				if(block instanceof PlaceholderChest) {
+					PlaceholderChest vblock = (PlaceholderChest) block;
 					location = isDouble ? vblock.modelDouble : vblock.modelNormal;
-				} else if(block instanceof VariantTrappedChestBlock) {
-					VariantTrappedChestBlock vblock = (VariantTrappedChestBlock) block;
+				} else if(block instanceof PlaceholderTrappedChest) {
+					PlaceholderTrappedChest vblock = (PlaceholderTrappedChest) block;
 					location = isDouble ? vblock.modelDouble : vblock.modelNormal;
 				}
 			}

@@ -23,11 +23,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.server.ServerWorld;
-import possibletriangle.dungeon.palette.Palette;
 import possibletriangle.dungeon.common.block.placeholder.IPlaceholder;
+import possibletriangle.dungeon.helper.Pair;
+import possibletriangle.dungeon.palette.Palette;
 
+import java.util.Collection;
+import java.util.Optional;
 import java.util.Random;
-import java.util.stream.StreamSupport;
+import java.util.stream.Collectors;
 
 public class PaletteCommand {
 
@@ -98,8 +101,7 @@ public class PaletteCommand {
 
         Random random = new Random(seed);
 
-        Iterable<BlockPos> iterable = BlockPos.getAllInBoxMutable(area.minX, area.minY, area.minZ, area.maxX, area.maxY, area.maxZ);
-        return (int) StreamSupport.stream(iterable.spliterator(), false).filter(pos -> {
+        Collection<Pair<BlockPos,BlockState>> map = BlockPos.getAllInBox(area.minX, area.minY, area.minZ, area.maxX, area.maxY, area.maxZ).map(pos -> {
             TileEntity tileentity = world.getTileEntity(pos);
             IClearable.clearObj(tileentity);
 
@@ -107,11 +109,17 @@ public class PaletteCommand {
             Block current = block.getBlock();
             if(current instanceof IPlaceholder) {
                 BlockState replace = palette.blockFor(((IPlaceholder) current).getType(), random, variant, block);
-                return world.setBlockState(pos, replace, 2);
+                return Optional.of(new Pair<>(new BlockPos(pos), replace));
             }
 
-            return false;
-        }).peek(pos -> world.notifyNeighbors(pos, world.getBlockState(pos).getBlock())).count();
+            return Optional.<Pair<BlockPos,BlockState>>empty();
+        }).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+
+        return (int) map.stream()
+                .filter(pair -> world.setBlockState(pair.getFirst(), pair.getSecond(), 2))
+                .map(Pair::getFirst)
+                .peek(pos -> world.notifyNeighbors(pos, world.getBlockState(pos).getBlock()))
+                .count();
     }
 
 }

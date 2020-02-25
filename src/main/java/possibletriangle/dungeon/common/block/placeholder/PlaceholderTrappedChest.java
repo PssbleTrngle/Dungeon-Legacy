@@ -1,27 +1,36 @@
 package possibletriangle.dungeon.common.block.placeholder;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.TrappedChestBlock;
+import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockReader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
+import possibletriangle.dungeon.common.block.tile.TrappedChestTile;
+import possibletriangle.dungeon.common.block.tile.render.ChestRenderer;
 
-import java.util.function.Function;
+import javax.annotation.Nullable;
 
 @ObjectHolder(DungeonMod.ID)
-public class PlaceholderTrappedChest extends TrappedChestBlock   implements IPlaceholder {
+public class PlaceholderTrappedChest extends TrappedChestBlock implements IPlaceholder {
 
     private final Type type;
 	public final ResourceLocation modelNormal, modelDouble;
 
-    public PlaceholderChest(Type type) {
-        super(PlaceholderTrappedChest.PROPERTIES());
+    public PlaceholderTrappedChest(Type type) {
+        super(TemplateBlock.PROPERTIES());
         this.type = type;
 
         final String name = "placeholder_" + type.name().toLowerCase();
         setRegistryName(name);
-		this.modelNormal = new ResourceLocation(Quark.MOD_ID, "textures/model/chest/" + name + ".png");
-		this.modelDouble = new ResourceLocation(Quark.MOD_ID, "textures/model/chest/" + name + "_double.png");
+		this.modelNormal = new ResourceLocation(DungeonMod.ID, "textures/model/chest/" + name + ".png");
+		this.modelDouble = new ResourceLocation(DungeonMod.ID, "textures/model/chest/" + name + "_double.png");
     }
 
     @Override
@@ -31,7 +40,7 @@ public class PlaceholderTrappedChest extends TrappedChestBlock   implements IPla
 
 	@Override
 	public TileEntity createNewTileEntity(@Nullable IBlockReader world) {
-		return new PlaceholderTrappedChestTile();
+		return new TrappedChestTile();
     }
 	
     @Override
@@ -42,8 +51,8 @@ public class PlaceholderTrappedChest extends TrappedChestBlock   implements IPla
 			
 			@Override
 			public void renderByItem(ItemStack itemStackIn) {
-				PlaceholderChestRender.forceNormal = modelNormal;
-				PlaceholderChestRender.forceDouble = modelDouble;
+				ChestRenderer.forceNormal = modelNormal;
+				ChestRenderer.forceDouble = modelDouble;
 				TileEntityRendererDispatcher.instance.renderAsItem(tile);
 			}
 		});

@@ -10,10 +10,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import possibletriangle.dungeon.common.block.placeholder.IPlaceholder;
-import possibletriangle.dungeon.palette.Palette;
 import possibletriangle.dungeon.common.block.placeholder.Type;
 import possibletriangle.dungeon.common.data.loot.DungeonLoot;
+import possibletriangle.dungeon.palette.Palette;
 
+import java.util.Optional;
 import java.util.Random;
 
 public class DungeonChunk {
@@ -56,7 +57,11 @@ public class DungeonChunk {
         BlockPos rotated = rotate(pos, rotation);
         BlockPos real = getPos().asBlockPos().add(rotated);
         BlockState placed = getBlockState(pos);
+
         /* TODO find tile entity type for placed block and set it in the compound */
+        if(placed.getBlock().hasTileEntity(placed)) Optional.ofNullable(placed.getBlock().createTileEntity(placed, null)).ifPresent(te ->
+            nbt.putString("id", te.getType().getRegistryName().toString())
+        );
 
         nbt.putInt("x", real.getX());
         nbt.putInt("y", real.getY());

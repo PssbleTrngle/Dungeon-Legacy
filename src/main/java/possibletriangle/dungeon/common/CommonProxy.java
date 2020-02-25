@@ -21,9 +21,13 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.RegistryBuilder;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.common.block.*;
+import possibletriangle.dungeon.common.block.placeholder.IPlaceholder;
+import possibletriangle.dungeon.common.block.placeholder.PlaceholderChest;
 import possibletriangle.dungeon.common.block.placeholder.Type;
+import possibletriangle.dungeon.common.block.tile.ChestTile;
 import possibletriangle.dungeon.common.block.tile.MetadataTile;
 import possibletriangle.dungeon.common.block.tile.ObeliskTile;
+import possibletriangle.dungeon.common.block.tile.TrappedChestTile;
 import possibletriangle.dungeon.common.entity.GrenadeEntity;
 import possibletriangle.dungeon.common.item.ScrollItem;
 import possibletriangle.dungeon.common.item.grenade.GrenadeFrost;
@@ -145,6 +149,16 @@ public class CommonProxy {
                     .build(null)
                     .setRegistryName(DungeonMod.ID, "obelisk")
             );
+            event.getRegistry().register(TileEntityType.Builder.create(
+                    ChestTile::new, PlaceholderChest.CHEST)
+                    .build(null)
+                    .setRegistryName(DungeonMod.ID, "chest")
+            );
+            event.getRegistry().register(TileEntityType.Builder.create(
+                    TrappedChestTile::new, PlaceholderChest.TRAPPED_CHEST)
+                    .build(null)
+                    .setRegistryName(DungeonMod.ID, "trapped_chest")
+            );
         }
 
         private static final ArrayList<Block> BLOCKS = new ArrayList<>();
@@ -180,7 +194,7 @@ public class CommonProxy {
 
         private static Item.Properties createProps(Block block) {
             Item.Properties props = new Item.Properties().group(DungeonMod.GROUP);
-            if(block instanceof IPlaceholder) ((IPlaceholder) b).modifyItem(props);
+            if(block instanceof IPlaceholder) ((IPlaceholder) block).modifyItem(props);
             return props;
         }
 

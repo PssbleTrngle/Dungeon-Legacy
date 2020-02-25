@@ -1,13 +1,9 @@
 package possibletriangle.dungeon.palette;
 
-import com.mojang.brigadier.arguments.IntegerArgumentType;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 
 import java.util.Arrays;
 import java.util.Random;
-import java.util.function.BiFunction;
-import java.util.stream.Stream;
 
 public abstract class StateProvider implements IStateProvider {
 
@@ -15,7 +11,6 @@ public abstract class StateProvider implements IStateProvider {
 
     void setProperties(PropertyProvider[] properties) {
         this.properties = properties;
-        return this;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package possibletriangle.dungeon.common.block.placeholder;
 
+import net.minecraft.item.Item;
+
 public interface IPlaceholder {
 
     /**
@@ -7,6 +9,6 @@ public interface IPlaceholder {
      */
     Type getType();
 
-    default void modifyItem(Item.Properties rops) {}
+    default void modifyItem(Item.Properties props) {}
 
 }
