@@ -84,10 +84,16 @@ public class DungeonChunk {
                 nbt.put("SpawnPotentials", potentials);
                 break;
 
+            case "minecraft:dropper":
             case "minecraft:chest":
-                DungeonLoot.Rarity rarity = random.nextInt(4) == 0 ? DungeonLoot.Rarity.COMMON : DungeonLoot.Rarity.RARE;
-                nbt.putString("LootTable", rarity.path().toString());
-                nbt.putLong("LootTableSeed", random.nextLong());
+            case "minecraft:barrel":
+            case "quark:variant_chest":
+                ListNBT items = nbt.getList("Items", 10);
+                if(items.isEmpty()) {
+                    DungeonLoot.Rarity rarity = random.nextInt(4) == 0 ? DungeonLoot.Rarity.COMMON : DungeonLoot.Rarity.RARE;
+                    nbt.putString("LootTable", rarity.path().toString());
+                    nbt.putLong("LootTableSeed", random.nextLong());
+                }
                 break;
 
         }
