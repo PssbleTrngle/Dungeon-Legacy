@@ -138,6 +138,22 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
                 });
     }
 
+    private static PropertyProvider[] findProperties(Element e) {
+        return Stream.of(
+
+                elements(e, "set").map(c -> {
+                    String value = c.getAttribute("value");
+                    return new PropertyProvider(e.getAttribute("key"), (r, p) -> p.parseValue(value).map(Function.identity()));
+                }),
+
+                elements(e, "cycle").map(c -> new PropertyProvider(e.getAttribute("key"), (r, p) -> {
+                    Comparable[] v = p.getAllowedValues().toArray(new Comparable[0]);
+                    return Optional.of(v[r.nextInt(v.length)]);
+                }))
+
+        ).flatMap(Function.identity()).toArray(PropertyProvider[]::new);
+    }
+
     private Optional<StateProviderSupplier> getProvider(Element e, String type) {
         String id = e.getAttribute("id");
         if(id.startsWith("#")) id = id.substring(1);
@@ -194,7 +210,11 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
                 .map(e -> (Element) e)
                 .map(e -> getProvider( e, e.getNodeName().toLowerCase()).map(p -> p.setWeight(getWeight(e))))
                 .filter(Optional::isPresent)
-                .map(Optional::get);
+                .map(Optional::get)
+                .peek(p -> {
+                    PropertyProvider[] properties = findProperties(e);
+                    if(p instanceof StateProvider) ((StateProvider) p).setProperties(properties);
+                });
     }
 
     private static float getWeight(Element e) {

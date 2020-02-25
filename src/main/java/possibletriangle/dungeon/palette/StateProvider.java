@@ -13,7 +13,7 @@ public abstract class StateProvider implements IStateProvider {
 
     private PropertyProvider[] properties = new PropertyProvider[0];
 
-    StateProvider setProperties(PropertyProvider[] properties) {
+    void setProperties(PropertyProvider[] properties) {
         this.properties = properties;
         return this;
     }

@@ -64,6 +64,8 @@
     </replace>
     <replace>
         <type>plant</type>
-        <tag id="#corals"></tag>
+        <tag id="#corals">
+            <set key="waterlogged" value="false" />
+        </tag>
     </replace>
 </palette>
