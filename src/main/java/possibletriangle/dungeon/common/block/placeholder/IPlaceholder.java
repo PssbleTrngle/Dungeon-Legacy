@@ -7,4 +7,6 @@ public interface IPlaceholder {
      */
     Type getType();
 
+    default void modifyItem(Item.Properties rops) {}
+
 }

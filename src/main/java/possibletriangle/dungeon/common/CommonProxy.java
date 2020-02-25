@@ -178,12 +178,17 @@ public class CommonProxy {
 
         }
 
+        private static Item.Properties createProps(Block block) {
+            Item.Properties props = new Item.Properties().group(DungeonMod.GROUP);
+            if(block instanceof IPlaceholder) ((IPlaceholder) b).modifyItem(props);
+            return props;
+        }
+
         @SubscribeEvent
         public static void onItemsRegistry(final RegistryEvent.Register<Item> event) {
-            Item.Properties properties = new Item.Properties().group(DungeonMod.GROUP);
             BLOCKS.stream()
                     .filter(b -> b.getRegistryName() != null)
-                    .map(b -> new BlockItem(b, properties).setRegistryName(b.getRegistryName()))
+                    .map(b -> new BlockItem(b, createProps(b)).setRegistryName(b.getRegistryName()))
                     .forEach(event.getRegistry()::register);
 
             event.getRegistry().registerAll(

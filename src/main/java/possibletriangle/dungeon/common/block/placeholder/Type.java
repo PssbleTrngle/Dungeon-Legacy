@@ -53,6 +53,9 @@ public class Type<T extends Block> {
     public static final Type<AbstractButtonBlock> BUTTON = new Type<>("BUTTON", TemplateButton::new, Placeholders.button(() -> TemplateBlock.WALL));
     public static final Type<LeverBlock> LEVER = new Type<>("LEVER", TemplateLever::new, Placeholders.lever(() -> TemplateBlock.WALL));
 
+    public static final Type<ChestBlock> CHEST = new Type<>("chest", PlaceholderChest::new, (t, p) -> {});
+    public static final Type<TrappedChestBlock> TRAPPED_CHEST = new Type<>("trapped_chest", PlaceholderTrappedChest::new, (t, p) -> {});
+
     private final Function<Type<T>, T> block;
     private final BiConsumer<T, Placeholders> model;
     private final String name;
