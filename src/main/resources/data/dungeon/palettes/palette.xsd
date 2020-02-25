@@ -46,6 +46,8 @@
 			<xsd:enumeration value="pressure_plate" />
 			<xsd:enumeration value="button" />
 			<xsd:enumeration value="lever" />
+			<xsd:enumeration value="chest" />
+			<xsd:enumeration value="trapped_chest" />
 		</xsd:restriction>
 	</xsd:simpleType>
 

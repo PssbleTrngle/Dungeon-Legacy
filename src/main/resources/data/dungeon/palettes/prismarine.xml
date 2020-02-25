@@ -68,4 +68,29 @@
             <set key="waterlogged" value="false" />
         </tag>
     </replace>
+    <replace>
+        <type>fence</type>
+        <block id="jungle_fence" />
+    </replace>
+    <replace>
+        <type>planks</type>
+        <block id="jungle_planks" />
+    </replace>
+    <replace>
+        <type>log</type>
+        <block id="jungle_log" />
+    </replace>
+    <replace>
+        <type>leaves</type>
+        <block id="jungle_leaves" />
+    </replace>
+    <replace>
+        <type>stairs_wood</type>
+        <block id="jungle_stairs" />
+    </replace>
+    <replace>
+        <type>slab_wood</type>
+        <block id="jungle_slab" />
+    </replace>
+    <mob id="drowned" />
 </palette>

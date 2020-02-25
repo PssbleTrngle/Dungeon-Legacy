@@ -195,6 +195,14 @@
 		<type>bookshelf</type>
 		<block id="bookshelf" />
 	</replace>
+	<replace>
+		<type>chest</type>
+		<block id="chest" />
+	</replace>
+	<replace>
+		<type>trapped_chest</type>
+		<block id="trapped_chest" />
+	</replace>
 	<mob weight="1" id="zombie" />
 	<mob weight="0.1" id="creeper" />
 </palette>
