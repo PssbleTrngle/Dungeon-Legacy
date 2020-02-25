@@ -55,6 +55,8 @@ public class DungeonChunk {
         Rotation rotation = pos.getX() * pos.getZ() == 0 ? Rotation.NONE : this.placement.getRotation();
         BlockPos rotated = rotate(pos, rotation);
         BlockPos real = getPos().asBlockPos().add(rotated);
+        BlockState placed = getBlockState(pos);
+        /* TODO find tile entity type for placed block and set it in the compound */
 
         nbt.putInt("x", real.getX());
         nbt.putInt("y", real.getY());
