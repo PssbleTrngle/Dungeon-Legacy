@@ -16,10 +16,10 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import possibletriangle.dungeon.client.ClientProxy;
-import possibletriangle.dungeon.common.CommonProxy;
-import possibletriangle.dungeon.common.block.placeholder.TemplateBlock;
-import possibletriangle.dungeon.common.command.DungeonCommand;
+import possibletriangle.dungeon.proxy.ClientProxy;
+import possibletriangle.dungeon.block.placeholder.TemplateBlock;
+import possibletriangle.dungeon.command.DungeonCommand;
+import possibletriangle.dungeon.proxy.CommonProxy;
 
 @Mod(DungeonMod.ID)
 public class DungeonMod {

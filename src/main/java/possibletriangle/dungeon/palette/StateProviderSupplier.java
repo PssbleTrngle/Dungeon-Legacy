@@ -1,6 +1,9 @@
 package possibletriangle.dungeon.palette;
 
 
+import possibletriangle.dungeon.palette.providers.IStateProvider;
+import possibletriangle.dungeon.palette.providers.StateProvider;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;

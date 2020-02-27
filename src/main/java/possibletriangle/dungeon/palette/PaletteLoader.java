@@ -18,8 +18,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import possibletriangle.dungeon.DungeonMod;
-import possibletriangle.dungeon.common.block.placeholder.Type;
-import possibletriangle.dungeon.helper.Pair;
+import possibletriangle.dungeon.block.placeholder.Type;
+import possibletriangle.dungeon.palette.providers.*;
+import possibletriangle.dungeon.util.Pair;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;

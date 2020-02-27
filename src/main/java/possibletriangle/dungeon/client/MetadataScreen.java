@@ -10,17 +10,16 @@ import net.minecraft.nbt.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.StringTextComponent;
-import possibletriangle.dungeon.common.block.tile.MetadataTile;
-import possibletriangle.dungeon.common.world.structure.metadata.Part;
-import possibletriangle.dungeon.common.world.structure.metadata.StructureMetadata;
-import possibletriangle.dungeon.common.world.structure.metadata.condition.CategoryCondition;
-import possibletriangle.dungeon.helper.Pair;
+import possibletriangle.dungeon.block.tile.MetadataTile;
+import possibletriangle.dungeon.world.structure.metadata.Part;
+import possibletriangle.dungeon.world.structure.metadata.StructureMetadata;
+import possibletriangle.dungeon.world.structure.metadata.condition.CategoryCondition;
+import possibletriangle.dungeon.util.Pair;
 
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.function.Supplier;
 
 public class MetadataScreen extends Screen {

@@ -9,9 +9,11 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
-import possibletriangle.dungeon.common.block.placeholder.IPlaceholder;
-import possibletriangle.dungeon.common.block.placeholder.Type;
-import possibletriangle.dungeon.helper.RandomCollection;
+import possibletriangle.dungeon.block.placeholder.IPlaceholder;
+import possibletriangle.dungeon.block.placeholder.Type;
+import possibletriangle.dungeon.palette.providers.BlockProvider;
+import possibletriangle.dungeon.palette.providers.IStateProvider;
+import possibletriangle.dungeon.util.RandomCollection;
 
 import java.util.Collection;
 import java.util.HashMap;
