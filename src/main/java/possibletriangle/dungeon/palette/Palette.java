@@ -42,6 +42,14 @@ public class Palette {
     public final Supplier<Biome> biome;
     private final ResourceLocation name;
 
+    public float getWeight() {
+        return weight;
+    }
+
+    public Biome getBiome() {
+        return this.biome.get();
+    }
+
     public ResourceLocation getName() {
         return this.name;
     }

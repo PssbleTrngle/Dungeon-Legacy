@@ -10,10 +10,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
+import possibletriangle.dungeon.util.Pair;
 import possibletriangle.dungeon.world.generator.DungeonChunkGenerator;
 import possibletriangle.dungeon.world.structure.IStructure;
 import possibletriangle.dungeon.world.structure.metadata.StructureMetadata;
-import possibletriangle.dungeon.util.Pair;
 
 import java.util.Optional;
 
@@ -57,7 +57,7 @@ public class RoomCommand {
 
             return pair.isPresent() ? 1 : 0;
 
-        }).orElseGet(() ->{
+        }).orElseGet(() -> {
 
             source.sendFeedback(new TranslationTextComponent("command.dungeon.get.no_dungeon"), false);
             return 0;

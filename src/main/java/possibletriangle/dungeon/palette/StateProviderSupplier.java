@@ -2,7 +2,6 @@ package possibletriangle.dungeon.palette;
 
 
 import possibletriangle.dungeon.palette.providers.IStateProvider;
-import possibletriangle.dungeon.palette.providers.StateProvider;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -32,9 +31,7 @@ public class StateProviderSupplier {
     }
 
     public Optional<Stream<IStateProvider>> supply() {
-        return this.supplier.get().map(s -> s.peek(p -> {
-            if(p instanceof StateProvider) ((StateProvider) p).setProperties(properties);
-        }));
+        return this.supplier.get().map(s -> s.peek(p -> p.setProperties(properties)));
     }
 
     public <T> Optional<Stream<T>> map(Function<IStateProvider,T> consumer) {
