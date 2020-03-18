@@ -2,6 +2,7 @@ package possibletriangle.dungeon.palette.providers;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import possibletriangle.dungeon.palette.PropertyProvider;
 
 import java.util.Random;
 import java.util.stream.Stream;
@@ -24,5 +25,7 @@ public interface IStateProvider {
     default boolean isValid() {
         return true;
     }
+
+    default void setProperties(PropertyProvider[] properties) {}
 
 }

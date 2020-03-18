@@ -11,10 +11,10 @@
         <type>pillar</type>
         <type>stripped_log</type>
         <variant>
-            <block id="stripped_dark_oak_log"></block>
-            <block id="stripped_spruce_log"></block>
-            <block id="stripped_jungle_log"></block>
-            <block id="stripped_oak_log"></block>
+            <block id="stripped_dark_oak_log"/>
+            <block id="stripped_spruce_log"/>
+            <block id="stripped_jungle_log"/>
+            <block id="stripped_oak_log"/>
         </variant>
     </replace>
     <replace>

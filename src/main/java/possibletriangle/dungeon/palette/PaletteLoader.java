@@ -10,6 +10,7 @@ import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -35,6 +36,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -219,6 +221,23 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
             Biome biome = GameRegistry.findRegistry(Biome.class).getValue(new ResourceLocation(paletteNode.getAttribute("biome")));
             final String parent = paletteNode.hasAttribute("parent") ? paletteNode.getAttribute("parent") : "dungeon:stone";
 
+            /* Find the dimensions */
+            Optional<Predicate<DimensionType>> dimension = elements(paletteNode, "dimensions").findFirst().map(dimensions -> {
+                String type = dimensions.getAttribute("type");
+                List<String> ids = elements(dimensions, "entry")
+                        .map(Node::getTextContent)
+                        .map(ResourceLocation::new)
+                        .map(ResourceLocation::toString)
+                        .collect(Collectors.toList());
+                Predicate<DimensionType> contains = t -> ids.contains(t.getRegistryName().toString());
+                switch(type) {
+                    case "whitelist": return contains;
+                    case "blacklist": return contains.negate();
+                    default: return t -> false;
+                }
+            });
+
+            /* Find the blocks */
             List<Pair<Type[],List<StateProviderSupplier>>> replaces = elements(paletteNode, "replace").map(replace -> {
                 Type[] types = elements(replace, "type")
                         .map(Node::getTextContent)
@@ -231,7 +250,13 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
             }).collect(Collectors.toList());
 
             return Optional.of(() -> {
-                Palette palette = new Palette(name, weight, () -> Optional.ofNullable(biome).orElse(Biomes.THE_VOID), new ResourceLocation(parent));
+                Palette palette = new Palette(
+                        name,
+                        weight,
+                        Optional.ofNullable(biome).orElse(Biomes.THE_VOID),
+                        new ResourceLocation(parent),
+                        dimension.orElse(null)
+                );
 
                 replaces.forEach(pair -> {
                     Type[] types = pair.getFirst();

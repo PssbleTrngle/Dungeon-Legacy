@@ -5,6 +5,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ObjectHolder;
@@ -15,12 +16,12 @@ import possibletriangle.dungeon.palette.providers.BlockProvider;
 import possibletriangle.dungeon.palette.providers.IStateProvider;
 import possibletriangle.dungeon.util.RandomCollection;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,10 +38,12 @@ public class Palette {
     private static final RandomCollection<Palette> VALUES = new RandomCollection<>();
 
     private final HashMap<Type<?>, IStateProvider> blocks = new HashMap<>();
-    private final float weight;
+    public final float weight;
     private final ResourceLocation parent;
-    public final Supplier<Biome> biome;
+    public final Biome biome;
     private final ResourceLocation name;
+    @Nullable
+    private final Predicate<DimensionType> dimensions;
 
     public ResourceLocation getName() {
         return this.name;
@@ -54,21 +57,17 @@ public class Palette {
      * @param biome The biome associated with this palette
      * @param parent The palette used as a fallback
      */
-    public Palette(ResourceLocation name, float weight, Supplier<Biome> biome, ResourceLocation parent) {
+    public Palette(ResourceLocation name, float weight, Biome biome, ResourceLocation parent, Predicate<DimensionType> dimensions) {
         this.parent = parent;
         this.biome = biome;
         this.weight = weight;
         this.name = name;
+        this.dimensions = dimensions;
     }
 
-    public Palette addMobs(RandomCollection<ResourceLocation> mobs) {
-        this.mobs.addAll(mobs.filter(FILTER));
-        return this;
-    }
-
-    public Palette setMobs(RandomCollection<ResourceLocation> mobs) {
-        this.mobs = mobs.filter(FILTER);
-        return this;
+    public boolean validDimension(DimensionType type) {
+        if(this.dimensions != null) return this.dimensions.test(type);
+        return getParent().map(p -> p.validDimension(type)).orElse(false);
     }
 
     /**

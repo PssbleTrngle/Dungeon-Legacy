@@ -1,38 +1,32 @@
 package possibletriangle.dungeon.world.generator;
 
-import possibletriangle.dungeon.util.Pair;
+import com.google.common.collect.Maps;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.WorldGenRegion;
-import possibletriangle.dungeon.palette.Palette;
 import possibletriangle.dungeon.block.placeholder.TemplateBlock;
-import possibletriangle.dungeon.world.DungeonWorldType;
+import possibletriangle.dungeon.palette.Palette;
+import possibletriangle.dungeon.util.Pair;
 import possibletriangle.dungeon.world.Wall;
 import possibletriangle.dungeon.world.structure.IStructure;
-import possibletriangle.dungeon.world.structure.Structures;
 import possibletriangle.dungeon.world.structure.StructureType;
+import possibletriangle.dungeon.world.structure.Structures;
 import possibletriangle.dungeon.world.structure.metadata.Part;
 
 import java.util.*;
 
 public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
 
-    public static Optional<DungeonSettings> getSettings(World world) {
-        if(world.getWorldType() instanceof DungeonWorldType) {
-            world.getWorldInfo().getGeneratorOptions();
-            return Optional.of(new DungeonSettings());
-        }
-        return Optional.empty();
+    public static Optional<DungeonSettings> getSettings(IWorld world) {
+        return getGenerator(world).map(ChunkGenerator::getSettings);
     }
 
     /**
@@ -45,7 +39,7 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
     }
 
     public DungeonChunkGenerator(World world, DungeonSettings settings) {
-        super(world, new DungeonBiomeProvider(world), settings);
+        super(world, new PaletteProvider(world), settings);
     }
 
     public static Optional<Pair<Integer, IStructure>> roomAt(BlockPos pos, World world) {
@@ -54,10 +48,10 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
         Map<Integer, IStructure> rooms = roomsFor(world, chunk);
         int floor = pos.getY() / (DungeonSettings.FLOOR_HEIGHT + 1);
 
-        int nextFloor = rooms.keySet().stream().filter(f -> f <= floor).max(Comparator.comparingInt(a -> a)).orElseGet(() -> 0);
+        int nextFloor = rooms.keySet().stream().filter(f -> f <= floor).max(Comparator.comparingInt(a -> a)).orElse(0);
         IStructure room = rooms.get(nextFloor);
         if(room == null) return Optional.empty();
-        return Optional.of(new Pair(floor, room));
+        return Optional.of(new Pair<>(floor, room));
 
     }
 
@@ -81,15 +75,6 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
     }
 
     @Override
-    public void generateBiomes(IChunk chunk) {
-        Biome biome = Optional.ofNullable(paletteFor(chunk.getPos(), world.getSeed()).biome.get()).orElseGet(() -> Biomes.THE_VOID);
-        Biome[] biomes = new Biome[16 * 16];
-        for(int x = 0; x < biomes.length; x++)
-            biomes[x] = biome;
-        chunk.setBiomes(biomes);
-    }
-
-    @Override
     public void carve(IChunk chunkIn, GenerationStage.Carving carvingSettings) {}
 
     /**
@@ -97,6 +82,22 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
      */
     private static boolean fits(IStructure structure, GenerationContext ctx) {
         return structure != null && structure.getSize().getY() <= ctx.settings.floors - ctx.getFloor() && structure.getMeta().getPredicate().test(ctx);
+    }
+
+    public static Optional<DungeonChunkGenerator> getGenerator(IWorld world) {
+        ChunkGenerator generator = world.getChunkProvider().getChunkGenerator();
+        if(generator instanceof DungeonChunkGenerator) return Optional.of((DungeonChunkGenerator) generator);
+        return Optional.empty();
+    }
+
+    public static Palette paletteAt(ChunkPos pos, IWorld world) {
+        return getGenerator(world).orElseThrow(UnsupportedOperationException::new)
+                .getPaletteProvider().getPalette(pos);
+    }
+
+    private PaletteProvider getPaletteProvider() {
+        if(this.biomeProvider instanceof PaletteProvider) return ((PaletteProvider) this.biomeProvider);
+        throw new ClassCastException("BiomeProvider used for ChunkGenerator has to extend PaletteProvider.class");
     }
 
     /**
@@ -115,51 +116,50 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
         return structure;
     }
 
-    public static Palette paletteFor(ChunkPos pos, long seed) {
-        Random random = chunkSeed(seed, pos);
-        return Palette.random(random);
-    }
-    
-    public static Map<Integer, IStructure> roomsFor(World world, ChunkPos pos) {
-        /* Get settings from world */
-        return getSettings(world).map(settings -> roomsFor(settings, pos, world.getSeed())).orElseGet(() -> new HashMap<>());
-    }
-
     /**
      * Retrieves all rooms for a specific ChunkPos.
      * Can be called at any time and will always return the same rooms
-     * @param settings The settings of the dungeon
+     * @param world The world
      * @param pos The position of the Chunk
-     * @param seed The worlds seed
      * @return A HashMap containing the rooms with their floor as the key
      */
-    public static Map<Integer, IStructure> roomsFor(DungeonSettings settings, ChunkPos pos, long seed) {
+    public static Map<Integer, IStructure> roomsFor(IWorld world, ChunkPos pos) {
+        return getSettings(world).map(settings -> {
+            Random random = chunkSeed(world.getSeed(), pos);
+            Map<Integer, IStructure> rooms = new HashMap<>();
+            GenerationContext ctx = new GenerationContext(settings, pos, paletteAt(pos, world));
 
-        Random random = chunkSeed(seed, pos);
-        Map<Integer, IStructure> rooms = new HashMap<>();
-        GenerationContext ctx = new GenerationContext(settings, pos, paletteFor(pos, seed));
+            for (int floor = 0; floor < settings.floors; floor++) {
+                ctx.setFloor(floor);
 
-        for(int floor = 0; floor < settings.floors; floor++) {
-            ctx.setFloor(floor);
+                IStructure room = roomFor(random, ctx);
+                rooms.put(floor, room);
 
-            IStructure room = roomFor(random, ctx);
-            rooms.put(floor, room);
+                /* If the room is higher than 1 floor, skip the next floors to not override it */
+                int height = room.getSize().getY();
+                if (height > 1) floor += height - 1;
+            }
 
-            /* If the room is higher than 1 floor, skip the next floors to not override it */
-            int height = room.getSize().getY();
-            if(height > 1) floor += height - 1;
-        }
-
-        return rooms;
+            return rooms;
+        }).orElseGet(Maps::newHashMap);
     }
 
     public static Optional<IStructure> partFor(Part part, Random random) {
         for(int i = 0; i < 20; i++) {
             IStructure structure = Structures.random(StructureType.PART, random);
-            if(part.test(structure) || true) return Optional.of(structure);
+            if(part.test(structure)) return Optional.of(structure);
         }
         return Optional.empty();
     }
+
+    //@Override
+    //public void generateBiomes(IChunk chunk) {
+    //    Biome biome = Optional.ofNullable(paletteAt(chunk.getPos(), world).biome.get()).orElse(Biomes.THE_VOID);
+    //    Biome[] biomes = new Biome[16 * 16];
+    //    for(int x = 0; x < biomes.length; x++)
+    //        biomes[x] = biome;
+    //    chunk.setBiomes(biomes);
+    //}
 
     @Override
     public void makeBase(IWorld world, IChunk ichunk) {
@@ -168,10 +168,10 @@ public class DungeonChunkGenerator extends ChunkGenerator<DungeonSettings> {
         Random random = chunkSeed(world.getSeed(), pos);
         DungeonSettings settings = getSettings();
 
-        GenerationContext ctx = new GenerationContext(settings, pos, paletteFor(pos, seed));
+        GenerationContext ctx = new GenerationContext(settings, pos, paletteAt(pos, world));
         DungeonChunk chunk = new DungeonChunk(ichunk, random, ctx);
         
-        roomsFor(settings, pos, world.getSeed()).forEach((floor, room) -> {
+        roomsFor(world, pos).forEach((floor, room) -> {
             ctx.setFloor(floor);
             ctx.setSize(room);
             

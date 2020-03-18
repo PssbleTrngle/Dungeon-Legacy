@@ -21,4 +21,12 @@ public class Pair<F,S> {
         return this.second;
     }
 
+    public <N> Pair<F,N> withSecond(N newSecond) {
+        return new Pair<>(first, newSecond);
+    }
+
+    public <N> Pair<N,S> withFirst(N newFirst) {
+        return new Pair<>(newFirst, second);
+    }
+
 }
