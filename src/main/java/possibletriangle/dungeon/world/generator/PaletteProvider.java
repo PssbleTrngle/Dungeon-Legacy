@@ -35,7 +35,7 @@ public class PaletteProvider extends BiomeProvider {
     public PaletteProvider(World world) {
         this.seed = world.getSeed();
 
-        this.layer = new BaseLayer(seed);
+        this.layer = new BaseLayer(seed, world.getDimension().getType());
         IAreaFactory<LazyArea> base = this.layer.apply(createContext(1L));
         IAreaFactory<LazyArea> zoomed = VoroniZoomLayer.INSTANCE.apply(createContext(10L), base);
 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsd:schema
-	id="palette"
-	targetNamespace="https://www.w3schools.com"
-	xmlns="https://www.w3schools.com"
-	elementFormDefault="qualified"
-	xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
-	vc:minVersion="1.1"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
->
+		id="palette"
+		targetNamespace="https://www.w3schools.com"
+		xmlns="https://www.w3schools.com"
+		elementFormDefault="qualified"
+		xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+		vc:minVersion="1.1"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
 	<xsd:element name="palette" type="palette" />
 
@@ -75,19 +75,32 @@
 		</xsd:complexContent>
 	</xsd:complexType>
 
+	<xsd:complexType name="list">
+		<xs:sequence>
+			<xsd:element maxOccurs="unbounded" minOccurs="0" name="entry" type="xsd:string" />
+		</xs:sequence>
+		<xsd:attribute use="required" name="type">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="whitelist" />
+					<xsd:enumeration value="blacklist" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+	</xsd:complexType>
+
 	<xsd:complexType name="palette">
 		<xsd:complexContent>
 			<xsd:extension base="weighted">
 				<xsd:sequence>
 					<xsd:sequence>
+						<xsd:element name="dimensions" minOccurs="0" type="list" />
 						<xsd:element maxOccurs="unbounded" minOccurs="0" name="replace" type="replace" />
-					</xsd:sequence>
-					<xsd:sequence>
 						<xsd:element maxOccurs="unbounded" minOccurs="0" name="mob" type="name" />
 					</xsd:sequence>
 				</xsd:sequence>
 				<xsd:attribute use="required" name="biome" type="xsd:string" />
-				<xsd:attribute use="optional" default="dungeon:stone" name="parent" type="xsd:string" />
+				<xsd:attribute default="dungeon:stone" name="parent" type="xsd:string" />
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
