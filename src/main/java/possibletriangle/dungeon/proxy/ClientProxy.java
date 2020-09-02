@@ -21,17 +21,6 @@ import possibletriangle.dungeon.entity.GrenadeEntity;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, modid = DungeonMod.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientProxy extends CommonProxy {
 
-    @SubscribeEvent
-    public static void registerModels(ModelRegistryEvent evt) {
-        ItemRenderer i = Minecraft.getInstance().getItemRenderer();
-        RenderingRegistry.registerEntityRenderingHandler(GrenadeEntity.class, manager -> new SpriteRenderer<>(manager, i));
-    }
-
-    @Override
-    public void clientSetup(FMLClientSetupEvent event) {
-        ClientRegistry.bindTileEntitySpecialRenderer(MetadataTile.class, new MetadataTESR());
-        ClientRegistry.bindTileEntitySpecialRenderer(ChestTile.class, new ChestTESR());
-    }
 
     @Override
     public void openMetaTile(MetadataTile tile) {

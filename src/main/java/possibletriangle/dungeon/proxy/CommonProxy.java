@@ -53,89 +53,8 @@ import java.util.Arrays;
 
 public class CommonProxy {
 
-    public void init(final FMLCommonSetupEvent event) {
-        new DungeonWorldType();
-    }
-
-    public void clientSetup(FMLClientSetupEvent event) {}
-
-    public void reload(MinecraftServer server) {
-
-        IReloadableResourceManager manager = server.getResourceManager();
-
-        Structures.clear();
-        StructureType.values().stream()
-                .map(StructureLoader::new)
-                .forEach(manager::addReloadListener);
-        Structures.register(new HallwayMaze(), StructureType.HALLWAY);
-
-        manager.addReloadListener(new PaletteLoader(server.getNetworkTagManager()));
-
-    }
-
-    public void openMetaTile(MetadataTile tile) {}
-
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
-
-        @OnlyIn(Dist.CLIENT)
-        @SubscribeEvent
-        public static void blockColors(ColorHandlerEvent.Block event) {
-            event.getBlockColors().register((s,w,p,i) -> {
-                if(i != 1) return -1;
-                return ObeliskBlock.getTE(w, p).map(ObeliskTile::getColor).orElseGet(() -> ObeliskBlock.State.INVALID.color);
-            }, ObeliskBlock.OBELISK);
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        @SubscribeEvent
-        public static void itemColors(ColorHandlerEvent.Item event) {
-            event.getItemColors().register((s,i) ->
-                i == 1 ? ScrollItem.getSpell(s).getColor() : -1
-            , ScrollItem.SCROLL);
-        }
-
-        @SubscribeEvent
-        public static void onNewRegistry(final RegistryEvent.NewRegistry event) {
-
-            new RegistryBuilder<StructureType>()
-                    .setName(new ResourceLocation(DungeonMod.ID, "structure_type"))
-                    .setType(StructureType.class)
-                    .create();
-
-            new RegistryBuilder<ConditionType>()
-                    .setName(new ResourceLocation(DungeonMod.ID, "condition"))
-                    .setType(ConditionType.class)
-                    .create();
-
-            new RegistryBuilder<Spell>()
-                    .setName(new ResourceLocation(DungeonMod.ID, "spell"))
-                    .setType(Spell.class)
-                    .create();
-        }
-
-        @SubscribeEvent
-        public static void onStructureTypeRegistry(final RegistryEvent.Register<StructureType> event) {
-            event.getRegistry().registerAll(
-                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.ID, "room"),
-                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.ID, "hallway"),
-                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.ID, "boss"),
-                new StructureType(StructureType::validRoom).setRegistryName(DungeonMod.ID, "base"),
-                new StructureType(StructureType.hasSize(2, 5, 4)).setRegistryName("door/small"),
-                new StructureType(StructureType.hasSize(2, 5, 5)).setRegistryName("door/big"),
-                new StructureType(StructureType.hasSize(5, DungeonSettings.FLOOR_HEIGHT, 15)).setRegistryName("shop"),
-                new StructureType(s -> true).setRegistryName("part")
-            );
-        }
-
-        @SubscribeEvent
-        public static void onConditionRegistry(final RegistryEvent.Register<ConditionType> event) {
-            event.getRegistry().registerAll(
-                    new ModCondition().setRegistryName(DungeonMod.ID, "mod"),
-                    new PaletteCondition().setRegistryName(DungeonMod.ID, "palette"),
-                    new FloorCondition().setRegistryName(DungeonMod.ID, "floor")
-            );
-        }
 
         @SubscribeEvent
         public static void onTileRegistry(final RegistryEvent.Register<TileEntityType<?>> event) {

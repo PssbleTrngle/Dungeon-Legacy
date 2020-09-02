@@ -5,12 +5,14 @@ import net.minecraft.block.Block;
 import net.minecraft.client.resources.ReloadListener;
 import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.NetworkTagManager;
 import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.DimensionType;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,6 +31,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -105,7 +108,7 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
         return Optional.ofNullable(GameRegistry.findRegistry(Block.class).getValue(name));
     }
 
-    private Optional<Tag<Block>> findTag(ResourceLocation name) {
+    private Optional<ITag<Block>> findTag(ResourceLocation name) {
         boolean isMC = name.getNamespace().equals("minecraft");
         return Optional.ofNullable(tags.getBlocks().get(name)).map(Optional::of).orElseGet(
                 isMC ? () -> findTag(new ResourceLocation("forge", name.getPath())) : () -> {
@@ -140,7 +143,7 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
         switch (type) {
             case "tag":
                 return Optional.of(new StateProviderSupplier(() -> findTag(r)
-                        .map(Tag::getAllElements)
+                        .map(ITag::func_230236_b_)
                         .map(Collection::stream)
                         .map(s -> s.map(BlockProvider::new))
                 ));
@@ -229,7 +232,9 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
                         .map(ResourceLocation::new)
                         .map(ResourceLocation::toString)
                         .collect(Collectors.toList());
-                Predicate<DimensionType> contains = t -> ids.contains(t.getRegistryName().toString());
+
+                // TODO dimension stuff
+                Predicate<DimensionType> contains = t -> true;
                 switch(type) {
                     case "whitelist": return contains;
                     case "blacklist": return contains.negate();
