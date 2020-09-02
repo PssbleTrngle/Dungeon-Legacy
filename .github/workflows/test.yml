@@ -4,14 +4,6 @@ on:
   pull_request:
     branches: 
       - master
-  repository_dispatch:
-    types: test
-  push:
-    branches-ignore:
-      - master
-      - website
-    paths:
-      - 'src/main/java'
 
 jobs:
   

@@ -1,27 +1,78 @@
-  
 name: Release
 
 on:
   pull_request:
-    types: [closed]
-    branches:
-    - master
+    types: [ closed ]
+    branches: [ master ]
 
 jobs:
-      
+
   publish:
-    if: github.event.pull_request.merged && contains(github.event.pull_request.labels.*.id, 1852879245)
+    if: github.event.pull_request.merged
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - run: chmod +x ./gradlew
-
-      - name: Build
-        run: ./gradlew build
-
-      - name: Upload jar
-        uses: actions/upload-artifact@v1.0.0
+      
+      - uses: PssbleTrngle/VersionManagment@v1.0.4
         with:
-          name: built
-          path: build/libs
+          token: ${{ secrets.GITHUB_TOKEN }}
+        id: version
+          
+      - name: Update mod version
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: 'build.properties'
+          property: 'mod_version'
+          value: ${{ steps.version.outputs.next }} 
+        
+      - name: Build Mod
+        if: contains(github.event.pull_request.labels.*.name, 'release')
+        run: chmod +x ./gradlew && ./gradlew build
+                 
+      - name: Upload to CurseForge
+        if: contains(github.event.pull_request.labels.*.name, 'release')
+        uses: itsmeow/curseforge-upload@master
+        with:
+          token: ${{ secrets.CURSEFORGE_TOKEN }}
+          project_id: 406014
+          game_endpoint: minecraft
+          file_path: build/libs/Dungeon-${{ steps.version.outputs.next }}.jar
+          changelog: ${{ github.event.pull_request.body }}
+          changelog_type: markdown  
+          display_name: Version ${{ steps.version.outputs.next }}
+          game_versions: 7892,4458,7498
+          release_type: alpha
+        
+      - name: Create Release
+        id: release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.next }}
+          release_name: Release ${{ steps.version.outputs.next }}
+          body: ${{ github.event.pull_request.body }}
+  
+      - name: Upload Mod Jar
+        if: contains(github.event.pull_request.labels.*.name, 'release')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          asset_path: build/libs/Dungeon-${{ steps.version.outputs.next }}.jar
+          asset_name: dungeon.jar
+          asset_content_type: application/java-archive
+
+      - name: Commit and Push Changes
+        uses: EndBug/add-and-commit@v4
+        with:
+          message: Update Version
+          add: build.properties CHANGELOG.md
+          ref: master
+          author_name: GitHub Actions
+          author_email: actions@github.com
+          force: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
