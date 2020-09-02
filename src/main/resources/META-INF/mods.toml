@@ -1,26 +1,25 @@
 modLoader="javafml"
-loaderVersion="[28,)"
+loaderVersion="[32,)"
 issueTrackerURL="https://github.com/PssbleTrngle/Dungeon/issues"
+license="https://github.com/PssbleTrngle/Dungeon/blob/master/LICENSE.txt"
 
 [[mods]]
-modId="dungeon"
-version="${file.jarVersion}"
-displayName="Dungeon"
-authors='possible_triangle'
-description='''
-Generate an infinite dungeon.
-'''
+    modId="brazier"
+    version="${file.jarVersion}"
+    displayName="Dungeon"
+    authors="possible_triangle"
+    description='''Generate an infinite dungeon'''
 
-[[dependencies.dungeon]]
+[[dependencies.brazier]]
     modId="forge"
     mandatory=true
-    versionRange="[28,)"
+    versionRange="[32,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.brazier]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.1]"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.dungeon]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.14.4]"
-    ordering="NONE"
-    side="BOTH"
