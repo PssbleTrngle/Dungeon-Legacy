@@ -8,21 +8,16 @@ import net.minecraft.particles.IParticleData;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.entity.GrenadeEntity;
 
-@ObjectHolder("dungeon")
 public abstract class GrenadeItem extends Item {
 
-    @ObjectHolder("frost_grenade")
-    public static final Item FROST = null;
-
-    @ObjectHolder("smoke_grenade")
-    public static final Item SMOKE = null;
-
-    @ObjectHolder("gravity_grenade")
-    public static final Item GRAVITY = null;
+    public static final RegistryObject<Item> FROST = DungeonMod.ITEMS.register("frost_grenade", GrenadeFrost::new);
+    public static final RegistryObject<Item> SMOKE = DungeonMod.ITEMS.register("frost_grenade", GrenadeSmoke::new);
+    public static final RegistryObject<Item> GRAVITY = DungeonMod.ITEMS.register("frost_grenade", GrenadeGravity::new);
 
     public GrenadeItem() {
         super(new Properties().group(DungeonMod.GROUP).maxStackSize(8));
@@ -39,11 +34,11 @@ public abstract class GrenadeItem extends Item {
         ItemStack stack = user.getHeldItem(hand);
         ItemStack thrown = user.abilities.isCreativeMode ? stack.copy() : stack.split(1);
 
-        world.playSound(null, user.posX, user.posY, user.posZ, SoundEvents.ENTITY_SPLASH_POTION_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+        world.playSound(null, user.prevPosX, user.prevPosY, user.prevPosZ, SoundEvents.ENTITY_SPLASH_POTION_THROW, SoundCategory.PLAYERS, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
         if (!world.isRemote) {
             GrenadeEntity entity = new GrenadeEntity(world, user);
             entity.setItem(thrown);
-            entity.shoot(user, user.rotationPitch, user.rotationYaw, -20.0F, 0.5F, 1.0F);
+            entity.func_234612_a_(user, user.rotationPitch, user.rotationYaw, -20.0F, 0.5F, 1.0F);
             world.addEntity(entity);
         }
 

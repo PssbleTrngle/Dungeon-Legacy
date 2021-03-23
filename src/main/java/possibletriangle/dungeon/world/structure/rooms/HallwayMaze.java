@@ -4,8 +4,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import possibletriangle.dungeon.block.placeholder.TemplateBlock;
+import possibletriangle.dungeon.block.placeholder.TemplateType;
 import possibletriangle.dungeon.world.generator.DungeonChunk;
 import possibletriangle.dungeon.world.generator.DungeonSettings;
 import possibletriangle.dungeon.world.generator.GenerationContext;
@@ -36,45 +37,15 @@ public class HallwayMaze extends IStructure {
     }
 
     /**
-     *
      *  Generates a maze filling out a 13x13 space
-     * 
-     *              ┌──── LAYOUT ────┐
-     *              │   Even    E    │
-     *              │   Odd     O    │
-     *              │   Wall    #    │
-     *              │   Torch   *    │
-     *              └────────────────┘
-     *
-     *
-     *    0  │# #     # # #       # # #     #│#
-     *    ───┼───────────────────────────────┼─────         ╔══     ═════       ══╦══     ══╗
-     *    F  │#         *           #        │#             ║         *           ║         ║
-     *    E  │    E O E # E O E   E # E   E  │                  ┌───────┬────   ──╨─┬   ┐
-     *    D  │    O       O           O   O  │                  │       │           │   │
-     *    C  │#   E O E   E O E O E   E   E  │#             ║   ├────   ├────────   │   │   ║
-     *    B  │# # #       O   O           # #│#             ╠═══╡       │   │           ╞═══╣
-     *    A  │#   E O E   E   E   E   E   E  │#             ║   ├────   │   │   │   │   │   ║
-     *    9  │                        O   O  │                                      │   │
-     *    8  │    E   E O E O E   E   E   E  │      ==>         │   ┌────────   │   │   │
-     *    7  │        O           O          │                      │           │
-     *    6  │#   E   E   E O E   E O E   E  │#             ║   │   │   ────┐   ├────   │   ║
-     *    5  │# # #   O       O   O       # *│#             ╠═══╡   │       │   │       │  *║
-     *    4  │#   E O E   E O E   E   E   E  │#             ║   │ ──┘   ────┘   └   ─   │   ║
-     *    3  │                               │
-     *    2  │    E   E # E   E   E # E   E  │                  └   ──╥──   ─   ──╥──   ┘
-     *    1  │#         #           #        │#             ║         ║           ║         ║
-     *    0  │# #     # # #       # # #     #│#             ╚══     ══╩══       ══╩══     ══╝
-     *    ───┼───────────────────────────────┼─────
-     *    F  │0 1 2 3 4 5 6 7 8 9 A B C D E F│0
      */
     @Override
     public void generate(DungeonChunk chunk, Random random, GenerationContext ctx, BlockPos at) {
 
         this.generateFloor(chunk, ctx.settings);
-        BlockState wall = TemplateBlock.WALL.getDefaultState();
+        BlockState wall = TemplateType.WALL.getBlock().getDefaultState();
         BlockState lava = Blocks.LAVA.getDefaultState();
-        Vec3i size = this.getSize();
+        Vector3i size = this.getSize();
 
         for (int x = 2; x < 16 * size.getX() - 1; x++)
             for (int z = 2; z < 16 * size.getZ() - 1; z++) {

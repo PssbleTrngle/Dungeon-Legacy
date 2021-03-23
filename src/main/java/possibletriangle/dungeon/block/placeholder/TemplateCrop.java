@@ -6,16 +6,16 @@ import net.minecraft.world.IBlockReader;
 
 public class TemplateCrop extends CropsBlock implements IPlaceholder {
 
-    private final Type type;
+    private final TemplateType type;
 
-    public TemplateCrop(Type type) {
+    public TemplateCrop(TemplateType type) {
         super(TemplateBlock.PROPERTIES().doesNotBlockMovement());
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
     }
 
     @Override
-    public Type getType() {
+    public TemplateType getType() {
         return this.type;
     }
 

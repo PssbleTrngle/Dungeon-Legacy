@@ -4,16 +4,16 @@ import net.minecraft.block.PressurePlateBlock;
 
 public class TemplatePlate extends PressurePlateBlock implements IPlaceholder {
 
-    private final Type type;
+    private final TemplateType type;
 
-    public TemplatePlate(Type type) {
+    public TemplatePlate(TemplateType type) {
         super(Sensitivity.MOBS, TemplateBlock.PROPERTIES());
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
     }
 
     @Override
-    public Type getType() {
+    public TemplateType getType() {
         return this.type;
     }
 

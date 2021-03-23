@@ -1,21 +1,17 @@
 package possibletriangle.dungeon.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 
-@ObjectHolder(DungeonMod.ID)
 public class BreakableBlock extends Block {
 
-    @ObjectHolder("porous_stone")
-    public static final Block STONE = null;
-
-    @ObjectHolder("gravelous_gravel")
-    public static final Block GRAVEL = null;
-
-    @ObjectHolder("morsh_wood")
-    public static final Block WOOD = null;
+    public static final RegistryObject<Block> STONE = DungeonMod.registerBlock("porous_stone", () -> new BreakableBlock(Blocks.STONE));
+    public static final RegistryObject<Block> GRAVEL = DungeonMod.registerBlock("gravelous_gravel", () -> new BreakableBlock(Blocks.GRAVEL));
+    public static final RegistryObject<Block> WOOD = DungeonMod.registerBlock("morsh_wood", () -> new BreakableBlock(Blocks.OAK_PLANKS));
 
     public final ToolType tool;
 

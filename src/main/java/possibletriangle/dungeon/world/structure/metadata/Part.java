@@ -3,7 +3,7 @@ package possibletriangle.dungeon.world.structure.metadata;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraftforge.common.util.INBTSerializable;
 import possibletriangle.dungeon.world.structure.IStructure;
 import possibletriangle.dungeon.world.structure.metadata.condition.CategoryCondition;
@@ -49,7 +49,7 @@ public class Part implements Predicate<IStructure>, INBTSerializable<CompoundNBT
      * @param structure The Substructure to test
      */
     public boolean test(IStructure structure) {
-        Vec3i size = structure.getActualSize();
+        Vector3i size = structure.getActualSize();
         return categories.test(structure.getMeta().getCategories())
             && size.getX() >= this.size.minX && size.getX() <= this.size.maxX
             && size.getY() >= this.size.minY && size.getY() <= this.size.maxY

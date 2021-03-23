@@ -8,8 +8,9 @@ import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.*;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import possibletriangle.dungeon.block.tile.MetadataTile;
 import possibletriangle.dungeon.world.structure.metadata.Part;
 import possibletriangle.dungeon.world.structure.metadata.StructureMetadata;
@@ -29,25 +30,27 @@ public class MetadataScreen extends Screen {
     private int partCount = 0;
 
     /**
-     *  The list of functions to execute on saving, supplying different parts of the StructureMetadata NBT
+     * The list of functions to execute on saving, supplying different parts of the StructureMetadata NBT
      */
-    private final List<Pair<String,Supplier<INBT>>> suppliers = Lists.newArrayList();
+    private final List<Pair<String, Supplier<INBT>>> suppliers = Lists.newArrayList();
 
     public MetadataScreen(MetadataTile tile) {
         super(new StringTextComponent("Structure Metadata"));
         this.tile = tile;
     }
 
+    /*
     @Override
     public void tick() {
         children(TextFieldWidget.class).forEach(TextFieldWidget::tick);
     }
 
+
     @Override
     protected void init() {
         StructureMetadata meta = tile.getMeta().clone();
-        
-        /* Just copy the conditions for now */
+
+        // Just copy the conditions for now
         this.suppliers.add(new Pair<>("conditions", () -> meta.serializeNBT().get("conditions")));
 
         this.minecraft.keyboardListener.enableRepeatEvents(true);
@@ -68,16 +71,17 @@ public class MetadataScreen extends Screen {
         this.children.add(nameEdit);
         this.suppliers.add(new Pair<>("display", () -> new StringNBT(nameEdit.getText())));
 
-        TextFieldWidget categoriesEdit = new TextFieldWidget(this.font, this.width / 2 - 152, 70, 300, 20, I18n.format("metadata_block.categories")) {};
+        TextFieldWidget categoriesEdit = new TextFieldWidget(this.font, this.width / 2 - 152, 70, 300, 20, I18n.format("metadata_block.categories")) {
+        };
         categoriesEdit.setMaxStringLength(128);
         categoriesEdit.setText(String.join(", ", meta.getCategories()));
         this.children.add(categoriesEdit);
         this.suppliers.add(new Pair<>("categories", () -> StructureMetadata.serializeList(
-            Arrays.stream(categoriesEdit.getText()
-                .split(","))
-                .map(String::trim)
-                .distinct()
-                .filter(s -> s.matches("^[a-zA-Z0-9-_]+$"))
+                Arrays.stream(categoriesEdit.getText()
+                        .split(","))
+                        .map(String::trim)
+                        .distinct()
+                        .filter(s -> s.matches("^[a-zA-Z0-9-_]+$"))
         )));
 
         TextFieldWidget weightEdit = new TextFieldWidget(this.font, this.width / 2 - 152, 100, 80, 20, I18n.format("metadata_block.weight"));
@@ -91,11 +95,13 @@ public class MetadataScreen extends Screen {
         this.setFocusedDefault(nameEdit);
 
     }
+*/
+
 
     private int getInt(TextFieldWidget edit) {
         try {
             return Integer.parseInt(edit.getText());
-        } catch(NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             return 0;
         }
     }
@@ -103,7 +109,7 @@ public class MetadataScreen extends Screen {
     private float getFloat(TextFieldWidget edit) {
         try {
             return Float.parseFloat(edit.getText());
-        } catch(NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             return 0;
         }
     }
@@ -114,8 +120,9 @@ public class MetadataScreen extends Screen {
 
     private void addPart(@Nullable Part in) {
         final int index = partCount;
+        int width = field_230708_k_;
 
-        Map<String, Function<AxisAlignedBB,Double>> c = new HashMap<String, Function<AxisAlignedBB,Double>>() {{
+        Map<String, Function<AxisAlignedBB, Double>> c = new HashMap<String, Function<AxisAlignedBB, Double>>() {{
             put("X", b -> b.minX);
             put("Y", b -> b.minY);
             put("Z", b -> b.minZ);
@@ -123,20 +130,20 @@ public class MetadataScreen extends Screen {
 
         List<TextFieldWidget> posEdits = Lists.newArrayList();
         c.forEach((key, val) -> {
-            TextFieldWidget edit = new TextFieldWidget(this.font, width / 2 - 152 +  posEdits.size() * 25, 140 + 30 * index, 20, 20, I18n.format("structure_block.pos" + key));
+            TextFieldWidget edit = new TextFieldWidget(this.field_230712_o_, width / 2 - 152 + posEdits.size() * 25, 140 + 30 * index, 20, 20, new TranslationTextComponent("structure_block.pos" + key));
             edit.setMaxStringLength(6);
             edit.setText(Optional.ofNullable(in).map(p -> val.apply(p.getPos())).orElse(0D).toString());
             posEdits.add(edit);
         });
 
-        children.addAll(posEdits);
+        this.field_230710_m_.addAll(posEdits);
 
-        Pair<String,Supplier<INBT>> supplier = new Pair<>("parts", () -> {
+        Pair<String, Supplier<INBT>> supplier = new Pair<>("parts", () -> {
             CategoryCondition categories = new CategoryCondition(new String[0], new String[0], new String[0]);
             AxisAlignedBB size = new AxisAlignedBB(3, 1, 3, 3, 7, 3);
 
             List<Integer> pos = posEdits.stream().map(this::getInt).collect(Collectors.toList());
-            Vec3d p = new Vec3d(pos.get(0), pos.get(1), pos.get(2));
+            Vector3d p = new Vector3d(pos.get(0), pos.get(1), pos.get(2));
             Part part = new Part(categories, new AxisAlignedBB(p, p), size);
 
             ListNBT list = new ListNBT();
@@ -145,9 +152,9 @@ public class MetadataScreen extends Screen {
         });
         this.suppliers.add(supplier);
 
-        addButton(new Button(width / 2 - 72, 140 + 30 * index, 20, 20, I18n.format("metadata_block.remove_part"), button -> {
-            posEdits.forEach(this.children::remove);
-            this.children.remove(button);
+        func_230480_a_(new Button(width / 2 - 72, 140 + 30 * index, 20, 20, new TranslationTextComponent("metadata_block.remove_part"), button -> {
+            posEdits.forEach(this.field_230710_m_::remove);
+            this.field_230710_m_.remove(button);
             this.suppliers.remove(supplier);
             partCount--;
         }));
@@ -159,6 +166,7 @@ public class MetadataScreen extends Screen {
      * Generates a new StructureMetadata object from the given input
      * Used to store in TileEntity when pressing OK and
      * saved to File when pressing SAVE
+     *
      * @return The generated Metadata
      */
     public StructureMetadata generateMeta() {
@@ -167,7 +175,7 @@ public class MetadataScreen extends Screen {
         CompoundNBT merged = this.suppliers.stream().map(pair -> {
             INBT nbt = pair.getSecond().get();
             CompoundNBT compound = new CompoundNBT();
-            if(nbt != null) compound.put(pair.getFirst(), nbt);
+            if (nbt != null) compound.put(pair.getFirst(), nbt);
             return compound;
         }).reduce(new CompoundNBT(), CompoundNBT::merge, (a, b) -> a);
 
@@ -177,11 +185,12 @@ public class MetadataScreen extends Screen {
     }
 
     public void removed() {
-        this.minecraft.keyboardListener.enableRepeatEvents(false);
+        if (this.field_230706_i_ != null) this.field_230706_i_.keyboardListener.enableRepeatEvents(false);
     }
 
+    /*
     public void render(int width, int height, float f) {
-        this.renderBackground();
+        this.func_231023_e_();
 
         //String name = "structure_block.mode_info." + "save";
         //this.drawString(this.font, I18n.format(name), this.width / 2 - 153, 174, 10526880);
@@ -192,9 +201,10 @@ public class MetadataScreen extends Screen {
 
         super.render(width, height, f);
     }
+    */
 
     public <T> Collection<T> children(Class<T> clazz) {
-        return this.children()
+        return this.field_230710_m_
                 .stream()
                 .filter(clazz::isInstance)
                 .map(g -> (T) g)

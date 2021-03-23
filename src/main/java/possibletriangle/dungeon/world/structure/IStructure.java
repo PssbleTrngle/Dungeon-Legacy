@@ -2,8 +2,9 @@ package possibletriangle.dungeon.world.structure;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import possibletriangle.dungeon.block.placeholder.TemplateBlock;
+import possibletriangle.dungeon.block.placeholder.TemplateType;
 import possibletriangle.dungeon.world.generator.DungeonChunk;
 import possibletriangle.dungeon.world.generator.DungeonSettings;
 import possibletriangle.dungeon.world.generator.GenerationContext;
@@ -46,8 +47,8 @@ public abstract class IStructure {
      */
     protected final void generateFloor(DungeonChunk chunk, DungeonSettings settings) {
 
-        Vec3i size = getSize();
-        BlockState state = TemplateBlock.FLOOR.getDefaultState();
+        Vector3i size = getSize();
+        BlockState state = TemplateType.FLOOR.getBlock().getDefaultState();
 
         for (int x = 0; x < size.getX() * 16; x++)
             for (int z = 0; z < size.getZ() * 16; z++)

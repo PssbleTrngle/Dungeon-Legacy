@@ -13,6 +13,9 @@ import net.minecraft.data.LootTableProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.ILootCondition;
+import net.minecraft.loot.functions.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.potion.Potions;
@@ -20,13 +23,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
-import net.minecraft.world.storage.loot.functions.*;
+import net.minecraftforge.fml.RegistryObject;
 import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.block.BreakableBlock;
 import possibletriangle.dungeon.palette.Palette;
-import possibletriangle.dungeon.block.placeholder.Type;
+import possibletriangle.dungeon.block.placeholder.TemplateType;
 import possibletriangle.dungeon.item.grenade.GrenadeItem;
 
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class DungeonLoot extends LootTableProvider {
         this.generator = generator;
     }
 
-    private static void register(BiConsumer<ItemLootEntry.Builder, Integer> pool, Item... items) {
+    private static void register(BiConsumer<ItemLootEntry.Builder<?>, Integer> pool, Item... items) {
         int m = 2;
         int length = (int) Math.pow(items.length, m);
         IntStream.range(0, items.length).forEach(i -> pool.accept(
@@ -65,7 +66,7 @@ public class DungeonLoot extends LootTableProvider {
         ));
     }
 
-    private static void registerEnchanting(BiConsumer<ItemLootEntry.Builder, Integer> pool, HashMap<Item, Integer> items) {
+    private static void registerEnchanting(BiConsumer<ItemLootEntry.Builder<?>, Integer> pool, HashMap<Item, Integer> items) {
 
         items.forEach((item, weight) -> pool.accept(
                 ItemLootEntry.builder(item)
@@ -82,13 +83,13 @@ public class DungeonLoot extends LootTableProvider {
 
     }
 
-    private static void keys(BiConsumer<ItemLootEntry.Builder, Integer> pool) {
+    private static void keys(BiConsumer<ItemLootEntry.Builder<?>, Integer> pool) {
 
         /*
          * Find all blocks which could replace a placeholder seal block
          */
         Block[] blocks = Palette.values().stream()
-                .map(p -> p.blocksFor(Type.SEAL))
+                .map(p -> p.blocksFor(TemplateType.SEAL))
                 .flatMap(Function.identity())
                 .filter(Objects::nonNull)
                 .map(BlockState::getBlock)
@@ -96,45 +97,45 @@ public class DungeonLoot extends LootTableProvider {
 
         ILootFunction.IBuilder lore = () -> new SetLore(new ILootCondition[0], true, Arrays.asList(
                 new StringTextComponent(""),
-                new TranslationTextComponent("model.canPlace").applyTextStyles(TextFormatting.RESET, TextFormatting.GRAY),
-                new TranslationTextComponent("tooltip.dungeon.keystone").applyTextStyles(TextFormatting.RESET, TextFormatting.DARK_GRAY)
+                new TranslationTextComponent("model.canPlace").func_240701_a_(TextFormatting.RESET, TextFormatting.GRAY),
+                new TranslationTextComponent("tooltip.dungeon.keystone").func_240701_a_(TextFormatting.RESET, TextFormatting.DARK_GRAY)
         ), null);
 
         pool.accept(
-            ItemLootEntry.builder(Items.STONE_BUTTON)
-                    .acceptFunction(CanPlaceOn.builder(blocks))
-                    .acceptFunction(HideFlags.builder(0b10000))
-                    .acceptFunction(lore),
+                ItemLootEntry.builder(Items.STONE_BUTTON)
+                        .acceptFunction(CanPlaceOn.builder(blocks))
+                        .acceptFunction(HideFlags.builder(0b10000))
+                        .acceptFunction(lore),
                 5
         );
 
         pool.accept(
-            ItemLootEntry.builder(Items.LEVER)
-                    .acceptFunction(CanPlaceOn.builder(blocks))
-                    .acceptFunction(HideFlags.builder(0b10000))
-                    .acceptFunction(lore),
+                ItemLootEntry.builder(Items.LEVER)
+                        .acceptFunction(CanPlaceOn.builder(blocks))
+                        .acceptFunction(HideFlags.builder(0b10000))
+                        .acceptFunction(lore),
                 1
         );
     }
 
-    private static void breakers(BiConsumer<ItemLootEntry.Builder, Integer> pool) {
+    private static void breakers(BiConsumer<ItemLootEntry.Builder<?>, Integer> pool) {
 
-        new HashMap<Item,Block>() {{
+        new HashMap<Item, RegistryObject<Block>>() {{
 
             put(Items.GOLDEN_PICKAXE, BreakableBlock.STONE);
             put(Items.GOLDEN_AXE, BreakableBlock.WOOD);
             put(Items.GOLDEN_SHOVEL, BreakableBlock.GRAVEL);
 
-        }}.forEach((item, block) -> pool.accept(
+        }}.forEach((item, r) -> r.ifPresent(block -> pool.accept(
                 ItemLootEntry.builder(item)
                         .acceptFunction(SetDamage.func_215931_a(new RandomValueRange(0.6F, 0.9F)))
                         .acceptFunction(CanBreak.builder(block)),
                 1
-        ));
+        )));
     }
 
-    private static void armor(BiConsumer<ItemLootEntry.Builder, Integer> pool) {
-        
+    private static void armor(BiConsumer<ItemLootEntry.Builder<?>, Integer> pool) {
+
         registerEnchanting(pool, new HashMap<Item, Integer>() {{
             put(Items.LEATHER_BOOTS, 60);
             put(Items.LEATHER_HELMET, 40);
@@ -149,10 +150,10 @@ public class DungeonLoot extends LootTableProvider {
             put(Items.DIAMOND_LEGGINGS, 2);
             put(Items.DIAMOND_CHESTPLATE, 1);
         }});
-        
+
     }
 
-    private static void weapons(BiConsumer<ItemLootEntry.Builder, Integer> pool) {
+    private static void weapons(BiConsumer<ItemLootEntry.Builder<?>, Integer> pool) {
 
         registerEnchanting(pool, new HashMap<Item, Integer>() {{
             put(Items.WOODEN_SWORD, 30);
@@ -167,53 +168,53 @@ public class DungeonLoot extends LootTableProvider {
         }});
 
         pool.accept(
-            ItemLootEntry.builder(Items.ARROW)
-                .acceptFunction(SetCount.builder(new RandomValueRange(1, 5))),
+                ItemLootEntry.builder(Items.ARROW)
+                        .acceptFunction(SetCount.builder(new RandomValueRange(1, 5))),
                 10
         );
 
     }
 
-    private static void gold(BiConsumer<ItemLootEntry.Builder, Integer> pool) {
+    private static void gold(BiConsumer<ItemLootEntry.Builder<?>, Integer> pool) {
 
         pool.accept(ItemLootEntry.builder(Items.GOLD_NUGGET)
-                .acceptFunction(SetCount.builder(new RandomValueRange(1, 8)))
+                        .acceptFunction(SetCount.builder(new RandomValueRange(1, 8)))
                 , 10
         );
 
         pool.accept(ItemLootEntry.builder(Items.GOLD_INGOT)
-                .acceptFunction(SetCount.builder(new RandomValueRange(1, 8)))
+                        .acceptFunction(SetCount.builder(new RandomValueRange(1, 8)))
                 , 2
         );
     }
 
-    private static void tools(BiConsumer<ItemLootEntry.Builder, Integer> pool) {
+    private static void tools(BiConsumer<ItemLootEntry.Builder<?>, Integer> pool) {
 
         pool.accept(ItemLootEntry.builder(Items.ENDER_PEARL)
-                .acceptFunction(SetCount.builder(ConstantRange.of(1)))
+                        .acceptFunction(SetCount.builder(ConstantRange.of(1)))
                 , 1
         );
     }
 
-    private static void food(BiConsumer<ItemLootEntry.Builder, Integer> pool) {
-        
+    private static void food(BiConsumer<ItemLootEntry.Builder<?>, Integer> pool) {
+
         pool.accept(ItemLootEntry.builder(Items.POTATO).acceptFunction(SetCount.builder(new RandomValueRange(1, 6))), 8);
         pool.accept(ItemLootEntry.builder(Items.APPLE).acceptFunction(SetCount.builder(new RandomValueRange(1, 4))), 5);
         pool.accept(ItemLootEntry.builder(Items.BREAD).acceptFunction(SetCount.builder(new RandomValueRange(1, 2))), 1);
 
     }
 
-    private static Stream<ItemLootEntry.Builder> createPotions(Item potionItem, Collection<Potion> potions) {
+    private static Stream<ItemLootEntry.Builder<?>> createPotions(Item potionItem, Collection<Potion> potions) {
         return potions.stream().map(potion -> {
             ItemStack stack = new ItemStack(potionItem, 1);
             PotionUtils.addPotionToItemStack(stack, potion);
             return stack.getOrCreateTag();
-        }).map(SetNBT::func_215952_a).map(nbt ->
+        }).map(SetNBT::builder).map(nbt ->
                 ItemLootEntry.builder(potionItem).acceptFunction(nbt)
         );
     }
 
-    private static void potions(BiConsumer<ItemLootEntry.Builder, Integer> pool) {
+    private static void potions(BiConsumer<ItemLootEntry.Builder<?>, Integer> pool) {
         createPotions(Items.POTION, ImmutableSet.of(
                 Potions.FIRE_RESISTANCE,
                 Potions.HEALING,
@@ -238,52 +239,52 @@ public class DungeonLoot extends LootTableProvider {
         )).forEach(p -> pool.accept(p, 5));
     }
 
-    private static void grenades(BiConsumer<ItemLootEntry.Builder, Integer> pool) {
-        new HashMap<Item, Integer>() {{
+    private static void grenades(BiConsumer<ItemLootEntry.Builder<?>, Integer> pool) {
+        new HashMap<RegistryObject<Item>, Integer>() {{
             put(GrenadeItem.SMOKE, 3);
             put(GrenadeItem.FROST, 1);
             put(GrenadeItem.GRAVITY, 1);
-        }}.forEach((item, weight) ->
+        }}.forEach((r, weight) -> r.ifPresent(item ->
                 pool.accept(ItemLootEntry.builder(item)
-                            .acceptFunction(SetCount.builder(ConstantRange.of(1)))
+                                .acceptFunction(SetCount.builder(ConstantRange.of(1)))
                         , weight)
-        );
+        ));
     }
 
     private void addTables() {
 
         lootTables.put(Rarity.COMMON, LootTable.builder()
                 .addLootPool(new DungeonLootPool("shiny", new RandomValueRange(0, 1))
-                    .add(DungeonLoot::gold)
+                        .add(DungeonLoot::gold)
                         .getPool())
                 .addLootPool(new DungeonLootPool("food", ConstantRange.of(2))
-                    .add(DungeonLoot::food)
+                        .add(DungeonLoot::food)
                         .getPool())
                 .addLootPool(new DungeonLootPool("battle", new RandomValueRange(1, 2))
-                    .add(DungeonLoot::armor, 3)
-                    .add(DungeonLoot::weapons, 3)
-                    .add(DungeonLoot::grenades, 3)
-                    .add(DungeonLoot::tools, 1)
+                        .add(DungeonLoot::armor, 3)
+                        .add(DungeonLoot::weapons, 3)
+                        .add(DungeonLoot::grenades, 3)
+                        .add(DungeonLoot::tools, 1)
                         .getPool())
         );
 
         lootTables.put(Rarity.RARE, LootTable.builder()
                 .addLootPool(new DungeonLootPool("shiny", new RandomValueRange(2, 4))
-                    .add(DungeonLoot::gold)
-                .getPool())
+                        .add(DungeonLoot::gold)
+                        .getPool())
                 .addLootPool(new DungeonLootPool("food", new RandomValueRange(0, 2))
-                    .add(DungeonLoot::food)
-                .getPool())
+                        .add(DungeonLoot::food)
+                        .getPool())
                 .addLootPool(new DungeonLootPool("battle", new RandomValueRange(2, 5))
-                    .add(DungeonLoot::armor, 3)
-                    .add(DungeonLoot::weapons, 3)
-                    .add(DungeonLoot::potions, 2)
-                .getPool())
+                        .add(DungeonLoot::armor, 3)
+                        .add(DungeonLoot::weapons, 3)
+                        .add(DungeonLoot::potions, 2)
+                        .getPool())
                 .addLootPool(new DungeonLootPool("tools", new RandomValueRange(1, 2))
-                    .add(DungeonLoot::tools, 2)
-                    .add(DungeonLoot::keys, 1)
-                    .add(DungeonLoot::breakers, 1)
-                .getPool())
+                        .add(DungeonLoot::tools, 2)
+                        .add(DungeonLoot::keys, 1)
+                        .add(DungeonLoot::breakers, 1)
+                        .getPool())
         );
 
     }

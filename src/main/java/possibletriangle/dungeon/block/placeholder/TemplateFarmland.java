@@ -10,9 +10,9 @@ import java.util.Random;
 
 public class TemplateFarmland extends FarmlandBlock implements IPlaceholder {
 
-    private final Type type;
+    private final TemplateType type;
 
-    public TemplateFarmland(Type type) {
+    public TemplateFarmland(TemplateType type) {
         super(TemplateBlock.PROPERTIES());
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
@@ -26,7 +26,7 @@ public class TemplateFarmland extends FarmlandBlock implements IPlaceholder {
     public void tick(BlockState state, World worldIn, BlockPos pos, Random random) {}
 
     @Override
-    public Type getType() {
+    public TemplateType getType() {
         return this.type;
     }
 

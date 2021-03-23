@@ -5,16 +5,16 @@ import net.minecraft.block.StairsBlock;
 
 public class TemplateStairs extends StairsBlock implements IPlaceholder {
 
-    private final Type type;
+    private final TemplateType type;
 
-    public TemplateStairs(Type type) {
+    public TemplateStairs(TemplateType type) {
         super(Blocks.STONE.getDefaultState(), TemplateBlock.PROPERTIES());
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
     }
 
     @Override
-    public Type getType() {
+    public TemplateType getType() {
         return this.type;
     }
 

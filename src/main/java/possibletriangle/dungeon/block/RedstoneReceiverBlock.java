@@ -1,11 +1,14 @@
 package possibletriangle.dungeon.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.IBlockReader;
+import net.minecraftforge.fml.RegistryObject;
+import possibletriangle.dungeon.DungeonMod;
 
 import javax.annotation.Nullable;
 
@@ -17,7 +20,7 @@ public class RedstoneReceiverBlock extends RedstoneLinkBlock {
 
         for(Direction d : Direction.values())
             for(int i = 0; i < DISTANCE; i++) {
-                Vec3i v = d.getDirectionVec();
+                Vector3i v = d.getDirectionVec();
                 BlockPos pos = context.getPos().add(v.getX() * i, v.getY() * i, v.getZ() * i);
                 BlockState state = context.getWorld().getBlockState(pos);
                 if(state.getBlock() instanceof RedstoneSenderBlock) {

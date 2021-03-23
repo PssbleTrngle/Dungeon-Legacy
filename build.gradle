@@ -14,6 +14,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'maven'
 
 static def parseConfig(File config) {
     config.withReader {
@@ -84,6 +85,14 @@ minecraft {
                 }
             }
         }
+    }
+}
+
+repositories {
+    maven {
+        // for Unofficial Mappings
+        name "gigaherz"
+        url "http://dogforce-games.com/maven/"
     }
 }
 

@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.StructureBlockTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -18,17 +19,17 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ObjectHolder;
+import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.block.tile.MetadataTile;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-@ObjectHolder("dungeon")
 public class MetadataBlock extends ContainerBlock {
 
-    @ObjectHolder("metadata_block")
-    public static final Block METADATA_BLOCK = null;
+    public static final RegistryObject<Block> METADATA_BLOCK = DungeonMod.registerBlock("metadata_block", MetadataBlock::new);
 
     public MetadataBlock() {
         super(Block.Properties.create(Material.IRON, MaterialColor.LIGHT_GRAY)
@@ -70,8 +71,10 @@ public class MetadataBlock extends ContainerBlock {
     }
 
     @Override
-    public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
-        return getTE(world, pos).map(te -> te.click(player)).orElseGet(() -> false);
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
+        return getTE(world, pos).filter(te -> te.click(player))
+                .map($ -> ActionResultType.SUCCESS)
+                .orElse(ActionResultType.PASS);
     }
 
     public BlockRenderType getRenderType(BlockState state) {

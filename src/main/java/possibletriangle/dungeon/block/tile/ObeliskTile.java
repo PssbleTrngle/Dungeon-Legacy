@@ -3,6 +3,7 @@ package possibletriangle.dungeon.block.tile;
 import com.google.common.collect.Lists;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -17,7 +18,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ObjectHolder;
+import possibletriangle.dungeon.DungeonMod;
 import possibletriangle.dungeon.block.ObeliskBlock;
 import possibletriangle.dungeon.world.generator.DungeonChunkGenerator;
 import possibletriangle.dungeon.world.generator.DungeonSettings;
@@ -28,10 +31,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class ObeliskTile extends TileEntity implements ITickableTileEntity {
+public class ObeliskTile extends BaseTile implements ITickableTileEntity {
 
-    @ObjectHolder("dungeon:obelisk")
-    public static final TileEntityType<ObeliskTile> TYPE = null;
+    public static final RegistryObject<TileEntityType<? extends ObeliskTile>> TYPE = DungeonMod.TILES.register("obelisk", () ->
+            TileEntityType.Builder.create(ObeliskTile::new, ObeliskBlock.OBELISK.get()) .build(null)
+    );
 
     private static final AxisAlignedBB EMPTY = new AxisAlignedBB(0,0,0,0,0,0);
 
@@ -56,7 +60,7 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
     private static final int CLAIM_DURATION = 6;
 
     public ObeliskTile() {
-        super(TYPE);
+        super(TYPE.get());
     }
 
     public void updateTeam() {
@@ -174,7 +178,8 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
         assert world != null;
         if(isOwner(player)) {
             player.sendStatusMessage(new StringTextComponent("You entered your base"), true);
-            player.setSpawnPoint(getPos(), true, world.getDimension().getType());
+            if(player instanceof ServerPlayerEntity)
+                ((ServerPlayerEntity) player).func_241153_a_(world.func_234923_W_(), getPos(), false, true);
         }
     }
 
@@ -276,8 +281,8 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
     }
 
     @Override
-    public void read(CompoundNBT compound) {
-        super.read(compound);
+    public void deserializeNBT(BlockState state, CompoundNBT compound) {
+        super.deserializeNBT(state, compound);
 
         this.roomSize = getPos(compound, "roomSize");
         if(compound.contains("floor")) this.floor = compound.getInt("floor");
@@ -286,8 +291,8 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound) {
-        CompoundNBT nbt = super.write(compound);
+    public CompoundNBT serializeNBT() {
+        CompoundNBT compound = super.serializeNBT();
 
         if(this.inRoom()) {
             putPos(this.roomSize, "roomSize", compound);
@@ -297,7 +302,7 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
         if(this.player != null) compound.putUniqueId("player", this.player);
         if(this.team != null) compound.putString("team", this.team.getName());
 
-        return nbt;
+        return compound;
     }
 
     public static void putPos(BlockPos pos, String key, CompoundNBT compound) {
@@ -315,15 +320,6 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
         return new BlockPos(x, y, z);
     }
 
-    @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-
-    }
-
-    public CompoundNBT getUpdateTag() {
-        return this.write(new CompoundNBT());
-    }
-
     private void updateState() {
         if(this.world == null) return;
         ObeliskBlock.State state = world.getBlockState(getPos()).get(ObeliskBlock.STATE);
@@ -333,7 +329,7 @@ public class ObeliskTile extends TileEntity implements ITickableTileEntity {
     private void updateState(ObeliskBlock.State state) {
         if(this.world == null) return;
 
-        BlockState block = ObeliskBlock.OBELISK.getDefaultState().with(ObeliskBlock.STATE, state);
+        BlockState block = getBlockState().with(ObeliskBlock.STATE, state);
         this.world.setBlockState(getPos(), block);
     }
 

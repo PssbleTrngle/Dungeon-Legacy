@@ -2,6 +2,7 @@ package possibletriangle.dungeon.world.generator.biome;
 
 import com.google.common.collect.Maps;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.dimension.DimensionType;

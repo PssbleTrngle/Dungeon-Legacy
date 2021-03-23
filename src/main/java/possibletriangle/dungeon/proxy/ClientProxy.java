@@ -18,11 +18,8 @@ import possibletriangle.dungeon.client.MetadataScreen;
 import possibletriangle.dungeon.block.tile.render.MetadataTESR;
 import possibletriangle.dungeon.entity.GrenadeEntity;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = DungeonMod.ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class ClientProxy extends CommonProxy {
+public class ClientProxy {
 
-
-    @Override
     public void openMetaTile(MetadataTile tile) {
         Minecraft.getInstance().displayGuiScreen(new MetadataScreen(tile));
     }

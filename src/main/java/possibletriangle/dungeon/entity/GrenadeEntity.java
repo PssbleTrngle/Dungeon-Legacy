@@ -1,5 +1,6 @@
 package possibletriangle.dungeon.entity;
 
+import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IRendersAsItem;
 import net.minecraft.entity.LivingEntity;
@@ -12,11 +13,12 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
@@ -33,15 +35,23 @@ public class GrenadeEntity extends ThrowableEntity implements IRendersAsItem {
 
     private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(GrenadeEntity.class, DataSerializers.ITEMSTACK);
 
-    @ObjectHolder("dungeon:grenade")
-    public static final EntityType<GrenadeEntity> TYPE = null;
+    public static final RegistryObject<EntityType<? extends GrenadeEntity>> TYPE = DungeonMod.ENTITIES.register("grenade", () ->
+            EntityType.Builder.<GrenadeEntity>create(GrenadeEntity::new, EntityClassification.MISC)
+                    .size(0.25F, 0.25F)
+                    .build("grenade")
+    );
 
-    public GrenadeEntity(EntityType<GrenadeEntity> type, World world) {
+    public GrenadeEntity(EntityType<? extends GrenadeEntity> type, World world) {
         super(type, world);
     }
 
     public GrenadeEntity(World world, LivingEntity user) {
-        super(TYPE, user, world);
+        super(TYPE.get(), user, world);
+    }
+
+    @SuppressWarnings("unused")
+    public GrenadeEntity(World world) {
+        super(TYPE.get(), world);
     }
 
     @Nonnull
@@ -57,7 +67,7 @@ public class GrenadeEntity extends ThrowableEntity implements IRendersAsItem {
 
     public Optional<GrenadeItem> getGrenade() {
         ItemStack i = getItem();
-        if(i.getItem() instanceof GrenadeItem) return Optional.of((GrenadeItem) i.getItem());
+        if (i.getItem() instanceof GrenadeItem) return Optional.of((GrenadeItem) i.getItem());
         return Optional.empty();
     }
 
@@ -80,12 +90,13 @@ public class GrenadeEntity extends ThrowableEntity implements IRendersAsItem {
     protected void onImpact(RayTraceResult result) {
         if (world instanceof ServerWorld) getGrenade().ifPresent(item -> {
             double radius = 3;
-            Vec3d vec = result.getHitVec();
+            Vector3d vec = result.getHitVec();
             AxisAlignedBB box = new AxisAlignedBB(vec, vec).grow(radius);
             world.getEntitiesWithinAABB(LivingEntity.class, box, item::affects).forEach(item::affect);
             ((ServerWorld) world).spawnParticle(item.getParticle(), vec.x, vec.y, vec.z, 100, 0.4, 0.2, 0.4, 0.15);
         });
     }
+
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
         ItemStack stack = ItemStack.read(compound.getCompound("stack"));

@@ -4,16 +4,16 @@ import net.minecraft.block.LeverBlock;
 
 public class TemplateLever extends LeverBlock implements IPlaceholder {
 
-    private final Type type;
+    private final TemplateType type;
 
-    public TemplateLever(Type type) {
+    public TemplateLever(TemplateType type) {
         super(TemplateBlock.PROPERTIES());
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
     }
 
     @Override
-    public Type getType() {
+    public TemplateType getType() {
         return this.type;
     }
 

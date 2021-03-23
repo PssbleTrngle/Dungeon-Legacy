@@ -3,15 +3,20 @@ package possibletriangle.dungeon.block.tile;
 import net.minecraft.tileentity.ChestTileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ObjectHolder;
+import possibletriangle.dungeon.DungeonMod;
+import possibletriangle.dungeon.block.MetadataBlock;
+import possibletriangle.dungeon.block.placeholder.PlaceholderChest;
 
 public class ChestTile extends ChestTileEntity {
 
-    @ObjectHolder("dungeon:chest")
-    public static final TileEntityType<ChestTile> TYPE = null;
+    public static final RegistryObject<TileEntityType<? extends ChestTile>> TYPE = DungeonMod.TILES.register("chest", () -> TileEntityType.Builder.create(
+            ChestTile::new, PlaceholderChest.CHEST.get()).build(null)
+    );
 
     public ChestTile() {
-        super(TYPE);
+        super(TYPE.get());
     }
 
     public ChestTile(TileEntityType<? extends ChestTile> type) {

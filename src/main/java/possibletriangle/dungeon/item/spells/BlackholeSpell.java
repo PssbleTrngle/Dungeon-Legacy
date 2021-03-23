@@ -2,7 +2,7 @@ package possibletriangle.dungeon.item.spells;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MoverType;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class BlackholeSpell extends Spell {
 
@@ -31,7 +31,7 @@ public class BlackholeSpell extends Spell {
 
         double radius = 2 + context.stack.getPower();
         context.inRange(radius, LivingEntity.class).forEach(hit -> {
-            Vec3d vec = hit.getPositionVector().subtract(context.pos);
+            Vector3d vec = hit.getPositionVec().subtract(context.pos);
             hit.move(MoverType.SELF, vec.scale(-4));
         });
     }

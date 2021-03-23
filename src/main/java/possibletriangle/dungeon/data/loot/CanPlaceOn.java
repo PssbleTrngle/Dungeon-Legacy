@@ -6,15 +6,17 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootFunction;
+import net.minecraft.loot.LootFunctionType;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootFunction;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import possibletriangle.dungeon.DungeonMod;
+import possibletriangle.dungeon.data.DataGenerators;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -31,6 +33,11 @@ public class CanPlaceOn extends LootFunction {
         this.blocks = blocks;
     }
 
+    @Override
+    public LootFunctionType func_230425_b_() {
+        return DataGenerators.CAN_PLACE_ON;
+    }
+
     public static LootFunction.Builder<?> builder(Block... blocks) {
         ResourceLocation[] locations = Arrays.stream(blocks).map(Block::getRegistryName).filter(Objects::nonNull).toArray(ResourceLocation[]::new);
         return builder(conditions -> new CanPlaceOn(conditions, locations));
@@ -45,7 +52,7 @@ public class CanPlaceOn extends LootFunction {
 
         Arrays.stream(this.blocks)
             .map(ResourceLocation::toString)
-            .map(StringNBT::new)
+            .map(StringNBT::valueOf)
             .forEach(list::add);
 
         nbt.put("CanPlaceOn", list);
@@ -54,12 +61,9 @@ public class CanPlaceOn extends LootFunction {
     }
 
     public static class Serializer extends LootFunction.Serializer<CanPlaceOn> {
-        public Serializer() {
-            super(new ResourceLocation(DungeonMod.ID, "can_place_on"), CanPlaceOn.class);
-        }
 
-        public void serialize(JsonObject object, CanPlaceOn functionClazz, JsonSerializationContext serializationContext) {
-            super.serialize(object, functionClazz, serializationContext);
+        public void func_230424_a_(JsonObject object, CanPlaceOn functionClazz, JsonSerializationContext serializationContext) {
+            super.func_230424_a_(object, functionClazz, serializationContext);
 
             JsonArray blocks = new JsonArray();
             Arrays.stream(functionClazz.blocks)

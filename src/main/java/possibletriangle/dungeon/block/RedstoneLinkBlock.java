@@ -9,17 +9,16 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.ObjectHolder;
+import possibletriangle.dungeon.DungeonMod;
 
 import java.util.Random;
 
 public abstract class RedstoneLinkBlock extends Block {
 
-    @ObjectHolder("dungeon:redstone_receiver")
-    public static final Block RECEIVER = null;
-
-    @ObjectHolder("dungeon:redstone_sender")
-    public static final Block SENDER = null;
+    public static final RegistryObject<Block> RECEIVER = DungeonMod.registerBlock("redstone_receiver", RedstoneReceiverBlock::new);
+    public static final RegistryObject<Block> SENDER = DungeonMod.registerBlock("redstone_sender", RedstoneSenderBlock::new);
 
     public static final int DISTANCE = 6;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;

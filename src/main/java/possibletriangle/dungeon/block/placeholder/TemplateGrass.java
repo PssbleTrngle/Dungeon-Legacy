@@ -8,10 +8,9 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.registries.ObjectHolder;
 import possibletriangle.dungeon.DungeonMod;
 
-@ObjectHolder(DungeonMod.ID)
 public class TemplateGrass extends TemplateBlock {
 
-    public TemplateGrass(Type type) {
+    public TemplateGrass(TemplateType type) {
         super(type);
     }
 

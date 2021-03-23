@@ -7,7 +7,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.BlockPosArgument;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import possibletriangle.dungeon.util.Pair;
@@ -35,7 +35,7 @@ public class RoomCommand {
             pos = BlockPosArgument.getBlockPos(context, "pos");
         } catch (CommandSyntaxException ignored) {}
 
-        World world = source.func_197023_e();
+        World world = source.getWorld();
         Optional<Pair<Integer, IStructure>> pair = DungeonChunkGenerator.roomAt(pos, world);
 
         return DungeonChunkGenerator.getSettings(world).map(settings -> {
@@ -44,7 +44,7 @@ public class RoomCommand {
                 int floor = pair.get().getFirst();
                 IStructure room = pair.get().getSecond();
                 StructureMetadata meta = room.getMeta();
-                Vec3i size = room.getSize();
+                Vector3i size = room.getSize();
 
                 source.sendFeedback(new TranslationTextComponent("command.dungeon.get.room", meta.getDisplay()), false);
                 source.sendFeedback(new TranslationTextComponent("command.dungeon.get.floor", floor, settings.floors), false);

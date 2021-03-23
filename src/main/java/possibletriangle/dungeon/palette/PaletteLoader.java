@@ -7,9 +7,7 @@ import net.minecraft.profiler.IProfiler;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.NetworkTagManager;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.DimensionType;
@@ -21,7 +19,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import possibletriangle.dungeon.DungeonMod;
-import possibletriangle.dungeon.block.placeholder.Type;
+import possibletriangle.dungeon.block.placeholder.TemplateType;
 import possibletriangle.dungeon.palette.providers.*;
 import possibletriangle.dungeon.util.Pair;
 
@@ -31,7 +29,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -243,13 +240,13 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
             });
 
             /* Find the blocks */
-            List<Pair<Type[],List<StateProviderSupplier>>> replaces = elements(paletteNode, "replace").map(replace -> {
-                Type[] types = elements(replace, "type")
+            List<Pair<TemplateType[],List<StateProviderSupplier>>> replaces = elements(paletteNode, "replace").map(replace -> {
+                TemplateType[] types = elements(replace, "type")
                         .map(Node::getTextContent)
-                        .map(Type::byName)
+                        .map(TemplateType::byName)
                         .filter(Optional::isPresent)
                         .map(Optional::get)
-                        .toArray(Type[]::new);
+                        .toArray(TemplateType[]::new);
 
                 return new Pair<>(types, findProviders(replace).collect(Collectors.toList()));
             }).collect(Collectors.toList());
@@ -264,7 +261,7 @@ public class PaletteLoader extends ReloadListener<List<Supplier<Palette>>> {
                 );
 
                 replaces.forEach(pair -> {
-                    Type[] types = pair.getFirst();
+                    TemplateType[] types = pair.getFirst();
                      IStateProvider[] providers = pair.getSecond().stream()
                             .map(StateProviderSupplier::supply)
                             .filter(Optional::isPresent)

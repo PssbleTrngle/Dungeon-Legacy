@@ -10,7 +10,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import possibletriangle.dungeon.block.placeholder.IPlaceholder;
-import possibletriangle.dungeon.block.placeholder.Type;
+import possibletriangle.dungeon.block.placeholder.TemplateType;
 import possibletriangle.dungeon.data.loot.DungeonLoot;
 import possibletriangle.dungeon.palette.Palette;
 
@@ -126,7 +126,7 @@ public class DungeonChunk {
 
         if(ctx.settings.replacePlaceholders && state.getBlock() instanceof IPlaceholder) {
 
-            Type type = ((IPlaceholder) state.getBlock()).getType();
+            TemplateType type = ((IPlaceholder) state.getBlock()).getType();
             BlockState replace = ctx.palette.blockFor(type, random, variant, state);
             return this.setBlockState(pos, replace);
 

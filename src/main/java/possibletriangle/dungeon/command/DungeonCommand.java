@@ -12,6 +12,7 @@ public class DungeonCommand {
                 Commands.literal(DungeonMod.ID)
                         .then(PaletteCommand.register())
                         .then(RoomCommand.register())
+                        .then(GenerateCommand.register())
         );
     }
 

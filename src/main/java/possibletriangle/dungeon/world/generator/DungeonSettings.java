@@ -1,8 +1,8 @@
 package possibletriangle.dungeon.world.generator;
 
-import net.minecraft.world.gen.GenerationSettings;
+import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 
-public class DungeonSettings extends GenerationSettings {
+public class DungeonSettings {
 
     public static final int FLOOR_HEIGHT = 10;
     public final int floors = 3;

@@ -8,25 +8,9 @@ import possibletriangle.dungeon.DungeonMod;
 
 import java.util.function.Function;
 
-@ObjectHolder(DungeonMod.ID)
 public class TemplateBlock extends Block implements IPlaceholder {
 
-    @ObjectHolder("placeholder_pillar")
-    public static final Block PILLAR = null;
-
-    @ObjectHolder("placeholder_floor")
-    public static final Block FLOOR = null;
-
-    @ObjectHolder("placeholder_wall")
-    public static final Block WALL = null;
-
-    @ObjectHolder("placeholder_planks")
-    public static final Block PLANKS = null;
-
-    @ObjectHolder("placeholder_dirt")
-    public static final Block DIRT = null;
-
-    private final Type type;
+    private final TemplateType type;
 
     public static Properties PROPERTIES() {
         return Properties.create(Material.ROCK)
@@ -35,22 +19,22 @@ public class TemplateBlock extends Block implements IPlaceholder {
                 .noDrops();
     }
 
-    public TemplateBlock(Type type) {
+    public TemplateBlock(TemplateType type) {
         this(type, 0);
     }
 
-    public TemplateBlock(Type type, int light) {
-        super(PROPERTIES().lightValue(light));
+    public TemplateBlock(TemplateType type, int light) {
+        super(PROPERTIES().func_235838_a_($ -> light));
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
     }
 
-    public static <T extends Block> Function<Type<T>, Block> glowing(int light) {
+    public static <T extends Block> Function<TemplateType<T>, Block> glowing(int light) {
         return type -> new TemplateBlock(type, light);
     }
 
     @Override
-    public Type getType() {
+    public TemplateType getType() {
         return this.type;
     }
 }

@@ -4,16 +4,16 @@ import net.minecraft.block.WallBlock;
 
 public class TemplateWall extends WallBlock implements IPlaceholder {
 
-    private final Type type;
+    private final TemplateType type;
 
-    public TemplateWall(Type type) {
+    public TemplateWall(TemplateType type) {
         super(TemplateBlock.PROPERTIES());
         this.type = type;
         setRegistryName("placeholder_" + type.name().toLowerCase());
     }
 
     @Override
-    public Type getType() {
+    public TemplateType getType() {
         return this.type;
     }
 

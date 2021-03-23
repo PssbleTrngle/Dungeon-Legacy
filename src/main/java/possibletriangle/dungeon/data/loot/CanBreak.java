@@ -5,15 +5,17 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootFunctionType;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.StringNBT;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootFunction;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootFunction;
 import possibletriangle.dungeon.DungeonMod;
+import possibletriangle.dungeon.data.DataGenerators;
 
 public class CanBreak extends LootFunction {
 
@@ -22,6 +24,11 @@ public class CanBreak extends LootFunction {
     private CanBreak(ILootCondition[] conditions, ResourceLocation block) {
         super(conditions);
         this.block = block;
+    }
+
+    @Override
+    public LootFunctionType func_230425_b_() {
+        return DataGenerators.CAN_BREAK;
     }
 
     public static LootFunction.Builder<?> builder(Block block) {
@@ -34,24 +41,21 @@ public class CanBreak extends LootFunction {
         CompoundNBT nbt = stack.getOrCreateTag();
         if(this.block != null) {
             ListNBT list = new ListNBT();
-            list.add(new StringNBT(this.block.toString()));
+            list.add(StringNBT.valueOf(this.block.toString()));
             nbt.put("CanDestroy", list);
         }
         return stack;
     }
 
     public static class Serializer extends LootFunction.Serializer<CanBreak> {
-        public Serializer() {
-            super(new ResourceLocation(DungeonMod.ID, "can_break"), CanBreak.class);
+
+        public void func_230424_a_(JsonObject object, CanBreak functionClazz, JsonSerializationContext context) {
+            super.func_230424_a_(object, functionClazz, context);
+            object.add("block", context.serialize(functionClazz.block));
         }
 
-        public void serialize(JsonObject object, CanBreak functionClazz, JsonSerializationContext serializationContext) {
-            super.serialize(object, functionClazz, serializationContext);
-            object.add("block", serializationContext.serialize(functionClazz.block));
-        }
-
-        public CanBreak deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
-            return new CanBreak(conditionsIn, JSONUtils.deserializeClass(object, "block", deserializationContext, ResourceLocation.class));
+        public CanBreak deserialize(JsonObject object, JsonDeserializationContext context, ILootCondition[] conditionsIn) {
+            return new CanBreak(conditionsIn, JSONUtils.deserializeClass(object, "block", context, ResourceLocation.class));
         }
     }
 }

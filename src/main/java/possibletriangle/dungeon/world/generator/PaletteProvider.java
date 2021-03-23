@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
@@ -13,6 +14,7 @@ import net.minecraft.world.gen.area.LazyArea;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.layer.Layer;
 import net.minecraft.world.gen.layer.VoroniZoomLayer;
+import net.minecraft.world.gen.layer.ZoomLayer;
 import possibletriangle.dungeon.palette.Palette;
 import possibletriangle.dungeon.world.generator.biome.BaseLayer;
 
@@ -32,12 +34,13 @@ public class PaletteProvider extends BiomeProvider {
         return new LazyAreaLayerContext(25, seed, mod);
     }
 
-    public PaletteProvider(World world) {
-        this.seed = world.getSeed();
+    public PaletteProvider(long seed) {
+        super()
+        this.seed = seed;
 
-        this.layer = new BaseLayer(seed, world.getDimension().getType());
+        this.layer = new BaseLayer(seed, DimensionType.);
         IAreaFactory<LazyArea> base = this.layer.apply(createContext(1L));
-        IAreaFactory<LazyArea> zoomed = VoroniZoomLayer.INSTANCE.apply(createContext(10L), base);
+        IAreaFactory<LazyArea> zoomed = ZoomLayer.NORMAL.apply(createContext(10L), base);
 
         this.biomes = new Layer(base);
         this.zoomed = new Layer(zoomed);

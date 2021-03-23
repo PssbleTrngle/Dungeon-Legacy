@@ -3,14 +3,17 @@ package possibletriangle.dungeon.data.loot;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootFunction;
+import net.minecraft.loot.LootFunctionType;
+import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootFunction;
-import net.minecraft.world.storage.loot.conditions.ILootCondition;
 import possibletriangle.dungeon.DungeonMod;
+import possibletriangle.dungeon.data.DataGenerators;
 
 /**
  * Hide certain info on ItemStacks
@@ -31,6 +34,11 @@ public class HideFlags extends LootFunction {
 
     private final int flags;
     private final boolean replace;
+
+    @Override
+    public LootFunctionType func_230425_b_() {
+        return DataGenerators.HIDE_FLAGS;
+    }
 
     private HideFlags(ILootCondition[] conditions, int flags, boolean replace) {
         super(conditions);
@@ -59,18 +67,15 @@ public class HideFlags extends LootFunction {
     }
 
     public static class Serializer extends LootFunction.Serializer<HideFlags> {
-        public Serializer() {
-            super(new ResourceLocation(DungeonMod.ID, "hide_flags"), HideFlags.class);
-        }
 
-        public void serialize(JsonObject object, HideFlags functionClazz, JsonSerializationContext serializationContext) {
-            super.serialize(object, functionClazz, serializationContext);
+        public void func_230424_a_(JsonObject object, HideFlags functionClazz, JsonSerializationContext context) {
+            super.func_230424_a_(object, functionClazz, context);
             object.addProperty("flags", functionClazz.flags);
             object.addProperty("replace", functionClazz.replace);
         }
 
-        public HideFlags deserialize(JsonObject object, JsonDeserializationContext deserializationContext, ILootCondition[] conditionsIn) {
-            return new HideFlags(conditionsIn, JSONUtils.getInt(object, "flags", 0), JSONUtils.getBoolean(object, "replace", false));
+        public HideFlags deserialize(JsonObject object, JsonDeserializationContext context, ILootCondition[] conditions) {
+            return new HideFlags(conditions, JSONUtils.getInt(object, "flags", 0), JSONUtils.getBoolean(object, "replace", false));
         }
     }
 }

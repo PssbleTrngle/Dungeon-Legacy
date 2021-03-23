@@ -10,7 +10,7 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -57,7 +57,7 @@ public class RedstoneSenderBlock extends RedstoneLinkBlock {
         Direction facing = state.get(FACING);
 
         for(int i = 0; i < DISTANCE; i++) {
-            Vec3i v = facing.getDirectionVec();
+            Vector3i v = facing.getDirectionVec();
             BlockPos p = pos.add(v.getX() * i, v.getY() * i, v.getZ() * i);
             BlockState s = world.getBlockState(p);
             if(s.getBlock() instanceof RedstoneReceiverBlock) {
